@@ -1,0 +1,45 @@
+﻿---
+description: Regras permanentes do projeto Granel da Praça E-commerce
+globs: ["src/**/*.{ts,tsx}"]
+alwaysApply: true
+---
+
+# Stack
+- Next.js 14 App Router — nunca Pages Router
+- Tailwind v3 — nunca v4
+- TypeScript strict — zero ny
+- Design system próprio — sem shadcn/ui
+
+# Design Tokens (DS v3.1)
+- Background geral: #F9F5EF (cream) — nunca branco puro
+- CTA principal: #00B207 — exclusivo para Finalizar compra, Buscar, Confirmar pedido
+- Add-to-cart: #2C742F — nunca #00B207 nos cards do catálogo
+- Hover todos os CTAs: #1A5C1E
+- Badge promo: #C0694A — NUNCA #E65100
+- stroke-width em todos os SVGs: 1.6
+- border-radius ProductCard: 20px (--r-card)
+- Unidade de peso: gr — nunca g ou gram
+
+# QuantitySelector
+- Estado idle: botão "+ Adicionar" full-width, height 40px, bg #2C742F
+- Estado active: pill [- | 100 gr | +], grid 1fr 2fr 1fr, padding 0 12px
+- Display central: só quantidade, sem preço
+- Incremento granel: 100 gr | Unidade: 1 un.
+
+# Supabase
+- Nunca instanciar client no top-level — sempre usar getSupabase() ou getSupabaseServer()
+- Datas: YYYY-MM-DD no banco, DD/MM/AAAA na UI
+- Monetário: centavos (int) no banco, BRL formatado na UI
+- Soft delete: is_deleted = true — nunca DELETE físico
+- Tabela usuários: app_users — nunca profiles
+
+# Código
+- Server Components por padrão — 'use client' só para interatividade real
+- next/image obrigatório — nunca <img> puro
+- Zero console.log commitado
+- Imports: React → libs externas → componentes internos → tipos → utils
+- Funções puras fora do componente (formatBRL, formatGrams, getCategoryGradient)
+
+# Terminal
+- PowerShell only — nunca bash ou sh
+- Commits como Andressadanfre em português
