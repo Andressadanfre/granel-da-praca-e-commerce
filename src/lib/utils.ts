@@ -26,5 +26,5 @@ export function formatGrams(grams: number): string {
 // Formata data do banco (YYYY-MM-DD) para UI (DD/MM/AAAA)
 export function formatDate(iso: string): string {
   const [y, m, d] = iso.split('-')
-  return ${d}//
+  return `${d}/${m}/${y}`
 }
