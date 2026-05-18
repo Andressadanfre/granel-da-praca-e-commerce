@@ -6,6 +6,7 @@ import { Button, type ButtonVariant } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
 import { ProductCard } from '@/components/product/ProductCard'
+import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
 
 const buttonVariants: ButtonVariant[] = [
   'primary',
@@ -183,6 +184,16 @@ export default function PreviewPage() {
             />
           </div>
 
+        </div>
+      </section>
+
+      {/* ── ProductCardSkeleton ────────────────────────────────────── */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
+          ProductCardSkeleton
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 302px)', gap: '24px' }}>
+          <ProductCardSkeleton count={4} />
         </div>
       </section>
 
