@@ -15,12 +15,12 @@ export function formatBRL(centavos: number): string {
 
 // Formata gramas — ex: 100 → "100 gr" | 1000 → "1 kg" | 1500 → "1,5 kg"
 export function formatGrams(grams: number): string {
-  if (grams < 1000) return ${grams} gr
+  if (grams < 1000) return `${grams} gr`
   const kg = grams / 1000
   const formatted = kg % 1 === 0
     ? kg.toFixed(0)
     : parseFloat(kg.toFixed(1)).toString().replace('.', ',')
-  return ${formatted} kg
+  return `${formatted} kg`
 }
 
 // Formata data do banco (YYYY-MM-DD) para UI (DD/MM/AAAA)
