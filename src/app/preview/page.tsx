@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/Input'
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
 import { ProductCard } from '@/components/product/ProductCard'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
+import { EmptyState } from '@/components/product/EmptyState'
 
 const buttonVariants: ButtonVariant[] = [
   'primary',
@@ -194,6 +195,20 @@ export default function PreviewPage() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 302px)', gap: '24px' }}>
           <ProductCardSkeleton count={4} />
+        </div>
+      </section>
+
+      {/* ── EmptyState ─────────────────────────────────────────────── */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
+          EmptyState
+        </h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
+          <EmptyState context="filter" />
+          <EmptyState context="search" searchTerm="castanha orgânica" />
+          <EmptyState context="cart" />
+          <EmptyState context="wishlist" />
+          <EmptyState context="orders" />
         </div>
       </section>
 
