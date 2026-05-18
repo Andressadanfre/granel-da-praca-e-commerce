@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Mail, Search } from 'lucide-react'
 
+import { Navigation } from '@/components/layout/Navigation'
 import { Badge, type BadgeVariant } from '@/components/ui/Badge'
 import { Button, type ButtonVariant } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -30,6 +31,8 @@ export default function PreviewPage() {
   if (process.env.NODE_ENV === 'production') notFound()
 
   return (
+    <>
+      <Navigation cartCount={3} />
     <main
       className="min-h-screen bg-cream"
       style={{ padding: '40px' }}
@@ -213,5 +216,6 @@ export default function PreviewPage() {
       </section>
 
     </main>
+    </>
   )
 }

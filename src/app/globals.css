@@ -54,3 +54,24 @@ body {
   background-size: 1200px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
+
+/* === Announcement Bar cycle === */
+@keyframes annCycle1 {
+  0%,40%  { opacity: 1; }
+  50%,90% { opacity: 0; }
+  100%    { opacity: 1; }
+}
+@keyframes annCycle2 {
+  0%,40%  { opacity: 0; }
+  50%,90% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+.ann-msg-1 { animation: annCycle1 8s ease-in-out infinite; }
+.ann-msg-2 { animation: annCycle2 8s ease-in-out infinite; }
+
+/* === Nav hover states === */
+.nav-cart-btn:hover { background-color: #1A5C1E !important; }
+.nav-search-wrap:focus-within {
+  border-color: #00B207 !important;
+  box-shadow: 0 0 0 3px rgba(0,178,7,.12);
+}
