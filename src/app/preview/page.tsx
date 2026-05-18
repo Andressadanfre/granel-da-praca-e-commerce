@@ -4,6 +4,7 @@ import { Mail, Search } from 'lucide-react'
 import { Badge, type BadgeVariant } from '@/components/ui/Badge'
 import { Button, type ButtonVariant } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { QuantitySelector } from '@/components/ui/QuantitySelector'
 
 if (process.env.NODE_ENV === 'production') {
   notFound()
@@ -88,6 +89,32 @@ export default function PreviewPage() {
             type="password"
             error="Senha deve ter no mínimo 8 caracteres"
           />
+        </div>
+      </section>
+
+      <section>
+        <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
+          QuantitySelector
+        </h2>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+          }}
+        >
+          <div>
+            <p style={{ fontSize: '14px', marginBottom: '12px' }}>variant: granel (default)</p>
+            <div className="max-w-[302px]">
+              <QuantitySelector />
+            </div>
+          </div>
+          <div>
+            <p style={{ fontSize: '14px', marginBottom: '12px' }}>variant: unit</p>
+            <div className="max-w-[302px]">
+              <QuantitySelector variant="unit" />
+            </div>
+          </div>
         </div>
       </section>
     </main>
