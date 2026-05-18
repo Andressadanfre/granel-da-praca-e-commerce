@@ -5,10 +5,7 @@ import { Badge, type BadgeVariant } from '@/components/ui/Badge'
 import { Button, type ButtonVariant } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
-
-if (process.env.NODE_ENV === 'production') {
-  notFound()
-}
+import { ProductCard } from '@/components/product/ProductCard'
 
 const buttonVariants: ButtonVariant[] = [
   'primary',
@@ -19,15 +16,17 @@ const buttonVariants: ButtonVariant[] = [
 ]
 
 const badgeVariants: { variant: BadgeVariant; label: string }[] = [
-  { variant: 'diet', label: 'Sem glúten' },
-  { variant: 'promo', label: 'Promoção' },
-  { variant: 'unit', label: 'Por unidade' },
-  { variant: 'discount', label: '-15%' },
+  { variant: 'diet',      label: 'Sem glúten' },
+  { variant: 'promo',     label: 'Promoção' },
+  { variant: 'unit',      label: 'Por unidade' },
+  { variant: 'discount',  label: '-15%' },
   { variant: 'low-stock', label: 'Últimas unidades' },
-  { variant: 'featured', label: 'Destaque' },
+  { variant: 'featured',  label: 'Destaque' },
 ]
 
 export default function PreviewPage() {
+  if (process.env.NODE_ENV === 'production') notFound()
+
   return (
     <main
       className="min-h-screen bg-cream"
@@ -37,6 +36,7 @@ export default function PreviewPage() {
         Preview — componentes UI
       </h1>
 
+      {/* ── Button ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: '48px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
           Button
@@ -55,6 +55,7 @@ export default function PreviewPage() {
         ))}
       </section>
 
+      {/* ── Badge ──────────────────────────────────────────────────── */}
       <section style={{ marginBottom: '48px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
           Badge
@@ -68,18 +69,12 @@ export default function PreviewPage() {
         </div>
       </section>
 
-      <section>
+      {/* ── Input ──────────────────────────────────────────────────── */}
+      <section style={{ marginBottom: '48px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
           Input
         </h2>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-            maxWidth: '400px',
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
           <Input label="E-mail" name="email" type="email" />
           <Input label="Nome" iconLeft={Mail} name="name" />
           <Input label="Buscar" iconRight={Search} name="search" />
@@ -92,17 +87,12 @@ export default function PreviewPage() {
         </div>
       </section>
 
-      <section>
+      {/* ── QuantitySelector ───────────────────────────────────────── */}
+      <section style={{ marginBottom: '48px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
           QuantitySelector
         </h2>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
             <p style={{ fontSize: '14px', marginBottom: '12px' }}>variant: granel (default)</p>
             <div className="max-w-[302px]">
@@ -117,6 +107,85 @@ export default function PreviewPage() {
           </div>
         </div>
       </section>
+
+      {/* ── ProductCard ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
+          ProductCard
+        </h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'flex-start' }}>
+
+          <div>
+            <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — default</p>
+            <ProductCard
+              id="prev-1"
+              name="Castanha de Caju W1 Torrada e Salgada"
+              category="Oleaginosas"
+              variant="granel"
+              priceInCents={1290}
+              pricePerKgInCents={12900}
+              dietBadges={['Sem Glúten', 'Vegano']}
+              state="default"
+            />
+          </div>
+
+          <div>
+            <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>unit — discount</p>
+            <ProductCard
+              id="prev-2"
+              name="Óleo de Coco Extra Virgem"
+              category="Suplementos"
+              variant="unit"
+              priceInCents={3490}
+              originalPriceInCents={4200}
+              discountPercent={17}
+              packageLabel="500ml"
+              state="discount"
+            />
+          </div>
+
+          <div>
+            <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — low-stock</p>
+            <ProductCard
+              id="prev-3"
+              name="Amêndoas Cruas Importadas Premium"
+              category="Oleaginosas"
+              variant="granel"
+              priceInCents={2890}
+              pricePerKgInCents={28900}
+              state="low-stock"
+            />
+          </div>
+
+          <div>
+            <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>unit — out-of-stock</p>
+            <ProductCard
+              id="prev-4"
+              name="Proteína de Ervilha Baunilha"
+              category="Suplementos"
+              variant="unit"
+              priceInCents={8990}
+              packageLabel="Pote 500g"
+              state="out-of-stock"
+            />
+          </div>
+
+          <div>
+            <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — featured</p>
+            <ProductCard
+              id="prev-5"
+              name="Quinoa Real Boliviana"
+              category="Grãos e Cereais"
+              variant="granel"
+              priceInCents={890}
+              pricePerKgInCents={8900}
+              state="featured"
+            />
+          </div>
+
+        </div>
+      </section>
+
     </main>
   )
 }

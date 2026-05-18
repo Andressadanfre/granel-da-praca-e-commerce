@@ -1,21 +1,33 @@
-﻿import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { createClient } from '@supabase/supabase-js'
+﻿import { createBrowserClient, createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 // REGRA: nunca instanciar no top-level do módulo
-// Sempre usar getSupabase() ou getSupabaseServer()
+// Client-side: usar getSupabase()
+// Server-side: usar getSupabaseServer()
 
-let _client: ReturnType<typeof createClientComponentClient> | null = null
+let _client: ReturnType<typeof createBrowserClient> | null = null
 
 export function getSupabase() {
   if (!_client) {
-    _client = createClientComponentClient()
+    _client = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
   }
   return _client
 }
 
 export function getSupabaseServer() {
-  return createClient(
+  const cookieStore = cookies()
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+      },
+    },
   )
 }
