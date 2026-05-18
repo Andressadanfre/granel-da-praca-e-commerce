@@ -75,3 +75,77 @@ body {
   border-color: #00B207 !important;
   box-shadow: 0 0 0 3px rgba(0,178,7,.12);
 }
+
+/* === Footer === */
+.ft-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ft-col-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.08);
+}
+.ft-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255,255,255,.55);
+  text-decoration: none;
+  padding: 7px 0;
+  transition: color .18s cubic-bezier(.4,0,.2,1), gap .18s cubic-bezier(.4,0,.2,1);
+}
+.ft-link svg { opacity: 0; transition: opacity .18s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.ft-link:hover { color: #ffffff; gap: 10px; }
+.ft-link:hover svg { opacity: 1; }
+.ft-social-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.42);
+  text-decoration: none;
+  padding: 6px;
+  transition: color .18s cubic-bezier(.4,0,.2,1), transform .18s cubic-bezier(.4,0,.2,1);
+}
+.ft-social-btn:hover { color: rgba(134,239,172,.9); transform: translateY(-2px); }
+.ft-contact-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.ft-contact-icon svg { color: rgba(134,239,172,.8); }
+.ft-badge-seal {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 500;
+  color: rgba(255,255,255,.42);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+  padding: 4px 9px;
+}
+.ft-badge-seal svg { flex-shrink: 0; color: rgba(134,239,172,.7); }
+.ft-legal-link:hover { color: rgba(255,255,255,.7) !important; }
+
+/* Footer responsivo */
+@media (max-width: 960px) {
+  .ft-body { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+  .ft-body > div:first-child { grid-column: 1 / -1; }
+  .ft-nl-inner { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
+}
+@media (max-width: 600px) {
+  .ft-body { grid-template-columns: 1fr !important; padding: 40px 20px 32px !important; }
+  .ft-bottom { flex-direction: column !important; align-items: flex-start !important; padding: 16px 20px 28px !important; gap: 16px !important; }
+  .ft-nl-inner { padding: 0 20px !important; }
+}

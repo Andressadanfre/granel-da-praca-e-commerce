@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Mail, Search } from 'lucide-react'
 
+import { Footer } from '@/components/layout/Footer'
 import { Navigation } from '@/components/layout/Navigation'
 import { Badge, type BadgeVariant } from '@/components/ui/Badge'
 import { Button, type ButtonVariant } from '@/components/ui/Button'
@@ -216,6 +217,7 @@ export default function PreviewPage() {
       </section>
 
     </main>
+    <Footer />
     </>
   )
 }
