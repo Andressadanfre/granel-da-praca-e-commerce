@@ -48,13 +48,14 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
           style={{
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: '0 40px',
-            height: '93px',
+            padding: '0 16px',
+            height: '64px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '24px',
+            gap: '12px',
           }}
+          className="md:px-10 md:h-[93px]"
         >
           {/* Logo */}
           <Link
@@ -80,14 +81,13 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
             </div>
           </Link>
 
-          {/* Search — desktop */}
+          {/* Search — desktop only */}
           <div
-            className="nav-search-wrap"
+            className="nav-search-wrap hidden md:flex"
             style={{
               flex: 1,
               maxWidth: '480px',
               position: 'relative',
-              display: 'flex',
               alignItems: 'center',
               border: '1.5px solid #E5E7EB',
               borderRadius: '12px',
@@ -152,7 +152,7 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
                 alignItems: 'center',
                 gap: '8px',
                 height: '44px',
-                padding: '0 16px',
+                padding: '0 12px',
                 backgroundColor: '#2C742F',
                 color: '#ffffff',
                 borderRadius: '10px',
@@ -166,7 +166,7 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
               className="nav-cart-btn"
             >
               <ShoppingCart size={16} strokeWidth={1.6} />
-              <span>Carrinho</span>
+              <span className="hidden md:inline">Carrinho</span>
               {cartCount > 0 && (
                 <span
                   style={{
@@ -197,9 +197,10 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
         </div>
       </div>
 
-      {/* ROW 3 — Category NavBar (desktop) */}
+      {/* ROW 3 — Category NavBar — desktop only */}
       <nav
         aria-label="Categorias"
+        className="hidden md:block"
         style={{
           backgroundColor: '#002603',
           borderTop: '1px solid rgba(255,255,255,.08)',
