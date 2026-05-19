@@ -149,3 +149,16 @@ body {
   .ft-bottom { flex-direction: column !important; align-items: flex-start !important; padding: 16px 20px 28px !important; gap: 16px !important; }
   .ft-nl-inner { padding: 0 20px !important; }
 }
+
+/* === HeroBanner === */
+.hero-cta-primary:hover  { background: #2C742F !important; }
+.hero-cta-secondary:hover { background: #002603 !important; color: #fff !important; }
+
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr !important; min-height: auto !important; gap: 0 !important; padding: 0 20px !important; display: block !important; }
+  .hero-copy { padding: 40px 0 32px !important; }
+  .hero-img  { height: 280px !important; border-radius: 16px !important; margin: 0 0 40px !important; }
+}
+@media (max-width: 480px) {
+  .hero-img { height: 220px !important; }
+}

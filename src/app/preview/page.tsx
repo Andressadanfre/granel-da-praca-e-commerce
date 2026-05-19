@@ -10,6 +10,7 @@ import { QuantitySelector } from '@/components/ui/QuantitySelector'
 import { ProductCard } from '@/components/product/ProductCard'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
 import { EmptyState } from '@/components/product/EmptyState'
+import { HeroBanner } from '@/components/sections/HeroBanner'
 
 const buttonVariants: ButtonVariant[] = [
   'primary',
@@ -34,7 +35,8 @@ export default function PreviewPage() {
   return (
     <>
       <Navigation cartCount={3} />
-    <main
+      <HeroBanner />
+      <main
       className="min-h-screen bg-cream"
       style={{ padding: '40px' }}
     >
@@ -217,7 +219,7 @@ export default function PreviewPage() {
         </div>
       </section>
 
-    </main>
+      </main>
     <Footer />
     </>
   )
