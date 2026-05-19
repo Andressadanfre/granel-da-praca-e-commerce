@@ -89,18 +89,11 @@ export function ProductCard({
   const isLowStock   = state === 'low-stock'
   const hasDiscount  = !!originalPriceInCents && !!discountPercent
 
-  // Calcula quantos badges ficam empilhados à esquerda antes do badge de desconto
-  const leftBadgeCount =
-    dietBadges.length +
-    (variant === 'unit' ? 1 : 0) +
-    (isLowStock ? 1 : 0)
-
   return (
     <article
       className={cn('product-card relative flex flex-col overflow-hidden cursor-pointer', className)}
       style={{
         width:        '302px',
-        minHeight:    '420px',
         borderRadius: tokens.radius.card,
         background:   tokens.colors.cream,
         border:       `1px solid ${tokens.colors.bd}`,

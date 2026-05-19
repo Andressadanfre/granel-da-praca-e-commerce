@@ -9,6 +9,7 @@ type EmptyStateContext = 'filter' | 'search' | 'cart' | 'wishlist' | 'orders'
 interface EmptyStateProps {
   context: EmptyStateContext
   searchTerm?: string
+  ctaHref?: string
 }
 
 const config: Record<EmptyStateContext, {
@@ -55,8 +56,9 @@ const config: Record<EmptyStateContext, {
   },
 }
 
-export function EmptyState({ context, searchTerm }: EmptyStateProps) {
-  const { icon, title, description, ctaLabel, ctaHref } = config[context]
+export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: EmptyStateProps) {
+  const { icon, title, description, ctaLabel, ctaHref: ctaHrefDefault } = config[context]
+  const ctaHref = ctaHrefOverride ?? ctaHrefDefault
 
   const resolvedDescription =
     context === 'search' && searchTerm

@@ -9,22 +9,9 @@ interface AddToCartSelectorProps {
 }
 
 export function AddToCartSelector({ id, variant }: AddToCartSelectorProps) {
-  function handleAddToCart(quantity: number) {
-    // TODO: despachar para o store do carrinho (Zustand) quando implementado
-    void id
-    void quantity
-  }
-
-  function handleQuantityChange(quantity: number) {
-    // TODO: sincronizar com o store do carrinho (Zustand) quando implementado
-    void quantity
-  }
-
   return (
-    <QuantitySelector
-      variant={variant}
-      onAddToCart={handleAddToCart}
-      onQuantityChange={handleQuantityChange}
-    />
+    <div data-product-id={id} className="w-full">
+      <QuantitySelector variant={variant} />
+    </div>
   )
 }

@@ -202,17 +202,18 @@ export default function PreviewPage() {
         </div>
       </section>
 
-      {/* ── EmptyState ─────────────────────────────────────────────── */}
+      {/* ── EmptyState ── */}
       <section style={{ marginBottom: '48px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
           EmptyState
         </h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
-          <EmptyState context="filter" />
-          <EmptyState context="search" searchTerm="castanha orgânica" />
-          <EmptyState context="cart" />
-          <EmptyState context="wishlist" />
-          <EmptyState context="orders" />
+          {/* href="#" previne navegação real — só para preview */}
+          <EmptyState context="filter"   ctaHref="#" />
+          <EmptyState context="search"   searchTerm="castanha orgânica" ctaHref="#" />
+          <EmptyState context="cart"     ctaHref="#" />
+          <EmptyState context="wishlist" ctaHref="#" />
+          <EmptyState context="orders"   ctaHref="#" />
         </div>
       </section>
 
