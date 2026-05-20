@@ -44,6 +44,11 @@ body {
   transition: transform .18s cubic-bezier(.4,0,.2,1);
 }
 
+.featured-products__grid .product-card {
+  width: 100% !important;
+  max-width: 100%;
+}
+
 @keyframes shimmer {
   0%   { background-position: -600px 0; }
   100% { background-position:  600px 0; }

@@ -1,59 +1,84 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
+import { getSupabaseServer } from '@/lib/supabase'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 
-// ─── Dados mockados — substituir por query Supabase quando tabelas existirem ──
-const FEATURED_PRODUCTS: ProductCardProps[] = [
-  {
-    id: '1',
-    name: 'Castanha de Caju W1 Torrada',
-    category: 'Oleaginosas',
-    variant: 'granel',
-    priceInCents: 1290,
-    pricePerKgInCents: 12900,
-    packageLabel: 'A granel',
-    dietBadges: ['Sem Glúten', 'Vegano'],
-    state: 'default',
-  },
-  {
-    id: '2',
-    name: 'Óleo de Coco Extra Virgem 500ml',
-    category: 'Suplementos',
-    variant: 'unit',
-    priceInCents: 3490,
-    originalPriceInCents: 4200,
-    discountPercent: 17,
-    packageLabel: '500ml',
-    state: 'discount',
-  },
-  {
-    id: '3',
-    name: 'Granola Artesanal Tropical Sem Açúcar',
-    category: 'Grãos',
-    variant: 'granel',
-    priceInCents: 890,
-    pricePerKgInCents: 8900,
-    packageLabel: 'A granel',
-    dietBadges: ['Orgânico'],
-    state: 'default',
-  },
-  {
-    id: '4',
-    name: 'Amêndoas Naturais Premium',
-    category: 'Superalimentos',
-    variant: 'granel',
-    priceInCents: 1990,
-    pricePerKgInCents: 19900,
-    packageLabel: 'A granel',
-    dietBadges: ['Sem Glúten'],
-    state: 'default',
-  },
-]
+// ─── Tipo interno do retorno da query ────────────────────────────────────────
+type ProductRow = {
+  id: number
+  name: string
+  unit: string
+  product_type: string
+  price_cents: number
+  compare_at_cents: number | null
+  stock_status: string
+  categories: { name: string }[] | null
+}
 
-// ─── Componente — Server Component puro ───────────────────────────────────────
-export default function FeaturedProducts() {
+// ─── Mapper banco → ProductCardProps ─────────────────────────────────────────
+function toCardProps(p: ProductRow): ProductCardProps {
+  const isGranel = p.product_type === 'granel'
+
+  const discountPercent =
+    p.compare_at_cents && p.compare_at_cents > p.price_cents
+      ? Math.round((1 - p.price_cents / p.compare_at_cents) * 100)
+      : undefined
+
+  return {
+    id: String(p.id),
+    name: p.name,
+    category: Array.isArray(p.categories) ? (p.categories[0]?.name ?? '') : '',
+    variant: isGranel ? 'granel' : 'unit',
+    // granel: card exibe preço por 100 gr → price_cents já está em centavos/kg
+    priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
+    pricePerKgInCents: isGranel ? p.price_cents : undefined,
+    originalPriceInCents: p.compare_at_cents ?? undefined,
+    discountPercent,
+    packageLabel: isGranel ? 'A granel' : p.unit,
+    state:
+      p.stock_status === 'out_of_stock'
+        ? 'out-of-stock'
+        : p.stock_status === 'low_stock'
+          ? 'low-stock'
+          : discountPercent
+            ? 'discount'
+            : 'default',
+  }
+}
+
+// ─── Server Component ─────────────────────────────────────────────────────────
+export default async function FeaturedProducts() {
+  const supabase = getSupabaseServer()
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)',
+    )
+    .eq('is_active', true)
+    .eq('is_deleted', false)
+    .eq('is_featured', true)
+    .limit(4)
+
+  // Fallback: se nenhum marcado como featured, pega os 4 mais recentes
+  const rows: ProductRow[] =
+    !error && data && data.length > 0
+      ? (data as unknown as ProductRow[])
+      : await supabase
+          .from('products')
+          .select(
+            'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)',
+          )
+          .eq('is_active', true)
+          .eq('is_deleted', false)
+          .order('id', { ascending: false })
+          .limit(4)
+          .then(({ data: d }) => (d as unknown as ProductRow[]) ?? [])
+
+  const products = rows.map(toCardProps)
+
   return (
     <section
       className="bg-[#F9F5EF] py-14 lg:py-20"
@@ -61,7 +86,7 @@ export default function FeaturedProducts() {
     >
       <div className="max-w-[1280px] mx-auto px-5 xl:px-0">
 
-        {/* Header — eyebrow + título + link */}
+        {/* Header */}
         <div className="flex items-end justify-between mb-8 lg:mb-10 gap-4">
           <div>
             <div className="inline-flex items-center gap-2 mb-2">
@@ -84,14 +109,14 @@ export default function FeaturedProducts() {
           </Link>
         </div>
 
-        {/* Grid de ProductCards — 2 colunas mobile · 4 desktop */}
+        {/* Grid */}
         <div className="featured-products__grid grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-          {FEATURED_PRODUCTS.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} {...product} className="w-full max-w-none" />
           ))}
         </div>
 
-        {/* Link "Ver todos" visível apenas mobile */}
+        {/* Link mobile */}
         <div className="mt-8 flex justify-center md:hidden">
           <Link
             href="/loja"
