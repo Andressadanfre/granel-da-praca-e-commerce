@@ -4,7 +4,7 @@
 import Link from 'next/link'
 import { ShoppingCart, Heart } from 'lucide-react'
 
-import { getSupabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase/server'
 
 import { CategoryBar } from './CategoryBar'
 import { UserMenuPopover } from './UserMenuPopover'

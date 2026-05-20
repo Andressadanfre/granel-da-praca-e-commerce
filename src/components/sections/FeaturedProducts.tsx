@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
-import { getSupabaseServer } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 
@@ -50,13 +50,11 @@ function toCardProps(p: ProductRow): ProductCardProps {
 
 // ─── Server Component ─────────────────────────────────────────────────────────
 export default async function FeaturedProducts() {
-  const supabase = getSupabaseServer()
+  const supabase = getSupabaseAdmin()
 
   const { data, error } = await supabase
     .from('products')
-    .select(
-      'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)',
-    )
+    .select('id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)')
     .eq('is_active', true)
     .eq('is_deleted', false)
     .eq('is_featured', true)
