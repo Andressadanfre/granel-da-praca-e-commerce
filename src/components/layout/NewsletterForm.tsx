@@ -2,18 +2,28 @@
 
 import { useState } from 'react'
 
+import { subscribeNewsletter } from '@/app/actions/newsletter'
+
 export function NewsletterForm() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email) return
     setStatus('loading')
-    // TODO: integrar com API de e-mail marketing
-    await new Promise((r) => setTimeout(r, 800))
-    setStatus('success')
-    setEmail('')
+    setErrorMsg('')
+
+    const result = await subscribeNewsletter(email)
+
+    if (result.success) {
+      setStatus('success')
+      setEmail('')
+    } else {
+      setStatus('error')
+      setErrorMsg(result.error)
+    }
   }
 
   return (
@@ -75,6 +85,16 @@ export function NewsletterForm() {
       }}>
         Ao se inscrever você concorda com nossa Política de Privacidade.
       </p>
+      {status === 'error' && errorMsg && (
+        <p style={{
+          fontSize: '11px',
+          color: '#FCA5A5',
+          marginTop: '4px',
+          textAlign: 'center',
+        }}>
+          {errorMsg}
+        </p>
+      )}
     </div>
   )
 }
