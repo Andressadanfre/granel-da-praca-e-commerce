@@ -4,23 +4,25 @@
 import Link from 'next/link'
 import { ShoppingCart, Heart } from 'lucide-react'
 
+import { getSupabaseAdmin } from '@/lib/supabase'
+
+import { CategoryBar } from './CategoryBar'
 import { UserMenuPopover } from './UserMenuPopover'
 import { MobileNavDrawer } from './MobileNavDrawer'
 
-const NAV_LINKS = [
-  { href: '/loja', label: 'Ver tudo', active: true, icon: 'grid' },
-  { href: '/categoria/castanhas', label: 'Castanhas' },
-  { href: '/categoria/graos', label: 'Grãos & Cereais' },
-  { href: '/categoria/chas', label: 'Chás & Ervas' },
-  { href: '/categoria/superalimentos', label: 'Superalimentos', badge: 'NOVO' },
-  { href: '/categoria/suplementos', label: 'Suplementos' },
-  { href: '/categoria/farinhas', label: 'Farinhas' },
-  { href: '/categoria/snacks', label: 'Snacks' },
-  { href: '/categoria/cosmeticos', label: 'Cosméticos' },
-  { href: '/ofertas', label: 'Ofertas da semana', promo: true },
-] as const
+export async function Navigation({ cartCount = 0 }: { cartCount?: number }) {
+  const supabase = getSupabaseAdmin()
+  const { data: categoriesData } = await supabase
+    .from('categories')
+    .select('name, slug')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true })
 
-export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
+  const categories = (categoriesData ?? []).map((c) => ({
+    href: `/categoria/${c.slug}`,
+    label: c.name,
+  }))
+
   return (
     <header
       style={{
@@ -192,15 +194,14 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
             </Link>
 
             {/* Mobile drawer trigger — Client Component */}
-            <MobileNavDrawer links={NAV_LINKS} />
+            <MobileNavDrawer links={categories} />
           </div>
         </div>
       </div>
 
-      {/* ROW 3 — Category NavBar — desktop only */}
+      {/* ROW 3 — Category NavBar */}
       <nav
         aria-label="Categorias"
-        className="hidden md:block"
         style={{
           backgroundColor: '#002603',
           borderTop: '1px solid rgba(255,255,255,.08)',
@@ -214,62 +215,11 @@ export function Navigation({ cartCount = 0 }: { cartCount?: number }) {
             height: '58px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            overflowX: 'auto',
           }}
         >
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '10px 10px',
-                whiteSpace: 'nowrap',
-                fontSize: '13px',
-                fontWeight: 600,
-                textDecoration: 'none',
-                color: 'active' in link && link.active
-                  ? '#ffffff'
-                  : 'promo' in link && link.promo
-                  ? '#FCA5A5'
-                  : 'rgba(255,255,255,.65)',
-                borderBottom: 'active' in link && link.active
-                  ? '2px solid #00B207'
-                  : '2px solid transparent',
-                transition: 'color .15s, border-color .15s',
-              }}
-            >
-              {'icon' in link && link.icon === 'grid' && (
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                  <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
-                </svg>
-              )}
-              {'promo' in link && link.promo && (
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                  <line x1="7" y1="7" x2="7.01" y2="7" />
-                </svg>
-              )}
-              {link.label}
-              {'badge' in link && link.badge && (
-                <span style={{
-                  backgroundColor: '#00B207',
-                  color: '#ffffff',
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  padding: '2px 6px',
-                  borderRadius: '100px',
-                  lineHeight: 1.4,
-                }}>
-                  {link.badge}
-                </span>
-              )}
-            </Link>
-          ))}
+          <CategoryBar
+            categories={categories}
+          />
         </div>
       </nav>
     </header>
