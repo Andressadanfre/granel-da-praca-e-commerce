@@ -34,7 +34,7 @@ export default function PreviewPage() {
 
   return (
     <>
-      <Navigation cartCount={3} />
+      <Navigation />
       <HeroBanner />
       <main
       className="min-h-screen bg-cream"

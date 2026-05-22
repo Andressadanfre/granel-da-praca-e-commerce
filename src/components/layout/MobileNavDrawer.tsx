@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Menu, X, Search } from 'lucide-react'
 
 interface NavLink {
@@ -15,10 +16,20 @@ interface NavLink {
 export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
+
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const trimmed = searchQuery.trim()
+    if (!trimmed) return
+    setSearchOpen(false)
+    router.push(`/loja?q=${encodeURIComponent(trimmed)}`)
+  }
 
   return (
     <>
-      {/* Search — mobile */}
+      {/* Botão de busca — mobile */}
       <button
         aria-label="Buscar"
         onClick={() => setSearchOpen((v) => !v)}
@@ -39,7 +50,7 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
         <Search size={20} strokeWidth={1.6} />
       </button>
 
-      {/* Hamburger */}
+      {/* Hambúrguer */}
       <button
         aria-label="Menu"
         aria-expanded={open}
@@ -61,7 +72,7 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
         {open ? <X size={22} strokeWidth={1.6} /> : <Menu size={22} strokeWidth={1.8} />}
       </button>
 
-      {/* Mobile search bar */}
+      {/* Busca mobile */}
       {searchOpen && (
         <div
           className="md:hidden"
@@ -76,18 +87,40 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
             zIndex: 49,
           }}
         >
-          <div style={{ position: 'relative' }}>
+          <form onSubmit={handleSearch} role="search" style={{ position: 'relative' }}>
+            <label htmlFor="search-mobile" className="sr-only">
+              Buscar produtos
+            </label>
             <svg
-              style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }}
-              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: '#9CA3AF',
+                pointerEvents: 'none',
+              }}
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
-              type="text"
+              id="search-mobile"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar produtos..."
               autoFocus
+              autoComplete="off"
               style={{
                 width: '100%',
                 height: '44px',
@@ -101,11 +134,11 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
                 fontFamily: 'var(--font-poppins), sans-serif',
               }}
             />
-          </div>
+          </form>
         </div>
       )}
 
-      {/* Mobile nav drawer */}
+      {/* Drawer de navegação mobile */}
       {open && (
         <div
           className="md:hidden"
@@ -141,14 +174,16 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
             >
               {link.label}
               {link.badge && (
-                <span style={{
-                  backgroundColor: '#00B207',
-                  color: '#ffffff',
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  padding: '2px 6px',
-                  borderRadius: '100px',
-                }}>
+                <span
+                  style={{
+                    backgroundColor: '#00B207',
+                    color: '#ffffff',
+                    fontSize: '9px',
+                    fontWeight: 700,
+                    padding: '2px 6px',
+                    borderRadius: '100px',
+                  }}
+                >
                   {link.badge}
                 </span>
               )}

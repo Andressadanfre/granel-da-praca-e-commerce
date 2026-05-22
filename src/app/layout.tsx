@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 
 import './globals.css'
@@ -12,7 +12,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'Granel da Praça — Produtos Naturais a Granel',
-  description: 'Loja online de produtos naturais a granel em Uberlândia. Castanhas, grãos, suplementos e muito mais.',
+  description: 'Loja online de Produtos Naturais a granel em Uberlândia. Castanhas, grãos, suplementos e muito mais.',
 }
 
 export default function RootLayout({
