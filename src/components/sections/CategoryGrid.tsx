@@ -196,7 +196,7 @@ export default async function CategoryGrid() {
       sort_order,
       products!inner(id)
     `)
-    .eq('is_deleted', false)
+    .eq('is_active', true)
     .eq('products.is_deleted', false)
     .order('sort_order', { ascending: true })
 
