@@ -4,6 +4,8 @@
 import type { ReactNode } from 'react'
 import { Search, ShoppingCart, Heart, Package, SlidersHorizontal } from 'lucide-react'
 
+import { tokens } from '@/lib/tokens'
+
 type EmptyStateContext = 'filter' | 'search' | 'cart' | 'wishlist' | 'orders'
 
 interface EmptyStateProps {
@@ -87,7 +89,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#2C742F',
+          color: tokens.colors.gd,
         }}
       >
         {icon}
@@ -98,7 +100,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
         style={{
           fontSize: '16px',
           fontWeight: 600,
-          color: '#111827',
+          color: tokens.colors.t9,
           margin: 0,
         }}
       >
@@ -110,7 +112,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
         style={{
           fontSize: '13px',
           fontWeight: 400,
-          color: '#4B5563',
+          color: tokens.colors.t6,
           margin: 0,
           maxWidth: '320px',
           lineHeight: 1.6,
@@ -129,9 +131,9 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
           justifyContent: 'center',
           height: '40px',
           padding: '0 24px',
-          borderRadius: '10px',
-          backgroundColor: '#00B207',
-          color: '#ffffff',
+          borderRadius: tokens.radius.sel,
+          backgroundColor: tokens.colors.g,
+          color: tokens.colors.white,
           fontSize: '13px',
           fontWeight: 600,
           textDecoration: 'none',

@@ -93,7 +93,6 @@ export function ProductCard({
     <article
       className={cn('product-card relative flex flex-col overflow-hidden cursor-pointer', className)}
       style={{
-        width:        '302px',
         borderRadius: tokens.radius.card,
         background:   tokens.colors.cream,
         border:       `1px solid ${tokens.colors.bd}`,
@@ -116,7 +115,7 @@ export function ProductCard({
             src={imageUrl}
             alt={imageAlt ?? name}
             fill
-            sizes="302px"
+            sizes="(max-width: 768px) 50vw, 302px"
             className="object-cover"
           />
         ) : (
@@ -261,7 +260,7 @@ export function ProductCard({
                 style={{
                   fontSize:       '12px',
                   fontWeight:     400,
-                  color:          '#6B7280',
+                  color:          tokens.colors.t5,
                   textDecoration: 'line-through',
                 }}
               >
@@ -276,7 +275,7 @@ export function ProductCard({
               style={{
                 fontSize:   '11px',
                 fontWeight: 400,
-                color:      '#374151',
+                color:      tokens.colors.t7,
                 marginTop:  '3px',
               }}
             >

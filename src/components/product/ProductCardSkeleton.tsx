@@ -9,7 +9,6 @@ function SingleSkeleton() {
   return (
     <div
       style={{
-        width: '302px',
         borderRadius: '20px',
         backgroundColor: '#FFFFFF',
         boxShadow: '0 10px 30px rgba(0,0,0,.05)',

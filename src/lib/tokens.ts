@@ -15,6 +15,8 @@ export const tokens = {
     t9:        '#111827',
     t6:        '#4B5563',
     t4:        '#9CA3AF',
+    t5:        '#6B7280', // preço riscado — contraste 5.74:1 WCAG AA
+    t7:        '#374151', // preço/kg — contraste 9.2:1 WCAG AAA
     bd:        '#E5E7EB',
     gray100:   '#F3F4F6',
     promo:     '#C0694A', // terracota — nunca #E65100
