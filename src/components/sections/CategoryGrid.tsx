@@ -200,22 +200,13 @@ export default async function CategoryGrid() {
     .eq('products.is_deleted', false)
     .order('sort_order', { ascending: true })
 
-  // Fallback silencioso — não quebra a página se o banco falhar
-  type RawCategory = {
-    id: number
-    name: string
-    slug: string
-    icon_name: string
-    sort_order: number
-    products: { id: number }[]
-  }
-  const categories: CategoryRow[] = ((data ?? []) as RawCategory[]).map((cat) => ({
+  const categories: CategoryRow[] = (data ?? []).map((cat) => ({
     id: cat.id,
     name: cat.name,
     slug: cat.slug,
     icon_name: cat.icon_name,
     sort_order: cat.sort_order,
-    product_count: Array.isArray(cat.products) ? cat.products.length : 0,
+    product_count: Array.isArray(cat.products) ? cat.products.length : cat.products ? 1 : 0,
   }))
 
   const totalCount = categories.reduce((acc, c) => acc + c.product_count, 0)

@@ -43,3 +43,31 @@ alwaysApply: true
 # Terminal
 - PowerShell only — nunca bash ou sh
 - Commits como Andressadanfre em português
+
+## Exemplos — Certo vs Errado (Few-Shot)
+
+### Cores
+# ERRADO: style={{ color: '#6B7280' }}
+# ERRADO: className="text-[#6B7280]"
+# CERTO: className="text-[--t6]" ou style={{ color: 'var(--t6)' }}
+
+### Tipagem
+# ERRADO: data as unknown as ProductRow[]
+# ERRADO: (data: any)
+# CERTO: type ProductWithCategory = Tables<'products'> & { categories: { name: string } | null }
+
+### Fronteira Server/Client
+# ERRADO: 'use client' em componente sem useState/useEffect/handlers
+# CERTO: Server Component por padrão — 'use client' só quando há interatividade real
+
+### Supabase client
+# ERRADO: import { supabase } from '@/lib/supabase' em Server Component
+# CERTO: import { getSupabaseServer } from '@/lib/server'
+
+### Border CSS
+# ERRADO: className="border-t-2 border-l-2" style={{ borderBottom: '2px solid #E5E7EB' }}
+# CERTO: className="border-2 border-[--bd]" ou border direcionais 100% via Tailwind
+
+### Formato de entrega
+# ERRADO: reescrever o arquivo inteiro
+# CERTO: entregar apenas o snippet alterado com // ... para indicar o trecho não modificado

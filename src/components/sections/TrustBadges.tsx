@@ -60,10 +60,10 @@ export default function TrustBadges() {
 
               {/* Texto */}
               <div className="min-w-0">
-                <p className="text-[14px] font-semibold text-[#111827] leading-tight truncate">
+                <p className="text-[14px] font-semibold text-[#111827] leading-tight">
                   {title}
                 </p>
-                <p className="text-[12px] font-normal text-[#4B5563] leading-tight truncate">
+                <p className="text-[12px] font-normal text-[#4B5563] leading-tight">
                   {subtitle}
                 </p>
               </div>

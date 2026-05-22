@@ -4,21 +4,19 @@ import { ArrowRight } from 'lucide-react'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { ProductCardProps } from '@/components/product/ProductCard'
+import type { Tables } from '@/types/database'
 
-// ─── Tipo interno do retorno da query ────────────────────────────────────────
-type ProductRow = {
-  id: number
-  name: string
-  unit: string
-  product_type: string
-  price_cents: number
-  compare_at_cents: number | null
-  stock_status: string
-  categories: { name: string }[] | null
+const FEATURED_PRODUCT_SELECT =
+  'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)' as const
+
+type ProductWithCategory = Pick<
+  Tables<'products'>,
+  'id' | 'name' | 'unit' | 'product_type' | 'price_cents' | 'compare_at_cents' | 'stock_status'
+> & {
+  categories: { name: string } | null
 }
 
-// ─── Mapper banco → ProductCardProps ─────────────────────────────────────────
-function toCardProps(p: ProductRow): ProductCardProps {
+function toCardProps(p: ProductWithCategory): ProductCardProps {
   const isGranel = p.product_type === 'granel'
 
   const discountPercent =
@@ -29,7 +27,7 @@ function toCardProps(p: ProductRow): ProductCardProps {
   return {
     id: String(p.id),
     name: p.name,
-    category: Array.isArray(p.categories) ? (p.categories[0]?.name ?? '') : '',
+    category: p.categories?.name ?? '',
     variant: isGranel ? 'granel' : 'unit',
     // granel: card exibe preço por 100 gr → price_cents já está em centavos/kg
     priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
@@ -48,33 +46,31 @@ function toCardProps(p: ProductRow): ProductCardProps {
   }
 }
 
-// ─── Server Component ─────────────────────────────────────────────────────────
-export default async function FeaturedProducts() {
+async function loadFeaturedProducts(): Promise<ProductWithCategory[]> {
   const supabase = getSupabaseAdmin()
 
-  const { data, error } = await supabase
-    .from('products')
-    .select('id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)')
-    .eq('is_active', true)
-    .eq('is_deleted', false)
-    .eq('is_featured', true)
+  const baseQuery = () =>
+    supabase
+      .from('products')
+      .select(FEATURED_PRODUCT_SELECT)
+      .eq('is_active', true)
+      .eq('is_deleted', false)
+
+  const { data, error } = await baseQuery().eq('is_featured', true).limit(4)
+
+  if (!error && data && data.length > 0) {
+    return data
+  }
+
+  const { data: fallback } = await baseQuery()
+    .order('id', { ascending: false })
     .limit(4)
 
-  // Fallback: se nenhum marcado como featured, pega os 4 mais recentes
-  const rows: ProductRow[] =
-    !error && data && data.length > 0
-      ? (data as unknown as ProductRow[])
-      : await supabase
-          .from('products')
-          .select(
-            'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)',
-          )
-          .eq('is_active', true)
-          .eq('is_deleted', false)
-          .order('id', { ascending: false })
-          .limit(4)
-          .then(({ data: d }) => (d as unknown as ProductRow[]) ?? [])
+  return fallback ?? []
+}
 
+export default async function FeaturedProducts() {
+  const rows = await loadFeaturedProducts()
   const products = rows.map(toCardProps)
 
   return (
