@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
@@ -36,6 +37,7 @@ function useVisibleCount() {
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 export function CategoryBar({ categories }: Props) {
+  const pathname     = usePathname()
   const visibleCount  = useVisibleCount()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [dropdownPos,  setDropdownPos]  = useState<{ top: number; left: number } | null>(null)
@@ -129,11 +131,10 @@ export function CategoryBar({ categories }: Props) {
       >
         {!isMobile && showLeft && <div className="shrink-0 w-12" aria-hidden="true" />}
 
-        {/* Ver tudo — fixo, sempre ativo */}
         <Link
           href="/loja"
-          className={`${linkBase} gap-2`}
-          style={{ color: '#ffffff', borderBottom: '2px solid #00B207' }}
+          className={`${linkBase} gap-2 ${pathname === '/loja' ? 'border-b-[#00B207]' : 'border-b-transparent'}`}
+          style={{ color: pathname === '/loja' ? '#ffffff' : 'rgba(255,255,255,.65)' }}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
