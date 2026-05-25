@@ -11,6 +11,7 @@ const config: Config = {
         gdeep:    '#002603', // TopBar, preços, logo
         ghover:   '#1A5C1E', // Hover único de todos os CTAs
         'g-muted':'#F1F8E9', // Hover botão secondary
+        'g-light': '#E8F5E9', // eyebrow pill do HeroBanner
         // Backgrounds
         cream:    '#F9F5EF', // Background geral — nunca branco puro
         'cream-img': '#F0EBE2', // Fundo área de imagem do ProductCard
@@ -19,6 +20,8 @@ const config: Config = {
         t9:       '#111827', // Texto primário
         t6:       '#4B5563', // Textos de suporte
         t4:       '#9CA3AF', // Labels muted, placeholder
+        t5:       '#6B7280', // preço riscado — contraste 5.74:1 WCAG AA
+        t7:       '#374151', // preço/kg — contraste 9.2:1 WCAG AAA
         // Bordas
         bd:       '#E5E7EB', // Bordas padrão
         'gray-100': '#F3F4F6', // Superfícies secundárias
