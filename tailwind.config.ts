@@ -39,6 +39,9 @@ const config: Config = {
         'badge-diet-bg': '#EAF7EA',
         'badge-diet-tx': '#2C742F',
         'badge-diet-bd': '#C6E6C7',
+        'icon-bg':      '#F0FDF4',
+        'warning-bg':   '#FEF3C7',
+        'warning-text': '#92400E',
         // Lime (ofertas)
         lime: '#D4F567',
       },

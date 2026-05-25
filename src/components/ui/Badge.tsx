@@ -11,32 +11,41 @@ export type BadgeVariant =
   | 'low-stock'
   | 'featured'
 
+/**
+ * EXCEÇÃO DE DESIGN SYSTEM:
+ * O hexadecimal #86EFAC é um verde-claro decorativo utilizado exclusivamente
+ * para bordas de elementos em destaque (featured). Por decisão intencional de
+ * escopo no DS v3.1, este valor não foi promovido a token global, sendo isolado
+ * localmente neste componente.
+ */
+const DECORATIVE_FEATURED_BORDER = '1px solid #86EFAC'
+
 const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
   diet: {
     backgroundColor: tokens.colors.badgeDietBg,
-    color: tokens.colors.badgeDietTx,
-    border: `1px solid ${tokens.colors.badgeDietBd}`,
+    color:           tokens.colors.badgeDietTx,
+    border:          `1px solid ${tokens.colors.badgeDietBd}`,
   },
   promo: {
     backgroundColor: tokens.colors.promo,
-    color: tokens.colors.white,
+    color:           tokens.colors.white,
   },
   unit: {
     backgroundColor: tokens.colors.indigoBg,
-    color: tokens.colors.indigo,
+    color:           tokens.colors.indigo,
   },
   discount: {
     backgroundColor: tokens.colors.promoBg,
-    color: tokens.colors.promo,
+    color:           tokens.colors.promo,
   },
   'low-stock': {
-    backgroundColor: '#FEF3C7',
-    color: '#92400E',
+    backgroundColor: tokens.colors.warningBg,
+    color:           tokens.colors.warningText,
   },
   featured: {
-    backgroundColor: '#F0FDF4',
-    color: tokens.colors.gd,
-    border: '1px solid #86EFAC',
+    backgroundColor: tokens.colors.iconBg,
+    color:           tokens.colors.gd,
+    border:          DECORATIVE_FEATURED_BORDER,
   },
 }
 

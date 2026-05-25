@@ -32,6 +32,10 @@ alwaysApply: true
 - Monetário: centavos (int) no banco, BRL formatado na UI
 - Soft delete: is_deleted = true — nunca DELETE físico
 - Tabela usuários: app_users — nunca profiles
+- Schema real confirmado Sessão 036:
+  - categories: usa is_active (não is_deleted) · usa sort_order (não display_order) · NÃO tem is_deleted
+  - products: usa price_cents + increment_grams · NÃO existe price_per_100g_cents
+  - Cálculo granel: price_cents / increment_grams * 100 = preço por 100gr
 
 # Código
 - Server Components por padrão — 'use client' só para interatividade real
@@ -39,6 +43,9 @@ alwaysApply: true
 - Zero console.log commitado
 - Imports: React → libs externas → componentes internos → tipos → utils
 - Funções puras fora do componente (formatBRL, formatGrams, getCategoryGradient)
+- CartIcon usa localStorage key 'granel:cart_count' + eventos 'storage' (cross-tab) e 'cart:updated' (same-tab)
+- SearchBar navega para /loja?q= via router.push com encodeURIComponent
+- Para atualizar badge do carrinho: window.dispatchEvent(new CustomEvent('cart:updated', { detail: novoCount }))
 
 # Terminal
 - PowerShell only — nunca bash ou sh
@@ -46,10 +53,36 @@ alwaysApply: true
 
 ## Exemplos — Certo vs Errado (Few-Shot)
 
-### Cores
+### Cores e Tokens
 # ERRADO: style={{ color: '#6B7280' }}
 # ERRADO: className="text-[#6B7280]"
-# CERTO: className="text-[--t6]" ou style={{ color: 'var(--t6)' }}
+# ERRADO: className="text-[--t6]"
+# CERTO: className="text-t6" (classe Tailwind mapeada em tailwind.config.ts)
+# CERTO: style={{ color: tokens.colors.t6 }} (apenas em style props dinâmicos)
+
+### Estilos inline — regra absoluta
+# ERRADO: style={{ display: 'flex', alignItems: 'center', width: '40px', height: '40px' }}
+# CERTO: className="flex items-center w-10 h-10"
+# REGRA: style prop apenas para valores dinâmicos em runtime (ex: largura de barra de progresso vinda de API)
+# REGRA: valores estáticos vão SEMPRE para classes Tailwind
+
+### Classes Tailwind arbitrárias
+# ERRADO: className="text-[14px]" quando existe escala padrão
+# ERRADO: className="text-[12px]" quando existe escala padrão
+# CERTO: className="text-sm" (14px), className="text-xs" (12px)
+# REGRA: verificar escala padrão do Tailwind antes de usar valor arbitrário [N]
+
+### Classes condicionais
+# ERRADO: className={['flex', condition && 'border-l'].filter(Boolean).join(' ')}
+# CERTO: className={cn('flex', condition && 'border-l')}
+# REGRA: sempre cn() de @/lib/utils para classes condicionais
+
+### Hex isolado com constante nomeada
+# QUANDO: hex sem token no DS v3.1 usado por decisão intencional de escopo
+# CERTO:
+# const DECORATIVE_FEATURED_BORDER = '1px solid #86EFAC' // exceção documentada
+# border: DECORATIVE_FEATURED_BORDER
+# ERRADO: border: '1px solid #86EFAC' inline no objeto
 
 ### Tipagem
 # ERRADO: data as unknown as ProductRow[]
@@ -66,8 +99,18 @@ alwaysApply: true
 
 ### Border CSS
 # ERRADO: className="border-t-2 border-l-2" style={{ borderBottom: '2px solid #E5E7EB' }}
-# CERTO: className="border-2 border-[--bd]" ou border direcionais 100% via Tailwind
+# CERTO: className="border-b-2 border-b-bd" — tudo via Tailwind, zero mistura com style
 
 ### Formato de entrega
 # ERRADO: reescrever o arquivo inteiro
 # CERTO: entregar apenas o snippet alterado com // ... para indicar o trecho não modificado
+
+## Estado da Auditoria (20/05/2026) — atualizado Sessão 040
+- Bloco 1 Segurança: ✅ Concluído · commit 88740b0
+- Bloco 2 Newsletter: ✅ Concluído · commit ab0f960
+- Bloco 3 CategoryGrid is_active: ✅ Concluído · componente removido da homepage
+- Bloco 4 FeaturedProducts tipagem: ✅ Concluído · tipo ProductWithCategory correto
+- Bloco 5 CategoryBar border shorthand: ✅ Concluído · commit 2b6d702
+- Bloco 6 Hex hardcoded: 🟡 Em progresso · tokens.ts + tailwind.config.ts atualizados · Badge ✅ · EmptyState ✅ · TrustBadges 🔄
+- Bloco 7 AddToCartSelector 'use client': 🟡 Baixo · redundante mas inofensivo
+- Bloco 8 Fallback imagem ProductCard: 🔴 Pendente

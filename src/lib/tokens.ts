@@ -29,6 +29,11 @@ export const tokens = {
     badgeDietBg: '#EAF7EA',
     badgeDietTx: '#2C742F',
     badgeDietBd: '#C6E6C7',
+    // Containers de ícone
+    iconBg:      '#F0FDF4',
+    // Estados de alerta (low-stock, avisos de estoque)
+    warningBg:   '#FEF3C7',
+    warningText: '#92400E',
   },
   radius: {
     input:  '8px',

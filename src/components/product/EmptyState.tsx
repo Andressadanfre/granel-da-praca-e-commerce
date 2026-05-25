@@ -80,18 +80,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
       }}
     >
       {/* Ícone */}
-      <div
-        style={{
-          width: '72px',
-          height: '72px',
-          borderRadius: '36px',
-          backgroundColor: '#F0FDF4',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: tokens.colors.gd,
-        }}
-      >
+      <div className="flex h-18 w-18 items-center justify-center rounded-full bg-icon-bg text-gd">
         {icon}
       </div>
 

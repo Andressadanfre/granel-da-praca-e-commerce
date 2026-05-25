@@ -1,5 +1,7 @@
 import { Truck, MessageCircle, ShieldCheck, Leaf } from 'lucide-react'
 
+import { cn } from '@/lib/utils'
+
 // ─── Dados estáticos — Server Component, zero JS no cliente ───────────────────
 const BADGES = [
   {
@@ -37,33 +39,22 @@ export default function TrustBadges() {
           {BADGES.map(({ icon: Icon, title, subtitle }, idx) => (
             <li
               key={title}
-              className={[
+              className={cn(
                 'flex items-center gap-3 px-4 py-3',
-                // Divisores verticais entre itens no desktop
-                idx > 0 ? 'lg:border-l lg:border-[#E5E7EB]' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
+                idx > 0 && 'lg:border-l lg:border-bd'
+              )}
             >
-              {/* Container do ícone — 40×40px, círculo, DS v3.1 */}
               <div
-                className="flex-shrink-0 flex items-center justify-center rounded-full bg-[#F0FDF4]"
-                style={{ width: 40, height: 40 }}
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-icon-bg"
                 aria-hidden="true"
               >
-                <Icon
-                  size={24}
-                  strokeWidth={1.6}
-                  className="text-[#2C742F]"
-                />
+                <Icon size={24} strokeWidth={1.6} className="text-gd" />
               </div>
-
-              {/* Texto */}
               <div className="min-w-0">
-                <p className="text-[14px] font-semibold text-[#111827] leading-tight">
+                <p className="text-sm font-semibold leading-tight text-t9">
                   {title}
                 </p>
-                <p className="text-[12px] font-normal text-[#4B5563] leading-tight">
+                <p className="text-xs font-normal leading-tight text-t6">
                   {subtitle}
                 </p>
               </div>
