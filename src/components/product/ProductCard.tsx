@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/Badge'
 import { AddToCartSelector } from '@/components/product/AddToCartSelector'
 import { WishlistButton } from '@/components/product/WishlistButton'
 import { tokens } from '@/lib/tokens'
-import { cn } from '@/lib/utils'
+import { cn, formatBRL } from '@/lib/utils'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -47,20 +47,6 @@ export interface ProductCardProps {
 }
 
 // ─── Helpers puros ────────────────────────────────────────────────────────────
-
-function formatBRL(cents: number): string {
-  return (cents / 100).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-}
-
-function formatPerKg(cents: number): string {
-  return `${(cents / 100).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })}/kg`
-}
 
 function getPriceLabel(variant: ProductVariant): string {
   return variant === 'granel' ? 'Preço por 100 gr' : 'Preço por unidade'
@@ -119,18 +105,15 @@ export function ProductCard({
             className="object-cover"
           />
         ) : (
-          <svg
-            width="72"
-            height="72"
-            viewBox="0 0 88 88"
-            fill="none"
-            aria-hidden="true"
-            style={{ opacity: 0.18 }}
-          >
-            <rect x="8" y="28" width="72" height="52" rx="6" fill={tokens.colors.gdeep} />
-            <ellipse cx="44" cy="28" rx="20" ry="8" fill={tokens.colors.gdeep} />
-            <circle cx="44" cy="22" r="5" fill={tokens.colors.gdeep} />
-          </svg>
+          <div className="flex items-center justify-center w-full h-full text-gdeep opacity-20">
+            <Image
+              src="/images/product-placeholder.svg"
+              alt=""
+              width={80}
+              height={80}
+              aria-hidden="true"
+            />
+          </div>
         )}
 
         {/* Overlay esgotado */}
@@ -279,7 +262,7 @@ export function ProductCard({
                 marginTop:  '3px',
               }}
             >
-              {formatPerKg(pricePerKgInCents)}
+              {`${formatBRL(pricePerKgInCents)}/kg`}
             </p>
           )}
 
