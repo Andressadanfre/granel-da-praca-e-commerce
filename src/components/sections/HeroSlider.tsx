@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 const SLIDES = [
   {
@@ -58,16 +59,7 @@ export function HeroSlider() {
   }, [])
 
   return (
-    <div
-      className="hero-img"
-      style={{
-        position: 'relative',
-        height: '520px',
-        borderRadius: '24px',
-        overflow: 'hidden',
-        background: '#D1E8D1',
-      }}
-    >
+    <div className="hero-img relative h-[520px] rounded-3xl overflow-hidden bg-[#D1E8D1]">
       <AnimatePresence mode="sync">
         <motion.div
           key={current}
@@ -75,11 +67,7 @@ export function HeroSlider() {
           initial="enter"
           animate="center"
           exit="exit"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            willChange: 'transform, filter, opacity',
-          }}
+          className="absolute inset-0 will-change-[transform,_filter,_opacity]"
         >
           <Image
             src={SLIDES[current].src}
@@ -92,43 +80,10 @@ export function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to right, rgba(0,38,3,.08) 0%, transparent 60%)',
-          pointerEvents: 'none',
-          zIndex: 1,
-        }}
-      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,38,3,.08)_0%,transparent_60%)] pointer-events-none z-[1]" />
 
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '24px',
-          left: '24px',
-          background: '#fff',
-          borderRadius: '12px',
-          padding: '12px 16px',
-          boxShadow: '0 8px 24px rgba(0,0,0,.12)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            background: '#E8F5E9',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
+      <div className="absolute bottom-6 left-6 bg-white rounded-inner py-3 px-4 shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center gap-2.5 z-[2]">
+        <div className="w-9 h-9 rounded-full bg-g-light flex items-center justify-center shrink-0">
           <svg
             width="18"
             height="18"
@@ -144,41 +99,26 @@ export function HeroSlider() {
           </svg>
         </div>
         <div>
-          <div style={{ fontSize: '13px', fontWeight: 700, color: '#002603', lineHeight: 1.2 }}>
+          <div className="text-[13px] font-bold text-gdeep leading-[1.2]">
             +390 produtos
           </div>
-          <div style={{ fontSize: '11px', color: '#6B7280' }}>
+          <div className="text-[11px] text-t5">
             Desde 2019 em Uberlândia
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '24px',
-          right: '24px',
-          display: 'flex',
-          gap: '6px',
-          zIndex: 2,
-        }}
-      >
+      <div className="absolute bottom-6 right-6 flex gap-1.5 z-[2]">
         {SLIDES.map((_, i) => (
           <button
             key={i}
             type="button"
             onClick={() => setCurrent(i)}
             aria-label={`Slide ${i + 1}`}
-            style={{
-              width: i === current ? '20px' : '6px',
-              height: '6px',
-              borderRadius: '100px',
-              background: i === current ? '#00B207' : 'rgba(255,255,255,.5)',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              transition: 'width .3s cubic-bezier(.4,0,.2,1), background .3s',
-            }}
+            className={cn(
+              'h-[6px] rounded-pill border-0 cursor-pointer p-0 transition-[width,background] duration-300 ease-in-out',
+              i === current ? 'w-5 bg-g' : 'w-1.5 bg-white/50'
+            )}
           />
         ))}
       </div>
