@@ -38,52 +38,23 @@ export function Footer() {
     <footer aria-label="Rodapé">
 
       {/* ── NEWSLETTER STRIP ── */}
-      <div
-        style={{
-          backgroundColor: '#2C742F',
-          padding: '40px 0',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="bg-gd py-10 relative overflow-hidden">
         <div
           aria-hidden="true"
-          style={{
-            position: 'absolute',
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, rgba(0,178,7,.25) 0%, transparent 70%)',
-            top: '-150px',
-            right: '-80px',
-            pointerEvents: 'none',
-          }}
+          className="ft-nl-glow absolute w-[400px] h-[400px] rounded-full -top-[150px] -right-20 pointer-events-none"
         />
 
-        <div
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '0 40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '40px',
-            position: 'relative',
-            zIndex: 1,
-          }}
-          className="ft-nl-inner"
-        >
+        <div className="ft-nl-inner max-w-container mx-auto px-10 flex items-center justify-between gap-10 relative z-[1]">
           <div>
-            <p style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,.6)', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '6px' }}>
+            <p className="text-[10px] font-bold text-white/60 uppercase tracking-[.12em] mb-[6px]">
               Newsletter
             </p>
-            <p style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', lineHeight: 1.25, letterSpacing: '-.01em' }}>
+            <p className="text-xl font-bold text-white leading-[1.25] tracking-[-0.01em]">
               Receba ofertas e{' '}
-              <span style={{ color: '#86EFAC' }}>novidades</span>
+              <span className="text-green-200">novidades</span>
               {' '}em primeira mão
             </p>
-            <p style={{ fontSize: '12.5px', color: 'rgba(255,255,255,.65)', marginTop: '4px' }}>
+            <p className="text-[12.5px] text-white/[.65] mt-1">
               Sem spam. Só o que é bom — produtos, receitas e promoções exclusivas.
             </p>
           </div>
@@ -93,48 +64,22 @@ export function Footer() {
       </div>
 
       {/* ── FOOTER PRINCIPAL ── */}
-      <div
-        style={{
-          backgroundColor: '#002603',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="bg-gdeep relative overflow-hidden">
         <div
           aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              radial-gradient(ellipse 60% 40% at 90% 10%, rgba(0,178,7,.06) 0%, transparent 65%),
-              radial-gradient(ellipse 40% 60% at 5% 85%, rgba(44,116,47,.08) 0%, transparent 60%)
-            `,
-            pointerEvents: 'none',
-          }}
+          className="ft-body-overlay absolute inset-0 pointer-events-none"
         />
 
-        <div
-          className="ft-body"
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '64px 40px 48px',
-            display: 'grid',
-            gridTemplateColumns: '260px 1fr 1fr 1fr',
-            gap: '48px',
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
+        <div className="ft-body max-w-container mx-auto pt-16 pb-12 px-10 grid grid-cols-[260px_1fr_1fr_1fr] gap-12 relative z-[1]">
           <div>
-            <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center' }}>
+            <div className="mb-[18px] flex items-center">
               <svg
                 height="36"
                 viewBox="0 0 40 40"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 aria-label="Granel da Praça"
-                style={{ filter: 'brightness(0) invert(1)', opacity: 0.92 }}
+                className="brightness-0 invert opacity-[.92]"
               >
                 <circle cx="20" cy="20" r="20" fill="#002603" />
                 <path d="M20 30 C13 26 10 19 13 13 C16 8 22 8 24 13 C26 18 24 26 20 30Z" fill="#00B207" />
@@ -143,16 +88,16 @@ export function Footer() {
                 <ellipse cx="16" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.7" transform="rotate(-20 16 22)" />
                 <ellipse cx="24" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.5" transform="rotate(20 24 22)" />
               </svg>
-              <span style={{ marginLeft: '10px', fontSize: '14px', fontWeight: 700, color: 'rgba(255,255,255,.92)', letterSpacing: '-.01em' }}>
+              <span className="ml-2.5 text-sm font-bold text-white/[.92] tracking-[-0.01em]">
                 Granel da Praça
               </span>
             </div>
 
-            <p style={{ fontSize: '12.5px', color: 'rgba(255,255,255,.82)', lineHeight: 1.65, marginBottom: '24px', maxWidth: '220px' }}>
+            <p className="text-[12.5px] text-white/[.82] leading-[1.65] mb-6 max-w-[220px]">
               Produtos naturais a granel com qualidade, transparência e cuidado. Dois espaços físicos em Uberlândia desde 2019.
             </p>
 
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '28px' }}>
+            <div className="flex gap-2 mb-7">
               <a href="https://instagram.com/graneldapraca" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="ft-social-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -172,7 +117,7 @@ export function Footer() {
               </a>
             </div>
 
-            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            <div className="flex gap-1.5 flex-wrap">
               <span className="ft-badge-seal">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -190,19 +135,14 @@ export function Footer() {
 
           <div>
             <p className="ft-col-title">Loja</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <ul className="list-none p-0 m-0 flex flex-col gap-1">
               {LOJA_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="ft-link">
                     {CHEVRON}
                     {link.label}
                     {link.badge && (
-                      <span style={{
-                        fontSize: '9px', fontWeight: 700,
-                        backgroundColor: '#00B207', color: '#ffffff',
-                        padding: '1px 6px', borderRadius: '100px',
-                        letterSpacing: '.04em', marginLeft: '2px',
-                      }}>
+                      <span className="text-[9px] font-bold bg-g text-white py-px px-1.5 rounded-pill tracking-[.04em] ml-0.5">
                         {link.badge}
                       </span>
                     )}
@@ -214,7 +154,7 @@ export function Footer() {
 
           <div>
             <p className="ft-col-title">Informações</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <ul className="list-none p-0 m-0 flex flex-col gap-1">
               {INFO_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="ft-link">
@@ -228,41 +168,41 @@ export function Footer() {
 
           <div>
             <p className="ft-col-title">Contato</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '4px' }}>
+            <div className="flex flex-col gap-3.5 mt-1">
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <div className="flex items-start gap-2.5">
                 <div className="ft-contact-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                   </svg>
                 </div>
                 <div>
-                  <p style={{ fontSize: '10.5px', fontWeight: 700, color: 'rgba(255,255,255,.88)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '4px' }}>Fundinho</p>
-                  <p style={{ fontSize: '12.5px', color: 'rgba(255,255,255,.58)', lineHeight: 1.6 }}>
+                  <p className="text-[10.5px] font-bold text-white/[.88] uppercase tracking-[.1em] mb-1">Fundinho</p>
+                  <p className="text-[12.5px] text-white/[.58] leading-[1.6]">
                     Pça. Clarimundo Carneiro, 119<br />
-                    <a href="https://wa.me/5534997819292" style={{ color: 'rgba(255,255,255,.75)', textDecoration: 'none' }}>(34) 99781-9292</a>
+                    <a href="https://wa.me/5534997819292" className="text-white/75 no-underline">(34) 99781-9292</a>
                   </p>
-                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,.42)', marginTop: '3px' }}>Seg–Sáb · 8h às 18h</p>
+                  <p className="text-[11px] text-white/[.42] mt-[3px]">Seg–Sáb · 8h às 18h</p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <div className="flex items-start gap-2.5">
                 <div className="ft-contact-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                   </svg>
                 </div>
                 <div>
-                  <p style={{ fontSize: '10.5px', fontWeight: 700, color: 'rgba(255,255,255,.88)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '4px' }}>UMC</p>
-                  <p style={{ fontSize: '12.5px', color: 'rgba(255,255,255,.58)', lineHeight: 1.6 }}>
+                  <p className="text-[10.5px] font-bold text-white/[.88] uppercase tracking-[.1em] mb-1">UMC</p>
+                  <p className="text-[12.5px] text-white/[.58] leading-[1.6]">
                     R. Rafael Marino Neto, 600<br />
-                    <a href="https://wa.me/5534979699191" style={{ color: 'rgba(255,255,255,.75)', textDecoration: 'none' }}>(34) 97969-9191</a>
+                    <a href="https://wa.me/5534979699191" className="text-white/75 no-underline">(34) 97969-9191</a>
                   </p>
-                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,.42)', marginTop: '3px' }}>Seg–Sáb · 8h às 18h</p>
+                  <p className="text-[11px] text-white/[.42] mt-[3px]">Seg–Sáb · 8h às 18h</p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <div className="flex items-start gap-2.5">
                 <div className="ft-contact-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <rect x="1" y="3" width="15" height="13" rx="1" /><path d="M16 8h4l3 5v3h-7V8z" />
@@ -270,8 +210,8 @@ export function Footer() {
                   </svg>
                 </div>
                 <div>
-                  <p style={{ fontSize: '10.5px', fontWeight: 700, color: 'rgba(255,255,255,.88)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '4px' }}>Entrega</p>
-                  <p style={{ fontSize: '12.5px', color: 'rgba(255,255,255,.58)', lineHeight: 1.6 }}>
+                  <p className="text-[10.5px] font-bold text-white/[.88] uppercase tracking-[.1em] mb-1">Entrega</p>
+                  <p className="text-[12.5px] text-white/[.58] leading-[1.6]">
                     Somente em Uberlândia<br />
                     Pedidos até 14h · Sem domingos
                   </p>
@@ -282,59 +222,31 @@ export function Footer() {
           </div>
         </div>
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
-          <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,.08)' }} />
+        <div className="max-w-container mx-auto px-10 relative z-[1]">
+          <hr className="border-0 border-t border-white/[.08]" />
         </div>
 
-        <div
-          className="ft-bottom"
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '20px 40px 32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '24px',
-            flexWrap: 'wrap',
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          <p style={{ fontSize: '11.5px', color: 'rgba(255,255,255,.42)', lineHeight: 1.5 }}>
-            © 2025 <strong style={{ color: 'rgba(255,255,255,.6)', fontWeight: 600 }}>Granel da Praça</strong>. Todos os direitos reservados.<br />
+        <div className="ft-bottom max-w-container mx-auto pt-5 pb-8 px-10 flex items-center justify-between gap-6 flex-wrap relative z-[1]">
+          <p className="text-[11.5px] text-white/[.42] leading-[1.5]">
+            © 2025 <strong className="text-white/60 font-semibold">Granel da Praça</strong>. Todos os direitos reservados.<br />
             Uberlândia, MG · CNPJ 00.000.000/0001-00
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '10px', fontWeight: 500, color: 'rgba(255,255,255,.42)', letterSpacing: '.06em', textTransform: 'uppercase', marginRight: '4px' }}>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-medium text-white/[.42] tracking-[.06em] uppercase mr-1">
               Aceito
             </span>
             {PAYMENT_METHODS.map((method) => (
               <span
                 key={method}
-                style={{
-                  height: '26px',
-                  padding: '0 10px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255,255,255,.08)',
-                  backgroundColor: 'rgba(255,255,255,.05)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  color: 'rgba(255,255,255,.6)',
-                  letterSpacing: '.03em',
-                  whiteSpace: 'nowrap',
-                }}
+                className="h-[26px] px-2.5 rounded-md border border-white/[.08] bg-white/[.05] inline-flex items-center justify-center text-[10px] font-bold text-white/60 tracking-[.03em] whitespace-nowrap"
               >
                 {method}
               </span>
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div className="flex gap-4 flex-wrap">
             {[
               { href: '/privacidade', label: 'Privacidade' },
               { href: '/termos', label: 'Termos de uso' },
@@ -343,8 +255,7 @@ export function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                style={{ fontSize: '11px', color: 'rgba(255,255,255,.42)', textDecoration: 'none' }}
-                className="ft-legal-link"
+                className="ft-legal-link text-[11px] text-white/[.42] no-underline"
               >
                 {link.label}
               </Link>
