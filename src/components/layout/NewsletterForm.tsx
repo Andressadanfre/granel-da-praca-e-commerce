@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { subscribeNewsletter } from '@/app/actions/newsletter'
+import { cn } from '@/lib/utils'
 
 export function NewsletterForm() {
   const [email, setEmail] = useState('')
@@ -28,10 +29,7 @@ export function NewsletterForm() {
 
   return (
     <div>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', gap: '8px' }}
-      >
+      <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="email"
           value={email}
@@ -40,58 +38,25 @@ export function NewsletterForm() {
           aria-label="E-mail para newsletter"
           required
           disabled={status === 'loading' || status === 'success'}
-          style={{
-            height: '46px',
-            width: '280px',
-            border: '1.5px solid rgba(255,255,255,.25)',
-            borderRadius: '100px',
-            backgroundColor: 'rgba(0,0,0,.18)',
-            color: '#ffffff',
-            fontSize: '13px',
-            padding: '0 20px',
-            outline: 'none',
-            fontFamily: 'var(--font-poppins), sans-serif',
-            backdropFilter: 'blur(8px)',
-            transition: 'border-color .18s cubic-bezier(.4,0,.2,1)',
-          }}
+          className="h-[46px] w-[280px] border-[1.5px] border-white/25 rounded-pill bg-black/[.18] text-white text-[13px] px-5 outline-none font-sans backdrop-blur transition-[border-color] duration-[180ms] ease-in-out"
         />
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          style={{
-            height: '46px',
-            padding: '0 24px',
-            backgroundColor: status === 'success' ? '#86EFAC' : '#ffffff',
-            color: '#2C742F',
-            border: 'none',
-            borderRadius: '100px',
-            fontSize: '13px',
-            fontWeight: 700,
-            cursor: status === 'loading' || status === 'success' ? 'default' : 'pointer',
-            whiteSpace: 'nowrap',
-            fontFamily: 'var(--font-poppins), sans-serif',
-            letterSpacing: '.02em',
-            transition: 'background .18s cubic-bezier(.4,0,.2,1), transform .18s cubic-bezier(.4,0,.2,1)',
-          }}
+          className={cn(
+            'h-[46px] px-6 text-gd border-0 rounded-pill text-[13px] font-bold whitespace-nowrap font-sans tracking-[.02em] transition-[background,transform] duration-[180ms] ease-in-out',
+            status === 'success' ? 'bg-green-200' : 'bg-white',
+            status === 'loading' || status === 'success' ? 'cursor-default' : 'cursor-pointer'
+          )}
         >
           {status === 'loading' ? 'Enviando…' : status === 'success' ? '✓ Inscrito!' : 'Quero receber'}
         </button>
       </form>
-      <p style={{
-        fontSize: '10px',
-        color: 'rgba(255,255,255,.62)',
-        marginTop: '6px',
-        textAlign: 'center',
-      }}>
+      <p className="text-[10px] text-white/[.62] mt-1.5 text-center">
         Ao se inscrever você concorda com nossa Política de Privacidade.
       </p>
       {status === 'error' && errorMsg && (
-        <p style={{
-          fontSize: '11px',
-          color: '#FCA5A5',
-          marginTop: '4px',
-          textAlign: 'center',
-        }}>
+        <p className="text-[11px] text-red-300 mt-1 text-center">
           {errorMsg}
         </p>
       )}
