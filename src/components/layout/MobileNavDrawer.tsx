@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Menu, X, Search } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface NavLink {
   href: string
@@ -33,19 +34,7 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
       <button
         aria-label="Buscar"
         onClick={() => setSearchOpen((v) => !v)}
-        className="md:hidden"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '44px',
-          height: '44px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          color: '#6B7280',
-          borderRadius: '10px',
-        }}
+        className="md:hidden flex items-center justify-center w-11 h-11 bg-transparent border-0 cursor-pointer text-t5 rounded-sel"
       >
         <Search size={20} strokeWidth={1.6} />
       </button>
@@ -55,51 +44,20 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="md:hidden"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '44px',
-          height: '44px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          color: '#374151',
-          borderRadius: '10px',
-        }}
+        className="md:hidden flex items-center justify-center w-11 h-11 bg-transparent border-0 cursor-pointer text-t7 rounded-sel"
       >
         {open ? <X size={22} strokeWidth={1.6} /> : <Menu size={22} strokeWidth={1.8} />}
       </button>
 
       {/* Busca mobile */}
       {searchOpen && (
-        <div
-          className="md:hidden"
-          style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: '#ffffff',
-            padding: '12px 20px',
-            borderBottom: '1px solid #E5E7EB',
-            zIndex: 49,
-          }}
-        >
-          <form onSubmit={handleSearch} role="search" style={{ position: 'relative' }}>
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white py-3 px-5 border-b border-bd z-[49]">
+          <form onSubmit={handleSearch} role="search" className="relative">
             <label htmlFor="search-mobile" className="sr-only">
               Buscar produtos
             </label>
             <svg
-              style={{
-                position: 'absolute',
-                left: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#9CA3AF',
-                pointerEvents: 'none',
-              }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-t4 pointer-events-none"
               width="16"
               height="16"
               viewBox="0 0 24 24"
@@ -121,18 +79,7 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
               placeholder="Buscar produtos..."
               autoFocus
               autoComplete="off"
-              style={{
-                width: '100%',
-                height: '44px',
-                paddingLeft: '40px',
-                paddingRight: '16px',
-                borderRadius: '12px',
-                border: '1.5px solid #E5E7EB',
-                backgroundColor: '#F9FAFB',
-                fontSize: '13px',
-                outline: 'none',
-                fontFamily: 'var(--font-poppins), sans-serif',
-              }}
+              className="w-full h-11 pl-10 pr-4 rounded-inner border-[1.5px] border-bd bg-surface text-[13px] outline-none font-sans"
             />
           </form>
         </div>
@@ -140,50 +87,19 @@ export function MobileNavDrawer({ links }: { links: readonly NavLink[] }) {
 
       {/* Drawer de navegação mobile */}
       {open && (
-        <div
-          className="md:hidden"
-          style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: '#ffffff',
-            borderTop: '1px solid #E5E7EB',
-            boxShadow: '0 8px 24px rgba(0,0,0,.08)',
-            zIndex: 50,
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '8px 0 12px',
-          }}
-        >
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-bd shadow-[0_8px_24px_rgba(0,0,0,0.08)] z-50 flex flex-col pt-2 pb-3">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              style={{
-                padding: '12px 20px',
-                fontSize: '14px',
-                fontWeight: 600,
-                color: link.promo ? '#DC2626' : link.active ? '#002603' : '#374151',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'background .12s',
-              }}
+              className={cn(
+                'py-3 px-5 text-sm font-semibold no-underline flex items-center gap-2 transition-colors duration-[120ms]',
+                link.promo ? 'text-red-600' : link.active ? 'text-gdeep' : 'text-t7'
+              )}
             >
               {link.label}
               {link.badge && (
-                <span
-                  style={{
-                    backgroundColor: '#00B207',
-                    color: '#ffffff',
-                    fontSize: '9px',
-                    fontWeight: 700,
-                    padding: '2px 6px',
-                    borderRadius: '100px',
-                  }}
-                >
+                <span className="bg-g text-white text-[9px] font-bold py-0.5 px-1.5 rounded-pill">
                   {link.badge}
                 </span>
               )}
