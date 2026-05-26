@@ -7,9 +7,23 @@ interface CategoryRow {
   id: number
   name: string
   slug: string
-  icon_name: string
   sort_order: number
   product_count: number
+}
+
+// ─── Mapa slug → ícone (independente do banco) ───────────────────────────────
+const SLUG_TO_ICON: Record<string, string> = {
+  'castanhas':                  'nut',
+  'graos-e-sementes':           'wheat',
+  'temperos-e-especiarias':     'flame',
+  'chas-e-infusoes':            'cup-saucer',
+  'frutas-secas':               'apple',
+  'snacks':                     'cookie',
+  'chocolates-de-verdade':      'chocolate',
+  'farinhas':                   'package',
+  'suplementos-naturais':       'pill',
+  'cosmeticos-naturais':        'sparkles',
+  'oleos-e-adocantes-naturais': 'droplets',
 }
 
 // ─── Mapa de ícones SVG por icon_name do banco ────────────────────────────────
@@ -192,7 +206,6 @@ export default async function CategoryGrid() {
       id,
       name,
       slug,
-      icon_name,
       sort_order,
       products!inner(id)
     `)
@@ -204,7 +217,6 @@ export default async function CategoryGrid() {
     id: cat.id,
     name: cat.name,
     slug: cat.slug,
-    icon_name: cat.icon_name,
     sort_order: cat.sort_order,
     product_count: Array.isArray(cat.products) ? cat.products.length : cat.products ? 1 : 0,
   }))
@@ -215,7 +227,7 @@ export default async function CategoryGrid() {
 
   return (
     <section
-      className="bg-[--cream] py-14 lg:py-20"
+      className="bg-cream py-14 lg:py-20"
       aria-label="Categorias de produtos"
     >
       <div className="max-w-[1280px] mx-auto px-5 xl:px-0">
@@ -258,7 +270,7 @@ export default async function CategoryGrid() {
                   aria-hidden="true"
                 >
                   <span className="text-[#2C742F] group-hover:scale-110 transition-all duration-[180ms]">
-                    <CategoryIcon name={cat.icon_name} />
+                    <CategoryIcon name={SLUG_TO_ICON[cat.slug] ?? ''} />
                   </span>
                 </div>
                 <span className="text-[12px] font-semibold leading-[1.4] tracking-[.01em] text-[#111827] transition-colors duration-[180ms]">

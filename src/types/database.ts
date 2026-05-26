@@ -10,25 +10,34 @@ export type Database = {
           id: number
           name: string
           slug: string
-          icon_name: string
+          icon_url: string | null
+          image_url: string | null
           sort_order: number
           is_active: boolean
+          created_at: string
+          updated_at: string
         }
         Insert: {
           id?: number
           name: string
           slug: string
-          icon_name?: string
+          icon_url?: string | null
+          image_url?: string | null
           sort_order?: number
           is_active?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Update: {
           id?: number
           name?: string
           slug?: string
-          icon_name?: string
+          icon_url?: string | null
+          image_url?: string | null
           sort_order?: number
           is_active?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -63,6 +72,7 @@ export type Database = {
           id: number
           name: string
           slug: string
+          description: string | null
           category_id: number | null
           unit: ProductUnit
           product_type: ProductType
@@ -73,12 +83,14 @@ export type Database = {
           is_active: boolean
           is_deleted: boolean
           is_featured: boolean
+          image_url: string | null
           created_at: string
         }
         Insert: {
           id?: number
           name: string
           slug: string
+          description?: string | null
           category_id?: number | null
           unit?: ProductUnit
           product_type?: ProductType
@@ -89,12 +101,14 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
+          image_url?: string | null
           created_at?: string
         }
         Update: {
           id?: number
           name?: string
           slug?: string
+          description?: string | null
           category_id?: number | null
           unit?: ProductUnit
           product_type?: ProductType
@@ -105,6 +119,7 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
+          image_url?: string | null
           created_at?: string
         }
         Relationships: [
