@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { getSupabaseAdmin } from '@/lib/supabase/server'
+import { getSupabaseServer } from '@/lib/supabase/server'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface CategoryRow {
@@ -198,32 +198,39 @@ function VerTudoCard({ totalCount }: { totalCount: number }) {
 
 // ─── Componente principal — Server Component ──────────────────────────────────
 export default async function CategoryGrid() {
-  const supabase = getSupabaseAdmin()
+  const supabase = getSupabaseServer()
 
-  const { data } = await supabase
+  // Query 1 — categorias ativas ordenadas
+  const { data: catsData } = await supabase
     .from('categories')
-    .select(`
-      id,
-      name,
-      slug,
-      sort_order,
-      products!inner(id)
-    `)
+    .select('id, name, slug, sort_order')
     .eq('is_active', true)
-    .eq('products.is_deleted', false)
     .order('sort_order', { ascending: true })
 
-  const categories: CategoryRow[] = (data ?? []).map((cat) => ({
+  // Query 2 — contagem de produtos ativos por categoria
+  const { data: productsData } = await supabase
+    .from('products')
+    .select('category_id')
+    .eq('is_active', true)
+    .eq('is_deleted', false)
+
+  // Monta mapa category_id → contagem
+  const countMap = new Map<number, number>()
+  for (const p of productsData ?? []) {
+    if (p.category_id != null) {
+      countMap.set(p.category_id, (countMap.get(p.category_id) ?? 0) + 1)
+    }
+  }
+
+  const categories: CategoryRow[] = (catsData ?? []).map((cat) => ({
     id: cat.id,
     name: cat.name,
     slug: cat.slug,
     sort_order: cat.sort_order,
-    product_count: Array.isArray(cat.products) ? cat.products.length : cat.products ? 1 : 0,
+    product_count: countMap.get(cat.id) ?? 0,
   }))
 
   const totalCount = categories.reduce((acc, c) => acc + c.product_count, 0)
-
-  // erro silencioso — fallback já aplicado com data ?? []
 
   return (
     <section
