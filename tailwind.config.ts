@@ -63,6 +63,23 @@ const config: Config = {
         card:         '0 10px 30px rgba(0,0,0,.05)',
         'card-hover': '0 20px 50px rgba(0,0,0,.09), 0 4px 12px rgba(0,0,0,.04)',
         drawer:       '0 0 40px rgba(0,0,0,.15)',
+        nav:          '0 1px 3px rgba(0,0,0,.06)',
+      },
+      keyframes: {
+        'ann-slide': {
+          '0%, 40%':  { transform: 'translateY(0)',     opacity: '1' },
+          '50%, 90%': { transform: 'translateY(-100%)', opacity: '0' },
+          '100%':     { transform: 'translateY(0)',     opacity: '1' },
+        },
+        'ann-slide-2': {
+          '0%, 40%':  { transform: 'translateY(100%)', opacity: '0' },
+          '50%, 90%': { transform: 'translateY(0)',    opacity: '1' },
+          '100%':     { transform: 'translateY(100%)', opacity: '0' },
+        },
+      },
+      animation: {
+        'ann-slide':   'ann-slide   6s ease-in-out infinite',
+        'ann-slide-2': 'ann-slide-2 6s ease-in-out infinite',
       },
       maxWidth: {
         container: '1280px',
