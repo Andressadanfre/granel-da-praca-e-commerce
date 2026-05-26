@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/Badge'
 import { AddToCartSelector } from '@/components/product/AddToCartSelector'
 import { WishlistButton } from '@/components/product/WishlistButton'
-import { tokens } from '@/lib/tokens'
 import { cn, formatBRL } from '@/lib/utils'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -77,25 +76,15 @@ export function ProductCard({
 
   return (
     <article
-      className={cn('product-card relative flex flex-col overflow-hidden cursor-pointer', className)}
-      style={{
-        borderRadius: tokens.radius.card,
-        background:   tokens.colors.cream,
-        border:       `1px solid ${tokens.colors.bd}`,
-        boxShadow:    tokens.shadow.card,
-        outline:      isFeatured ? `2px solid ${tokens.colors.g}` : undefined,
-        opacity:      isOutOfStock ? 0.7 : 1,
-      }}
+      className={cn(
+        'product-card relative flex flex-col overflow-hidden cursor-pointer rounded-card bg-cream border border-bd shadow-card',
+        isFeatured && 'outline outline-2 outline-g',
+        isOutOfStock && 'opacity-70',
+        className
+      )}
     >
       {/* ── Área de imagem ─────────────────────────────────────────── */}
-      <div
-        className="product-card__img relative flex-shrink-0 flex items-center justify-center overflow-hidden"
-        style={{
-          height:       '200px',
-          background:   tokens.colors.creamImg,
-          borderRadius: '20px 20px 0 0',
-        }}
-      >
+      <div className="product-card__img relative flex-shrink-0 flex items-center justify-center overflow-hidden h-[200px] bg-cream-img rounded-t-card">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -118,27 +107,15 @@ export function ProductCard({
 
         {/* Overlay esgotado */}
         {isOutOfStock && (
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{
-              background:   'rgba(249,245,239,0.80)',
-              borderRadius: '20px 20px 0 0',
-            }}
-          >
-            <span
-              className="font-semibold text-sm"
-              style={{ color: tokens.colors.t6 }}
-            >
+          <div className="absolute inset-0 flex items-center justify-center bg-cream/80 rounded-t-card">
+            <span className="font-semibold text-sm text-t6">
               Produto esgotado
             </span>
           </div>
         )}
 
         {/* Badges empilhados — constraint Left/Top */}
-        <div
-          className="absolute flex flex-col"
-          style={{ top: '12px', left: '12px', gap: '5px' }}
-        >
+        <div className="absolute flex flex-col top-3 left-3 gap-[5px]">
           {dietBadges.map((label) => (
             <Badge key={label} variant="diet">{label}</Badge>
           ))}
@@ -159,94 +136,36 @@ export function ProductCard({
       </div>
 
       {/* ── Card body ──────────────────────────────────────────────── */}
-      <div
-        className="flex flex-col flex-1"
-        style={{ padding: '16px 18px 20px' }}
-      >
+      <div className="flex flex-col flex-1 pt-4 pb-5 px-[18px]">
         {/* Categoria */}
-        <p
-          className="uppercase"
-          style={{
-            fontSize:      '9.5px',
-            fontWeight:    600,
-            color:         tokens.colors.t4,
-            letterSpacing: '0.08em',
-            marginBottom:  '4px',
-          }}
-        >
+        <p className="uppercase text-[9.5px] font-semibold text-t4 tracking-[0.08em] mb-1">
           {category}
         </p>
 
         {/* Nome — reserva exata de 3 linhas */}
-        <h3
-          className="line-clamp-3"
-          style={{
-            fontSize:   '13.5px',
-            fontWeight: 600,
-            color:      tokens.colors.t9,
-            lineHeight: 1.4,
-            minHeight:  'calc(13.5px * 1.4 * 3)',
-          }}
-        >
+        <h3 className="line-clamp-3 text-[13.5px] font-semibold text-t9 leading-[1.4] min-h-[calc(13.5px*1.4*3)]">
           {name}
         </h3>
 
         {/* Variante/embalagem */}
-        <p
-          style={{
-            fontSize:   '11px',
-            fontWeight: 500,
-            color:      tokens.colors.t6,
-            marginTop:  '4px',
-            minHeight:  '16px',
-          }}
-        >
+        <p className="text-[11px] font-medium text-t6 mt-1 min-h-4">
           {packageLabel ?? ''}
         </p>
 
         {/* Bloco de preço — min-height reserva o caso mais alto */}
-        <div
-          style={{
-            minHeight:     '72px',
-            display:       'flex',
-            flexDirection: 'column',
-            marginTop:     '8px',
-          }}
-        >
-          <p
-            style={{
-              fontSize:     '10px',
-              fontWeight:   400,
-              color:        tokens.colors.t4,
-              marginBottom: '2px',
-            }}
-          >
+        <div className="min-h-[72px] flex flex-col mt-2">
+          <p className="text-[10px] font-normal text-t4 mb-0.5">
             {getPriceLabel(variant)}
           </p>
 
           {/* Preço principal + riscado */}
-          <div className="flex items-baseline" style={{ gap: '6px' }}>
-            <span
-              style={{
-                fontSize:      '20px',
-                fontWeight:    700,
-                color:         tokens.colors.gdeep,
-                letterSpacing: '-0.02em',
-                lineHeight:    1,
-              }}
-            >
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gdeep tracking-[-0.02em] leading-none">
               {formatBRL(priceInCents)}
             </span>
 
             {originalPriceInCents && (
-              <span
-                style={{
-                  fontSize:       '12px',
-                  fontWeight:     400,
-                  color:          tokens.colors.t5,
-                  textDecoration: 'line-through',
-                }}
-              >
+              <span className="text-xs font-normal text-t5 line-through">
                 {formatBRL(originalPriceInCents)}
               </span>
             )}
@@ -254,51 +173,27 @@ export function ProductCard({
 
           {/* /kg para granel | % desconto para unit */}
           {variant === 'granel' && pricePerKgInCents && (
-            <p
-              style={{
-                fontSize:   '11px',
-                fontWeight: 400,
-                color:      tokens.colors.t7,
-                marginTop:  '3px',
-              }}
-            >
+            <p className="text-[11px] font-normal text-t7 mt-[3px]">
               {`${formatBRL(pricePerKgInCents)}/kg`}
             </p>
           )}
 
           {variant === 'unit' && hasDiscount && (
-            <p
-              style={{
-                fontSize:   '11px',
-                fontWeight: 600,
-                color:      tokens.colors.promo,
-                marginTop:  '3px',
-              }}
-            >
+            <p className="text-[11px] font-semibold text-promo mt-[3px]">
               {discountPercent}% de desconto
             </p>
           )}
         </div>
 
         {/* Spacer — empurra botão para a base */}
-        <div style={{ flex: 1 }} aria-hidden="true" />
+        <div className="flex-1" aria-hidden="true" />
 
         {/* QuantitySelector ou estado esgotado */}
         {isOutOfStock ? (
           <button
             type="button"
             disabled
-            className="w-full flex items-center justify-center font-semibold"
-            style={{
-              height:       '40px',
-              borderRadius: tokens.radius.sel,
-              border:       `1px solid ${tokens.colors.bd}`,
-              background:   tokens.colors.surface,
-              color:        tokens.colors.t4,
-              fontSize:     '13.5px',
-              cursor:       'not-allowed',
-              fontFamily:   'var(--font-poppins), sans-serif',
-            }}
+            className="w-full flex items-center justify-center font-semibold h-10 rounded-sel border border-bd bg-surface text-t4 text-[13.5px] cursor-not-allowed font-sans"
           >
             Indisponível
           </button>
