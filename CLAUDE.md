@@ -450,3 +450,4 @@ Idem em `/conta/pedidos` por linha de pedido.
 | Commit vazio (blob `e69de29`) | `git diff --staged --stat` antes de todo commit |
 | `@supabase/auth-helpers-nextjs` | Usar `@supabase/ssr` |
 | Badge com `number` como children direto | Template literal `` `${n}% OFF` `` — nunca JSX com number diretamente |
+| RLS policy sem `GRANT SELECT` — tabela pública invisível para `anon` | RLS policy e `GRANT SELECT` são duas camadas independentes no Postgres. Após criar qualquer tabela pública: (1) `CREATE POLICY ... USING (...)`, (2) `GRANT SELECT ON tabela TO anon, authenticated` |
