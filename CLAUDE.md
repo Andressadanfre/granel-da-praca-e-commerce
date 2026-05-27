@@ -172,6 +172,32 @@ import { getSupabaseAdmin } from '@/lib/supabase/server'
 
 ---
 
+
+## Seguranca de Negocio
+
+### Calculo de preco
+- Server Action recebe apenas product_id e quantity_grams
+- Preco SEMPRE buscado do banco
+- Total: price_cents / increment_grams * 100
+
+### IDs publicos
+- orders, payments: UUID obrigatorio
+- Nunca int sequencial em URL
+
+### Idempotencia
+- Checkout usa cart_id como idempotency_key
+
+### Cupons Race Condition
+- UPDATE com RETURNING e WHERE used_count < max_uses em query unica
+
+### IDOR
+- Queries em orders filtram por user_id da sessao
+
+### Rate limiting
+- checkout: 5 req/min
+- auth: 10 req/min
+- coupons: 3 req/min
+
 ## Padrões de Código
 
 ### Ordem de imports
