@@ -7,7 +7,7 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
-          id: number
+          id: string
           name: string
           slug: string
           icon_url: string | null
@@ -18,7 +18,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          id?: number
+          id?: string
           name: string
           slug: string
           icon_url?: string | null
@@ -69,11 +69,11 @@ export type Database = {
       }
       products: {
         Row: {
-          id: number
+          id: string
           name: string
           slug: string
           description: string | null
-          category_id: number | null
+          category_id: string | null
           unit: ProductUnit
           product_type: ProductType
           price_cents: number
@@ -87,11 +87,11 @@ export type Database = {
           created_at: string
         }
         Insert: {
-          id?: number
+          id?: string
           name: string
           slug: string
           description?: string | null
-          category_id?: number | null
+          category_id?: string | null
           unit?: ProductUnit
           product_type?: ProductType
           price_cents: number
