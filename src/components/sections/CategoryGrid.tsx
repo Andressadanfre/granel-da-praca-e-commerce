@@ -4,7 +4,7 @@ import { getSupabaseServer } from '@/lib/supabase/server'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface CategoryRow {
-  id: number
+  id: string
   name: string
   slug: string
   sort_order: number
@@ -197,7 +197,7 @@ function VerTudoCard({ totalCount }: { totalCount: number }) {
 }
 
 // ─── Componente principal — Server Component ──────────────────────────────────
-export default async function CategoryGrid() {
+export default async function CategoryGrid({ selectedSlug }: { selectedSlug?: string } = {}) {
   const supabase = getSupabaseServer()
 
   // Query 1 — categorias ativas ordenadas
@@ -215,7 +215,7 @@ export default async function CategoryGrid() {
     .eq('is_deleted', false)
 
   // Monta mapa category_id → contagem
-  const countMap = new Map<number, number>()
+  const countMap = new Map<string, number>()
   for (const p of productsData ?? []) {
     if (p.category_id != null) {
       countMap.set(p.category_id, (countMap.get(p.category_id) ?? 0) + 1)
@@ -254,14 +254,16 @@ export default async function CategoryGrid() {
           {categories.map((cat) => (
             <li key={cat.id}>
               <Link
-                href={`/loja/${cat.slug}`}
+                href={`/loja?categoria=${cat.slug}`}
                 className={cn(
                   'group flex flex-col items-center gap-3 lg:gap-4',
                   'px-3 py-5 lg:px-4 lg:py-8',
                   'rounded-[20px] text-center no-underline',
                   'transition-all duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)]',
                   'hover:-translate-y-[10px]',
-                  'bg-white border border-transparent',
+                  selectedSlug === cat.slug
+                    ? 'bg-[#F0FDF4] border border-[#2C742F]'
+                    : 'bg-white border border-transparent',
                   'shadow-[0_4px_20px_rgba(0,0,0,.03)]',
                   'hover:shadow-[0_16px_48px_rgba(0,38,3,.10),_0_4px_12px_rgba(0,38,3,.05)]',
                 )}
@@ -271,7 +273,7 @@ export default async function CategoryGrid() {
                     'flex items-center justify-center rounded-full flex-shrink-0',
                     'transition-all duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)]',
                     'group-hover:scale-105',
-                    'bg-[#F0FDF4] group-hover:bg-[#DCFCE7]',
+                    selectedSlug === cat.slug ? 'bg-[#DCFCE7]' : 'bg-[#F0FDF4] group-hover:bg-[#DCFCE7]',
                   )}
                   style={{ width: 60, height: 60 }}
                   aria-hidden="true"
