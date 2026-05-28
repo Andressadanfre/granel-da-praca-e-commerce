@@ -44,7 +44,7 @@ export function Footer() {
           className="ft-nl-glow absolute w-[400px] h-[400px] rounded-full -top-[150px] -right-20 pointer-events-none"
         />
 
-        <div className="ft-nl-inner max-w-container mx-auto px-10 flex items-center justify-between gap-10 relative z-[1]">
+        <div className="ft-nl-inner max-w-container mx-auto px-4 sm:px-5 xl:px-0 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 md:gap-10 relative z-[1]">
           <div>
             <p className="text-[10px] font-bold text-white/60 uppercase tracking-[.12em] mb-[6px]">
               Newsletter
@@ -70,7 +70,7 @@ export function Footer() {
           className="ft-body-overlay absolute inset-0 pointer-events-none"
         />
 
-        <div className="ft-body max-w-container mx-auto pt-16 pb-12 px-10 grid grid-cols-[260px_1fr_1fr_1fr] gap-12 relative z-[1]">
+        <div className="ft-body max-w-container mx-auto pt-16 pb-12 px-4 sm:px-5 xl:px-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[260px_1fr_1fr_1fr] gap-12 relative z-[1]">
           <div>
             <div className="mb-[18px] flex items-center">
               <svg
@@ -222,11 +222,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="max-w-container mx-auto px-10 relative z-[1]">
+        <div className="max-w-container mx-auto px-4 sm:px-5 xl:px-0 relative z-[1]">
           <hr className="border-0 border-t border-white/[.08]" />
         </div>
 
-        <div className="ft-bottom max-w-container mx-auto pt-5 pb-8 px-10 flex items-center justify-between gap-6 flex-wrap relative z-[1]">
+        <div className="ft-bottom max-w-container mx-auto pt-5 pb-8 px-4 sm:px-5 xl:px-0 flex items-center justify-between gap-6 flex-wrap relative z-[1]">
           <p className="text-[11.5px] text-white/[.42] leading-[1.5]">
             © 2025 <strong className="text-white/60 font-semibold">Granel da Praça</strong>. Todos os direitos reservados.<br />
             Uberlândia, MG · CNPJ 00.000.000/0001-00
