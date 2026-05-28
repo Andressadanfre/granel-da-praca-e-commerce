@@ -4,7 +4,6 @@ import { Suspense } from 'react'
 
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
-import CategoryGrid from '@/components/sections/CategoryGrid'
 import ProductGrid from '@/components/sections/ProductGrid'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
 import { getSupabaseServer } from '@/lib/supabase/server'
@@ -54,8 +53,6 @@ export default async function LojaPage({ searchParams }: LojaPageProps) {
     <>
       <Navigation />
       <main className="bg-cream min-h-screen">
-        <CategoryGrid selectedSlug={categoria} />
-
         <section className="max-w-[1280px] mx-auto px-5 xl:px-0 pb-14 lg:pb-20">
           <div className="mb-6 pt-10">
             <h1 className="text-2xl font-bold text-gdeep leading-tight">
