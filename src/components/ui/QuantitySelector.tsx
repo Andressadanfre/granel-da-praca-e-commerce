@@ -127,8 +127,7 @@ export const QuantitySelector = React.forwardRef<
         </button>
 
         <span
-          className="flex items-center justify-center border-x border-white/20 font-bold text-white"
-          style={{ fontSize: '14px' }}
+          className="flex items-center justify-center border-x border-white/20 font-bold text-white text-xs sm:text-sm"
           aria-hidden
         >
           {formatQuantity(quantity, variant)}

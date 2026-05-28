@@ -68,7 +68,7 @@ function DifCard({ card }: { card: Card }) {
         aria-hidden="true"
         className="
           absolute bottom-0 left-0 right-0 h-[3px] rounded-b-[24px]
-          bg-gradient-to-r from-[var(--g)] to-[var(--gd)]
+          bg-gradient-to-r from-g to-gd
           scale-x-0 origin-left
           transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)]
           group-hover:scale-x-100
@@ -80,9 +80,9 @@ function DifCard({ card }: { card: Card }) {
         className="
           relative z-10 mb-5 flex h-14 w-14 shrink-0
           items-center justify-center rounded-full
-          bg-[#E8F5E9] text-[var(--gd)]
+          bg-g-light text-gd
           transition-[background,transform] duration-[180ms]
-          group-hover:scale-110 group-hover:bg-[#C8E6C9]
+          group-hover:scale-110 group-hover:bg-badge-diet-bd
         "
       >
         {card.icon}
@@ -98,12 +98,12 @@ function DifCard({ card }: { card: Card }) {
           inline-flex self-start items-center gap-[5px]
           whitespace-nowrap rounded-[100px]
           border border-[rgba(44,116,47,0.15)]
-          bg-[#E8F5E9] px-[11px] py-[5px]
+          bg-g-light px-[11px] py-[5px]
           text-[10px] font-semibold uppercase tracking-[0.04em]
-          text-[var(--gd)]
+          text-gd
         "
       >
-        <span className="text-[var(--g)]">
+        <span className="text-g">
           <CheckIcon />
         </span>
         {card.badge}
@@ -113,14 +113,14 @@ function DifCard({ card }: { card: Card }) {
       <h3
         className="
           relative z-10 mb-2.5
-          text-[20px] font-bold leading-[1.25] tracking-[-0.02em] text-[#1A1A1A]
+          text-[20px] font-bold leading-[1.25] tracking-[-0.02em] text-t9
         "
       >
         {card.title}
       </h3>
 
       {/* texto */}
-      <p className="relative z-10 text-[15px] leading-[1.65] text-[#4A4A4A]">
+      <p className="relative z-10 text-[15px] leading-[1.65] text-t6">
         {card.text}
       </p>
     </>
@@ -135,7 +135,7 @@ function DifCard({ card }: { card: Card }) {
     hover:shadow-[0_12px_36px_rgba(0,38,3,0.08),0_4px_10px_rgba(0,38,3,0.04)]
     ${card.featured
       ? 'border-[rgba(0,178,7,0.18)] bg-[#F7FDF7]'
-      : 'border-[#E0E0E0] bg-[var(--cream)]'
+      : 'border-bd bg-cream'
     }
   `
 
@@ -163,7 +163,7 @@ export default function DiferenciaisSection() {
         aria-hidden="true"
         className="
           absolute inset-x-0 top-0 h-px
-          bg-[linear-gradient(90deg,transparent,var(--bd)_20%,var(--bd)_80%,transparent)]
+          bg-[linear-gradient(90deg,transparent,theme(colors.bd)_20%,theme(colors.bd)_80%,transparent)]
         "
       />
 
@@ -190,12 +190,12 @@ export default function DiferenciaisSection() {
           <div
             className="
               mb-2.5 inline-flex items-center gap-2
-              text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--gd)]
+              text-[11px] font-bold uppercase tracking-[0.12em] text-gd
             "
           >
             <span
               aria-hidden="true"
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--g)]"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-g"
             />
             Por que escolher a gente
           </div>
@@ -203,7 +203,7 @@ export default function DiferenciaisSection() {
           <h2
             className="
               mb-2.5 text-[clamp(22px,3vw,36px)] font-extrabold
-              leading-[1.15] tracking-[-0.02em] text-[var(--gdeep)]
+              leading-[1.15] tracking-[-0.02em] text-gdeep
             "
           >
             Natural de verdade,
@@ -211,7 +211,7 @@ export default function DiferenciaisSection() {
             do começo ao fim
           </h2>
 
-          <p className="mx-auto max-w-[520px] text-[15px] leading-[1.65] text-[var(--t6)]">
+          <p className="mx-auto max-w-[520px] text-[15px] leading-[1.65] text-t6">
             Cada etapa pensada para você receber o melhor dos produtos naturais
             — com qualidade, cuidado e transparência.
           </p>
