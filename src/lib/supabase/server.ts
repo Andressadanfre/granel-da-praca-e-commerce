@@ -8,7 +8,7 @@ import type { Database } from '@/types/database'
 // Server Components e Server Actions autenticados — RLS ativo via cookies
 export function getSupabaseServer() {
   const cookieStore = cookies()
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
