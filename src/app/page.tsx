@@ -4,7 +4,6 @@ import { Suspense } from 'react'
 import { Navigation } from '@/components/layout/Navigation'
 import { HeroBanner } from '@/components/sections/HeroBanner'
 import TrustBadges from '@/components/sections/TrustBadges'
-import CategoryGrid from '@/components/sections/CategoryGrid'
 import DiferenciaisSection from '@/components/sections/DiferenciaisSection'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
@@ -17,7 +16,6 @@ export default function Home() {
       <main>
         <HeroBanner />
         <TrustBadges />
-        <CategoryGrid />
         <DiferenciaisSection />
         <Suspense
           fallback={

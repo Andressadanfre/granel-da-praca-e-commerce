@@ -130,7 +130,7 @@ export async function Navigation() {
         aria-label="Categorias"
         className="bg-gdeep border-t border-[rgba(255,255,255,.08)]"
       >
-        <div className="max-w-container mx-auto px-s10 h-[58px] flex items-center">
+        <div className="max-w-container mx-auto px-4 md:px-s10 h-[58px] flex items-center">
           <CategoryBar categories={categories} />
         </div>
       </nav>

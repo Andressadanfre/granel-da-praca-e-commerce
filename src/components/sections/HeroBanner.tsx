@@ -9,7 +9,7 @@ import { HeroSlider } from './HeroSlider'
 export function HeroBanner() {
   return (
     <section aria-label="Banner principal" className="bg-cream overflow-hidden">
-      <div className="mx-auto max-w-container px-s10 grid grid-cols-2 items-center min-h-[520px] gap-s12">
+      <div className="mx-auto max-w-container px-4 sm:px-s10 grid grid-cols-1 sm:grid-cols-2 items-center sm:min-h-[520px] gap-s12">
 
         {/* ── Coluna de copy ─────────────────────────────────────── */}
         <div className="py-[56px]">
@@ -72,7 +72,9 @@ export function HeroBanner() {
           </div>
         </div>
 
-        <HeroSlider />
+        <div className="hidden sm:block">
+          <HeroSlider />
+        </div>
       </div>
     </section>
   )
