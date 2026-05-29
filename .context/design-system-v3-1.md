@@ -451,23 +451,23 @@ Todo feed, grid ou lista com dados assíncronos deve implementar:
 
 | Arquivo | Status |
 | --- | --- |
-| `design-tokens.ts` | 🔴 Pendente |
-| `cn.ts` | 🔴 Pendente |
-| `Button.tsx` — 5 variantes | 🔴 Pendente |
-| `Badge.tsx` | 🔴 Pendente |
-| `Input.tsx` | 🔴 Pendente |
+| `design-tokens.ts` | ✅ Implementado (src/lib/tokens.ts) |
+| `cn.ts` | ✅ Implementado (src/lib/utils.ts) |
+| `Button.tsx` — 5 variantes | ✅ Implementado |
+| `Badge.tsx` | ✅ Implementado |
+| `Input.tsx` | ✅ Implementado |
 | `Card.tsx` | 🔴 Pendente |
-| `QuantitySelector.tsx` | 🔴 Pendente |
-| `ProductCard.tsx` | 🔴 Pendente |
-| `ProductCardSkeleton.tsx` | 🔴 Pendente |
-| `EmptyState.tsx` — 5 contextos | 🔴 Pendente |
-| `Navigation.tsx` | 🔴 Pendente |
-| `Footer.tsx` | 🔴 Pendente |
-| `HeroBanner.tsx` | 🔴 Pendente |
-| `TrustBadges.tsx` | 🔴 Pendente |
-| `CategoryGrid.tsx` | 🔴 Pendente |
+| `QuantitySelector.tsx` | ✅ Implementado |
+| `ProductCard.tsx` | 🟡 Parcial (fallback imagem + Bloco 9) |
+| `ProductCardSkeleton.tsx` | ✅ Implementado |
+| `EmptyState.tsx` — 5 contextos | ✅ Implementado |
+| `Navigation.tsx` | 🟡 Parcial (Bloco 9) |
+| `Footer.tsx` | 🟡 Parcial (Bloco 9) |
+| `HeroBanner.tsx` | 🟡 Parcial (Bloco 9) |
+| `TrustBadges.tsx` | ✅ Implementado |
+| `CategoryGrid.tsx` | ✅ Implementado |
 | `ProductGrid.tsx` | 🔴 Pendente |
-| `FeaturedProducts.tsx` | 🔴 Pendente |
+| `FeaturedProducts.tsx` | ✅ Implementado |
 | `NewsletterPopup.tsx` | 🔴 Pendente |
 | `CartDrawer.tsx` | 🔴 Pendente |
 | `CheckoutStepper.tsx` | 🔴 Pendente |
