@@ -446,6 +446,35 @@ Nunca commitar com build quebrado.
 | `/conta/*` | 🔴 Pendente |
 | `/admin/*` | 🔴 Pendente |
 
+### Componentes — Status
+
+| Arquivo | Status |
+|---|---|
+| `design-tokens.ts` | ✅ Implementado (src/lib/tokens.ts) |
+| `cn.ts` | ✅ Implementado (src/lib/utils.ts) |
+| `Button.tsx` — 5 variantes | ✅ Implementado |
+| `Badge.tsx` | ✅ Implementado |
+| `Input.tsx` | ✅ Implementado |
+| `Card.tsx` | 🔴 Pendente |
+| `QuantitySelector.tsx` | ✅ Implementado |
+| `ProductCard.tsx` | 🟡 Parcial (fallback imagem + Bloco 9) |
+| `ProductCardSkeleton.tsx` | ✅ Implementado |
+| `EmptyState.tsx` — 5 contextos | ✅ Implementado |
+| `Navigation.tsx` | 🟡 Parcial (Bloco 9) |
+| `Footer.tsx` | 🟡 Parcial (Bloco 9) |
+| `HeroBanner.tsx` | 🟡 Parcial (Bloco 9) |
+| `TrustBadges.tsx` | ✅ Implementado |
+| `CategoryGrid.tsx` | ✅ Implementado |
+| `ProductGrid.tsx` | 🔴 Pendente |
+| `FeaturedProducts.tsx` | ✅ Implementado |
+| `NewsletterPopup.tsx` | 🔴 Pendente |
+| `CartDrawer.tsx` | 🔴 Pendente |
+| `CheckoutStepper.tsx` | 🔴 Pendente |
+| `OrderTimeline.tsx` | 🔴 Pendente |
+| `Modal.tsx` | 🔴 Pendente |
+| `FidelityCard.tsx` | 🔴 Pendente |
+| `AdminSidebar.tsx` | 🔴 Pendente |
+
 ### Próximas entregas (prioridade)
 1. **Vercel** — conectar repo `granel-da-praca-e-commerce` (apagar projeto antigo manualmente)
 2. **Descrições de produto** — script batch Node.js + Anthropic API → coluna `description` no Supabase
