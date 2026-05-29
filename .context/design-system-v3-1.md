@@ -458,7 +458,7 @@ Todo feed, grid ou lista com dados assíncronos deve implementar:
 | `Input.tsx` | ✅ Implementado |
 | `Card.tsx` | 🔴 Pendente |
 | `QuantitySelector.tsx` | ✅ Implementado |
-| `ProductCard.tsx` | 🟡 Parcial (fallback imagem + Bloco 9) |
+| `ProductCard.tsx` | 🟡 Parcial (Bloco 9) |
 | `ProductCardSkeleton.tsx` | ✅ Implementado |
 | `EmptyState.tsx` — 5 contextos | ✅ Implementado |
 | `Navigation.tsx` | 🟡 Parcial (Bloco 9) |

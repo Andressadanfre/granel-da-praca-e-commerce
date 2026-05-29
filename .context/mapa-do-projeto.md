@@ -132,7 +132,7 @@ Tipagem fraca — `FeaturedProducts.tsx`
 | **5 — Arquitetura** | Resolver border shorthand conflitante | `src/components/layout/CategoryBar.tsx` | ✅ Concluído · commit 2b6d702 · Sessão 040 |
 | **6 — DS** | Mapear tokens no `tailwind.config.ts` e substituir hex hardcoded | Múltiplos arquivos | ✅ Parcial · commit 7c8e2e3 · componentes UI limpos · arquivos de layout entram no Bloco 9 |
 | **7 — Baixo** | Avaliar remoção do `'use client'` | `AddToCartSelector.tsx` | ✅ Avaliado · Sessão 040 · `'use client'` necessário — `QuantitySelector` é Client Component com `useState` · não remover |
-| **8 — Baixo** | Fallback de imagem no ProductCard | `ProductCard.tsx` | 🔴 Pendente |
+| **8 — Baixo** | Fallback de imagem no ProductCard | `ProductCard.tsx` | ✅ Concluído |
 | **9 —  Refatoração** | Converter `style` inline estático → Tailwind | `Navigation.tsx` · `HeroBanner.tsx` · `MobileNavDrawer.tsx` · `Footer.tsx` · `NewsletterForm.tsx` · `HeroSlider.tsx` · `ProductCard.tsx` | 🔴 Pendente · 1 arquivo por commit  |
 
 ---
