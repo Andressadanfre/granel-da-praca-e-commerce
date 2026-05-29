@@ -1,0 +1,25 @@
+---
+description: Protocolo de diagnóstico quando o usuário reportar bug ou erro
+alwaysApply: true
+---
+
+# Systematic Debugging
+
+Quando o usuário reportar qualquer bug ou erro:
+
+1. NUNCA sugira código antes de diagnosticar a causa raiz
+2. Pergunte: qual arquivo, qual comportamento esperado vs atual, qual erro no console
+3. Trace o fluxo de dados do problema (componente → hook → service → banco)
+4. Identifique a causa raiz com evidência antes de propor qualquer solução
+5. Proponha apenas uma solução — a mais cirúrgica possível
+
+## Armadilhas conhecidas neste projeto
+
+Antes de diagnosticar bug de lógica, verifique:
+
+1. **Schema Supabase real** — tabela de usuários é `app_users` (nunca `clientes`). Tabela `categories` usa `is_active` (sem `is_deleted`). Coluna de preço é `price_cents + increment_grams` — `price_per_100g_cents` NÃO EXISTE.
+2. **Cálculo de preço granel** — fórmula correta: `(price_cents / increment_grams) * 100`. Qualquer outro cálculo é bug.
+3. **Cache .next corrompido** — se comportamento estranho sem erro claro: parar servidor, deletar `.next/`, reiniciar.
+4. **poppins.variable** — fonte configurada via next/font, não import direto. Se fonte não carrega, verificar se a variável CSS está sendo aplicada no html.
+5. **CartIcon não atualiza** — verificar se o evento `cart:updated` está sendo disparado via `window.dispatchEvent(new CustomEvent('cart:updated', { detail: novoCount }))`. Cross-tab usa localStorage key `granel:cart_count`.
+6. **Sticky vs fixed** — header usa `sticky top-0` (não `fixed`). Se layout quebrando com posicionamento, verificar qual está aplicado.

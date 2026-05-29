@@ -1,6 +1,5 @@
 ﻿---
 description: Regras permanentes do projeto Granel da Praça E-commerce
-globs: ["src/**/*.{ts,tsx}"]
 alwaysApply: true
 ---
 
@@ -104,13 +103,3 @@ alwaysApply: true
 ### Formato de entrega
 # ERRADO: reescrever o arquivo inteiro
 # CERTO: entregar apenas o snippet alterado com // ... para indicar o trecho não modificado
-
-## Estado da Auditoria (20/05/2026) — atualizado Sessão 040
-- Bloco 1 Segurança: ✅ Concluído · commit 88740b0
-- Bloco 2 Newsletter: ✅ Concluído · commit ab0f960
-- Bloco 3 CategoryGrid is_active: ✅ Concluído · componente removido da homepage
-- Bloco 4 FeaturedProducts tipagem: ✅ Concluído · tipo ProductWithCategory correto
-- Bloco 5 CategoryBar border shorthand: ✅ Concluído · commit 2b6d702
-- Bloco 6 Hex hardcoded: 🟡 Em progresso · tokens.ts + tailwind.config.ts atualizados · Badge ✅ · EmptyState ✅ · TrustBadges 🔄
-- Bloco 7 AddToCartSelector 'use client': 🟡 Baixo · redundante mas inofensivo
-- Bloco 8 Fallback imagem ProductCard: 🔴 Pendente

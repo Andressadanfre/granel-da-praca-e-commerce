@@ -1,0 +1,54 @@
+---
+description: Regras de segurança do projeto Granel da Praça — negócio e admin
+alwaysApply: true
+---
+
+# Segurança de Negócio
+
+## Preço — nunca confiar no cliente
+- Preço SEMPRE calculado server-side antes de criar pedido no Mercado Pago
+- Fórmula: `(product.price_cents / product.increment_grams) * quantidadeGr`
+- Nunca aceitar preço vindo do body da requisição — recalcular a partir do banco
+
+## Quantidade granel — sanitização obrigatória
+- `quantity_grams` deve ser: inteiro positivo, múltiplo de `product.increment_grams`
+- Validar antes de qualquer operação: `quantity_grams % product.increment_grams === 0`
+- Valor mínimo: `product.increment_grams`
+
+## IDOR — isolamento de dados por usuário
+- Toda query de pedido, endereço e pontos DEVE incluir `.eq('user_id', session.user.id)`
+- Nunca buscar por ID sem validar que pertence ao usuário logado
+- RLS no Supabase é a segunda linha de defesa — a primeira é a query correta
+
+## Cupons — race condition
+- Validar e decrementar uso em transação única (Supabase RPC)
+- Nunca: buscar cupom → validar → usar (window para race condition)
+
+## Idempotência de pagamento
+- `ON CONFLICT (mp_payment_id) DO NOTHING` no processamento de webhook
+- Verificar se pedido já existe antes de criar — nunca duplicar
+
+## Webhook Mercado Pago
+- Validar assinatura HMAC-SHA256 com `x-signature` antes de processar
+- Rejeitar com 401 se assinatura inválida
+
+## Rate limiting
+- Checkout: 10 req/min por IP
+- Auth: 5 req/min por IP
+- Produtos: 60 req/min (pode ser mais liberal)
+
+# Segurança Admin — rotas /admin/*
+
+## Middleware obrigatório
+- Todo acesso a `/admin/*` passa por middleware Next.js que valida JWT server-side
+- Verificar campo `role` em `app_users` — valor esperado: `'admin'` ou `'supervisora'`
+- Query correta: `SELECT role FROM app_users WHERE id = session.user.id`
+- Se `role` for nulo: negar acesso (usuário criado antes do campo existir)
+
+## getSupabaseAdmin()
+- Exclusivo para Server Components e Route Handlers em /admin/*
+- NUNCA usar em componentes client ou rotas públicas
+
+## Log de auditoria
+- Toda ação destrutiva no admin registra em `admin_audit_log`:
+  - user_id, action, target_table, target_id, timestamp, ip

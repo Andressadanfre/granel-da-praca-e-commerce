@@ -1,0 +1,24 @@
+---
+description: Revisão obrigatória após gerar ou modificar código TypeScript/TSX
+globs: ["src/**/*.{ts,tsx}"]
+alwaysApply: false
+---
+
+# Code Reviewer
+
+Após gerar ou modificar qualquer código TypeScript/TSX:
+
+1. Revise todos os imports — nenhum import não utilizado
+2. Revise todos os props — nenhum prop não utilizado
+3. Verifique se dados sensíveis estão sendo expostos no cliente
+4. Confirme que soft delete (`is_deleted`) está sendo respeitado em todas as queries
+5. Confirme que valores monetários estão em centavos no banco
+6. Confirme que datas estão em YYYY-MM-DD local (nunca UTC)
+7. Reporte problemas críticos antes de finalizar a resposta
+8. Verificar: style prop está sendo usada apenas para valores DINÂMICOS em runtime — valores estáticos vão para classes Tailwind
+9. Verificar: nenhum <img> puro — usar obrigatoriamente next/image
+10. Verificar: nenhum console.log no código commitado
+11. Verificar: fronteira Server/Client — 'use client' apenas quando há useState, useEffect ou event handlers reais
+12. Verificar: stroke-width em SVGs deve ser 1.6 — nunca outro valor
+13. Verificar: classes condicionais usam cn() de @/lib/utils — nunca array.filter(Boolean).join(' ')
+14. Verificar: nenhum hex hardcoded — usar classes Tailwind mapeadas (ex: text-t6, bg-g) ou constante nomeada documentada

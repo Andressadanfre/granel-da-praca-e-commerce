@@ -424,7 +424,7 @@ Nunca commitar com build quebrado.
 
 ---
 
-## Estado do Projeto — 26/05/2026
+## Estado do Projeto — 28/06/2026
 
 ### Infraestrutura
 - **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
@@ -438,7 +438,7 @@ Nunca commitar com build quebrado.
 | Rota | Status |
 |---|---|
 | `/` | ✅ Homepage completa |
-| `/loja` | 🔴 Pendente |
+| `/loja` | ✅ Implementada |
 | `/loja/[categoria]/[slug]` | 🔴 Pendente |
 | `/carrinho` | 🔴 Pendente |
 | `/checkout` | 🔴 Pendente |

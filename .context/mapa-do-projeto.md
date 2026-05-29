@@ -25,11 +25,13 @@
 
 ## 🔴 Críticos — Bloqueadores de lançamento
 
-### 1. `CategoryGrid.tsx` — ~~dados hardcoded~~ ✅ query real (fora da homepage)
+### 1. `CategoryGrid.tsx` — dados hardcoded
 
-**Arquivo:** `src/components/sections/CategoryGrid.tsx`
+**Arquivo:** `src/components/sections/CategoryGrid.tsx` · Linhas 68–75
 
-**Status:** Bloco 3 concluído (commit a072397) — query Supabase com `is_active` + contagem via `products!inner`. Componente removido de `/`; será montado em `/loja` quando a rota existir.
+**Problema:** Array `CATEGORIES` com slugs, nomes e contagens de produtos fixos no código (`48`, `62`, `396` etc). O banco real tem 11 categorias e 402 produtos com slugs diferentes dos mockados. A tela exibe informações falsas para o usuário.
+
+**Correção:** conectar ao Supabase com query real de categorias + `COUNT` de produtos ativos agrupado por categoria.
 
 ### 2. `NewsletterForm.tsx` — submit simulado
 
@@ -61,13 +63,15 @@
 
 **Problema:** `className` com `border-t-2 border-l-2 border-r-2` (via `linkBase`) combinado com `style={{ borderBottom: '...' }}` no mesmo elemento. Mistura de shorthand CSS com propriedades individuais gera comportamento imprevisível e já causou bug de hidratação em sessão anterior.
 
-### Tipagem fraca — `FeaturedProducts.tsx`
+✅ Resolvido · Sessão 040 · commit 2b6d702 — `border-b-2` + classes condicionais Tailwind · `usePathname()` para estado ativo exclusivo
+
+Tipagem fraca — `FeaturedProducts.tsx`
 
 **Linhas:** 66, 76
 
 **Problema:** Cast `as unknown as ProductRow[]` contorna o sistema de tipos do TypeScript. Se a estrutura da query mudar, o erro só aparecerá em runtime, não em tempo de compilação.
 
-**Correção:** criar tipo utilitário `type ProductWithCategory = Tables<'products'> & { categories: { name: string } | null }` e usar diretamente.
+✅ Resolvido · Sessão 039 · tipo `ProductWithCategory` correto · zero cast `as unknown`
 
 ### Classes Tailwind conflitantes — `CategoryGrid.tsx`
 
@@ -89,13 +93,15 @@
 
 **Exceção aceita:** cores da marca Google em `UserMenuPopover.tsx` (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) — são identidade de marca externa, não do DS.
 
+✅ Parcial · Sessão 040 · commit 7c8e2e3 — Badge, EmptyState, TrustBadges limpos · Navigation, HeroBanner, MobileNavDrawer, Footer entram no Bloco 9
+
 ---
 
 ## 🟢 Baixos — Dívida Técnica
 
-### `'use client'` desnecessário — `AddToCartSelector.tsx`
+### `'use client'` — `AddToCartSelector.tsx` — ✅ Avaliado
 
-**Problema:** Arquivo marcado como Client Component mas sem hooks ou event handlers próprios. Apenas repassa dados para `QuantitySelector`. Avaliar remoção após ver o arquivo completo.
+**Resultado:** `'use client'` é necessário. `QuantitySelector` é Client Component com `useState` e event handlers. Remover causaria erro de fronteira Server/Client. Não alterar.
 
 ### Dados estáticos de marketing — aceitável por ora
 
@@ -121,28 +127,28 @@
 | --- | --- | --- | --- |
 | **1 — Segurança** | `getSupabaseAdmin()` usar `createClient` puro, nunca `createBrowserClient` | `src/lib/supabase.ts` | ✅ Concluído · Sessão 035 · commit 88740b0 |
 | **2 — Crítico** | Server Action real de newsletter com Supabase | `src/components/layout/NewsletterForm.tsx` | ✅ Concluído · Sessão 035 · commit ab0f960 |
-| **3 — Crítico** | Query real de categorias + contagens do banco | `src/components/sections/CategoryGrid.tsx` | ✅ Concluído · commit a072397 · `.eq('is_active', true)` · componente fora da homepage, reservado para `/loja` |
-| **4 — Arquitetura** | Eliminar cast `as unknown as ProductRow[]` | `src/components/sections/FeaturedProducts.tsx` | 🔴 Próximo passo |
-| **5 — Arquitetura** | Resolver border shorthand conflitante | `src/components/layout/CategoryBar.tsx` | 🔴 Pendente |
-| **6 — DS** | Mapear tokens no `tailwind.config.ts` e substituir hex hardcoded | Múltiplos arquivos | 🔴 Pendente |
-| **7 — Baixo** | Avaliar remoção do `'use client'` | `AddToCartSelector.tsx` | 🔴 Pendente |
+| **3 — Crítico** | Query real de categorias + contagens do banco | `src/components/sections/CategoryGrid.tsx` | ✅ Concluído · componente removido da homepage · será usado em /loja |
+| **4 — Arquitetura** | Eliminar cast `as unknown as ProductRow[]` | `src/components/sections/FeaturedProducts.tsx` | ✅ Concluído · tipo ProductWithCategory correto · zero cast · Sessão 039 |
+| **5 — Arquitetura** | Resolver border shorthand conflitante | `src/components/layout/CategoryBar.tsx` | ✅ Concluído · commit 2b6d702 · Sessão 040 |
+| **6 — DS** | Mapear tokens no `tailwind.config.ts` e substituir hex hardcoded | Múltiplos arquivos | ✅ Parcial · commit 7c8e2e3 · componentes UI limpos · arquivos de layout entram no Bloco 9 |
+| **7 — Baixo** | Avaliar remoção do `'use client'` | `AddToCartSelector.tsx` | ✅ Avaliado · Sessão 040 · `'use client'` necessário — `QuantitySelector` é Client Component com `useState` · não remover |
 | **8 — Baixo** | Fallback de imagem no ProductCard | `ProductCard.tsx` | 🔴 Pendente |
+| **9 —  Refatoração** | Converter `style` inline estático → Tailwind | `Navigation.tsx` · `HeroBanner.tsx` · `MobileNavDrawer.tsx` · `Footer.tsx` · `NewsletterForm.tsx` · `HeroSlider.tsx` · `ProductCard.tsx` | 🔴 Pendente · 1 arquivo por commit  |
 
 ---
 
-# ✅ Estado Atual — 22/05/2026
+# ✅ Estado Atual — 25/05/2026 (Sessão 040)
 
-Repositório limpo. Build 100% limpo. Homepage com `DiferenciaisSection` no ar; `CategoryGrid` removido de `/`, preservado para uso futuro em `/loja`.
+Repositório limpo. Build 100% limpo. Auditoria em progresso — Blocos 1 a 6 (parcial) concluídos.
 
 - **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
 - **Pasta:** `C:\Users\Dell\Documents\projetos\granel-da-praca-e-commerce`
 - **Supabase:** `ymjmgukuojwumvtaglyp` — São Paulo — ✅ tabelas criadas e seed aplicado
 - **`.env.local`:** ✅ preenchido
-- **`pnpm run dev`:** ✅ compilando sem erros (porta 3000)
+- **`npm run dev`:** ✅ compilando sem erros
 - **Tailwind:** v3 confirmado
-- **Último commit:** `a072397` — feat: DiferenciaisSection substitui CategoryGrid na homepage
-- **Homepage `/`:** Hero → TrustBadges → DiferenciaisSection → FeaturedProducts (Suspense) → Footer
-- **`CategoryGrid.tsx`:** query real com `is_active` · não montado em `page.tsx` · aguardando rota `/loja`
+- **Último commit:** `7c8e2e3` — fix(bloco-6): mapear tokens warning/icon-bg e substituir hex hardcoded em Badge, EmptyState e TrustBadges
+- **Homepage `/`:** ✅ Navigation 3 camadas · HeroBanner slider · TrustBadges · DiferenciaisSection · FeaturedProducts · Footer
 
 ---
 
@@ -184,31 +190,32 @@ Repositório limpo. Build 100% limpo. Homepage com `DiferenciaisSection` no ar; 
 
 ---
 
-# 🔴 Próximo Passo
+# 🔴 Próximo Passo — Sessão 040
 
-## Bloco 4 — Tipagem estrita em FeaturedProducts
+> 📌 **Lembrete para `/pedido/[codigo]`:** ao implementar essa rota, incluir botão "Tive um problema com meu pedido" que abre `https://wa.me/5534997819292` com mensagem pré-preenchida via `encodeURIComponent` contendo o código do pedido. Idem em `/conta/pedidos` por linha de pedido. Decisão registrada no PRD (doc 02 — seção Devolução e Problemas com Pedido).
+> 
 
-**Arquivo:** `src/components/sections/FeaturedProducts.tsx` · linhas ~66, 76
+## Seguir ordem do plano de auditoria (20/05/2026) — sem pular blocos
 
-**Problema:** cast `as unknown as ProductRow[]` contorna o TypeScript — mudanças na query só aparecem em runtime.
+## ✅ Bloco 4 — FeaturedProducts tipagem — CONCLUÍDO
 
-**Correção:**
+Tipo `ProductWithCategory` com `Pick<Tables<'products'>>` já aplicado. Zero cast `as unknown`. Confirmado via leitura do arquivo na Sessão 039.
 
-```ts
-type ProductWithCategory = Tables<'products'> & {
-  categories: { name: string } | null
-}
-```
+## Bloco 5 — CategoryBar border shorthand ← INICIAR AQUI
 
-Substituir o cast e tipar o retorno da query diretamente.
+Resolver `border-t-2 border-l-2 border-r-2` (className) combinado com `style={{ borderBottom }}` no mesmo elemento em `src/components/layout/CategoryBar.tsx` linhas 135–136, 153–154, 175–178.
 
-**Sequência sugerida:**
+## Bloco 6 — Tokens DS — hex hardcoded
 
-1. Ler `.context/mapa-do-projeto.md` + `.cursor/rules/granel-ecommerce.mdc`
-2. Aplicar tipo utilitário e remover `as unknown as ProductRow[]`
-3. `pnpm run build` — build limpo
-4. Validar seção de destaques na homepage
-5. Commit e push
+Substituir hex hardcoded por tokens em múltiplos arquivos.
+
+## Bloco 7 — AddToCartSelector `'use client'`
+
+Avaliar remoção do `'use client'` desnecessário em `src/components/product/AddToCartSelector.tsx`.
+
+## Bloco 8 — Fallback de imagem ProductCard
+
+Criar imagem padrão da marca como fallback em `src/components/product/ProductCard.tsx`.
 
 ## ⚠️ Schema real do Supabase — confirmado na Sessão 036
 
@@ -225,33 +232,7 @@ Substituir o cast e tipar o retorno da query diretamente.
 - Tem `compare_at_cents`, `is_active`, `stock_status` — não documentados na skill
 - `is_deleted` existe aqui ✅
 
-**Ação:** atualizar `.claude/skills/supabase-granel/SKILL.md` com schema correto quando conveniente.
-
----
-
-## ✅ O que foi feito — commit `a072397` (22/05/2026)
-
-### `DiferenciaisSection.tsx` — criado e montado na homepage
-
-- Novo Server Component com 3 cards (Entrega · Qualidade · Variedade a granel)
-- Card central destacado conforme `granel_home.html`
-- Posição em `page.tsx`: após `TrustBadges`, antes de `FeaturedProducts`
-
-### `page.tsx` — homepage
-
-- `CategoryGrid` removido de `/`
-- `DiferenciaisSection` importado e renderizado
-
-### `CategoryGrid.tsx` — correção de query (preservado para `/loja`)
-
-- `.eq('is_deleted', false)` → `.eq('is_active', true)` na tabela `categories`
-- Componente intacto para uso futuro na página da loja
-
-### Build
-
-- `pnpm run build` → ✅ limpo
-
----
+**Ação:** atualizar `.claude/skills/supabase-granel/SKILL.md` com schema correto na Sessão 037.
 
 # ✅ O que foi feito na Sessão 035
 
@@ -356,14 +337,13 @@ Substituir o cast e tipar o retorno da query diretamente.
 - **Observação:** o `granel_home.html` não tem esse componente como seção separada — no HTML os trust badges aparecem inline na coluna esquerda do Hero como 2 pills. O `TrustBadges.tsx` é o componente standalone planejado no DS v3.1 para uso em múltiplas páginas.
 - **Arquivo:** `src/components/sections/TrustBadges.tsx` — **Server Component**
 
-### DiferenciaisSection.tsx — ✅ na homepage (commit a072397)
+### DiferenciaisSection.tsx — ✅ Implementado
 
 - **O que é:** seção completa com 3 cards grandes em grid 3 colunas
 - **Conteúdo:** Entrega Rápida · Qualidade Garantida · Variedade a Granel
 - **Detalhe:** card central destacado (conforme `granel_home.html`)
-- **Posição atual:** após TrustBadges, antes de FeaturedProducts — substituiu CategoryGrid em `/`
-- **Referência:** `granel_home.html` — seção Diferenciais
-- **Arquivo:** `src/components/sections/DiferenciaisSection.tsx` — **Server Component**
+- **Posição:** seção da homepage entre FeaturedProducts e Ofertas
+- **Arquivo:** `src/components/sections/DiferenciaisSection.tsx` — **Server Component** ✅ na homepage
 
 ---
 
@@ -371,7 +351,7 @@ Substituir o cast e tipar o retorno da query diretamente.
 
 | Rota | Status |
 | --- | --- |
-| `/` | ✅ Homepage · DiferenciaisSection + FeaturedProducts · commit a072397 |
+| `/` | ✅ Homepage montada · Sessão 032 |
 | `/loja` | 🔴 Pendente |
 | `/loja/[categoria]/[slug]` | 🔴 Pendente |
 | `/carrinho` | 🔴 Pendente |
@@ -394,7 +374,7 @@ Substituir o cast e tipar o retorno da query diretamente.
 | `design-tokens` | `src/lib/tokens.ts` | ✅ |
 | `cn`  • utils | `src/lib/utils.ts` | ✅ Bug formatGrams corrigido |
 | `Button.tsx` | `src/components/ui/Button.tsx` | ✅ 5 variantes |
-| `Badge.tsx` | `src/components/ui/Badge.tsx` | ✅ 6 variantes |
+| `Badge.tsx` | `src/components/ui/Badge.tsx` | ✅ 6 variantes · tokens semânticos · Sessão 040 |
 | `Input.tsx` | `src/components/ui/Input.tsx` | ✅ floating label |
 | `QuantitySelector.tsx` | `src/components/ui/QuantitySelector.tsx` | ✅ granel/unit |
 | `Card.tsx` | `src/components/ui/Card.tsx` | 🔴 Pendente |
@@ -406,9 +386,9 @@ Substituir o cast e tipar o retorno da query diretamente.
 | --- | --- | --- |
 | `ProductCard.tsx` | `src/components/product/ProductCard.tsx` | ✅ 5 estados · 2 variantes |
 | `WishlistButton.tsx` | `src/components/product/WishlistButton.tsx` | ✅ Client Component autônomo |
-| `AddToCartSelector.tsx` | `src/components/product/AddToCartSelector.tsx` | ✅ Client Component autônomo |
+| `AddToCartSelector.tsx` | `src/components/product/AddToCartSelector.tsx` | ✅ `'use client'` necessário · QuantitySelector tem useState · Sessão 040 |
 | `ProductCardSkeleton.tsx` | `src/components/product/ProductCardSkeleton.tsx` | ✅ shimmer CSS puro · prop count |
-| `EmptyState.tsx` | `src/components/product/EmptyState.tsx` | ✅ 5 contextos |
+| `EmptyState.tsx` | `src/components/product/EmptyState.tsx` | ✅ 5 contextos · ícone convertido para Tailwind · Sessão 040 |
 
 ## Layout
 
@@ -425,10 +405,9 @@ Substituir o cast e tipar o retorno da query diretamente.
 | Componente | Arquivo | Status |
 | --- | --- | --- |
 | `HeroBanner.tsx`  • `HeroSlider.tsx` | `src/components/sections/HeroBanner.tsx` | ✅ Slider Framer Motion · 3 imagens WebP · Sessão 031 |
-| `TrustBadges.tsx` | `src/components/sections/TrustBadges.tsx` | ✅ Implementado · Sessão 032 — confirmar antes de recriar |
-| `CategoryGrid.tsx` | `src/components/sections/CategoryGrid.tsx` | ✅ Query real · `is_active` · fora da homepage · reservado para `/loja` |
-| `DiferenciaisSection.tsx` | `src/components/sections/DiferenciaisSection.tsx` | ✅ Homepage · commit a072397 |
-| `FeaturedProducts.tsx` | `src/components/sections/FeaturedProducts.tsx` | ✅ Query real · tipagem fraca pendente — **Bloco 4 (próximo)** |
+| `TrustBadges.tsx` | `src/components/sections/TrustBadges.tsx` | ✅ Tokens DS limpos · cn() · Sessão 040 |
+| `CategoryGrid.tsx` | `src/components/sections/CategoryGrid.tsx` | ✅ Query real · removido da homepage · será usado em /loja |
+| `FeaturedProducts.tsx` | `src/components/sections/FeaturedProducts.tsx` | ✅ Query real · tipagem correta · Sessão 039 |
 | `NewsletterPopup.tsx` | `src/components/sections/NewsletterPopup.tsx` | 🔴 Pendente |
 
 ---
@@ -454,6 +433,7 @@ Substituir o cast e tipar o retorno da query diretamente.
 - [✅] Schema SQL aplicado — 4 tabelas criadas · 402 produtos · 11 categorias
 - [ ]  Conectar Vercel ao novo repo `granel-da-praca-e-commerce`
 - [ ]  Apagar projeto antigo no Vercel (fazer manualmente em [vercel.com/settings](http://vercel.com/settings))
+- [ ]  Gerar descrições de produto com IA para os 390 itens (script batch Node.js + API Anthropic → coluna `description` no Supabase) — prioridade: categorias de maior margem (Castanhas, Superalimentos, Proteínas) primeiro. Sem descrições as PDPs não rankeiam no Google. **Fazer antes do lançamento.**
 
 ---
 
@@ -464,6 +444,10 @@ Substituir o cast e tipar o retorno da query diretamente.
 | `pr-12` em `overflow-x-auto` não garante padding no fim do scroll | Usar spacer `shrink-0` inline ou remover o elemento conflitante |
 | Schema da skill desatualizado causou query com campo errado | Sempre verificar schema real via MCP antes de escrever query — `categories` usa `is_active` não `is_deleted` · `products` não tem `price_per_100g_cents` |
 | `console.log` de diagnóstico esquecido no commit | Remover antes do build — `Select-String "console.log"` antes de commitar |
+| `style` inline com valores estáticos | Converter para classes Tailwind — `style` prop apenas para valores dinâmicos em runtime |
+| Classes arbitrárias `text-[14px]` quando existe escala padrão | Verificar escala Tailwind primeiro — `text-sm` (14px) · `text-xs` (12px) |
+| Array manual + `.filter().join()` para classes condicionais | Sempre `cn()` de `@/lib/utils` |
+| Hex inline em objeto de estilos sem token no DS | Extrair como constante nomeada com JSDoc explicando a exceção |
 
 ---
 
@@ -480,7 +464,7 @@ Substituir o cast e tipar o retorno da query diretamente.
 
 ---
 
-*Última atualização: 22/05/2026 · commit a072397 — DiferenciaisSection na homepage · CategoryGrid removido de `/` (preservado para `/loja`) · Bloco 3 concluído (`is_active`) · build limpo · Próximo: Bloco 4 — eliminar cast `as unknown as ProductRow[]` em FeaturedProducts.tsx*
+*Última atualização: 25/05/2026 · Sessão 040 — Blocos 5, 6 (parcial) e 7 concluídos · tokens warning/icon-bg criados · Badge, EmptyState, TrustBadges limpos · 'use client' no AddToCartSelector confirmado como necessário (QuantitySelector tem useState) · Bloco 8 (fallback de imagem) é o próximo · Bloco 9 criado para refatoração style inline → Tailwind*
 
 ## ⚠️ Lições da Sessão 032 — Erros e Soluções
 
@@ -492,3 +476,5 @@ Substituir o cast e tipar o retorno da query diretamente.
 | `poppins.variable` no `<html>` não aplica a fonte no body | Usar `poppins.className` no `<body>` — `.variable` só expõe o CSS var, `.className` aplica a fonte de fato |
 | `pt-[195px]` no `<main>` causou espaço em branco gigante | Só adicionar padding-top no main se o header for `position: fixed`. Navigation usa `sticky` — não precisa de compensação. Verificar com `Get-Content Navigation.tsx \ |
 | Componentes com named export importados como default | Rodar `Select-String "^export"` em TODOS os componentes antes de montar o `page.tsx` — não assumir que é default |
+
+[Sessão 037 — DiferenciaisSection substitui CategoryGrid na Homepage](https://www.notion.so/Sess-o-037-DiferenciaisSection-substitui-CategoryGrid-na-Homepage-368f86ce18e5819f96fdc13cc580bf35?pvs=21)

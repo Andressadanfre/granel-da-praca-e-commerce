@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "build:clean": "node scripts/clean-build.mjs",
+    "gen:descriptions": "node scripts/generate-descriptions.mjs",
+    "gen:descriptions:dry": "node scripts/generate-descriptions.mjs --dry-run",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/ssr": "^0.10.3",
