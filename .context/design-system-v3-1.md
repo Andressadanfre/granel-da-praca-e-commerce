@@ -463,7 +463,7 @@ Todo feed, grid ou lista com dados assíncronos deve implementar:
 | `EmptyState.tsx` — 5 contextos | ✅ Implementado |
 | `Navigation.tsx` | 🟡 Parcial (Bloco 9) |
 | `Footer.tsx` | 🟡 Parcial (Bloco 9) |
-| `HeroBanner.tsx` | 🟡 Parcial (Bloco 9) |
+| `HeroBanner.tsx` | ✅ Implementado |
 | `TrustBadges.tsx` | ✅ Implementado |
 | `CategoryGrid.tsx` | ✅ Implementado |
 | `ProductGrid.tsx` | 🔴 Pendente |
