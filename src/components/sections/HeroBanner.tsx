@@ -22,10 +22,8 @@ export function HeroBanner() {
             </span>
           </div>
 
-          {/* H1 — clamp sem equivalente Tailwind: style permanece */}
           <h1
-            className="font-extrabold text-gdeep leading-[1.1] tracking-[-0.02em] mb-4"
-            style={{ fontSize: 'clamp(32px, 4vw, 52px)' }}
+            className="font-extrabold text-gdeep leading-[1.1] tracking-[-0.02em] mb-4 text-[clamp(32px,4vw,52px)]"
           >
             Natureza no
             <br />
