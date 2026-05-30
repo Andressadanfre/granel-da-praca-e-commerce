@@ -51,18 +51,21 @@ export type Database = {
       }
       newsletter_subscriptions: {
         Row: {
-          id: number
+          id: string
           email: string
+          source: string
           created_at: string
         }
         Insert: {
-          id?: number
+          id?: string
           email: string
+          source?: string
           created_at?: string
         }
         Update: {
-          id?: number
+          id?: string
           email?: string
+          source?: string
           created_at?: string
         }
         Relationships: []
