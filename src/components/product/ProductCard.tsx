@@ -77,7 +77,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        'product-card relative flex flex-col overflow-hidden cursor-pointer rounded-card bg-cream border border-bd shadow-card',
+        'product-card relative flex flex-col overflow-hidden cursor-pointer rounded-card bg-white border border-bd shadow-card transition-[transform,box-shadow] duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)] hover:-translate-y-1 hover:shadow-card-hover',
         isFeatured && 'outline outline-2 outline-g',
         isOutOfStock && 'opacity-70',
         className
