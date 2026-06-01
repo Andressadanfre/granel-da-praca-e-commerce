@@ -85,6 +85,8 @@ Tipagem fraca — `FeaturedProducts.tsx`
 
 **Problema:** `console.error('[GlobalError]', ...)` dentro de `useEffect` será visível no browser em produção.
 
+✅ Concluído · commit f419047 — `console.error` restrito a `process.env.NODE_ENV !== 'production'`
+
 ### Cores hex hardcoded fora dos tokens do DS
 
 **Arquivos afetados:** `globals.css`, `error.tsx`, `Navigation.tsx`, `MobileNavDrawer.tsx`, `Footer.tsx`, `NewsletterForm.tsx`, `TrustBadges.tsx`, `CategoryGrid.tsx`, `HeroBanner.tsx`, `HeroSlider.tsx`, `ProductCard.tsx`, `EmptyState.tsx`, `Badge.tsx`
@@ -134,6 +136,8 @@ Tipagem fraca — `FeaturedProducts.tsx`
 | **7 — Baixo** | Avaliar remoção do `'use client'` | `AddToCartSelector.tsx` | ✅ Avaliado · Sessão 040 · `'use client'` necessário — `QuantitySelector` é Client Component com `useState` · não remover |
 | **8 — Baixo** | Fallback de imagem no ProductCard | `ProductCard.tsx` | ✅ Concluído |
 | **9 —  Refatoração** | Converter `style` inline estático → Tailwind | `Navigation.tsx` · `HeroBanner.tsx` · `MobileNavDrawer.tsx` · `Footer.tsx` · `NewsletterForm.tsx` · `HeroSlider.tsx` · `ProductCard.tsx` | ✅ Concluído · commit 338efc9 |
+
+> **Auditoria de 20/05/2026 encerrada em 01/06/2026 — todos os 9 blocos concluídos.**
 
 ---
 
@@ -272,7 +276,7 @@ Criar imagem padrão da marca como fallback em `src/components/product/ProductCa
 
 ## Limpeza pendente (baixa prioridade)
 
-- `globals.css` ainda contém `.nav-promo-link:hover` — classe órfã, não causa bug, remover em oportunidade futura
+- ✅ `globals.css` — classe órfã `.nav-promo-link:hover` removida · commit 1f6ed9c
 
 ## Commit
 
