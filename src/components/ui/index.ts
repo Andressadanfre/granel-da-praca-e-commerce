@@ -1,5 +1,7 @@
 export * from './Badge'
 export * from './Button'
+export { Card } from './Card'
+export type { CardProps, CardPadding } from './Card'
 export * from './Input'
 export * from './Modal'
 export * from './QuantitySelector'
