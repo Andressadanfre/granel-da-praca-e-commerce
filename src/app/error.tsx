@@ -9,12 +9,14 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Log completo no console — digest é o hash do erro em produção
-    console.error('[GlobalError]', {
-      message: error.message,
-      digest: error.digest,
-      stack: error.stack,
-    })
+    // Log apenas em desenvolvimento — error.tsx é error boundary: style inline e tokens inline são intencionais (CSS pode falhar ao carregar)
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[GlobalError]', {
+        message: error.message,
+        digest: error.digest,
+        stack: error.stack,
+      })
+    }
   }, [error])
 
   return (
