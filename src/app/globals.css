@@ -185,5 +185,4 @@ body {
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .nav-cat-link:hover  { color: #ffffff !important; }
-.nav-promo-link:hover { color: #ffffff !important; }
 .dropdown-cat-link:hover { background-color: #F9F5EF !important; color: #002603 !important; }
