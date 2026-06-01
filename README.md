@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# Granel da Praça — E-commerce
 
-## Getting Started
+E-commerce de produtos naturais a granel. Uberlândia, MG.
 
-First, run the development server:
+## Stack
+
+- Next.js 14 App Router + TypeScript strict
+- Tailwind CSS v3 + Design System próprio
+- Supabase (PostgreSQL + Auth + Storage) — região São Paulo
+- Framer Motion, Lucide React
+- Vercel (deploy)
+
+## Pré-requisitos
+
+- Node.js 20+
+- npm
+
+## Setup local
 
 ```bash
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts úteis
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run build:clean
+node scripts/generate-descriptions.mjs --dry-run
+node scripts/generate-descriptions.mjs --limit 10
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura de pastas relevante
+src/
+app/
+components/
+lib/
+types/
+.context/
+.cursor/rules/
+scripts/
 
-## Learn More
+## Documentação completa
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Notion: https://www.notion.so/33bf86ce18e5815f892fc82b14a5b870
