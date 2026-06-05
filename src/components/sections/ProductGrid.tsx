@@ -224,7 +224,8 @@ export default async function ProductGrid({
   }
 
   if (q) {
-    query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`)
+    const qSafe = q.replace(/[(),\\]/g, '')
+    query = query.or(`name.ilike.%${qSafe}%,description.ilike.%${qSafe}%`)
   }
 
   const { data, count, error } = await query
