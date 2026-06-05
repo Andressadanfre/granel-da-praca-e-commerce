@@ -2,15 +2,26 @@ import 'server-only'
 import { createServerClient } from '@supabase/ssr'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
-
 import type { Database } from '@/types/database'
 
-// Server Components e Server Actions autenticados — RLS ativo via cookies
+function requireEnv(name: string): string {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`[Supabase] Variavel de ambiente ausente: ${name}. Verifique o .env.local`)
+  }
+  return value
+}
+
+const SUPABASE_URL = requireEnv('NEXT_PUBLIC_SUPABASE_URL')
+const SUPABASE_ANON_KEY = requireEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+const SUPABASE_SERVICE_ROLE_KEY = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
+
+// Server Components e Server Actions - RLS ativo via cookies
 export function getSupabaseServer() {
   const cookieStore = cookies()
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -21,10 +32,10 @@ export function getSupabaseServer() {
   )
 }
 
-// Operações administrativas — bypass de RLS — NUNCA importar em Client Components
+// Operacoes administrativas - bypass de RLS - NUNCA importar em Client Components
 export function getSupabaseAdmin(): SupabaseClient<Database> {
   return createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY,
   )
 }
