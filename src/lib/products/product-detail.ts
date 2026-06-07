@@ -34,8 +34,9 @@ export type RelatedProduct = Pick<
   | 'increment_grams'
   | 'stock_status'
   | 'image_url'
-  | 'category_id'
->
+> & {
+  category: { name: string; slug: string }
+}
 
 export async function getProductDetail(
   categoriaSlug: string,
@@ -113,7 +114,10 @@ export async function getRelatedProducts(
       increment_grams,
       stock_status,
       image_url,
-      category_id
+      categories!inner(
+        name,
+        slug
+      )
     `)
     .eq('category_id', categoryId)
     .eq('is_active', true)
@@ -125,5 +129,20 @@ export async function getRelatedProducts(
     return []
   }
 
-  return data as RelatedProduct[]
+  return data.map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.slug,
+    unit: item.unit,
+    product_type: item.product_type,
+    price_cents: item.price_cents,
+    compare_at_cents: item.compare_at_cents,
+    increment_grams: item.increment_grams,
+    stock_status: item.stock_status,
+    image_url: item.image_url,
+    category: {
+      name: item.categories.name,
+      slug: item.categories.slug,
+    },
+  }))
 }
