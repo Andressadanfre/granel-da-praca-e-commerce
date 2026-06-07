@@ -198,6 +198,306 @@ import { getSupabaseAdmin } from '@/lib/supabase/server'
 - auth: 10 req/min
 - coupons: 3 req/min
 
+## 🛡️ Segurança Web — Regras Absolutas
+
+### Headers HTTP obrigatórios (adicionar em `next.config.js` antes do lançamento)
+```typescript
+headers: async () => [{
+  source: '/(.*)',
+  headers: [
+    { key: 'X-Frame-Options', value: 'DENY' },
+    { key: 'X-Content-Type-Options', value: 'nosniff' },
+    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+    { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co" },
+  ],
+}]
+```
+
+### XSS
+- **Proibido** `dangerouslySetInnerHTML` sem sanitização — instalar `isomorphic-dompurify` antes de qualquer uso
+- React escapa automaticamente `{variavel}` em JSX — nunca contornar isso com HTML bruto
+
+### CSRF
+- Server Actions do Next.js 14 têm proteção nativa de origin — mas mutações autenticadas **ainda exigem** validação de sessão, autorização e origem esperada
+- Cookies de sessão: `httpOnly; Secure; SameSite=Strict`
+- **Nunca** usar Route Handlers para mutações autenticadas — usar Server Actions
+
+### Open Redirect
+- **Proibido** `redirect(params.url)` — sempre usar paths internos fixos
+
+### Upload de arquivos (admin futuro)
+- Aceitar apenas: `jpg`, `jpeg`, `png`, `webp` — máx 5MB
+- Validar MIME type no servidor — nunca confiar no `Content-Type` do cliente
+
+### Autenticação — Identity no Servidor
+- **Nunca** confiar em `user_id` enviado pelo cliente como parâmetro
+- **Sempre** obter identidade via:
+  ```typescript
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { success: false, error: 'Não autorizado' }
+  ```
+- Toda query de mutação ou leitura sensível **deve** incluir `.eq('user_id', user.id)`
+
+### Autorização — RBAC
+| Ação | customer | admin |
+|---|---|---|
+| Ver próprio pedido | ✅ | ✅ |
+| Ver pedido de terceiros | ❌ | ✅ |
+| Alterar produto/estoque | ❌ | ✅ |
+| Aplicar cupom | ✅ | ✅ |
+
+## 🚨 Error Handling — Padrão Único
+
+### Server Actions — retornar resultado tipado, nunca lançar erro bruto
+```typescript
+// ❌ ERRADO — expõe stack trace e mensagens internas na UI
+throw new Error(error.message)
+
+// ✅ CERTO — resultado tipado, mensagem amigável
+return { success: false, error: 'Não foi possível completar a operação.' }
+return { success: true, data: resultado }
+```
+
+### Route Handlers — lançar e capturar na camada superior
+```typescript
+// ✅ CERTO — capturar e retornar genérico
+try {
+  const data = await fetchData()
+  return NextResponse.json({ success: true, data })
+} catch (error) {
+  logger.error('Erro interno', error)
+  return NextResponse.json({ success: false, error: 'Erro interno.' }, { status: 500 })
+}
+```
+
+### Regras absolutas
+- Nunca expor `error.message`, `error.stack` ou mensagem do banco na resposta ao cliente
+- Erros internos: sempre logar via `logger.error()` de `src/lib/logger.ts`
+- Tipos de erro a implementar na Fase 5: `AppError`, `ValidationError`, `AuthError`, `DatabaseError`
+
+## 🔄 Cache e Revalidação — Princípios
+
+### Quando usar cada estratégia
+| Situação | Estratégia | Como declarar |
+|---|---|---|
+| Rota lê `searchParams` ou `cookies()` explicitamente | SSR dinâmico | `export const dynamic = 'force-dynamic'` |
+| Rota pública sem filtros dinâmicos | ISR | `export const revalidate = N` (segundos) |
+| Rota de admin com mutações | SSR dinâmico | `export const dynamic = 'force-dynamic'` |
+
+### Revalidação após mutações (Fase 5)
+```typescript
+import { revalidatePath } from 'next/cache'
+// Chamar ao final de Server Actions que alteram dados públicos
+revalidatePath('/loja')
+revalidatePath(`/loja/${categoria}/${slug}`)
+```
+
+### Query dupla — deduplicar com `cache()` do React
+```typescript
+// Obrigatório quando generateMetadata e Page Component usam a mesma query
+import { cache } from 'react'
+const getCachedProduct = cache(getProductDetail)
+// Ambos chamam getCachedProduct — apenas 1 query por requisição
+```
+
+> Decisões específicas de renderização por rota estão em `docs/adr/`.
+
+## 💧 localStorage e Hidratação
+
+### Princípio
+Server Components são a padrão. `localStorage` só é acessível no cliente — usar com parcimônia.
+
+### Quando usar `isMounted` (exceção, não regra)
+Apenas quando o componente depende **exclusivamente** de browser APIs e não pode ser Server Component:
+```typescript
+// Usar apenas para componentes 100% dependentes de browser (ex: badge do carrinho)
+const [isMounted, setIsMounted] = useState(false)
+useEffect(() => setIsMounted(true), [])
+if (!isMounted) return <CartIconSkeleton /> // skeleton, nunca null em elemento LCP
+```
+
+### Alternativa preferida — desabilitar SSR cirurgicamente
+```typescript
+// Para subcomponentes isolados que não afetam LCP ou SEO
+import dynamic from 'next/dynamic'
+const CartBadge = dynamic(() => import('./CartBadge'), { ssr: false })
+```
+
+### Sincronização entre abas
+- Mesma aba: `window.dispatchEvent(new CustomEvent('cart:updated', { detail: count }))`
+- Outra aba: ouvir evento `'storage'` do browser
+
+## 📦 Regras de Negócio
+
+### Produto granel
+- Incremento mínimo: 100 gr · sem teto máximo fixo
+- Conversão automática: ≥ 1000 gr → kg com vírgula BR (`1 kg`, `1,5 kg`)
+- Preço calculado no servidor: `price_cents / increment_grams * 100` = por 100 gr
+
+### Estoque
+- `in_stock` → venda normal
+- `low_stock` → badge "Últimas unidades" · venda permitida
+- `out_of_stock` → botão desabilitado · sem adição ao carrinho
+- **Proibido** estoque negativo — validar no servidor antes de confirmar pedido
+
+### Preço durante checkout
+- Preço **sempre** relido do banco no momento do checkout — nunca confiar no valor enviado pelo cliente
+- Se preço foi alterado entre adição ao carrinho e checkout → notificar usuário antes de confirmar
+
+### Pedido duplicado
+- Usar `cart_id` como `idempotency_key` — mesma chave nunca cria dois pedidos
+
+### Cupom
+- Validar no servidor: ativo, dentro do prazo, `used_count < max_uses`
+- Decremento atômico via RPC — nunca dois requests simultâneos consumindo o mesmo cupom
+
+### Produto inativo ou deletado
+- `is_active = false` ou `is_deleted = true` → `notFound()` em qualquer rota do produto
+- Nunca aparecer em listagens ou resultados de busca
+
+### Frete
+- R$ 15,00 fixo · grátis para pedidos ≥ R$ 100,00
+- Calculado exclusivamente no servidor — nunca no cliente
+
+### Parcelamento
+- 2x sem juros a partir de R$ 150,00
+- 3x sem juros a partir de R$ 300,00
+
+### PIX
+- 5% de desconto — aplicado no servidor
+
+## 🤖 Regras para IA — Claude/Cursor
+
+### Proibido sem aprovação explícita
+- Criar ou alterar arquivos em `supabase/migrations/`
+- Executar SQL destrutivo: `DELETE`, `DROP`, `TRUNCATE`
+- `UPDATE` sem cláusula `WHERE`
+- `DELETE` sem cláusula `WHERE`
+- Reescrever arquivos inteiros — apenas snippets alterados
+- Commitar sem build limpo (`npm run build 2>&1` zero erros)
+- Instalar novas dependências sem mencionar explicitamente
+- Criar variantes do `Badge` além das 6 existentes: `diet`, `promo`, `unit`, `discount`, `low-stock`, `featured`
+
+### Obrigatório antes de qualquer alteração
+1. Ler este `CLAUDE.md`
+2. Ler o(s) arquivo(s) alvo em disco — nunca editar de memória
+3. Verificar schema Supabase (seção acima) antes de escrever query
+4. Verificar `tailwind.config.ts` antes de escolher classe de cor
+5. Mostrar diff para aprovação antes de `git add`
+
+### Proibido inventar
+- Campos inexistentes no schema: `price_per_100g_cents`, `is_deleted` em `categories`
+- Caminhos de import não confirmados em disco
+- Comportamentos de negócio não documentados na seção "Regras de Negócio"
+
+## 📊 Observabilidade
+
+### Logging estruturado — pino instalado (Sessão 045)
+- `src/lib/logger.ts` funcional — usar `logger.info()`, `logger.warn()`, `logger.error()`
+- **Nunca** `console.log/error/warn` em código commitado
+- `src/lib/sanitizeForLog.ts` — mascarar dados sensíveis antes de logar (LGPD)
+
+### Campos obrigatórios em todo log
+```typescript
+logger.info('Descrição do evento', {
+  request_id: ctx.requestId,   // sempre
+  user_id: user?.id,           // quando autenticado
+  route: '/api/...',           // rota ou action
+  // nunca: senha, token, CPF, cartão, session
+})
+```
+
+### Audit log — admin (Fase 6)
+Toda alteração de produto, preço, estoque ou cupom deve gerar registro:
+```typescript
+// quem · o quê · quando · valor anterior · valor novo
+await supabase.from('audit_logs').insert({ user_id, action, entity, old_value, new_value })
+```
+
+### Monitoramento de erros (pendente — pré-lançamento)
+- Instalar Sentry (`@sentry/nextjs`) antes do lançamento
+- Capturar: exceptions, hydration errors, Server Action errors, erros de API
+- Nunca logar: senha, token, CPF, número de cartão, dados de sessão
+
+### Health check existente
+- `GET /api/health` → verifica conexão Supabase · retorna `{ status: 'ok' | 'error' }`
+
+## ⚡ Performance — Budget
+
+### Core Web Vitals (metas para e-commerce)
+| Métrica | Meta | O que mede |
+|---|---|---|
+| LCP | < 2.5s | Maior elemento visível carregado |
+| CLS | < 0.1 | Estabilidade visual — sem layout shift |
+| INP | < 200ms | Resposta a interações do usuário |
+
+### Bundle budget
+- JS inicial (First Load JS): **< 250kb gzip**
+- Verificar após cada sessão: `npm run build` mostra o tamanho por rota
+- Lazy loading obrigatório para: modais, drawers, admin, componentes pesados
+
+### Lazy loading — padrão
+```typescript
+// Componentes pesados ou raramente visíveis
+const CartDrawer = dynamic(() => import('./CartDrawer'))
+const AdminSidebar = dynamic(() => import('./AdminSidebar'))
+```
+
+### Imagens
+- `next/image` obrigatório — nunca `<img>` puro
+- Formato: WebP · AVIF quando possível
+- `priority` apenas no elemento LCP (primeira imagem acima da dobra)
+- `sizes` descritivo obrigatório em todo `fill`
+
+## 🔍 SEO — Obrigatório em Rotas Públicas
+
+### generateMetadata — obrigatório em toda rota pública
+```typescript
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: `${produto.name} | Granel da Praça`,
+    description: produto.description?.slice(0, 155) ?? `Compre ${produto.name} a granel`,
+    openGraph: {
+      title: `${produto.name} | Granel da Praça`,
+      images: produto.image_url ? [produto.image_url] : [],
+    },
+    alternates: { canonical: `/loja/${categoria}/${slug}` },
+  }
+}
+```
+
+### Schema.org (pendente — pré-lançamento)
+- `Product` em cada PDP
+- `BreadcrumbList` em páginas de categoria e PDP
+- `Organization` no layout raiz
+
+## 🧪 Testes — Estratégia (pendente — pré-lançamento)
+
+| Camada | Framework | Escopo |
+|---|---|---|
+| Unitário | Vitest | `formatBRL`, `formatGrams`, cálculos de preço granel, helpers |
+| Integração | Vitest | Server Actions, queries Supabase, validações Zod |
+| E2E | Playwright | Fluxo completo: produto → carrinho → checkout → confirmação |
+
+### Cobertura mínima
+- Funções utilitárias e cálculos de preço: **100%**
+- Server Actions críticas (checkout, newsletter): **80%**
+- Fluxo E2E principal: **obrigatório antes de qualquer lançamento**
+
+## 🚀 CI/CD — Pipeline (pendente — pré-lançamento)
+
+```yaml
+# .github/workflows/ci.yml — executar em todo PR e push para master
+steps:
+  - lint       # eslint
+  - typecheck  # tsc --noEmit
+  - build      # npm run build
+  - test       # vitest
+  - e2e        # playwright (apenas em merge para master)
+```
+
+**Regra:** merge bloqueado se qualquer step falhar.
+
 ## Padrões de Código
 
 ### Ordem de imports
@@ -424,7 +724,7 @@ Nunca commitar com build quebrado.
 
 ---
 
-## Estado do Projeto — 28/06/2026
+## Estado do Projeto — 07/06/2026
 
 ### Infraestrutura
 - **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
@@ -439,7 +739,7 @@ Nunca commitar com build quebrado.
 |---|---|
 | `/` | ✅ Homepage completa |
 | `/loja` | ✅ Implementada |
-| `/loja/[categoria]/[slug]` | 🔴 Pendente |
+| `/loja/[categoria]/[slug]` | ✅ Implementada · Sessão 046 |
 | `/carrinho` | 🔴 Pendente |
 | `/checkout` | 🔴 Pendente |
 | `/pedido/[codigo]` | 🔴 Pendente |
@@ -455,7 +755,7 @@ Nunca commitar com build quebrado.
 | `Button.tsx` — 5 variantes | ✅ Implementado |
 | `Badge.tsx` | ✅ Implementado |
 | `Input.tsx` | ✅ Implementado |
-| `Card.tsx` | 🔴 Pendente |
+| `Card.tsx` | ✅ Implementado · commit d102e19 |
 | `QuantitySelector.tsx` | ✅ Implementado |
 | `ProductCard.tsx` | 🟡 Parcial (fallback imagem + Bloco 9) |
 | `ProductCardSkeleton.tsx` | ✅ Implementado |
@@ -465,13 +765,13 @@ Nunca commitar com build quebrado.
 | `HeroBanner.tsx` | 🟡 Parcial (Bloco 9) |
 | `TrustBadges.tsx` | ✅ Implementado |
 | `CategoryGrid.tsx` | ✅ Implementado |
-| `ProductGrid.tsx` | 🔴 Pendente |
+| `ProductGrid.tsx` | ✅ Implementado · Sessão 044 |
 | `FeaturedProducts.tsx` | ✅ Implementado |
-| `NewsletterPopup.tsx` | 🔴 Pendente |
+| `NewsletterPopup.tsx` | ✅ Implementado · commits a6853d9 e 7378521 |
 | `CartDrawer.tsx` | 🔴 Pendente |
 | `CheckoutStepper.tsx` | 🔴 Pendente |
 | `OrderTimeline.tsx` | 🔴 Pendente |
-| `Modal.tsx` | 🔴 Pendente |
+| `Modal.tsx` | ✅ Implementado · commit a685057 |
 | `FidelityCard.tsx` | 🔴 Pendente |
 | `AdminSidebar.tsx` | 🔴 Pendente |
 
@@ -506,3 +806,5 @@ Idem em `/conta/pedidos` por linha de pedido.
 | `@supabase/auth-helpers-nextjs` | Usar `@supabase/ssr` |
 | Badge com `number` como children direto | Template literal `` `${n}% OFF` `` — nunca JSX com number diretamente |
 | RLS policy sem `GRANT SELECT` — tabela pública invisível para `anon` | RLS policy e `GRANT SELECT` são duas camadas independentes no Postgres. Após criar qualquer tabela pública: (1) `CREATE POLICY ... USING (...)`, (2) `GRANT SELECT ON tabela TO anon, authenticated` |
+| `<Link>` envolvendo `ProductCard` | HTML inválido — `<a>` não pode conter `<button>`. `ProductCard` tem `WishlistButton` e `AddToCartSelector` internos. Renderizar sem wrapper `<Link>`. |
+| `generateMetadata` + Page Component com mesma query | Usar `cache()` do React: `const fn = cache(queryFn)` — dedup automático, apenas 1 query por requisição. |
