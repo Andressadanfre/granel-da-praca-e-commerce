@@ -760,12 +760,12 @@ Nunca commitar com build quebrado.
 | `Input.tsx` | ✅ Implementado |
 | `Card.tsx` | ✅ Implementado · commit d102e19 |
 | `QuantitySelector.tsx` | ✅ Implementado |
-| `ProductCard.tsx` | 🟡 Parcial (fallback imagem + Bloco 9) |
+| `ProductCard.tsx` | ✅ Implementado |
 | `ProductCardSkeleton.tsx` | ✅ Implementado |
 | `EmptyState.tsx` — 5 contextos | ✅ Implementado |
-| `Navigation.tsx` | 🟡 Parcial (Bloco 9) |
-| `Footer.tsx` | 🟡 Parcial (Bloco 9) |
-| `HeroBanner.tsx` | 🟡 Parcial (Bloco 9) |
+| `Navigation.tsx` | ✅ Implementado |
+| `Footer.tsx` | ✅ Implementado |
+| `HeroBanner.tsx` | ✅ Implementado · slider Framer Motion |
 | `TrustBadges.tsx` | ✅ Implementado |
 | `CategoryGrid.tsx` | ✅ Implementado |
 | `ProductGrid.tsx` | ✅ Implementado · Sessão 044 |
@@ -779,11 +779,8 @@ Nunca commitar com build quebrado.
 | `AdminSidebar.tsx` | 🔴 Pendente |
 
 ### Próximas entregas (prioridade)
-1. `src/lib/utils.ts` — corrigir bug `formatGrams` (`return` ausente para valores ≥ 1000gr)
-2. ADR 010 — trocar `force-dynamic` por `revalidate = 1800` na PDP
-3. `CLAUDE.md` — corrigir seção "Próximas entregas" (esta seção)
-4. **Fase 3.2** — rodar `scripts/generate-descriptions.mjs` (402 produtos sem descrição)
-5. **Fase 4.1** — `CartDrawer.tsx` · referencia `mini_cart_final_3.html`
+1. Fase 3.2 — rodar `scripts/generate-descriptions.mjs` (402 produtos sem descrição)
+2. Fase 4.1 — `CartDrawer.tsx` · referencia `mini_cart_final_3.html`
 
 ### Lembrete `/pedido/[codigo]`
 Ao implementar: botão "Tive um problema com meu pedido" → `https://wa.me/5534997819292`
