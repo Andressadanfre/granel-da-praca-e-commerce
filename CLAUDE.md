@@ -2,7 +2,7 @@
 
 > Lido automaticamente pelo Claude Code a cada sessão.
 > Fonte de verdade para decisões de arquitetura e estilo.
-> Baseado em `.cursor/rules/granel-ecommerce.mdc` + Sessões 031–042.
+> Atualizado em 11/05/2026 · Sessões 031–046.
 
 ---
 
@@ -740,11 +740,14 @@ Nunca commitar com build quebrado.
 | `/` | ✅ Homepage completa |
 | `/loja` | ✅ Implementada |
 | `/loja/[categoria]/[slug]` | ✅ Implementada · Sessão 046 |
-| `/carrinho` | 🔴 Pendente |
-| `/checkout` | 🔴 Pendente |
-| `/pedido/[codigo]` | 🔴 Pendente |
-| `/conta/*` | 🔴 Pendente |
-| `/admin/*` | 🔴 Pendente |
+| `/carrinho` | 🔴 Pendente · Fase 4 |
+| `/checkout` | 🔴 Pendente · Fase 5 |
+| `/pedido/[codigo]` | 🔴 Pendente · Fase 6 |
+| `/pedido/[codigo]/rastreamento` | 🔴 Pendente · HTML ainda não criado |
+| `/conta/login` | 🔴 Pendente · HTML ainda não criado |
+| `/conta/pedidos` | 🔴 Pendente · HTML ainda não criado |
+| `/conta/fidelidade` | 🔴 Pendente |
+| `/admin/*` | 🔴 Pendente · Fase 6 |
 
 ### Componentes — Status
 
@@ -776,14 +779,43 @@ Nunca commitar com build quebrado.
 | `AdminSidebar.tsx` | 🔴 Pendente |
 
 ### Próximas entregas (prioridade)
-1. **Vercel** — conectar repo `granel-da-praca-e-commerce` (apagar projeto antigo manualmente)
-2. **Descrições de produto** — script batch Node.js + Anthropic API → coluna `description` no Supabase
-3. **`/loja`** — listagem com filtro de categoria, busca, paginação
+1. `src/lib/utils.ts` — corrigir bug `formatGrams` (`return` ausente para valores ≥ 1000gr)
+2. ADR 010 — trocar `force-dynamic` por `revalidate = 1800` na PDP
+3. `CLAUDE.md` — corrigir seção "Próximas entregas" (esta seção)
+4. **Fase 3.2** — rodar `scripts/generate-descriptions.mjs` (402 produtos sem descrição)
+5. **Fase 4.1** — `CartDrawer.tsx` · referencia `mini_cart_final_3.html`
 
 ### Lembrete `/pedido/[codigo]`
 Ao implementar: botão "Tive um problema com meu pedido" → `https://wa.me/5534997819292`
 com mensagem pré-preenchida via `encodeURIComponent` contendo o código do pedido.
 Idem em `/conta/pedidos` por linha de pedido.
+
+---
+
+## HTMLs Aprovados — Referência Visual para TSX
+
+> Arquivos em `html-referencias/` na raiz do projeto.
+> Todo componente visual **deve** ser implementado a partir do HTML aprovado correspondente.
+> Nunca inventar layout — se não existe HTML aprovado, não implementar.
+
+| Arquivo HTML | Componente / Rota TSX alvo | Status |
+|---|---|---|
+| `granel_home.html` | Homepage completa | ✅ Implementada |
+| `product_cards_granel_final.html` | `ProductCard.tsx` | ✅ Implementado |
+| `DiferenciaisSection_v5.html` | `DiferenciaisSection.tsx` | ✅ Implementada |
+| `loja_catalog_v2.html` | `/loja` | ✅ Implementada · Sessão 044 |
+| `product_detail.html` | `/loja/[categoria]/[slug]` — PDP | ✅ Implementada · Sessão 046 |
+| `mini_cart_final_3.html` | `CartDrawer.tsx` | 🔴 Pendente · Fase 4.1 |
+| `checkout_page.html` | `/checkout` | 🔴 Pendente · Fase 5 |
+| `order_confirmation.html` | `/pedido/[codigo]` | 🔴 Pendente · Fase 6 |
+
+### HTMLs ainda não criados — criar antes de implementar as rotas
+
+| HTML a criar | Rota alvo | Quando |
+|---|---|---|
+| `order_tracking.html` | `/pedido/[codigo]/rastreamento` | Antes da Fase 6 |
+| `login_cadastro.html` | `/conta/login` | Antes da Fase 6 |
+| `minha_conta.html` | `/conta/pedidos` | Antes da Fase 6 |
 
 ---
 
