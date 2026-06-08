@@ -10,7 +10,7 @@ const getCachedProduct = cache(getProductDetail)
 
 type Props = { params: { categoria: string; slug: string } }
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 1800
 
 export async function generateMetadata({ params }: Props) {
   const produto = await getCachedProduct(params.categoria, params.slug)
