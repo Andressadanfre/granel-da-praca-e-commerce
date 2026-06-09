@@ -366,6 +366,14 @@ const CartBadge = dynamic(() => import('./CartBadge'), { ssr: false })
 ### PIX
 - 5% de desconto — aplicado no servidor
 
+### Programa de Fidelidade — Carimbo Digital
+- 1 ponto a cada R$ 50,00 em compras (qualquer forma de pagamento)
+- 10 pontos = R$ 15,00 de desconto automático no próximo pedido
+- Carimbo digital visual em `/conta/fidelidade` — 10 espaços preenchíveis
+- Expiração: 12 meses sem atividade
+- Não combinável com desconto de 1ª compra nem outros cupons
+- Desconto de 1ª compra: 10% automático na primeira compra ≥ R$ 150,00 — sem cupom
+
 ## 🤖 Regras para IA — Claude/Cursor
 
 ### Proibido sem aprovação explícita
@@ -837,3 +845,61 @@ Idem em `/conta/pedidos` por linha de pedido.
 | RLS policy sem `GRANT SELECT` — tabela pública invisível para `anon` | RLS policy e `GRANT SELECT` são duas camadas independentes no Postgres. Após criar qualquer tabela pública: (1) `CREATE POLICY ... USING (...)`, (2) `GRANT SELECT ON tabela TO anon, authenticated` |
 | `<Link>` envolvendo `ProductCard` | HTML inválido — `<a>` não pode conter `<button>`. `ProductCard` tem `WishlistButton` e `AddToCartSelector` internos. Renderizar sem wrapper `<Link>`. |
 | `generateMetadata` + Page Component com mesma query | Usar `cache()` do React: `const fn = cache(queryFn)` — dedup automático, apenas 1 query por requisição. |
+
+---
+
+## Contexto de Negócio — Ler Antes de Qualquer Decisão de Marketing ou Analytics
+
+### Empresa
+Granel da Praça — produtos naturais a granel desde 2019 · duas unidades físicas em Uberlândia, MG
+
+- **Fundinho:** Praça Clarimundo Carneiro, 119 · WhatsApp (34) 99781-9292
+- **UMC** (quiosque, sem retirada): Rua Rafael Marino Neto, 600 · WhatsApp (34) 99796-9191
+- **Pedidos online (atual):** graneldapraca.goomer.app
+- **Instagram:** @graneldapraca
+
+### Site Institucional — Existe e Está no Ar
+- Repositório separado: `Andressadanfre/graneldapraca-landing`
+- URL: www.graneldapraca.com.br · Stack: HTML/CSS/JS puro · Deploy: Vercel
+- Provisório — será substituído pelo e-commerce no lançamento.
+- Runbook de troca de domínio documentado no Notion Módulo 5 — **nunca inventar processo**.
+
+### Infraestrutura de Marketing — Já Existe (não recriar)
+
+| Item | Status | Detalhe |
+|---|---|---|
+| GA4 | ✅ Ativo | ID G-C6W30XMXN3 · propriedade 491153641 · instalado no landing |
+| Google Ads | ✅ Ativo | Conta 760-664-9903 · R$20-30/dia · CTR 9,59% · segmentação Uberlândia |
+| Google Ads conversão | ✅ Configurado | AW-763361661 |
+| Meta Pixel | ✅ Instalado | ID 2291807841017792 · instalado no landing |
+| Meta Ads | 🔴 Não ativo | 2 campanhas desativadas · 1 rascunho · execução pós-dados de conversão |
+| Search Console | ✅ Verificado | Domínio graneldapraca.com.br verificado |
+| UTM taxonomy | ✅ Definida | Google: `utm_source=google&utm_medium=cpc&utm_campaign=fundinho\|umc` · Meta: `utm_source=meta&utm_medium=paid_social` |
+| UptimeRobot | ✅ Ativo | Monitora site e Supabase API a cada 5 min com alertas por email |
+
+### Eventos GA4 Já Ativos no Landing
+- `clique_goomer` — 40,5% dos visitantes
+- `clique_whatsapp_fundinho` — 19,4%
+- `clique_whatsapp_umc` — 3,3%
+- Todos marcados como Eventos Principais → sincronizados com Google Ads 760-664-9903
+
+### O Que Isso Muda no E-commerce
+- **GA4:** usar mesma propriedade G-C6W30XMXN3 — **nunca criar nova**
+- **Meta Pixel:** usar mesmo ID 2291807841017792 — **nunca criar novo**
+- **UTM:** seguir taxonomy já definida — **nunca criar padrão novo**
+- Eventos de e-commerce (`view_item`, `add_to_cart`, `purchase` etc.) entram na Fase 7 — Launch via GTM (`@next/third-parties/google` no `layout.tsx`)
+- Troca de domínio: seguir runbook Módulo 5 — pausar campanhas → trocar → reativar
+
+### Documentação de Marketing no Notion
+
+| Módulo | Conteúdo | Quando ler |
+|---|---|---|
+| 📍 5 — Lançamento e PDCA | Runbook de domínio · checklist rastreamento · validação GIGO | Antes do lançamento |
+| 📍 7 — SEO, Performance e Qualidade | Eventos GA4 · JSON-LD · sitemap · robots | Antes de qualquer nova página pública |
+| 🌿 Site Institucional & Marketing Digital | Log completo das campanhas · performance · decisões | Contexto de marketing |
+
+### GXO — Itens Pendentes de Implementação (não documentados em outro lugar)
+- `llms.txt` na raiz do e-commerce — arquivo de contexto para IAs (ver Mapa do Projeto)
+- `robots.ts`: permitir explicitamente GPTBot, PerplexityBot, ClaudeBot, Google-Extended, Bingbot
+- Schema.org Product nas PDPs — especificado no Módulo 7
+- Calculadora de consumo a granel — ferramenta de marketing pós-lançamento
