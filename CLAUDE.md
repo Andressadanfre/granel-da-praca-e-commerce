@@ -903,3 +903,17 @@ Granel da Praça — produtos naturais a granel desde 2019 · duas unidades fís
 - `robots.ts`: permitir explicitamente GPTBot, PerplexityBot, ClaudeBot, Google-Extended, Bingbot
 - Schema.org Product nas PDPs — especificado no Módulo 7
 - Calculadora de consumo a granel — ferramenta de marketing pós-lançamento
+
+---
+
+## Lições da Sessão 047 — Aprendizados de Processo e Técnica
+
+| Aprendizado | Detalhe |
+|---|---|
+| RLS e GRANT são camadas independentes | `service_role` com `rolbypassrls = true` ainda precisa de `GRANT UPDATE` na tabela. Bypass de RLS ≠ permissão de tabela. Diagnosticar via `information_schema.role_table_grants` |
+| Parser manual de `.env` não remove aspas | `line.slice(eqIdx + 1).trim()` retorna `"eyJ..."` com aspas se o valor estiver entre aspas no arquivo. Fix: `.replace(/^["']|["']$/g, '')` após o trim |
+| Skills antes — não quando lembrado | Padrão obrigatório: ler skill relevante → diagnóstico → proposta → aprovação. Nunca proposta primeiro |
+| Cursor não é fonte de verdade | Cursor mistura correto com errado na análise do projeto. Fonte de verdade: código em disco + Notion + CLAUDE.md. Cursor é executor, não auditor |
+| Documentação incompleta gera suposições erradas | Se o CLAUDE.md não tem uma informação, qualquer IA vai inventar. GA4, Meta Pixel e UTM já existiam — sem documentação, foram propostos como se não existissem |
+| Notion MCP: `insert_content` confiável · `update_content` em tabelas não | `update_content` falha silenciosamente em células de tabela. Padrão correto: inserir bloco autoritativo no topo com `position: start` e marcar conteúdo abaixo como histórico |
+| Uma IA só sabe o que está no contexto | O CLAUDE.md é a única fonte que todo agente lê obrigatoriamente. Tudo que não está nele será inventado ou ignorado |
