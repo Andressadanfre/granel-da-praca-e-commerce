@@ -1,7 +1,7 @@
 'use server'
 
 import { createLogger, logError } from '@/lib/logger'
-import { getSupabaseServer } from '@/lib/supabase/server'
+import { getSupabaseAdmin } from '@/lib/supabase/server'
 
 type Result = { success: true } | { success: false; error: string }
 
@@ -10,7 +10,7 @@ export async function subscribeNewsletter(email: string): Promise<Result> {
     return { success: false, error: 'E-mail inválido.' }
   }
 
-  const supabase = getSupabaseServer()
+  const supabase = getSupabaseAdmin()
 
   const { error } = await supabase
     .from('newsletter_subscriptions')

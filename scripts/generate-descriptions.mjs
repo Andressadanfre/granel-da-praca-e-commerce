@@ -30,7 +30,8 @@ try {
       .filter(line => line.includes('=') && !line.startsWith('#') && line.trim())
       .map(line => {
         const eqIdx = line.indexOf('=')
-        return [line.slice(0, eqIdx).trim(), line.slice(eqIdx + 1).trim()]
+        const value = line.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, '')
+        return [line.slice(0, eqIdx).trim(), value]
       })
   )
 } catch {
