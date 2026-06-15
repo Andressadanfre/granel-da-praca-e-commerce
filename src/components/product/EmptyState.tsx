@@ -2,6 +2,7 @@
 // Server Component — sem 'use client'
 
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 import { Search, ShoppingCart, Heart, Package, SlidersHorizontal } from 'lucide-react'
 
 import { tokens } from '@/lib/tokens'
@@ -111,7 +112,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
       </p>
 
       {/* CTA */}
-      <a
+      <Link
         href={ctaHref}
         className="hover:bg-ghover transition-[background-color] duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)]"
         style={{
@@ -130,7 +131,7 @@ export function EmptyState({ context, searchTerm, ctaHref: ctaHrefOverride }: Em
         }}
       >
         {ctaLabel}
-      </a>
+      </Link>
     </div>
   )
 }

@@ -52,10 +52,10 @@ const DRAWER_TRANSITION = { duration: 0.25, ease: [0.4, 0, 0.2, 1] } as const
 
 // ── Funções puras ────────────────────────────────────────────────────────────
 
-function getBadgeProps(type: ProductType): { variant: BadgeVariant; label: string } {
-  return type === 'granel'
-    ? { variant: 'granel', label: 'Granel' }
-    : { variant: 'unit', label: 'Unidade' }
+function getBadgeProps(type: ProductType): { variant: BadgeVariant; label: string } | null {
+  return type === 'unit'
+    ? { variant: 'unit' as BadgeVariant, label: 'Unidade' }
+    : null
 }
 
 function getItemMeta(item: CartItem): string {
@@ -279,7 +279,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           <span className="text-[9.5px] font-medium uppercase tracking-wide text-t4">
                             {item.category}
                           </span>
-                          <Badge variant={badge.variant}>{badge.label}</Badge>
+                          {badge && <Badge variant={badge.variant}>{badge.label}</Badge>}
                         </div>
                         <p className="line-clamp-2 text-[13.5px] font-semibold leading-snug text-t9">
                           {item.name}
