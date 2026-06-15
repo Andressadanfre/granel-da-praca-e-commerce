@@ -779,7 +779,8 @@ Nunca commitar com build quebrado.
 | `ProductGrid.tsx` | ✅ Implementado · Sessão 044 |
 | `FeaturedProducts.tsx` | ✅ Implementado |
 | `NewsletterPopup.tsx` | ✅ Implementado · commits a6853d9 e 7378521 |
-| `CartDrawer.tsx` | 🔴 Pendente |
+| `CartDrawer.tsx` | ✅ Implementado · src/components/cart/CartDrawer.tsx · commit 0699a3a |
+| `CartProvider.tsx` | ✅ Implementado · src/components/cart/CartProvider.tsx · commit c24aea1 |
 | `CheckoutStepper.tsx` | 🔴 Pendente |
 | `OrderTimeline.tsx` | 🔴 Pendente |
 | `Modal.tsx` | ✅ Implementado · commit a685057 |
@@ -787,8 +788,9 @@ Nunca commitar com build quebrado.
 | `AdminSidebar.tsx` | 🔴 Pendente |
 
 ### Próximas entregas (prioridade)
-1. Fase 3.2 — rodar `scripts/generate-descriptions.mjs` (402 produtos sem descrição)
-2. Fase 4.1 — `CartDrawer.tsx` · referencia `mini_cart_final_3.html`
+1. Fase 4.2 — conectar `PdpActions.tsx` ao carrinho real (`addToCart` de `@/lib/cart`)
+2. Fase 4.3 — conectar `AddToCartSelector.tsx` ao carrinho real
+3. Fase 5.1 — `CheckoutStepper.tsx` + Mercado Pago
 
 ### Lembrete `/pedido/[codigo]`
 Ao implementar: botão "Tive um problema com meu pedido" → `https://wa.me/5534997819292`
