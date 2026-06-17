@@ -1,17 +1,20 @@
 'use client'
 
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
-import type { QuantityVariant } from '@/components/ui/QuantitySelector'
+import { addToCart } from '@/lib/cart'
+import type { ProductForCart } from '@/lib/cart/types'
 
 interface AddToCartSelectorProps {
-  id: string
-  variant: QuantityVariant
+  product: ProductForCart
 }
 
-export function AddToCartSelector({ id, variant }: AddToCartSelectorProps) {
+export function AddToCartSelector({ product }: AddToCartSelectorProps) {
   return (
-    <div data-product-id={id} className="w-full">
-      <QuantitySelector variant={variant} />
+    <div data-product-id={product.id} className="w-full">
+      <QuantitySelector
+        variant={product.productType}
+        onAddToCart={(quantity) => addToCart({ ...product, quantity })}
+      />
     </div>
   )
 }

@@ -11,6 +11,8 @@ export interface CartItem {
   quantity: number     // granel: em gramas | unit: em unidades
 }
 
+export type ProductForCart = Omit<CartItem, 'quantity'>
+
 export interface CartState {
   items: CartItem[]
   isOpen: boolean

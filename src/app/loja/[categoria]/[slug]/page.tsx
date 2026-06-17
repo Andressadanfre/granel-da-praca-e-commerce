@@ -39,8 +39,21 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
           <aside className="lg:sticky lg:top-[88px]">
             <PdpActions
-              productId={produto.id}
-              productType={produto.product_type}
+              product={{
+                id: produto.id,
+                name: produto.name,
+                category: produto.category.name,
+                productType: produto.product_type,
+                imageUrl: produto.image_url,
+                priceCents:
+                  produto.product_type === 'granel'
+                    ? Math.round(produto.price_cents / 10)
+                    : produto.price_cents,
+                incrementGrams:
+                  produto.product_type === 'granel'
+                    ? produto.increment_grams
+                    : 0,
+              }}
               stockStatus={produto.stock_status}
             />
           </aside>

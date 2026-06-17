@@ -3,32 +3,30 @@
 import { useState } from 'react'
 
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
-import type { QuantityVariant } from '@/components/ui/QuantitySelector'
+import { addToCart } from '@/lib/cart'
+import type { ProductForCart } from '@/lib/cart/types'
 
 interface PdpActionsProps {
-  productId: string
-  productType: 'granel' | 'unit'
+  product: ProductForCart
   stockStatus: string
 }
 
 const OUT_OF_STOCK_STATUS = 'out_of_stock'
 
 export function PdpActions({
-  productId,
-  productType,
+  product,
   stockStatus,
 }: PdpActionsProps) {
   const isOutOfStock = stockStatus === OUT_OF_STOCK_STATUS
-  const variant: QuantityVariant = productType === 'granel' ? 'granel' : 'unit'
   const [isActive, setIsActive] = useState(false)
 
-  const handleAddToCart = () => {
-    // TODO: integrar com CartDrawer via localStorage + CustomEvents (Fase 4)
+  const handleAddToCart = (quantity: number) => {
+    addToCart({ ...product, quantity })
   }
 
   if (isOutOfStock) {
     return (
-      <div data-product-id={productId} className="w-full">
+      <div data-product-id={product.id} className="w-full">
         <p className="text-danger font-semibold text-sm">Produto esgotado</p>
         <button
           type="button"
@@ -42,7 +40,7 @@ export function PdpActions({
   }
 
   return (
-    <div data-product-id={productId} className="w-full">
+    <div data-product-id={product.id} className="w-full">
       {!isActive ? (
         <button
           type="button"
@@ -53,7 +51,7 @@ export function PdpActions({
         </button>
       ) : (
         <QuantitySelector
-          variant={variant}
+          variant={product.productType}
           className="rounded-inner"
           onAddToCart={handleAddToCart}
           onQuantityChange={(q) => {

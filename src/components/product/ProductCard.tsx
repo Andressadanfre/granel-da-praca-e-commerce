@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/Badge'
 import { AddToCartSelector } from '@/components/product/AddToCartSelector'
 import { WishlistButton } from '@/components/product/WishlistButton'
+import type { ProductForCart } from '@/lib/cart/types'
 import { cn, formatBRL } from '@/lib/utils'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -73,6 +74,16 @@ export function ProductCard({
   const isFeatured   = state === 'featured'
   const isLowStock   = state === 'low-stock'
   const hasDiscount  = !!originalPriceInCents && !!discountPercent
+
+  const productForCart: ProductForCart = {
+    id,
+    name,
+    category,
+    productType: variant,
+    imageUrl: imageUrl ?? null,
+    priceCents: priceInCents,
+    incrementGrams: variant === 'granel' ? 100 : 0,
+  }
 
   return (
     <article
@@ -198,7 +209,7 @@ export function ProductCard({
             Indisponível
           </button>
         ) : (
-          <AddToCartSelector id={id} variant={variant} />
+          <AddToCartSelector product={productForCart} />
         )}
       </div>
     </article>
