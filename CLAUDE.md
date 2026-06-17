@@ -136,7 +136,7 @@ created_at       timestamptz
 ```
 
 > ❌ **NÃO EXISTE** `price_per_100g_cents` — nunca usar em queries.
-> ✅ **Cálculo granel:** `price_cents / increment_grams * 100` = preço por 100gr
+> ✅ **Cálculo granel:** `Math.round(price_cents / 10)` = preço por 100gr · `price_cents` = preço por kg (sem fórmula)
 
 ### `app_users`
 
@@ -178,7 +178,7 @@ import { getSupabaseAdmin } from '@/lib/supabase/server'
 ### Calculo de preco
 - Server Action recebe apenas product_id e quantity_grams
 - Preco SEMPRE buscado do banco
-- Total: price_cents / increment_grams * 100
+- Total (centavos): price_cents * quantity_grams / 1000
 
 ### IDs publicos
 - orders, payments: UUID obrigatorio
@@ -332,7 +332,7 @@ const CartBadge = dynamic(() => import('./CartBadge'), { ssr: false })
 ### Produto granel
 - Incremento mínimo: 100 gr · sem teto máximo fixo
 - Conversão automática: ≥ 1000 gr → kg com vírgula BR (`1 kg`, `1,5 kg`)
-- Preço calculado no servidor: `price_cents / increment_grams * 100` = por 100 gr
+- Preço exibido por 100 gr: `Math.round(price_cents / 10)` · preço por kg: `price_cents` direto
 
 ### Estoque
 - `in_stock` → venda normal
