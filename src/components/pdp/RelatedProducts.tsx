@@ -26,17 +26,18 @@ function mapRelatedToCardProps(product: RelatedProduct): ProductCardProps {
     ? Math.round((1 - product.price_cents / compareAtCents) * 100)
     : undefined
 
-  const incrementGrams = product.increment_grams
+  const priceInCents = isGranel
+    ? Math.round(product.price_cents / 10)
+    : product.price_cents
 
-  const priceInCents =
-    isGranel && incrementGrams > 0
-      ? Math.round((product.price_cents / incrementGrams) * 100)
-      : product.price_cents
+  const pricePerKgInCents = isGranel ? product.price_cents : undefined
 
-  const pricePerKgInCents =
-    isGranel && incrementGrams > 0
-      ? Math.round((product.price_cents / incrementGrams) * 1000)
-      : undefined
+  const originalPriceInCents =
+    compareAtCents === null
+      ? undefined
+      : isGranel
+        ? Math.round(compareAtCents / 10)
+        : compareAtCents
 
   return {
     id: product.id,
@@ -44,7 +45,7 @@ function mapRelatedToCardProps(product: RelatedProduct): ProductCardProps {
     category: product.category.name,
     variant: product.product_type,
     priceInCents,
-    originalPriceInCents: compareAtCents ?? undefined,
+    originalPriceInCents,
     pricePerKgInCents,
     imageUrl: product.image_url ?? undefined,
     discountPercent,

@@ -59,7 +59,12 @@ function toCardProps(p: ProductRow): ProductCardProps {
     variant: isGranel ? 'granel' : 'unit',
     priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
     pricePerKgInCents: isGranel ? p.price_cents : undefined,
-    originalPriceInCents: p.compare_at_cents ?? undefined,
+    originalPriceInCents:
+      p.compare_at_cents === null
+        ? undefined
+        : isGranel
+          ? Math.round(p.compare_at_cents / 10)
+          : p.compare_at_cents,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : UNIT_LABEL[p.unit],
     imageUrl: p.image_url ?? undefined,

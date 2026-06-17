@@ -32,7 +32,12 @@ function toCardProps(p: ProductWithCategory): ProductCardProps {
     // granel: card exibe preço por 100 gr → price_cents já está em centavos/kg
     priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
     pricePerKgInCents: isGranel ? p.price_cents : undefined,
-    originalPriceInCents: p.compare_at_cents ?? undefined,
+    originalPriceInCents:
+      p.compare_at_cents === null
+        ? undefined
+        : isGranel
+          ? Math.round(p.compare_at_cents / 10)
+          : p.compare_at_cents,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : p.unit,
     state:
