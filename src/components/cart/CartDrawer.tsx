@@ -166,7 +166,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Carrinho de compras"
-        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85vh] w-full flex-col rounded-t-card bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[380px] md:rounded-none"
+        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85vh] w-full flex-col rounded-t-modal bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[420px] md:rounded-none"
         initial={drawerMotion.initial}
         animate={drawerMotion.animate}
         exit={drawerMotion.exit}
