@@ -78,6 +78,7 @@ function getStep(item: CartItem): number {
 
 export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const drawerRef = React.useRef<HTMLDivElement>(null)
+  const previousFocusRef = React.useRef<HTMLElement | null>(null)
   const [items, setItems] = React.useState<CartItem[]>([])
   const [failedImages, setFailedImages] = React.useState<Set<string>>(new Set())
   const [isMobile, setIsMobile] = React.useState<boolean>(() =>
@@ -113,8 +114,12 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', handleKeyDown)
+    previousFocusRef.current = document.activeElement as HTMLElement | null
     drawerRef.current?.focus()
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      previousFocusRef.current?.focus()
+    }
   }, [isOpen, onClose])
 
   const handleDecrease = (item: CartItem) => {
@@ -184,8 +189,8 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <ShoppingCart size={20} strokeWidth={1.6} className="text-gd" aria-hidden="true" />
             Seu Carrinho
             {items.length > 0 && (
-              <span className="rounded-pill bg-g px-2 py-0.5 text-[10px] font-bold text-white">
-                {items.length}
+              <span className="rounded-pill bg-g px-2.5 py-0.5 text-[10px] font-bold text-white">
+                {`${items.length} ${items.length === 1 ? 'produto' : 'produtos'}`}
               </span>
             )}
           </div>
