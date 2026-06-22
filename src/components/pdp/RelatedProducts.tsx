@@ -6,8 +6,8 @@ import type { RelatedProduct } from '@/lib/products/product-detail'
 const RELATED_LIMIT = 8
 
 export interface RelatedProductsProps {
-  categoryId: string
-  excludeId: string
+  categoryId: number
+  excludeId: number
 }
 
 function resolveState(product: RelatedProduct, hasDiscount: boolean): ProductState {
@@ -47,7 +47,7 @@ function mapRelatedToCardProps(product: RelatedProduct): ProductCardProps {
     priceInCents,
     originalPriceInCents,
     pricePerKgInCents,
-    imageUrl: product.image_url ?? undefined,
+    imageUrl: product.imageUrl ?? undefined,
     discountPercent,
     state: resolveState(product, hasDiscount),
   }

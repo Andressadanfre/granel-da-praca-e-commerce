@@ -32,9 +32,9 @@ export function ProductDetailHero({ produto }: ProductDetailHeroProps) {
   return (
     <article className="flex flex-col gap-6">
       <div className="relative w-full aspect-square rounded-card bg-cream-img overflow-hidden">
-        {produto.image_url ? (
+        {produto.imageUrl ? (
           <Image
-            src={produto.image_url}
+            src={produto.imageUrl}
             alt={produto.name}
             fill
             sizes="(max-width: 1024px) 100vw, 560px"

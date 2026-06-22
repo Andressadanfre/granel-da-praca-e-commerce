@@ -7,22 +7,22 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
-          id: string
+          id: number
           name: string
           slug: string
-          icon_url: string | null
-          image_url: string | null
+          description: string | null
+          icon_name: string | null
           sort_order: number
           is_active: boolean
           created_at: string
           updated_at: string
         }
         Insert: {
-          id?: string
+          id?: number
           name: string
           slug: string
-          icon_url?: string | null
-          image_url?: string | null
+          description?: string | null
+          icon_name?: string | null
           sort_order?: number
           is_active?: boolean
           created_at?: string
@@ -32,22 +32,14 @@ export type Database = {
           id?: number
           name?: string
           slug?: string
-          icon_url?: string | null
-          image_url?: string | null
+          description?: string | null
+          icon_name?: string | null
           sort_order?: number
           is_active?: boolean
           created_at?: string
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: 'products_category_id_fkey'
-            columns: ['id']
-            isOneToOne: false
-            referencedRelation: 'products'
-            referencedColumns: ['category_id']
-          },
-        ]
+        Relationships: []
       }
       newsletter_subscriptions: {
         Row: {
@@ -70,13 +62,51 @@ export type Database = {
         }
         Relationships: []
       }
+      product_images: {
+        Row: {
+          id: number
+          product_id: number
+          url: string
+          alt: string | null
+          sort_order: number
+          is_primary: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          product_id: number
+          url: string
+          alt?: string | null
+          sort_order?: number
+          is_primary?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          product_id?: number
+          url?: string
+          alt?: string | null
+          sort_order?: number
+          is_primary?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'product_images_product_id_fkey'
+            columns: ['product_id']
+            isOneToOne: false
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       products: {
         Row: {
-          id: string
+          id: number
+          category_id: number
           name: string
           slug: string
           description: string | null
-          category_id: string | null
           unit: ProductUnit
           product_type: ProductType
           price_cents: number
@@ -86,15 +116,15 @@ export type Database = {
           is_active: boolean
           is_deleted: boolean
           is_featured: boolean
-          image_url: string | null
           created_at: string
+          updated_at: string
         }
         Insert: {
-          id?: string
+          id?: number
+          category_id: number
           name: string
           slug: string
           description?: string | null
-          category_id?: string | null
           unit?: ProductUnit
           product_type?: ProductType
           price_cents: number
@@ -104,15 +134,15 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
-          image_url?: string | null
           created_at?: string
+          updated_at?: string
         }
         Update: {
           id?: number
+          category_id?: number
           name?: string
           slug?: string
           description?: string | null
-          category_id?: number | null
           unit?: ProductUnit
           product_type?: ProductType
           price_cents?: number
@@ -122,8 +152,8 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
-          image_url?: string | null
           created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -132,6 +162,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'categories'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'product_images_product_id_fkey'
+            columns: ['id']
+            isOneToOne: false
+            referencedRelation: 'product_images'
+            referencedColumns: ['product_id']
           },
         ]
       }

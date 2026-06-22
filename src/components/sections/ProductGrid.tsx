@@ -5,7 +5,7 @@ import { ProductCard } from '@/components/product/ProductCard'
 import { EmptyState } from '@/components/product/EmptyState'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 import type { ProductType, ProductUnit, StockStatus } from '@/types/database'
-import { cn } from '@/lib/utils'
+import { cn, pickPrimaryImage } from '@/lib/utils'
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
@@ -28,18 +28,18 @@ export interface ProductGridProps {
 }
 
 interface ProductRow {
-  id: string
+  id: number
   name: string
   description: string | null
-  category_id: string | null
+  category_id: number
   product_type: ProductType
   unit: ProductUnit
   price_cents: number
   compare_at_cents: number | null
   increment_grams: number
   stock_status: StockStatus
-  image_url: string | null
-  categories: { name: string } | null
+  product_images: { url: string; is_primary: boolean }[] | null
+  categories: { category_name: string } | null
 }
 
 // ─── Mapper ───────────────────────────────────────────────────────────────────
@@ -55,7 +55,7 @@ function toCardProps(p: ProductRow): ProductCardProps {
   return {
     id: p.id,
     name: p.name,
-    category: p.categories?.name ?? '',
+    category: p.categories?.category_name ?? '',
     variant: isGranel ? 'granel' : 'unit',
     priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
     pricePerKgInCents: isGranel ? p.price_cents : undefined,
@@ -67,7 +67,7 @@ function toCardProps(p: ProductRow): ProductCardProps {
           : p.compare_at_cents,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : UNIT_LABEL[p.unit],
-    imageUrl: p.image_url ?? undefined,
+    imageUrl: pickPrimaryImage(p.product_images) ?? undefined,
     state:
       p.stock_status === 'out_of_stock'
         ? 'out-of-stock'
@@ -196,7 +196,7 @@ export default async function ProductGrid({
   const supabase = getSupabaseServer()
 
   // Resolver category_id a partir do slug
-  let categoryId: string | null = null
+  let categoryId: number | null = null
   if (categoria) {
     const { data: catData } = await supabase
       .from('categories')
@@ -218,7 +218,7 @@ export default async function ProductGrid({
   let query = supabase
     .from('products')
     .select(
-      'id, name, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, image_url, categories(name)',
+      'id, name, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, product_images(url, is_primary), categories(category_name:name)',
       { count: 'exact' },
     )
     .eq('is_active', true)
@@ -244,12 +244,12 @@ export default async function ProductGrid({
   // Normalizar categories — Supabase retorna array em joins com isOneToOne: false
   const products: ProductRow[] = (data ?? []).map((row) => {
     const rawCat = row.categories
-    const categories: { name: string } | null =
+    const categories: { category_name: string } | null =
       rawCat === null || rawCat === undefined
         ? null
         : Array.isArray(rawCat)
-          ? ((rawCat[0] as { name: string } | undefined) ?? null)
-          : (rawCat as { name: string })
+          ? ((rawCat[0] as { category_name: string } | undefined) ?? null)
+          : (rawCat as { category_name: string })
 
     return {
       id: row.id,
@@ -262,7 +262,7 @@ export default async function ProductGrid({
       compare_at_cents: row.compare_at_cents,
       increment_grams: row.increment_grams,
       stock_status: row.stock_status,
-      image_url: row.image_url,
+      product_images: Array.isArray(row.product_images) ? row.product_images as { url: string; is_primary: boolean }[] : null,
       categories,
     }
   })

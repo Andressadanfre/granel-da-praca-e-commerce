@@ -42,7 +42,7 @@ export function addToCart(item: CartItem): void {
   saveCart([...items, item])
 }
 
-export function updateQuantity(id: string, quantity: number): void {
+export function updateQuantity(id: number, quantity: number): void {
   const items = getCartItems()
   const updated = items.map((i) =>
     i.id === id ? { ...i, quantity } : i
@@ -50,7 +50,7 @@ export function updateQuantity(id: string, quantity: number): void {
   saveCart(updated.filter((i) => i.quantity > 0))
 }
 
-export function removeFromCart(id: string): void {
+export function removeFromCart(id: number): void {
   const items = getCartItems()
   saveCart(items.filter((i) => i.id !== id))
 }

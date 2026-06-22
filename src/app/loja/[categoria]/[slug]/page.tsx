@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
       produto.description?.slice(0, 155) ??
       `Compre ${produto.name} a granel na Granel da Praça`,
     openGraph: {
-      images: produto.image_url ? [produto.image_url] : undefined,
+      images: produto.imageUrl ? [produto.imageUrl] : undefined,
     },
   }
 }
@@ -44,7 +44,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 name: produto.name,
                 category: produto.category.name,
                 productType: produto.product_type,
-                imageUrl: produto.image_url,
+                imageUrl: produto.imageUrl,
                 priceCents:
                   produto.product_type === 'granel'
                     ? Math.round(produto.price_cents / 10)

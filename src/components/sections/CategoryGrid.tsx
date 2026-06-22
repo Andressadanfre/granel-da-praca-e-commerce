@@ -4,7 +4,7 @@ import { getSupabaseServer } from '@/lib/supabase/server'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface CategoryRow {
-  id: string
+  id: number
   name: string
   slug: string
   sort_order: number
@@ -215,7 +215,7 @@ export default async function CategoryGrid({ selectedSlug }: { selectedSlug?: st
     .eq('is_deleted', false)
 
   // Monta mapa category_id → contagem
-  const countMap = new Map<string, number>()
+  const countMap = new Map<number, number>()
   for (const p of productsData ?? []) {
     if (p.category_id != null) {
       countMap.set(p.category_id, (countMap.get(p.category_id) ?? 0) + 1)

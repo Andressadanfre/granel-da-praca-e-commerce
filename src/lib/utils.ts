@@ -28,3 +28,10 @@ export function formatDate(iso: string): string {
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
 }
+
+export function pickPrimaryImage(
+  images: { url: string; is_primary: boolean }[] | null
+): string | null {
+  if (!images || images.length === 0) return null
+  return (images.find(img => img.is_primary) ?? images[0]).url
+}

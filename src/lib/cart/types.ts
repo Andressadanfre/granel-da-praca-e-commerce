@@ -1,7 +1,7 @@
 export type ProductType = 'granel' | 'unit'
 
 export interface CartItem {
-  id: string           // product_id (uuid)
+  id: number           // product_id (integer serial)
   name: string
   category: string
   productType: ProductType

@@ -126,7 +126,7 @@ export default function PreviewPage() {
           <div>
             <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — default</p>
             <ProductCard
-              id="prev-1"
+              id={1}
               name="Castanha de Caju W1 Torrada e Salgada"
               category="Oleaginosas"
               variant="granel"
@@ -140,7 +140,7 @@ export default function PreviewPage() {
           <div>
             <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>unit — discount</p>
             <ProductCard
-              id="prev-2"
+              id={2}
               name="Óleo de Coco Extra Virgem"
               category="Suplementos"
               variant="unit"
@@ -155,7 +155,7 @@ export default function PreviewPage() {
           <div>
             <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — low-stock</p>
             <ProductCard
-              id="prev-3"
+              id={3}
               name="Amêndoas Cruas Importadas Premium"
               category="Oleaginosas"
               variant="granel"
@@ -168,7 +168,7 @@ export default function PreviewPage() {
           <div>
             <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>unit — out-of-stock</p>
             <ProductCard
-              id="prev-4"
+              id={4}
               name="Proteína de Ervilha Baunilha"
               category="Suplementos"
               variant="unit"
@@ -181,7 +181,7 @@ export default function PreviewPage() {
           <div>
             <p style={{ fontSize: '12px', marginBottom: '12px', color: '#9CA3AF' }}>granel — featured</p>
             <ProductCard
-              id="prev-5"
+              id={5}
               name="Quinoa Real Boliviana"
               category="Grãos e Cereais"
               variant="granel"

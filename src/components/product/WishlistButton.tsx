@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react'
 import { tokens } from '@/lib/tokens'
 
 interface WishlistButtonProps {
-  id: string
+  id: number
   initialIsFavorited?: boolean
 }
 

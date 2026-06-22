@@ -25,7 +25,7 @@ export type DietBadge =
   | 'Integral'
 
 export interface ProductCardProps {
-  id: string
+  id: number
   name: string
   category: string
   variant: ProductVariant

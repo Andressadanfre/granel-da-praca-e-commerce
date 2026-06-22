@@ -25,7 +25,7 @@ function toCardProps(p: ProductWithCategory): ProductCardProps {
       : undefined
 
   return {
-    id: String(p.id),
+    id: p.id,
     name: p.name,
     category: p.categories?.name ?? '',
     variant: isGranel ? 'granel' : 'unit',

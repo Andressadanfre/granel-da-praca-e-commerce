@@ -80,7 +80,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const drawerRef = React.useRef<HTMLDivElement>(null)
   const previousFocusRef = React.useRef<HTMLElement | null>(null)
   const [items, setItems] = React.useState<CartItem[]>([])
-  const [failedImages, setFailedImages] = React.useState<Set<string>>(new Set())
+  const [failedImages, setFailedImages] = React.useState<Set<number>>(new Set())
   const [isMobile, setIsMobile] = React.useState<boolean>(() =>
     typeof window !== 'undefined' ? window.matchMedia(MOBILE_QUERY).matches : false,
   )
@@ -135,7 +135,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     updateQuantity(item.id, item.quantity + getStep(item))
   }
 
-  const markImageFailed = (id: string) => {
+  const markImageFailed = (id: number) => {
     setFailedImages((prev) => new Set(prev).add(id))
   }
 
