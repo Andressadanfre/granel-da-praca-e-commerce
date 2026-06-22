@@ -92,9 +92,9 @@ Badges e estados
 
 ---
 
-## Supabase — Schema Real (confirmado Sessão 036)
+## Supabase — Schema Real (confirmado Sessão 036, re-auditado via MCP em 18/06/2026)
 
-> **Este schema é a fonte de verdade.** A skill antiga estava desatualizada.
+> **Este schema é a fonte de verdade.** Sempre verificar aqui antes de escrever qualquer query.
 
 ### Projeto
 - **ID:** `ymjmgukuojwumvtaglyp` · **Região:** São Paulo
@@ -103,40 +103,56 @@ Badges e estados
 ### `categories`
 
 ```sql
-id          uuid         PK
+id          integer      PK  ← serial, NÃO uuid
 name        text         NOT NULL
 slug        text         NOT NULL UNIQUE
-icon_url    text
-image_url   text
-sort_order  smallint     ← usa sort_order, NÃO display_order
-is_active   boolean      ← usa is_active, NÃO is_deleted (não existe aqui)
-created_at  timestamptz
-updated_at  timestamptz
+description text
+icon_name   text         ← NÃO icon_url, NÃO image_url (não existem nesta tabela)
+sort_order  smallint     NOT NULL DEFAULT 0  ← usa sort_order, NÃO display_order
+is_active   boolean      NOT NULL DEFAULT true  ← usa is_active, NÃO is_deleted (não existe aqui)
+created_at  timestamptz  NOT NULL
+updated_at  timestamptz  NOT NULL
 ```
 
 ### `products`
 
 ```sql
-id               uuid        PK
+id               integer     PK  ← serial, NÃO uuid
 name             text        NOT NULL
 slug             text        NOT NULL UNIQUE
 description      text
-category_id      uuid        FK → categories.id
+category_id      integer     NOT NULL  FK → categories.id  ← NÃO nullable, NÃO uuid
 product_type     enum        ('granel', 'unit')
-price_cents      int         NOT NULL   ← preço principal em centavos
-increment_grams  int                    ← granel: incremento (ex: 100)
+price_cents      int         NOT NULL   ← preço por kg em centavos
+increment_grams  int         NOT NULL DEFAULT 100  ← step do QuantitySelector APENAS
 compare_at_cents int                    ← preço original p/ desconto
 unit             enum        ('KG','UN','SC','CX','BL')
-stock_status     text                   ← 'in_stock' | 'low_stock' | 'out_of_stock'
-is_active        boolean
-is_featured      boolean
-is_deleted       boolean                ← soft delete (EXISTS aqui)
-image_url        text
-created_at       timestamptz
+stock_status     text        NOT NULL DEFAULT 'in_stock'
+is_active        boolean     NOT NULL DEFAULT true
+is_featured      boolean     NOT NULL DEFAULT false
+is_deleted       boolean     NOT NULL DEFAULT false  ← soft delete (EXISTS aqui)
+created_at       timestamptz NOT NULL
+updated_at       timestamptz NOT NULL
 ```
 
+> ❌ **NÃO EXISTE** `image_url` em `products` — nunca existiu. Fotos ficam em `product_images`.
 > ❌ **NÃO EXISTE** `price_per_100g_cents` — nunca usar em queries.
-> ✅ **Cálculo granel:** `Math.round(price_cents / 10)` = preço por 100gr · `price_cents` = preço por kg (sem fórmula)
+> ✅ **Cálculo granel:** `Math.round(price_cents / 10)` = preço por 100gr · `price_cents` = preço por kg
+> ✅ `increment_grams` é APENAS o step do QuantitySelector (100 granel / 1 unit) — NUNCA divisor de preço
+
+### `product_images`
+
+```sql
+id          integer     PK  ← serial
+product_id  integer     NOT NULL  FK → products.id
+url         text        NOT NULL
+alt         text
+sort_order  smallint    NOT NULL DEFAULT 0
+is_primary  boolean     NOT NULL DEFAULT false
+created_at  timestamptz NOT NULL
+```
+
+> Helper: `pickPrimaryImage(images)` em `src/lib/utils.ts` — retorna `url` da imagem com `is_primary = true`, ou a primeira, ou `null` se vazio.
 
 ### `app_users`
 
@@ -394,9 +410,24 @@ const CartBadge = dynamic(() => import('./CartBadge'), { ssr: false })
 5. Mostrar diff para aprovação antes de `git add`
 
 ### Proibido inventar
-- Campos inexistentes no schema: `price_per_100g_cents`, `is_deleted` em `categories`
+- Campos inexistentes no schema: `price_per_100g_cents`, `is_deleted` em `categories`, `image_url` em `products`
 - Caminhos de import não confirmados em disco
 - Comportamentos de negócio não documentados na seção "Regras de Negócio"
+
+### Pendências de arquitetura — não alterar sem sessão dedicada
+
+Identificadas no code review de 18/06/2026. Aguardam sessão de auditoria
+própria pós-fix do bug `image_url`. **Não corrigir espontaneamente** —
+não misturar com outro fix em andamento.
+
+- **`Badge.tsx`**: usa `style={{}}` + `src/lib/tokens.ts` em vez de classe
+  Tailwind. Não adicionar novos `style={{}}` com valores de `tokens.ts` —
+  padrão correto é classe Tailwind, igual ao resto do DS.
+- **`CartDrawer.tsx`**: lista de itens usa `<div>` por item em vez de
+  `<ul>/<li>`. Não adicionar novos `<div>` por item na lista.
+- **`ProductGrid.tsx`**: mistura query Supabase, normalização e paginação
+  no mesmo arquivo. Não adicionar lógica de fetch ou normalização aqui —
+  extração para `src/lib/products/` agendada pós-fix, em commit separado.
 
 ## 📊 Observabilidade
 
@@ -732,7 +763,7 @@ Nunca commitar com build quebrado.
 
 ---
 
-## Estado do Projeto — 07/06/2026
+## Estado do Projeto — 18/06/2026 · Sessão 050 · HEAD 78b119e
 
 ### Infraestrutura
 - **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
@@ -748,7 +779,7 @@ Nunca commitar com build quebrado.
 | `/` | ✅ Homepage completa |
 | `/loja` | ✅ Implementada |
 | `/loja/[categoria]/[slug]` | ✅ Implementada · Sessão 046 |
-| `/carrinho` | 🔴 Pendente · Fase 4 |
+| `/carrinho` | ✅ Removida — substituída pelo `CartDrawer` (overlay). Nunca existirá como página separada. |
 | `/checkout` | 🔴 Pendente · Fase 5 |
 | `/pedido/[codigo]` | 🔴 Pendente · Fase 6 |
 | `/pedido/[codigo]/rastreamento` | 🔴 Pendente · HTML ainda não criado |
