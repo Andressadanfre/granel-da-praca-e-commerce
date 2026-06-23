@@ -878,6 +878,7 @@ Idem em `/conta/pedidos` por linha de pedido.
 | RLS policy sem `GRANT SELECT` — tabela pública invisível para `anon` | RLS policy e `GRANT SELECT` são duas camadas independentes no Postgres. Após criar qualquer tabela pública: (1) `CREATE POLICY ... USING (...)`, (2) `GRANT SELECT ON tabela TO anon, authenticated` |
 | `<Link>` envolvendo `ProductCard` | HTML inválido — `<a>` não pode conter `<button>`. `ProductCard` tem `WishlistButton` e `AddToCartSelector` internos. Renderizar sem wrapper `<Link>`. |
 | `generateMetadata` + Page Component com mesma query | Usar `cache()` do React: `const fn = cache(queryFn)` — dedup automático, apenas 1 query por requisição. |
+| Tabela nova sem GRANT → 401 silencioso em produção | Toda tabela criada via migration precisa de duas etapas obrigatórias: (1) `GRANT SELECT ON tabela TO anon, authenticated` e (2) `CREATE POLICY ... FOR SELECT USING (true)` + `ALTER TABLE tabela ENABLE ROW LEVEL SECURITY`. Sem isso a tabela existe no banco mas é invisível para o client anon do Supabase — retorna 401 que o código engole e exibe EmptyState. `product_images` ficou sem isso da Sessão 033 até a Sessão 051. |
 
 ---
 
