@@ -34,7 +34,7 @@ alwaysApply: true
 - Schema real confirmado Sessão 036:
   - categories: usa is_active (não is_deleted) · usa sort_order (não display_order) · NÃO tem is_deleted
   - products: usa price_cents + increment_grams · NÃO existe price_per_100g_cents
-  - Cálculo granel: price_cents / increment_grams * 100 = preço por 100gr
+  - Cálculo granel: price_cents / 10 = preço por 100gr · increment_grams NUNCA é divisor de preço, é só o step do QuantitySelector (100 granel / 1 unit)
 
 # Código
 - Server Components por padrão — 'use client' só para interatividade real
