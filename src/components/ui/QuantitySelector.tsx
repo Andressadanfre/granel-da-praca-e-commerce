@@ -7,9 +7,11 @@ import { tokens } from '@/lib/tokens'
 import { cn } from '@/lib/utils'
 
 export type QuantityVariant = 'granel' | 'unit'
+export type QuantityAppearance = 'pill' | 'split'
 
 export interface QuantitySelectorProps {
   variant?: QuantityVariant
+  appearance?: QuantityAppearance
   onQuantityChange?: (quantity: number) => void
   onAddToCart?: (quantity: number) => void
   initialQuantity?: number
@@ -49,6 +51,7 @@ export const QuantitySelector = React.forwardRef<
   (
     {
       variant = 'granel',
+      appearance = 'pill',
       onQuantityChange,
       onAddToCart,
       initialQuantity = 0,
@@ -86,6 +89,52 @@ export const QuantitySelector = React.forwardRef<
       const next = quantity + increment
       setQuantity(next)
       onQuantityChange?.(next)
+    }
+
+    if (appearance === 'split') {
+      const displayQty = quantity === 0 ? increment : quantity
+      return (
+        <div
+          ref={ref}
+          role="spinbutton"
+          aria-label={ariaLabel}
+          aria-valuemin={increment}
+          aria-valuenow={displayQty}
+          className={cn(
+            'flex h-[52px] items-stretch overflow-hidden rounded-inner border-[1.5px] border-bd bg-white',
+            className,
+          )}
+        >
+          <button
+            type="button"
+            onClick={handleDecrease}
+            aria-label="Diminuir quantidade"
+            className="flex w-[52px] min-w-[52px] flex-shrink-0 items-center justify-center text-gd hover:bg-g-muted"
+            style={transitionStyle}
+          >
+            <Minus size={16} strokeWidth={1.6} aria-hidden />
+          </button>
+
+          <div className="flex flex-1 flex-col items-center justify-center gap-0.5 border-x border-bd">
+            <strong className="text-[15px] font-semibold text-t9 leading-tight">
+              {formatQuantity(displayQty, variant)}
+            </strong>
+            <small className="text-[10px] font-normal text-t4 leading-tight">
+              {variant === 'granel' ? '100 gr por clique' : '1 un. por clique'}
+            </small>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleIncrease}
+            aria-label="Aumentar quantidade"
+            className="flex w-[52px] min-w-[52px] flex-shrink-0 items-center justify-center text-gd hover:bg-g-muted"
+            style={transitionStyle}
+          >
+            <Plus size={16} strokeWidth={1.6} aria-hidden />
+          </button>
+        </div>
+      )
     }
 
     if (!isActive) {
