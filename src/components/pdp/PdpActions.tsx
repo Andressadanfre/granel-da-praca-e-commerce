@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
 import { addToCart } from '@/lib/cart'
 import type { ProductForCart } from '@/lib/cart/types'
+import { formatBRL } from '@/lib/utils'
 
 interface PdpActionsProps {
   product: ProductForCart
@@ -19,9 +20,17 @@ export function PdpActions({
 }: PdpActionsProps) {
   const isOutOfStock = stockStatus === OUT_OF_STOCK_STATUS
   const [isActive, setIsActive] = useState(false)
+  const [quantity, setQuantity] = useState(0)
 
   const handleAddToCart = (quantity: number) => {
     addToCart({ ...product, quantity })
+  }
+
+  function calcTotal(q: number): number {
+    if (product.productType === 'granel') {
+      return Math.round(product.priceCents * q / 100)
+    }
+    return product.priceCents * q
   }
 
   if (isOutOfStock) {
@@ -50,14 +59,25 @@ export function PdpActions({
           + Adicionar
         </button>
       ) : (
-        <QuantitySelector
-          variant={product.productType}
-          className="rounded-inner"
-          onAddToCart={handleAddToCart}
-          onQuantityChange={(q) => {
-            if (q === 0) setIsActive(false)
-          }}
-        />
+        <>
+          <QuantitySelector
+            variant={product.productType}
+            className="rounded-inner"
+            onAddToCart={handleAddToCart}
+            onQuantityChange={(q) => {
+              setQuantity(q)
+              if (q === 0) setIsActive(false)
+            }}
+          />
+          {quantity > 0 && (
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-sm text-t6">Total</span>
+              <span className="text-xl font-bold text-gdeep">
+                {formatBRL(calcTotal(quantity))}
+              </span>
+            </div>
+          )}
+        </>
       )}
     </div>
   )
