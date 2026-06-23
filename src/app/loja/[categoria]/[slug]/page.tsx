@@ -36,12 +36,11 @@ export default async function ProductDetailPage({ params }: Props) {
       <Navigation />
       <main className="bg-cream min-h-screen">
         <div className="max-w-container mx-auto px-s5 xl:px-0 pt-8 pb-16">
-          <div className="grid lg:grid-cols-[1fr_400px] gap-8 lg:gap-12 items-start">
-            <div>
+          <div className="grid lg:grid-cols-[480px_1fr] gap-8 lg:gap-12 items-start">
+            <div className="lg:sticky lg:top-[88px]">
               <ProductDetailHero produto={produto} />
-              <ProductDescription description={produto.description} />
             </div>
-            <aside className="lg:sticky lg:top-[88px]">
+            <div>
               <PdpActions
                 product={{
                   id: produto.id,
@@ -60,7 +59,10 @@ export default async function ProductDetailPage({ params }: Props) {
                 }}
                 stockStatus={produto.stock_status}
               />
-            </aside>
+            </div>
+          </div>
+          <div className="mt-12 max-w-[720px]">
+            <ProductDescription description={produto.description} />
           </div>
           <div className="mt-16">
             <RelatedProducts
