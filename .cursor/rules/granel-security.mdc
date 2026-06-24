@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Preço — nunca confiar no cliente
 - Preço SEMPRE calculado server-side antes de criar pedido no Mercado Pago
-- Fórmula: `(product.price_cents / product.increment_grams) * quantidadeGr`
+- Fórmula server-side: `Math.round(product.price_cents * quantity_grams / 1000)` — price_cents é preço por KG; increment_grams NUNCA entra no cálculo de preço (é só o step do QuantitySelector). NÃO mexer nas linhas abaixo: ali increment_grams é o step legítimo de validação de múltiplo.
 - Nunca aceitar preço vindo do body da requisição — recalcular a partir do banco
 
 ## Quantidade granel — sanitização obrigatória
