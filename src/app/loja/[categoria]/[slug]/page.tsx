@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
-import { getProductDetail } from '@/lib/products/product-detail'
+import { getProductDetail, type ProductDetail } from '@/lib/products/product-detail'
 import { ProductDetailHero } from '@/components/pdp/ProductDetailHero'
 import { PdpActions } from '@/components/pdp/PdpActions'
 import { ProductDescription } from '@/components/pdp/ProductDescription'
@@ -10,6 +10,52 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 
 const getCachedProduct = cache(getProductDetail)
+
+interface ProductJsonLd {
+  '@context': 'https://schema.org'
+  '@type': 'Product'
+  name: string
+  description?: string
+  image?: string
+  offers: {
+    '@type': 'Offer'
+    priceCurrency: 'BRL'
+    price: number
+    availability: string
+  }
+}
+
+function buildProductJsonLd(
+  produto: Pick<
+    ProductDetail,
+    'name' | 'description' | 'imageUrl' | 'product_type' | 'price_cents' | 'stock_status'
+  >,
+): ProductJsonLd {
+  const consumerPriceCents =
+    produto.product_type === 'granel'
+      ? Math.round(produto.price_cents / 10)
+      : produto.price_cents
+
+  const jsonLd: ProductJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: produto.name,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'BRL',
+      price: consumerPriceCents / 100,
+      availability:
+        produto.stock_status === 'in_stock'
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+    },
+  }
+
+  if (produto.description) jsonLd.description = produto.description
+  if (produto.imageUrl) jsonLd.image = produto.imageUrl
+
+  return jsonLd
+}
 
 type Props = { params: { categoria: string; slug: string } }
 
@@ -40,8 +86,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductDetailPage({ params }: Props) {
   const produto = await getCachedProduct(params.categoria, params.slug)
   if (!produto) notFound()
+  const jsonLd = buildProductJsonLd(produto)
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navigation />
       <main className="bg-cream min-h-screen">
         <div className="max-w-container mx-auto px-s5 xl:px-0 pt-8 pb-16">
