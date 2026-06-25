@@ -1,4 +1,5 @@
-﻿import { notFound } from 'next/navigation'
+﻿import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { cache } from 'react'
 import { getProductDetail } from '@/lib/products/product-detail'
 import { ProductDetailHero } from '@/components/pdp/ProductDetailHero'
@@ -14,15 +15,23 @@ type Props = { params: { categoria: string; slug: string } }
 
 export const revalidate = 1800
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const produto = await getCachedProduct(params.categoria, params.slug)
   if (!produto) return {}
+  const canonicalUrl = `https://graneldapraca.com.br/loja/${params.categoria}/${params.slug}`
+  const description =
+    produto.description?.slice(0, 155) ??
+    `Compre ${produto.name} a granel na Granel da Praça`
   return {
     title: `${produto.name} | Granel da Praça`,
-    description:
-      produto.description?.slice(0, 155) ??
-      `Compre ${produto.name} a granel na Granel da Praça`,
+    description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
+      title: produto.name,
+      description,
+      type: 'website',
+      siteName: 'Granel da Praça',
+      url: canonicalUrl,
       images: produto.imageUrl ? [produto.imageUrl] : undefined,
     },
   }
