@@ -92,9 +92,9 @@ Badges e estados
 
 ---
 
-## Supabase — Schema Real (confirmado Sessão 036, re-auditado via MCP em 18/06/2026)
+## Supabase — Schema Real (confirmado Sessão 053, 26/06/2026)
 
-> **Este schema é a fonte de verdade.** Sempre verificar aqui antes de escrever qualquer query.
+> **Este schema é a fonte de verdade.** Schema versionado a partir de `supabase/migrations/20260626000000_baseline.sql`. Docker ausente — `db pull` requer Docker; migrations aplicadas via `db push` no remoto. Sempre verificar via MCP antes de escrever qualquer query.
 
 ### Projeto
 - **ID:** `ymjmgukuojwumvtaglyp` · **Região:** São Paulo
@@ -393,7 +393,7 @@ const CartBadge = dynamic(() => import('./CartBadge'), { ssr: false })
 ## 🤖 Regras para IA — Claude/Cursor
 
 ### Proibido sem aprovação explícita
-- Criar ou alterar arquivos em `supabase/migrations/`
+- Criar ou alterar arquivos em `supabase/migrations/` (baseline existe: 20260626000000; próxima migration: 20260626000001_create_orders.sql)
 - Executar SQL destrutivo: `DELETE`, `DROP`, `TRUNCATE`
 - `UPDATE` sem cláusula `WHERE`
 - `DELETE` sem cláusula `WHERE`
@@ -763,7 +763,7 @@ Nunca commitar com build quebrado.
 
 ---
 
-## Estado do Projeto — 18/06/2026 · Sessão 050 · HEAD 78b119e
+## Estado do Projeto — 26/06/2026 · Sessão 053 · HEAD 76fbda4
 
 ### Infraestrutura
 - **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
@@ -819,9 +819,11 @@ Nunca commitar com build quebrado.
 | `AdminSidebar.tsx` | 🔴 Pendente |
 
 ### Próximas entregas (prioridade)
-1. Fase 4.2 — conectar `PdpActions.tsx` ao carrinho real (`addToCart` de `@/lib/cart`)
-2. Fase 4.3 — conectar `AddToCartSelector.tsx` ao carrinho real
-3. Fase 5.1 — `CheckoutStepper.tsx` + Mercado Pago
+1. Fase 5 — A0: migration `orders` + `order_items` (`20260626000001_create_orders.sql`)
+2. Fase 5 — A1: Zod em Server Actions de checkout
+3. Fase 5 — A2: HTTP headers no `next.config.mjs`
+4. Fase 5 — A4: recálculo de preço server-side (antes do A3)
+5. Fase 5 — A3: integração Mercado Pago
 
 ### Lembrete `/pedido/[codigo]`
 Ao implementar: botão "Tive um problema com meu pedido" → `https://wa.me/5534997819292`
