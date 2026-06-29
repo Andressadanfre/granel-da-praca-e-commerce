@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Pedido #GP0024 · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── DS v3.1 TOKENS ─────────────────────────────────────── */
+:root {
+  --g:#00B207;--gd:#2C742F;--gdeep:#002603;--ghover:#1A5C1E;
+  --cream:#F9F5EF;--surface:#F9FAFB;--white:#FFFFFF;
+  --t9:#111827;--t6:#4B5563;--t4:#9CA3AF;--bd:#E5E7EB;
+  --gray-100:#F3F4F6;
+  --color-danger:#EF4444;--color-rating:#FBBF24;
+  --badge-diet-tx:#2C742F;--badge-diet-bg:#EAF7EA;--badge-diet-bd:#C6E6C7;
+  --color-indigo:#3730A3;--color-indigo-bg:#EEF2FF;
+  --color-promo:#C0694A;--color-promo-bg:#FBF1EE;
+  --r-input:8px;--r-sel:10px;--r-inner:12px;--r-modal:16px;--r-card:20px;--r-pill:100px;
+  --shadow-card:0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover:0 20px 50px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.04);
+  --sidebar-w:220px;--topbar-h:56px;
+  --nav-inactive:rgba(255,255,255,.55);--nav-active:#ffffff;
+  --nav-active-bg:rgba(0,178,7,.12);--ease:.18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--t9);font-size:14px;line-height:1.5;min-height:100vh;display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────── */
+.admin-shell{display:flex;width:100%;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--gdeep);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:40;overflow-y:auto;}
+.sidebar-brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:34px;height:34px;background:var(--g);border-radius:var(--r-sel);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:18px;height:18px;color:#fff;}
+.brand-name{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;}
+.brand-tag{font-size:8px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;}
+.sidebar-nav{flex:1;padding:12px 8px;}
+.nav-section{margin-bottom:4px;}
+.nav-section-label{font-size:9px;font-weight:600;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 4px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);font-size:12.5px;font-weight:500;color:var(--nav-inactive);cursor:pointer;transition:all var(--ease);position:relative;text-decoration:none;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:var(--nav-active-bg);color:var(--nav-active);}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--g);border-radius:0 3px 3px 0;}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.65;transition:opacity var(--ease);}
+.nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:var(--r-pill);min-width:18px;text-align:center;line-height:1.4;}
+.badge-danger{background:var(--color-danger);color:#fff;}
+.badge-warn{background:var(--color-rating);color:#78350F;}
+.sidebar-footer{padding:10px 8px 16px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);background:rgba(255,255,255,.05);cursor:pointer;transition:background var(--ease);}
+.user-chip:hover{background:rgba(255,255,255,.09);}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--gd));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-name{font-size:11.5px;font-weight:600;color:#fff;}
+.user-role{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+.main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:30;flex-shrink:0;}
+.topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t4);text-decoration:none;transition:color var(--ease);cursor:pointer;}
+.topbar-back:hover{color:var(--gd);}
+.topbar-back svg{width:14px;height:14px;}
+.topbar-divider{width:1px;height:18px;background:var(--bd);}
+.topbar-title{font-size:15px;font-weight:600;color:var(--t9);}
+.topbar-spacer{flex:1;}
+.topbar-icon-btn{width:36px;height:36px;border:1px solid var(--bd);border-radius:var(--r-input);background:var(--gray-100);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);color:var(--t6);}
+.topbar-icon-btn:hover{background:var(--bd);color:var(--t9);}
+.content{padding:24px;flex:1;}
+
+/* ─── LAYOUT DETALHE ─────────────────────────────────────── */
+.detail-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;}
+.left-col{display:flex;flex-direction:column;gap:16px;}
+.right-col{display:flex;flex-direction:column;gap:16px;position:sticky;top:calc(var(--topbar-h) + 24px);}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden;}
+.card-header{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);gap:10px;}
+.card-header svg{width:15px;height:15px;flex-shrink:0;}
+.card-title{font-size:13px;font-weight:600;color:var(--t9);flex:1;}
+.card-body{padding:16px 18px;}
+
+/* ─── STATUS BADGE ───────────────────────────────────────── */
+.status{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:4px 10px;border-radius:var(--r-pill);}
+.status-dot{width:5px;height:5px;border-radius:50%;}
+.s-recebido{background:#FEF3C7;color:#92400E;}
+.s-recebido .status-dot{background:var(--color-rating);}
+.s-aceito{background:var(--color-indigo-bg);color:var(--color-indigo);}
+.s-aceito .status-dot{background:var(--color-indigo);}
+.s-separacao{background:#F3E8FF;color:#6B21A8;}
+.s-separacao .status-dot{background:#A855F7;}
+.s-saiu{background:var(--badge-diet-bg);color:var(--gd);}
+.s-saiu .status-dot{background:var(--g);}
+.s-pronto{background:var(--badge-diet-bg);color:var(--gd);}
+.s-pronto .status-dot{background:var(--g);}
+.s-entregue{background:#DCFCE7;color:#166534;}
+.s-entregue .status-dot{background:#16A34A;}
+.s-cancelado{background:#FEE2E2;color:#991B1B;}
+.s-cancelado .status-dot{background:var(--color-danger);}
+
+/* tipo */
+.tipo-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:var(--r-pill);}
+.tipo-entrega{background:var(--color-indigo-bg);color:var(--color-indigo);}
+.tipo-retirada{background:#FEF3C7;color:#92400E;}
+
+/* ─── ORDER HEADER CARD ──────────────────────────────────── */
+.order-meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.order-meta-item{}
+.order-meta-label{font-size:9.5px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.order-meta-val{font-size:13px;font-weight:600;color:var(--t9);}
+.order-meta-val.mono{font-variant-numeric:tabular-nums;}
+
+/* ─── ITENS TABLE ────────────────────────────────────────── */
+.items-table{width:100%;border-collapse:collapse;}
+.items-table thead th{padding:8px 12px;text-align:left;font-size:9.5px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;background:var(--gray-100);border-bottom:1px solid var(--bd);}
+.items-table thead th:first-child{padding-left:18px;}
+.items-table thead th:last-child{padding-right:18px;text-align:right;}
+.items-table tbody tr{border-bottom:1px solid var(--bd);}
+.items-table tbody tr:last-child{border-bottom:none;}
+.items-table tbody td{padding:12px 12px;font-size:12px;vertical-align:middle;}
+.items-table tbody td:first-child{padding-left:18px;}
+.items-table tbody td:last-child{padding-right:18px;text-align:right;}
+
+.item-product{display:flex;align-items:center;gap:10px;}
+.item-thumb{width:38px;height:38px;border-radius:var(--r-inner);background:var(--cream);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.item-thumb svg{width:16px;height:16px;color:var(--t4);}
+.item-name{font-size:12px;font-weight:600;color:var(--t9);}
+.item-code{font-size:10px;color:var(--t4);margin-top:1px;}
+.item-qty{font-size:12px;font-weight:600;color:var(--t9);white-space:nowrap;}
+.item-price{font-size:11px;color:var(--t6);}
+.item-total{font-size:13px;font-weight:700;color:var(--gdeep);font-variant-numeric:tabular-nums;}
+
+/* separado checkbox */
+.sep-check{display:flex;align-items:center;gap:6px;font-size:11px;}
+.check-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.check-box.checked{background:var(--g);border-color:var(--g);}
+.check-box.checked svg{width:10px;height:10px;color:#fff;}
+.check-label{color:var(--t4);font-size:10px;}
+.check-label.done{color:var(--gd);font-weight:600;}
+
+/* totals */
+.totals-block{padding:14px 18px;border-top:1px solid var(--bd);background:var(--gray-100);}
+.total-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--t6);margin-bottom:6px;}
+.total-row:last-child{margin-bottom:0;}
+.total-row.final{font-size:14px;font-weight:700;color:var(--gdeep);margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);}
+.total-row.final span:last-child{font-size:16px;font-variant-numeric:tabular-nums;}
+.total-val{font-variant-numeric:tabular-nums;font-weight:500;color:var(--t9);}
+
+/* ─── TIMELINE ───────────────────────────────────────────── */
+.timeline{padding:4px 0;}
+.timeline-item{display:flex;gap:14px;position:relative;padding-bottom:20px;}
+.timeline-item:last-child{padding-bottom:0;}
+.timeline-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:32px;}
+.timeline-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--bd);}
+.timeline-dot svg{width:14px;height:14px;}
+.td-done{background:var(--g);border-color:var(--g);color:#fff;}
+.td-active{background:var(--white);border-color:var(--g);color:var(--g);}
+.td-pending{background:var(--white);border-color:var(--bd);color:var(--t4);}
+.timeline-line{width:2px;flex:1;margin-top:4px;}
+.tl-done{background:var(--g);}
+.tl-pending{background:var(--bd);}
+.tl-none{background:transparent;}
+.timeline-content{flex:1;padding-top:4px;}
+.timeline-label{font-size:12px;font-weight:600;color:var(--t9);}
+.timeline-label.pending{color:var(--t4);font-weight:500;}
+.timeline-time{font-size:10px;color:var(--t4);margin-top:2px;}
+.timeline-who{font-size:10px;color:var(--t6);margin-top:1px;}
+
+/* ─── CLIENTE CARD ───────────────────────────────────────── */
+.client-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.client-avatar-lg{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--color-indigo-bg),var(--color-indigo));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--color-indigo);flex-shrink:0;}
+.client-name-lg{font-size:13px;font-weight:700;color:var(--t9);}
+.client-since{font-size:10px;color:var(--t4);margin-top:1px;}
+.client-detail-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--t6);}
+.client-detail-row svg{width:13px;height:13px;color:var(--t4);flex-shrink:0;}
+.client-detail-row:last-child{margin-bottom:0;}
+.client-link{color:var(--g);font-size:11px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:12px;}
+.client-link:hover{color:var(--ghover);}
+.client-link svg{width:11px;height:11px;}
+
+/* ─── PAGAMENTO CARD ─────────────────────────────────────── */
+.pay-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 0;border-bottom:1px solid var(--bd);}
+.pay-row:last-child{border-bottom:none;}
+.pay-key{color:var(--t6);}
+.pay-val{font-weight:600;color:var(--t9);}
+.pay-status-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:var(--r-pill);}
+.ps-pago{background:var(--badge-diet-bg);color:var(--gd);}
+.ps-pendente{background:#FEF3C7;color:#92400E;}
+
+/* ─── BOTOES DE ACAO ─────────────────────────────────────── */
+.action-group{display:flex;flex-direction:column;gap:8px;}
+.btn-full{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:var(--r-sel);font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--ease);border:none;}
+.btn-full svg{width:15px;height:15px;}
+.btn-accept{background:var(--g);color:#fff;}
+.btn-accept:hover{background:var(--ghover);}
+.btn-next{background:var(--gdeep);color:#fff;}
+.btn-next:hover{background:#001a01;}
+.btn-print{background:var(--white);color:var(--t6);border:1px solid var(--bd)!important;border:none;}
+.btn-print:hover{border-color:var(--gd);color:var(--gd);}
+.btn-cancel{background:var(--white);color:var(--color-danger);border:1px solid #FECACA!important;border:none;}
+.btn-cancel:hover{background:#FEF2F2;}
+.btn-whatsapp{background:#25D366;color:#fff;}
+.btn-whatsapp:hover{background:#1ebe5d;}
+
+/* ─── NOTAS ──────────────────────────────────────────────── */
+.notes-box{background:var(--color-promo-bg);border:1px solid #F0C8B8;border-radius:var(--r-inner);padding:12px 14px;}
+.notes-label{font-size:9.5px;font-weight:700;color:var(--color-promo);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.notes-text{font-size:12px;color:var(--t9);line-height:1.5;}
+
+/* ─── OBSERVACOES ENTREGA ────────────────────────────────── */
+.addr-block{font-size:12px;color:var(--t6);line-height:1.8;}
+.addr-block strong{color:var(--t9);font-weight:600;}
+
+/* ─── OBSERVACAO PULSANTE ────────────────────────────────── */
+@keyframes notes-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(192,105,74,.45); }
+  50%      { box-shadow: 0 0 0 8px rgba(192,105,74,0); }
+}
+.notes-box {
+  background: #fff;
+  border: 2px solid var(--color-promo);
+  border-radius: var(--r-inner);
+  padding: 14px 16px;
+  animation: notes-pulse 2s ease-in-out infinite;
+  position: relative;
+}
+.notes-box::before {
+  content: 'ATENCAO';
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--color-promo);
+  letter-spacing: .14em;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  margin-bottom: 8px;
+  width: fit-content;
+}
+.notes-label { display: none; }
+.notes-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-promo);
+  line-height: 1.55;
+}
+
+</style>
+</head>
+<body>
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 3h18v2H3zM3 10h18v2H3zM3 17h18v2H3z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Granel da Praça</div>
+        <div class="brand-tag">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Principal</div>
+        <a class="nav-item" href="admin-01-dashboard.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item active" href="admin-02-pedidos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Pedidos
+          <span class="nav-badge badge-danger">3</span>
+        </a>
+        <a class="nav-item" href="admin-04-produtos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          Produtos
+          <span class="nav-badge badge-warn">5</span>
+        </a>
+        <a class="nav-item" href="admin-06-clientes-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Clientes
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Cupons</div>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Cupons
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatorios
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <a class="nav-item" href="admin-07-configuracoes.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          Configuracoes
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Andressa</div>
+          <div class="user-role">Owner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <a class="topbar-back" href="admin-02-pedidos-lista.html">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Pedidos
+      </a>
+      <div class="topbar-divider"></div>
+      <span class="topbar-title">Pedido #GP0024</span>
+      <span class="status s-recebido" style="margin-left:4px"><span class="status-dot"></span>Recebido</span>
+      <span class="tipo-badge tipo-entrega" style="margin-left:4px">Entrega</span>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-icon-btn" title="Imprimir cupom de separacao">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </div>
+      <div class="topbar-icon-btn" title="Notificacoes">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="detail-grid">
+
+        <!-- COLUNA ESQUERDA -->
+        <div class="left-col">
+
+          <!-- CABECALHO DO PEDIDO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+              <span class="card-title">Resumo do pedido</span>
+              <span style="font-size:11px;color:var(--t4)">29/06/2026 · 12:18</span>
+            </div>
+            <div class="card-body">
+              <div class="order-meta-grid">
+                <div class="order-meta-item">
+                  <div class="order-meta-label">Codigo</div>
+                  <div class="order-meta-val" style="color:var(--gdeep);font-weight:700">#GP0024</div>
+                </div>
+                <div class="order-meta-item">
+                  <div class="order-meta-label">Total</div>
+                  <div class="order-meta-val mono" style="color:var(--gdeep);font-size:15px;font-weight:700">R$ 134,50</div>
+                </div>
+                <div class="order-meta-item">
+                  <div class="order-meta-label">Tipo</div>
+                  <div style="margin-top:2px"><span class="tipo-badge tipo-entrega">Entrega</span></div>
+                </div>
+                <div class="order-meta-item">
+                  <div class="order-meta-label">Status</div>
+                  <div style="margin-top:2px"><span class="status s-recebido"><span class="status-dot"></span>Recebido</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- OBSERVACAO DO CLIENTE — destacada, logo apos resumo -->
+          <div class="notes-box" style="margin:0">
+            <div class="notes-text">Por favor, embalar os produtos separadamente. A castanha pode vir em saco duplo.</div>
+          </div>
+
+          <!-- ENDERECO DE ENTREGA — logo apos observacao -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span class="card-title">Endereco de entrega</span>
+              <span style="font-size:10px;color:var(--t4);background:var(--gray-100);padding:2px 8px;border-radius:var(--r-pill)">Snapshot do pedido</span>
+            </div>
+            <div class="card-body">
+              <div class="addr-block">
+                <strong>Maria Silva</strong><br>
+                Rua das Flores, 123 · Apto 42<br>
+                Bairro Jardim Botanico<br>
+                Uberlandia – MG · 38408-123<br>
+                <span style="color:var(--t4)">(34) 9 9999-0001</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITENS DO PEDIDO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              <span class="card-title">Itens do pedido</span>
+              <span style="font-size:11px;color:var(--t4)">4 itens</span>
+            </div>
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Preco unit.</th>
+                  <th>Subtotal</th>
+                  <th>Separado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="item-product">
+                      <div class="item-thumb">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+                      </div>
+                      <div>
+                        <div class="item-name">Castanha-do-Para</div>
+                        <div class="item-code">COD: 0042 · Castanhas · Granel</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="item-qty">500 gr</div>
+                    <div class="item-price">5 × 100 gr</div>
+                  </td>
+                  <td style="font-size:12px;color:var(--t6)">R$ 14,90 / 100 gr</td>
+                  <td><span class="item-total">R$ 74,50</span></td>
+                  <td>
+                    <div class="sep-check">
+                      <div class="check-box"><!-- vazio --></div>
+                      <span class="check-label">Pendente</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="item-product">
+                      <div class="item-thumb">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                      </div>
+                      <div>
+                        <div class="item-name">Chia Preta</div>
+                        <div class="item-code">COD: 0118 · Graos e Sementes · Granel</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="item-qty">300 gr</div>
+                    <div class="item-price">3 × 100 gr</div>
+                  </td>
+                  <td style="font-size:12px;color:var(--t6)">R$ 6,00 / 100 gr</td>
+                  <td><span class="item-total">R$ 18,00</span></td>
+                  <td>
+                    <div class="sep-check">
+                      <div class="check-box"><!-- vazio --></div>
+                      <span class="check-label">Pendente</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="item-product">
+                      <div class="item-thumb">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+                      </div>
+                      <div>
+                        <div class="item-name">Oleo de Coco EV Copra 500ml</div>
+                        <div class="item-code">COD: 0387 · Oleos e Adocantes · Unitario</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="item-qty">1 un</div>
+                    <div class="item-price">Unitario</div>
+                  </td>
+                  <td style="font-size:12px;color:var(--t6)">R$ 42,00 / un</td>
+                  <td><span class="item-total">R$ 42,00</span></td>
+                  <td>
+                    <div class="sep-check">
+                      <div class="check-box checked">
+                        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                      </div>
+                      <span class="check-label done">Separado</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="item-product">
+                      <div class="item-thumb">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 2h18v20H3z"/></svg>
+                      </div>
+                      <div>
+                        <div class="item-name">Amendoim Cru s/ Casca</div>
+                        <div class="item-code">COD: 0011 · Castanhas · Granel</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="item-qty">200 gr</div>
+                    <div class="item-price">2 × 100 gr</div>
+                  </td>
+                  <td style="font-size:12px;color:var(--t6)">R$ 2,50 / 100 gr</td>
+                  <td><span class="item-total">R$ 5,00</span></td>
+                  <td>
+                    <div class="sep-check">
+                      <div class="check-box"><!-- vazio --></div>
+                      <span class="check-label">Pendente</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="totals-block">
+              <div class="total-row">
+                <span>Subtotal</span>
+                <span class="total-val">R$ 139,50</span>
+              </div>
+              <div class="total-row">
+                <span>Frete</span>
+                <span class="total-val" style="color:var(--gd);font-weight:600">Gratis</span>
+              </div>
+              <div class="total-row">
+                <span>Desconto (10% 1ª compra)</span>
+                <span class="total-val" style="color:var(--color-promo)">- R$ 5,00</span>
+              </div>
+              <div class="total-row final">
+                <span>Total</span>
+                <span>R$ 134,50</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /COLUNA ESQUERDA -->
+
+        <!-- COLUNA DIREITA (sticky) -->
+        <div class="right-col">
+
+          <!-- ACOES -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span class="card-title">Acoes do pedido</span>
+            </div>
+            <div class="card-body">
+              <div class="action-group">
+                <button class="btn-full btn-accept">
+                  <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  Aceitar pedido
+                </button>
+                <button class="btn-full btn-print" style="border:1px solid var(--bd)">
+                  <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Imprimir cupom de separacao
+                </button>
+                <button class="btn-full btn-whatsapp">
+                  <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  Contatar via WhatsApp
+                </button>
+                <button class="btn-full btn-cancel" style="border:1px solid #FECACA">
+                  <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  Cancelar pedido
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIMELINE -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="card-title">Historico do pedido</span>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+
+                <!-- Recebido — feito -->
+                <div class="timeline-item">
+                  <div class="timeline-left">
+                    <div class="timeline-dot td-done">
+                      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="timeline-line tl-done"></div>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-label">Pedido recebido</div>
+                    <div class="timeline-time">29/06/2026 · 12:18</div>
+                    <div class="timeline-who">Pagamento Pix confirmado</div>
+                  </div>
+                </div>
+
+                <!-- Aceito — ativo (proximo) -->
+                <div class="timeline-item">
+                  <div class="timeline-left">
+                    <div class="timeline-dot td-active">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="timeline-line tl-pending"></div>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-label" style="color:var(--g)">Aceitar pedido</div>
+                    <div class="timeline-time">Aguardando acao</div>
+                  </div>
+                </div>
+
+                <!-- Em separacao — pendente -->
+                <div class="timeline-item">
+                  <div class="timeline-left">
+                    <div class="timeline-dot td-pending">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="timeline-line tl-pending"></div>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-label pending">Em Separacao</div>
+                    <div class="timeline-time">Pendente</div>
+                  </div>
+                </div>
+
+                <!-- Saiu para entrega — pendente (entrega) -->
+                <div class="timeline-item">
+                  <div class="timeline-left">
+                    <div class="timeline-dot td-pending">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="timeline-line tl-pending"></div>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-label pending">Saiu para Entrega</div>
+                    <div class="timeline-time">Pendente · tipo: Entrega</div>
+                  </div>
+                </div>
+
+                <!-- Entregue — pendente -->
+                <div class="timeline-item">
+                  <div class="timeline-left">
+                    <div class="timeline-dot td-pending">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="timeline-line tl-none"></div>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-label pending">Entregue</div>
+                    <div class="timeline-time">Pendente</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGAMENTO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <span class="card-title">Pagamento</span>
+            </div>
+            <div class="card-body">
+              <div class="pay-row">
+                <span class="pay-key">Metodo</span>
+                <span class="pay-val">Pix</span>
+              </div>
+              <div class="pay-row">
+                <span class="pay-key">Status</span>
+                <span class="pay-status-badge ps-pago">
+                  <span style="width:5px;height:5px;border-radius:50%;background:var(--gd);display:inline-block"></span>
+                  Pago
+                </span>
+              </div>
+              <div class="pay-row">
+                <span class="pay-key">ID transacao</span>
+                <span class="pay-val" style="font-size:10px;color:var(--t4);font-family:monospace">MP-2026062900124</span>
+              </div>
+              <div class="pay-row">
+                <span class="pay-key">Valor pago</span>
+                <span class="pay-val">R$ 134,50</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLIENTE -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span class="card-title">Cliente</span>
+            </div>
+            <div class="card-body">
+              <div class="client-row">
+                <div class="client-avatar-lg">MS</div>
+                <div>
+                  <div class="client-name-lg">Maria Silva</div>
+                  <div class="client-since">Cliente desde 15/03/2026 · 14 pedidos</div>
+                </div>
+              </div>
+              <div class="client-detail-row">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.72A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.72 6.72l1.29-1.29a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0121.73 15h.19a2 2 0 01.08 1.92z"/></svg>
+                (34) 9 9999-0001
+              </div>
+              <div class="client-detail-row">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                maria@email.com
+              </div>
+              <div class="client-detail-row">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                142 pontos de fidelidade
+              </div>
+              <a class="client-link" href="admin-06-clientes-lista.html">
+                Ver perfil completo
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <!-- /COLUNA DIREITA -->
+
+      </div>
+    </main>
+  </div>
+
+</div>
+</body>
+</html>

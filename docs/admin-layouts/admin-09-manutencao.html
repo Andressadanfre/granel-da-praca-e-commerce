@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Em Manutenção · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── DS v3.1 TOKENS — e-commerce público ────────────────── */
+:root {
+  --g:         #00B207;
+  --gd:        #2C742F;
+  --gdeep:     #002603;
+  --ghover:    #1A5C1E;
+  --cream:     #F9F5EF;
+  --cream-img: #F0EBE2;
+  --white:     #FFFFFF;
+  --t9:        #111827;
+  --t6:        #4B5563;
+  --t4:        #9CA3AF;
+  --bd:        #E5E7EB;
+  --gray-100:  #F3F4F6;
+  --badge-diet-bg: #EAF7EA;
+  --badge-diet-tx: #2C742F;
+  --badge-diet-bd: #C6E6C7;
+
+  /* spacing DS v3.1 */
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;
+  --s6:24px;--s8:32px;--s10:40px;--s12:48px;
+
+  /* radius DS v3.1 */
+  --r-input:8px;--r-sel:10px;--r-inner:12px;
+  --r-modal:16px;--r-card:20px;--r-pill:100px;
+
+  --ease:.18s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--cream);
+  color: var(--t9);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── TOPBAR MINIMA ──────────────────────────────────────── */
+/* Mesma altura e cor do header real do e-commerce            */
+.topbar {
+  background: var(--gdeep);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.topbar-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,.7);
+  letter-spacing: .01em;
+}
+.topbar-text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.header {
+  background: var(--white);
+  border-bottom: 1px solid var(--bd);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  text-decoration: none;
+}
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--gdeep);
+  border-radius: var(--r-sel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-mark svg { width: 20px; height: 20px; color: var(--g); }
+.logo-name {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--gdeep);
+  letter-spacing: -0.96px;
+  line-height: 1;
+}
+.logo-name span { color: var(--g); }
+
+/* ─── MAIN CONTENT ───────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s12) var(--s5);
+}
+
+.container {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ─── ILUSTRACAO ─────────────────────────────────────────── */
+.illustration {
+  width: 120px;
+  height: 120px;
+  background: var(--badge-diet-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--s8);
+  position: relative;
+}
+.illustration svg {
+  width: 52px;
+  height: 52px;
+  color: var(--gd);
+}
+
+/* pulso sutil ao redor do circulo */
+.illustration::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--badge-diet-bd);
+  animation: ring-pulse 2.4s ease-in-out infinite;
+}
+.illustration::after {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--badge-diet-bd);
+  opacity: .4;
+  animation: ring-pulse 2.4s ease-in-out .6s infinite;
+}
+@keyframes ring-pulse {
+  0%,100% { opacity: .6; transform: scale(1); }
+  50%      { opacity: .15; transform: scale(1.04); }
+}
+
+/* ─── TEXTO PRINCIPAL ────────────────────────────────────── */
+.badge-manut {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--badge-diet-tx);
+  background: var(--badge-diet-bg);
+  border: 1px solid var(--badge-diet-bd);
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: var(--s4);
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--g);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.4;transform:scale(.7)}
+}
+
+h1 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--gdeep);
+  line-height: 1.2;
+  letter-spacing: -.03em;
+  margin-bottom: var(--s3);
+}
+
+.subtitle {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--t6);
+  line-height: 1.65;
+  margin-bottom: var(--s8);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── PREVISAO DE RETORNO ────────────────────────────────── */
+.retorno-card {
+  background: var(--white);
+  border: 1px solid var(--bd);
+  border-radius: var(--r-card);
+  padding: var(--s5) var(--s6);
+  margin-bottom: var(--s6);
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+.retorno-icon {
+  width: 44px; height: 44px;
+  background: var(--cream-img);
+  border-radius: var(--r-inner);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.retorno-icon svg { width: 20px; height: 20px; color: var(--t6); }
+.retorno-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--t4);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 3px;
+}
+.retorno-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gdeep);
+  letter-spacing: -.01em;
+}
+.retorno-sub {
+  font-size: 11px;
+  color: var(--t4);
+  margin-top: 2px;
+}
+
+/* ─── WHATSAPP CTA ───────────────────────────────────────── */
+/* DS v3.1: botão Primary = --g · height: 40px · padding: 0 24px · gap: 8px · radius: --r-sel */
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  height: 48px;
+  padding: 0 var(--s8);
+  background: #25D366;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--r-sel);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--ease);
+  margin-bottom: var(--s3);
+}
+.btn-whatsapp:hover { background: #1ebe5d; }
+.btn-whatsapp svg { width: 18px; height: 18px; }
+
+.btn-hint {
+  font-size: 11px;
+  color: var(--t4);
+  margin-bottom: var(--s8);
+}
+
+/* ─── SEPARADOR ──────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s6);
+}
+.divider-line { flex: 1; height: 1px; background: var(--bd); }
+.divider-text { font-size: 11px; color: var(--t4); }
+
+/* ─── INFO CARDS ─────────────────────────────────────────── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s3);
+  margin-bottom: var(--s8);
+}
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--bd);
+  border-radius: var(--r-inner);
+  padding: var(--s4);
+  text-align: left;
+}
+.info-card svg { width: 16px; height: 16px; color: var(--t4); margin-bottom: var(--s2); }
+.info-card-title { font-size: 12px; font-weight: 600; color: var(--t9); margin-bottom: 3px; }
+.info-card-text { font-size: 11px; color: var(--t6); line-height: 1.5; }
+
+/* ─── STATUS TECNICO ─────────────────────────────────────── */
+/* Visível apenas em tela — para referência de implementação  */
+.status-block {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: 10.5px;
+  color: var(--t4);
+  background: var(--gray-100);
+  border: 1px solid var(--bd);
+  border-radius: var(--r-pill);
+  padding: 4px 12px;
+  font-family: monospace;
+}
+.status-code {
+  font-weight: 700;
+  color: var(--t6);
+}
+
+/* ─── FOOTER MINIMO ──────────────────────────────────────── */
+.footer {
+  background: var(--gdeep);
+  padding: var(--s5) var(--s6);
+  text-align: center;
+  flex-shrink: 0;
+}
+.footer-text {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.4);
+}
+.footer-text a {
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--ease);
+}
+.footer-text a:hover { color: #fff; }
+.footer-sep { margin: 0 var(--s2); opacity: .3; }
+
+/* ─── NOTA DE IMPLEMENTACAO ──────────────────────────────── */
+/* Box visível apenas neste HTML de referência               */
+.impl-note {
+  background: #FFFBEB;
+  border: 1.5px dashed #FCD34D;
+  border-radius: var(--r-inner);
+  padding: var(--s4) var(--s5);
+  margin: var(--s6) auto 0;
+  max-width: 560px;
+  text-align: left;
+}
+.impl-note-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #92400E;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: var(--s2);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.impl-note-title svg { width: 12px; height: 12px; }
+.impl-note-body {
+  font-size: 11.5px;
+  color: #78350F;
+  line-height: 1.6;
+}
+.impl-note-body code {
+  background: rgba(0,0,0,.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 11px;
+}
+</style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-text">
+      <strong>Granel da Praça</strong> · Voltamos em breve
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <path d="M3 3h18v2H3zM3 10h18v2H3zM3 17h18v2H3z"/>
+        </svg>
+      </div>
+      <div class="logo-name">Granel<span>.</span></div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="container">
+
+      <!-- ILUSTRACAO -->
+      <div class="illustration">
+        <svg fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+
+      <!-- BADGE -->
+      <div class="badge-manut">
+        <span class="badge-dot"></span>
+        Manutencao em andamento
+      </div>
+
+      <!-- TITULO -->
+      <h1>Estamos melhorando<br>o site para voce</h1>
+
+      <p class="subtitle">
+        Nosso site esta em manutencao programada e voltara em breve.
+        Seus pedidos anteriores estao garantidos e nossa equipe continua
+        disponivel pelo WhatsApp.
+      </p>
+
+      <!-- PREVISAO DE RETORNO -->
+      <div class="retorno-card">
+        <div class="retorno-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="retorno-label">Previsao de retorno</div>
+          <div class="retorno-val">Hoje, ate as 14h00</div>
+          <div class="retorno-sub">Horario de Brasilia · Seg a Sex 10h–17h30 · Sab 9h–11h30</div>
+        </div>
+      </div>
+
+      <!-- WHATSAPP CTA -->
+      <a class="btn-whatsapp" href="https://wa.me/5534999990000" target="_blank" rel="noopener noreferrer">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+        Falar conosco pelo WhatsApp
+      </a>
+
+      <div class="btn-hint">(34) 9 9999-0000 · Respondemos em ate 30 minutos</div>
+
+      <!-- SEPARADOR -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">Enquanto isso</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- INFO CARDS -->
+      <div class="info-grid">
+        <div class="info-card">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+          </svg>
+          <div class="info-card-title">Seus pedidos estao seguros</div>
+          <div class="info-card-text">Pedidos realizados anteriormente continuam sendo preparados normalmente.</div>
+        </div>
+        <div class="info-card">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <div class="info-card-title">Horario de funcionamento</div>
+          <div class="info-card-text">Seg a Sex das 10h as 17h30 · Sabado das 9h as 11h30</div>
+        </div>
+        <div class="info-card">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+            <rect x="1" y="4" width="22" height="16" rx="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          <div class="info-card-title">Formas de pagamento</div>
+          <div class="info-card-text">Aceitamos Pix, cartao de credito e debito, dinheiro e Alelo na entrega.</div>
+        </div>
+        <div class="info-card">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div class="info-card-title">Entrega em Uberlandia</div>
+          <div class="info-card-text">Entregamos em Uberlandia-MG. Frete gratis em pedidos acima de R$ 100.</div>
+        </div>
+      </div>
+
+      <!-- STATUS HTTP -->
+      <div class="status-block">
+        <span class="status-code">503</span>
+        Service Unavailable · Manutencao temporaria
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">
+      &copy; 2026 Granel da Praca · Uberlandia, MG
+      <span class="footer-sep">·</span>
+      <a href="https://wa.me/5534999990000">WhatsApp</a>
+      <span class="footer-sep">·</span>
+      <a href="mailto:contato@graneldapraca.com.br">contato@graneldapraca.com.br</a>
+    </div>
+  </footer>
+
+  <!-- NOTA DE IMPLEMENTACAO — remover no codigo real -->
+  <div class="impl-note">
+    <div class="impl-note-title">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Nota de implementacao — visivel somente neste HTML de referencia
+    </div>
+    <div class="impl-note-body">
+      <strong>HTTP status:</strong> esta pagina deve retornar <code>503 Service Unavailable</code> — nunca 200 ou 404.<br><br>
+      <strong>Next.js:</strong> implementar via <code>middleware.ts</code> na raiz do projeto. O middleware verifica a flag <code>maintenance_mode</code> no Supabase (tabela <code>system_settings</code>) ou variavel de ambiente <code>MAINTENANCE_MODE=true</code> e redireciona todas as rotas exceto <code>/admin/*</code>.<br><br>
+      <strong>Admin continua acessivel:</strong> <code>/admin/*</code> deve ser excluido do redirecionamento — a operadora precisa continuar gerenciando pedidos durante a manutencao.<br><br>
+      <strong>Previsao de retorno:</strong> o campo "Hoje, ate as 14h00" deve ser configuravel pelo admin na tela de Configuracoes antes de ativar a manutencao.<br><br>
+      <strong>Cache:</strong> adicionar header <code>Cache-Control: no-store</code> para que proxies e CDNs nao cacheiem a pagina de manutencao.
+    </div>
+  </div>
+
+</body>
+</html>

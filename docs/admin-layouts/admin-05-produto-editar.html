@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Editar Produto · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── DS v3.1 TOKENS ─────────────────────────────────────── */
+:root {
+  --g:#00B207;--gd:#2C742F;--gdeep:#002603;--ghover:#1A5C1E;
+  --cream:#F9F5EF;--surface:#F9FAFB;--white:#FFFFFF;
+  --t9:#111827;--t6:#4B5563;--t4:#9CA3AF;--bd:#E5E7EB;
+  --gray-100:#F3F4F6;
+  --color-danger:#EF4444;--color-rating:#FBBF24;
+  --badge-diet-tx:#2C742F;--badge-diet-bg:#EAF7EA;--badge-diet-bd:#C6E6C7;
+  --color-indigo:#3730A3;--color-indigo-bg:#EEF2FF;
+  --color-promo:#C0694A;--color-promo-bg:#FBF1EE;
+  --r-input:8px;--r-sel:10px;--r-inner:12px;--r-modal:16px;--r-card:20px;--r-pill:100px;
+  --shadow-card:0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover:0 20px 50px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.04);
+  --sidebar-w:220px;--topbar-h:56px;
+  --nav-inactive:rgba(255,255,255,.55);--nav-active:#ffffff;
+  --nav-active-bg:rgba(0,178,7,.12);--ease:.18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--t9);font-size:14px;line-height:1.5;min-height:100vh;display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────── */
+.admin-shell{display:flex;width:100%;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--gdeep);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:40;overflow-y:auto;}
+.sidebar-brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:34px;height:34px;background:var(--g);border-radius:var(--r-sel);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:18px;height:18px;color:#fff;}
+.brand-name{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;}
+.brand-tag{font-size:8px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;}
+.sidebar-nav{flex:1;padding:12px 8px;}
+.nav-section{margin-bottom:4px;}
+.nav-section-label{font-size:9px;font-weight:600;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 4px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);font-size:12.5px;font-weight:500;color:var(--nav-inactive);cursor:pointer;transition:all var(--ease);position:relative;text-decoration:none;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:var(--nav-active-bg);color:var(--nav-active);}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--g);border-radius:0 3px 3px 0;}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.65;transition:opacity var(--ease);}
+.nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:var(--r-pill);min-width:18px;text-align:center;line-height:1.4;}
+.badge-danger{background:var(--color-danger);color:#fff;}
+.badge-warn{background:var(--color-rating);color:#78350F;}
+.sidebar-footer{padding:10px 8px 16px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);background:rgba(255,255,255,.05);cursor:pointer;}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--gd));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-name{font-size:11.5px;font-weight:600;color:#fff;}
+.user-role{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+.main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:30;flex-shrink:0;}
+.topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t4);text-decoration:none;transition:color var(--ease);cursor:pointer;}
+.topbar-back:hover{color:var(--gd);}
+.topbar-back svg{width:14px;height:14px;}
+.topbar-divider{width:1px;height:18px;background:var(--bd);}
+.topbar-title{font-size:15px;font-weight:600;color:var(--t9);}
+.topbar-spacer{flex:1;}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:1px solid var(--bd);border-radius:var(--r-input);background:var(--white);font-size:12px;font-weight:500;color:var(--t6);cursor:pointer;transition:all var(--ease);font-family:inherit;}
+.btn-ghost:hover{border-color:var(--bd);background:var(--gray-100);}
+.btn-save{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 18px;border:none;border-radius:var(--r-input);background:var(--g);font-size:12px;font-weight:600;color:#fff;cursor:pointer;transition:background var(--ease);font-family:inherit;}
+.btn-save:hover{background:var(--ghover);}
+.btn-save svg,.btn-ghost svg{width:14px;height:14px;}
+.content{padding:24px;flex:1;}
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.edit-grid{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;}
+.left-col{display:flex;flex-direction:column;gap:16px;}
+.right-col{display:flex;flex-direction:column;gap:16px;position:sticky;top:calc(var(--topbar-h) + 24px);}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden;}
+.card-header{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);gap:10px;}
+.card-header svg{width:15px;height:15px;flex-shrink:0;}
+.card-title{font-size:13px;font-weight:600;color:var(--t9);flex:1;}
+.card-body{padding:18px;}
+
+/* ─── ROLE BADGE ─────────────────────────────────────────── */
+.role-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);letter-spacing:.04em;text-transform:uppercase;}
+.rb-owner{background:var(--badge-diet-bg);color:var(--badge-diet-tx);}
+.rb-super{background:var(--color-indigo-bg);color:var(--color-indigo);}
+.rb-both{background:var(--gray-100);color:var(--t6);}
+
+/* ─── FORM ───────────────────────────────────────────────── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-full{grid-column:1/-1;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:10.5px;font-weight:600;color:var(--t6);display:flex;align-items:center;gap:6px;}
+.form-label .required{color:var(--color-danger);font-size:11px;}
+.form-input{height:38px;padding:0 12px;border:1px solid var(--bd);border-radius:var(--r-input);font-size:12.5px;font-family:inherit;color:var(--t9);background:var(--white);outline:none;transition:border-color var(--ease);}
+.form-input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,178,7,.08);}
+.form-input::placeholder{color:var(--t4);}
+.form-input.mono{font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+.form-input:disabled{background:var(--gray-100);color:var(--t4);cursor:not-allowed;}
+.form-textarea{padding:10px 12px;border:1px solid var(--bd);border-radius:var(--r-input);font-size:12.5px;font-family:inherit;color:var(--t9);background:var(--white);outline:none;resize:vertical;min-height:80px;transition:border-color var(--ease);}
+.form-textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,178,7,.08);}
+.form-select{height:38px;padding:0 12px;border:1px solid var(--bd);border-radius:var(--r-input);font-size:12.5px;font-family:inherit;color:var(--t9);background:var(--white);outline:none;cursor:pointer;transition:border-color var(--ease);}
+.form-select:focus{border-color:var(--g);}
+.form-hint{font-size:10px;color:var(--t4);margin-top:2px;line-height:1.4;}
+.form-hint.warn{color:#92400E;}
+.form-hint.danger{color:var(--color-danger);}
+
+/* preco preview */
+.price-preview{margin-top:10px;padding:10px 14px;background:var(--cream);border-radius:var(--r-inner);border:1px solid var(--bd);}
+.price-preview-label{font-size:9.5px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.price-preview-row{display:flex;gap:20px;flex-wrap:wrap;}
+.price-preview-item{}
+.price-preview-key{font-size:10px;color:var(--t6);}
+.price-preview-val{font-size:14px;font-weight:700;color:var(--gdeep);font-variant-numeric:tabular-nums;}
+
+/* toggle ativo/inativo */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;}
+.toggle-row:not(:last-child){border-bottom:1px solid var(--bd);}
+.toggle-label{font-size:12.5px;font-weight:500;color:var(--t9);}
+.toggle-sub{font-size:10.5px;color:var(--t4);margin-top:2px;}
+.toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;border-radius:var(--r-pill);background:var(--bd);transition:background var(--ease);}
+.toggle-switch input:checked + .toggle-track{background:var(--g);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform var(--ease);}
+.toggle-switch input:checked ~ .toggle-thumb{transform:translateX(18px);}
+
+/* ─── UPLOAD DE FOTOS ────────────────────────────────────── */
+.upload-zone{border:2px dashed var(--bd);border-radius:var(--r-inner);padding:24px 16px;text-align:center;background:var(--surface);cursor:pointer;transition:all var(--ease);}
+.upload-zone:hover{border-color:var(--g);background:rgba(0,178,7,.03);}
+.upload-zone svg{width:28px;height:28px;color:var(--t4);margin:0 auto 8px;}
+.upload-title{font-size:12px;font-weight:600;color:var(--t9);margin-bottom:3px;}
+.upload-sub{font-size:10.5px;color:var(--t4);line-height:1.5;}
+.upload-sub strong{color:var(--g);}
+
+/* thumbnails */
+.thumbs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
+.thumb-item{position:relative;border-radius:var(--r-inner);overflow:hidden;aspect-ratio:1;background:var(--cream);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);}
+.thumb-item:hover{border-color:var(--g);}
+.thumb-item.primary{border-color:var(--g);border-width:2px;}
+.thumb-item svg{width:20px;height:20px;color:var(--t4);}
+.thumb-primary-tag{position:absolute;bottom:0;left:0;right:0;background:var(--g);font-size:7.5px;font-weight:700;color:#fff;text-align:center;padding:2px 0;letter-spacing:.06em;}
+.thumb-remove{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--ease);}
+.thumb-item:hover .thumb-remove{opacity:1;}
+.thumb-remove svg{width:10px;height:10px;color:#fff;}
+.thumb-add{border:2px dashed var(--bd);background:transparent;}
+.thumb-add:hover{border-color:var(--g);background:rgba(0,178,7,.04);}
+.thumb-add svg{color:var(--t4);}
+.thumb-add:hover svg{color:var(--g);}
+
+.thumbs-hint{font-size:10px;color:var(--t4);margin-top:8px;line-height:1.5;text-align:center;}
+
+/* ─── ESTOQUE CARD ───────────────────────────────────────── */
+.stock-display{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--cream);border-radius:var(--r-inner);border:1px solid var(--bd);margin-bottom:14px;}
+.stock-val{font-size:22px;font-weight:700;color:var(--color-danger);font-variant-numeric:tabular-nums;}
+.stock-unit{font-size:12px;color:var(--t6);margin-top:2px;}
+.stock-label{font-size:10px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ─── HISTORICO PRECOS ───────────────────────────────────── */
+.price-history{display:flex;flex-direction:column;gap:0;}
+.ph-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);}
+.ph-item:last-child{border-bottom:none;}
+.ph-date{font-size:10.5px;color:var(--t4);width:80px;flex-shrink:0;}
+.ph-who{font-size:10.5px;color:var(--t6);flex:1;}
+.ph-val{font-size:12px;font-weight:700;color:var(--t9);font-variant-numeric:tabular-nums;}
+.ph-arrow{font-size:10px;color:var(--t4);}
+
+/* ─── AVISO ROLE ─────────────────────────────────────────── */
+.role-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--color-indigo-bg);border:1px solid #C7D2FE;border-radius:var(--r-inner);margin-bottom:14px;}
+.role-notice svg{width:15px;height:15px;color:var(--color-indigo);flex-shrink:0;margin-top:1px;}
+.role-notice-text{font-size:11px;color:var(--color-indigo);line-height:1.5;}
+.role-notice-text strong{font-weight:700;}
+
+/* ─── ERP SYNC INDICATORS ────────────────────────────────── */
+.erp-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-weight: 700;
+  padding: 2px 8px; border-radius: var(--r-pill);
+  letter-spacing: .04em; text-transform: uppercase;
+  background: #FEF3C7; color: #92400E;
+  border: 1px solid #FDE68A;
+}
+.erp-badge svg { width: 9px; height: 9px; }
+
+.erp-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: var(--r-inner);
+  margin-bottom: 14px;
+}
+.erp-notice svg { width: 15px; height: 15px; color: #92400E; flex-shrink: 0; margin-top: 1px; }
+.erp-notice-text { font-size: 11px; color: #78350F; line-height: 1.55; }
+.erp-notice-text strong { font-weight: 700; }
+
+.erp-field-wrap { position: relative; }
+.erp-field-overlay {
+  position: absolute; inset: 0;
+  border-radius: var(--r-input);
+  background: rgba(254,243,199,.4);
+  border: 1.5px dashed #FCD34D;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 10px;
+}
+.erp-field-overlay span {
+  font-size: 8.5px; font-weight: 700;
+  color: #92400E; letter-spacing: .04em;
+  text-transform: uppercase;
+  background: #FEF3C7;
+  padding: 1px 6px; border-radius: var(--r-pill);
+}
+
+.erp-legend {
+  display: flex; align-items: center; gap: 16px;
+  padding: 10px 14px;
+  background: var(--gray-100);
+  border-top: 1px solid var(--bd);
+  margin-top: 14px;
+  border-radius: 0 0 var(--r-inner) var(--r-inner);
+}
+.erp-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--t6); }
+.erp-legend-dot-manual { width: 8px; height: 8px; border-radius: 50%; background: var(--g); }
+.erp-legend-dot-erp { width: 8px; height: 8px; border-radius: 2px; background: #FCD34D; border: 1.5px dashed #92400E; }
+
+</style>
+</head>
+<body>
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 3h18v2H3zM3 10h18v2H3zM3 17h18v2H3z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Granel da Praça</div>
+        <div class="brand-tag">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Principal</div>
+        <a class="nav-item" href="admin-01-dashboard.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" href="admin-02-pedidos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Pedidos
+          <span class="nav-badge badge-danger">3</span>
+        </a>
+        <a class="nav-item active" href="admin-04-produtos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          Produtos
+          <span class="nav-badge badge-warn">5</span>
+        </a>
+        <a class="nav-item" href="admin-06-clientes-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Clientes
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Cupons</div>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Cupons
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatorios
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <a class="nav-item" href="admin-07-configuracoes.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          Configuracoes
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Andressa</div>
+          <div class="user-role">Owner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <a class="topbar-back" href="admin-04-produtos-lista.html">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Produtos
+      </a>
+      <div class="topbar-divider"></div>
+      <span class="topbar-title">Castanha-do-Para · COD 0042</span>
+      <div class="topbar-spacer"></div>
+      <button class="btn-ghost">Cancelar</button>
+      <button class="btn-save">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Salvar alteracoes
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="edit-grid">
+
+        <!-- COLUNA ESQUERDA -->
+        <div class="left-col">
+
+          <!-- DADOS BASICOS -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span class="card-title">Dados basicos</span>
+              <span class="role-badge rb-both">Owner + Supervisora</span>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group form-full">
+                  <label class="form-label">
+                    Nome do produto
+                    <span class="required">*</span>
+                  </label>
+                  <input class="form-input" type="text" value="Castanha-do-Para">
+                  <div class="form-hint">Use o nome correto com acento. Ex: Castanha-do-Para, Chia Preta.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Categoria <span class="required">*</span></label>
+                  <select class="form-select">
+                    <option selected>Castanhas</option>
+                    <option>Graos e Sementes</option>
+                    <option>Frutas Secas</option>
+                    <option>Oleos e Adocantes</option>
+                    <option>Snacks</option>
+                    <option>Cereais</option>
+                    <option>Suplementos</option>
+                    <option>Temperos</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Tipo <span class="required">*</span></label>
+                  <select class="form-select" disabled>
+                    <option selected>Granel</option>
+                    <option>Unitario</option>
+                  </select>
+                  <div class="form-hint">Tipo nao pode ser alterado apos cadastro.</div>
+                </div>
+
+                <div class="form-group form-full">
+                  <label class="form-label">Descricao</label>
+                  <textarea class="form-textarea" placeholder="Descricao do produto para a pagina de detalhes...">Castanha-do-Para selecionada, rica em selenio e gorduras boas. Ideal para consumo in natura ou para uso em receitas. Produto natural sem aditivos.</textarea>
+                </div>
+
+                <div class="form-group form-full">
+                  <label class="form-label">Variante / Embalagem</label>
+                  <input class="form-input" type="text" value="A granel · pesado na hora" placeholder="Ex: A granel · pesado na hora">
+                  <div class="form-hint">Texto exibido abaixo do nome no card do catalogo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRECO — acesso supervisora -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>
+              <span class="card-title">Preco</span>
+              <span class="role-badge rb-both">Owner + Supervisora</span>
+              <span class="erp-badge"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>Futuro ERP</span>
+            </div>
+            <div class="card-body">
+
+              <div class="erp-notice">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                <div class="erp-notice-text">
+                  <strong>Campo futuro ERP Explend:</strong> apos a integracao com o Explend, o preco sera sincronizado automaticamente e este campo ficara somente leitura. Por enquanto, edite manualmente.
+                </div>
+              </div>
+              <div class="role-notice">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="role-notice-text">
+                  <strong>Regra critica de preco:</strong> o campo armazena o preco por kg em centavos. O sistema converte automaticamente para exibir R$/100gr no catalogo. O preview abaixo confirma o valor antes de salvar.
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">
+                    Preco por kg (centavos)
+                    <span class="required">*</span>
+                  </label>
+                  <div class="erp-field-wrap">
+                    <input class="form-input mono" type="number" value="14900" min="0">
+                    <div class="erp-field-overlay"><span>Futuro ERP</span></div>
+                  </div>
+                  <div class="form-hint">14900 centavos = R$ 149,00/kg</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Preco promocional por kg (centavos)</label>
+                  <div class="erp-field-wrap">
+                    <input class="form-input mono" type="number" placeholder="0" value="">
+                    <div class="erp-field-overlay"><span>Futuro ERP</span></div>
+                  </div>
+                  <div class="form-hint">Deixar vazio se nao houver promocao.</div>
+                </div>
+              </div>
+
+              <!-- Preview automatico -->
+              <div class="price-preview">
+                <div class="price-preview-label">Previsualização no catálogo</div>
+                <div class="price-preview-row">
+                  <div class="price-preview-item">
+                    <div class="price-preview-key">Exibido no card</div>
+                    <div class="price-preview-val">R$ 14,90 / 100 gr</div>
+                  </div>
+                  <div class="price-preview-item">
+                    <div class="price-preview-key">Preco por kg</div>
+                    <div class="price-preview-val" style="color:var(--t6);font-size:12px;font-weight:500">R$ 149,00 / kg</div>
+                  </div>
+                  <div class="price-preview-item">
+                    <div class="price-preview-key">Exemplo — 500 gr</div>
+                    <div class="price-preview-val" style="color:var(--gd)">R$ 74,50</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ESTOQUE -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              <span class="card-title">Estoque</span>
+              <span class="role-badge rb-owner">Owner</span>
+              <span class="erp-badge"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>Futuro ERP</span>
+            </div>
+            <div class="card-body">
+
+              <div class="erp-notice">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                <div class="erp-notice-text">
+                  <strong>Campo futuro ERP Explend:</strong> apos a integracao, o estoque sera atualizado automaticamente a cada venda no PDV e no e-commerce. Por enquanto, atualize manualmente.
+                </div>
+              </div>
+              <div class="stock-display">
+                <div>
+                  <div class="stock-label">Estoque atual</div>
+                  <div class="stock-val">200 gr</div>
+                  <div class="stock-unit">Castanha-do-Para · Granel</div>
+                </div>
+                <div style="margin-left:auto">
+                  <span style="font-size:10px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:4px 10px;border-radius:var(--r-pill)">Critico — repor urgente</span>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Estoque atual (gramas)</label>
+                  <div class="erp-field-wrap">
+                    <input class="form-input mono" type="number" value="200" min="0">
+                    <div class="erp-field-overlay"><span>Futuro ERP</span></div>
+                  </div>
+                  <div class="form-hint warn">Abaixo do threshold de alerta (2.000 gr).</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Threshold de alerta (gramas)</label>
+                  <input class="form-input mono" type="number" value="2000" min="0">
+                  <div class="form-hint">Configurado aqui — permanece mesmo apos integracao ERP.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Incremento de compra (gramas)</label>
+                  <input class="form-input mono" type="number" value="100" disabled>
+                  <div class="form-hint">Padrao granel: 100 gr. Nao editavel.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Notificar estoque critico via WhatsApp</label>
+                  <div style="display:flex;align-items:center;gap:10px;height:38px;">
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked>
+                      <div class="toggle-track"></div>
+                      <div class="toggle-thumb"></div>
+                    </label>
+                    <span style="font-size:12px;color:var(--t6)">Ativado</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="erp-legend">
+              <div class="erp-legend-item">
+                <div class="erp-legend-dot-manual"></div>
+                Gerenciado manualmente agora
+              </div>
+              <div class="erp-legend-item">
+                <div class="erp-legend-dot-erp"></div>
+                Sera sincronizado pelo ERP Explend (Fase 2)
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /COLUNA ESQUERDA -->
+
+        <!-- COLUNA DIREITA -->
+        <div class="right-col">
+
+          <!-- FOTOS — acesso supervisora -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="card-title">Fotos do produto</span>
+              <span class="role-badge rb-both">Owner + Supervisora</span>
+            </div>
+            <div class="card-body">
+
+              <div class="upload-zone">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div class="upload-title">Arraste fotos aqui</div>
+                <div class="upload-sub">ou <strong>clique para selecionar</strong><br>JPG · PNG · WebP · max 5 MB · fundo branco</div>
+              </div>
+
+              <div class="thumbs-grid">
+                <!-- foto principal -->
+                <div class="thumb-item primary">
+                  <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <div class="thumb-primary-tag">PRINCIPAL</div>
+                  <div class="thumb-remove">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                </div>
+                <!-- segunda foto -->
+                <div class="thumb-item">
+                  <svg fill="none" stroke="var(--t4)" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <div class="thumb-remove">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                </div>
+                <!-- adicionar -->
+                <div class="thumb-item thumb-add">
+                  <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+              </div>
+
+              <div class="thumbs-hint">
+                Clique em uma foto para definir como principal.<br>
+                Arraste para reordenar. Max 5 fotos por produto.<br>
+                Resolucao recomendada: 800 × 800 px.
+              </div>
+            </div>
+          </div>
+
+          <!-- STATUS DO PRODUTO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="card-title">Status e visibilidade</span>
+              <span class="role-badge rb-owner">Owner</span>
+            </div>
+            <div class="card-body" style="padding-top:8px;padding-bottom:8px;">
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Produto ativo</div>
+                  <div class="toggle-sub">Visiivel no catalogo para os clientes</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-thumb"></div>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Produto em destaque</div>
+                  <div class="toggle-sub">Exibido na secao "Produtos em Destaque"</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <div class="toggle-track"></div>
+                  <div class="toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- HISTORICO DE ALTERACOES DE PRECO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span class="card-title">Historico de preco</span>
+            </div>
+            <div class="card-body" style="padding-top:8px;padding-bottom:8px;">
+              <div class="price-history">
+                <div class="ph-item">
+                  <div class="ph-date">29/06/2026</div>
+                  <div class="ph-who">Andressa (Owner)</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span class="ph-arrow">R$13,90</span>
+                    <svg width="10" height="10" fill="none" stroke="var(--t4)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span class="ph-val">R$14,90</span>
+                  </div>
+                </div>
+                <div class="ph-item">
+                  <div class="ph-date">14/06/2026</div>
+                  <div class="ph-who">Supervisora</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span class="ph-arrow">R$12,50</span>
+                    <svg width="10" height="10" fill="none" stroke="var(--t4)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span class="ph-val">R$13,90</span>
+                  </div>
+                </div>
+                <div class="ph-item">
+                  <div class="ph-date">02/06/2026</div>
+                  <div class="ph-who">Andressa (Owner)</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span class="ph-arrow">—</span>
+                    <svg width="10" height="10" fill="none" stroke="var(--t4)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span class="ph-val">R$12,50</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /COLUNA DIREITA -->
+
+      </div>
+    </main>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Produtos · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── DS v3.1 TOKENS ─────────────────────────────────────── */
+:root {
+  --g:#00B207;--gd:#2C742F;--gdeep:#002603;--ghover:#1A5C1E;
+  --cream:#F9F5EF;--surface:#F9FAFB;--white:#FFFFFF;
+  --t9:#111827;--t6:#4B5563;--t4:#9CA3AF;--bd:#E5E7EB;
+  --gray-100:#F3F4F6;
+  --color-danger:#EF4444;--color-rating:#FBBF24;
+  --badge-diet-tx:#2C742F;--badge-diet-bg:#EAF7EA;--badge-diet-bd:#C6E6C7;
+  --color-indigo:#3730A3;--color-indigo-bg:#EEF2FF;
+  --color-promo:#C0694A;--color-promo-bg:#FBF1EE;
+  --r-input:8px;--r-sel:10px;--r-inner:12px;--r-modal:16px;--r-card:20px;--r-pill:100px;
+  --shadow-card:0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover:0 20px 50px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.04);
+  --sidebar-w:220px;--topbar-h:56px;
+  --nav-inactive:rgba(255,255,255,.55);--nav-active:#ffffff;
+  --nav-active-bg:rgba(0,178,7,.12);--ease:.18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--t9);font-size:14px;line-height:1.5;min-height:100vh;display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────── */
+.admin-shell{display:flex;width:100%;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--gdeep);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:40;overflow-y:auto;}
+.sidebar-brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:34px;height:34px;background:var(--g);border-radius:var(--r-sel);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:18px;height:18px;color:#fff;}
+.brand-name{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;}
+.brand-tag{font-size:8px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;}
+.sidebar-nav{flex:1;padding:12px 8px;}
+.nav-section{margin-bottom:4px;}
+.nav-section-label{font-size:9px;font-weight:600;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;padding:8px 8px 4px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);font-size:12.5px;font-weight:500;color:var(--nav-inactive);cursor:pointer;transition:all var(--ease);position:relative;text-decoration:none;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:var(--nav-active-bg);color:var(--nav-active);}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--g);border-radius:0 3px 3px 0;}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.65;transition:opacity var(--ease);}
+.nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:var(--r-pill);min-width:18px;text-align:center;line-height:1.4;}
+.badge-danger{background:var(--color-danger);color:#fff;}
+.badge-warn{background:var(--color-rating);color:#78350F;}
+.sidebar-footer{padding:10px 8px 16px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-inner);background:rgba(255,255,255,.05);cursor:pointer;}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--gd));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-name{font-size:11.5px;font-weight:600;color:#fff;}
+.user-role{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+.main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:30;flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:600;color:var(--t9);}
+.topbar-sub{font-size:11px;color:var(--t4);margin-left:2px;}
+.topbar-spacer{flex:1;}
+.topbar-icon-btn{width:36px;height:36px;border:1px solid var(--bd);border-radius:var(--r-input);background:var(--gray-100);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);color:var(--t6);}
+.topbar-icon-btn:hover{background:var(--bd);color:var(--t9);}
+.content{padding:24px;flex:1;}
+
+/* ─── PAGE HEADER ────────────────────────────────────────── */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.page-header h1{font-size:20px;font-weight:700;color:var(--t9);letter-spacing:-.02em;}
+.page-header p{font-size:12px;color:var(--t4);margin-top:2px;}
+.header-actions{display:flex;gap:8px;align-items:center;}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;background:var(--g);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:var(--r-sel);border:none;cursor:pointer;transition:background var(--ease);font-family:inherit;}
+.btn-primary:hover{background:var(--ghover);}
+.btn-primary svg{width:14px;height:14px;}
+.btn-secondary{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--t6);font-size:12px;font-weight:500;padding:8px 14px;border-radius:var(--r-sel);border:1px solid var(--bd);cursor:pointer;transition:all var(--ease);font-family:inherit;}
+.btn-secondary:hover{border-color:var(--gd);color:var(--gd);}
+.btn-secondary svg{width:14px;height:14px;}
+
+/* ─── ALERTAS RAPIDOS ────────────────────────────────────── */
+.quick-alerts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.quick-alert{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--r-inner);cursor:pointer;transition:all var(--ease);}
+.quick-alert:hover{transform:translateY(-2px);box-shadow:var(--shadow-card);}
+.qa-icon{width:34px;height:34px;border-radius:var(--r-inner);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.qa-icon svg{width:16px;height:16px;}
+.qa-val{font-size:18px;font-weight:700;line-height:1;}
+.qa-label{font-size:10px;font-weight:500;margin-top:2px;}
+.qa-total{background:var(--white);border:1px solid var(--bd);}
+.qa-total .qa-icon{background:var(--gray-100);color:var(--t6);}
+.qa-total .qa-val{color:var(--t9);}
+.qa-total .qa-label{color:var(--t4);}
+.qa-sem-foto{background:#FFFBEB;border:1px solid #FDE68A;}
+.qa-sem-foto .qa-icon{background:#FEF3C7;color:#92400E;}
+.qa-sem-foto .qa-val{color:#92400E;}
+.qa-sem-foto .qa-label{color:#B45309;}
+.qa-estoque{background:#FEF2F2;border:1px solid #FECACA;}
+.qa-estoque .qa-icon{background:#FEE2E2;color:var(--color-danger);}
+.qa-estoque .qa-val{color:var(--color-danger);}
+.qa-estoque .qa-label{color:#991B1B;}
+.qa-inativos{background:var(--gray-100);border:1px solid var(--bd);}
+.qa-inativos .qa-icon{background:var(--white);color:var(--t4);}
+.qa-inativos .qa-val{color:var(--t6);}
+.qa-inativos .qa-label{color:var(--t4);}
+
+/* ─── FILTROS ────────────────────────────────────────────── */
+.filters-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:240px;}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--t4);pointer-events:none;}
+.search-input{width:100%;height:36px;padding:0 12px 0 32px;border:1px solid var(--bd);border-radius:var(--r-input);font-size:12px;font-family:inherit;color:var(--t9);background:var(--white);outline:none;transition:border-color var(--ease);}
+.search-input:focus{border-color:var(--g);}
+.search-input::placeholder{color:var(--t4);}
+.filter-select{height:36px;padding:0 10px;border:1px solid var(--bd);border-radius:var(--r-input);font-size:12px;font-family:inherit;color:var(--t6);background:var(--white);outline:none;cursor:pointer;}
+.filter-select:focus{border-color:var(--g);}
+
+/* ─── TABS FILTRO ────────────────────────────────────────── */
+.filter-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;}
+.ftab{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--r-sel);border:1px solid var(--bd);background:var(--white);font-size:11px;font-weight:500;color:var(--t6);cursor:pointer;transition:all var(--ease);font-family:inherit;}
+.ftab:hover{border-color:var(--g);color:var(--g);}
+.ftab.active{background:var(--gdeep);color:#fff;border-color:var(--gdeep);font-weight:600;}
+.ftab-count{font-size:9px;font-weight:700;padding:1px 5px;border-radius:var(--r-pill);}
+.ftab.active .ftab-count{background:rgba(255,255,255,.2);color:#fff;}
+.ftab:not(.active) .ftab-count{background:var(--gray-100);color:var(--t6);}
+.ftab-warn .ftab-count{background:#FEF3C7;color:#92400E;}
+.ftab-danger .ftab-count{background:#FEE2E2;color:#991B1B;}
+
+/* ─── TABELA ─────────────────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden;}
+.table-wrap{overflow-x:auto;}
+.products-table{width:100%;border-collapse:collapse;min-width:900px;}
+.products-table thead th{padding:10px 14px;text-align:left;font-size:9.5px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;background:var(--gray-100);border-bottom:1px solid var(--bd);white-space:nowrap;}
+.products-table thead th:first-child{padding-left:20px;}
+.products-table thead th:last-child{padding-right:20px;text-align:right;}
+.products-table tbody tr{border-bottom:1px solid var(--bd);transition:background var(--ease);cursor:pointer;}
+.products-table tbody tr:last-child{border-bottom:none;}
+.products-table tbody tr:hover{background:var(--surface);}
+.products-table tbody td{padding:11px 14px;font-size:12px;vertical-align:middle;}
+.products-table tbody td:first-child{padding-left:20px;}
+.products-table tbody td:last-child{padding-right:20px;text-align:right;}
+
+/* produto cell */
+.product-cell{display:flex;align-items:center;gap:10px;}
+.product-thumb{width:42px;height:42px;border-radius:var(--r-inner);background:var(--cream);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;position:relative;}
+.product-thumb svg{width:18px;height:18px;color:var(--t4);}
+.thumb-no-img{position:absolute;bottom:0;left:0;right:0;background:rgba(245,158,11,.85);font-size:7px;font-weight:700;color:#fff;text-align:center;padding:1px 0;letter-spacing:.04em;}
+.product-name{font-size:12px;font-weight:600;color:var(--t9);}
+.product-code{font-size:10px;color:var(--t4);margin-top:1px;}
+.product-cat{font-size:10px;color:var(--t6);margin-top:1px;}
+
+/* tipo badge */
+.tipo-prod{font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:var(--r-pill);}
+.tipo-granel{background:var(--badge-diet-bg);color:var(--badge-diet-tx);}
+.tipo-unit{background:var(--color-indigo-bg);color:var(--color-indigo);}
+
+/* preco */
+.price-main{font-size:13px;font-weight:700;color:var(--gdeep);font-variant-numeric:tabular-nums;}
+.price-label{font-size:9.5px;color:var(--t4);margin-top:1px;}
+
+/* estoque */
+.stock-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap;}
+.stock-ok{background:var(--badge-diet-bg);color:var(--badge-diet-tx);}
+.stock-low{background:#FEF3C7;color:#92400E;}
+.stock-crit{background:#FEE2E2;color:#991B1B;}
+.stock-na{background:var(--gray-100);color:var(--t4);}
+
+/* status ativo/inativo */
+.status-ativo{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:var(--r-pill);}
+.s-ativo{background:var(--badge-diet-bg);color:var(--badge-diet-tx);}
+.s-ativo .dot{width:5px;height:5px;border-radius:50%;background:var(--g);}
+.s-inativo{background:var(--gray-100);color:var(--t4);}
+.s-inativo .dot{width:5px;height:5px;border-radius:50%;background:var(--t4);}
+
+/* acoes */
+.action-cell{display:flex;gap:5px;align-items:center;justify-content:flex-end;}
+.action-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--r-input);border:1px solid var(--bd);background:var(--white);cursor:pointer;transition:all var(--ease);color:var(--t6);}
+.action-btn:hover{border-color:var(--gd);color:var(--gd);background:var(--badge-diet-bg);}
+.action-btn.danger:hover{border-color:var(--color-danger);color:var(--color-danger);background:#FEE2E2;}
+.action-btn svg{width:13px;height:13px;}
+
+/* sem foto highlight */
+.row-sem-foto td:first-child{border-left:3px solid var(--color-rating);}
+
+/* ─── PAGINACAO ──────────────────────────────────────────── */
+.table-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--bd);background:var(--gray-100);}
+.table-info{font-size:11px;color:var(--t4);}
+.pagination{display:flex;gap:4px;}
+.page-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);border-radius:var(--r-input);background:var(--white);font-size:11.5px;font-weight:500;color:var(--t6);cursor:pointer;transition:all var(--ease);}
+.page-btn:hover{border-color:var(--g);color:var(--g);}
+.page-btn.active{background:var(--gdeep);border-color:var(--gdeep);color:#fff;font-weight:600;}
+.page-btn svg{width:13px;height:13px;}
+
+/* role tag — apenas supervisora ve edicao de preco e foto */
+.role-tip{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;color:var(--color-indigo);background:var(--color-indigo-bg);padding:2px 7px;border-radius:var(--r-pill);margin-left:6px;}
+</style>
+</head>
+<body>
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 3h18v2H3zM3 10h18v2H3zM3 17h18v2H3z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Granel da Praça</div>
+        <div class="brand-tag">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Principal</div>
+        <a class="nav-item" href="admin-01-dashboard.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" href="admin-02-pedidos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Pedidos
+          <span class="nav-badge badge-danger">3</span>
+        </a>
+        <a class="nav-item active" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          Produtos
+          <span class="nav-badge badge-warn">5</span>
+        </a>
+        <a class="nav-item" href="admin-06-clientes-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Clientes
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Cupons</div>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Cupons
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatorios
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <a class="nav-item" href="admin-07-configuracoes.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          Configuracoes
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Andressa</div>
+          <div class="user-role">Owner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <div>
+        <span class="topbar-title">Produtos</span>
+        <span class="topbar-sub">— Catalogo completo</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-icon-btn" title="Notificacoes">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div>
+          <h1>Produtos</h1>
+          <p>402 produtos cadastrados · Supervisora pode editar preco e fazer upload de fotos</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-secondary">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Importar CSV
+          </button>
+          <button class="btn-primary">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo produto
+          </button>
+        </div>
+      </div>
+
+      <!-- ALERTAS RAPIDOS -->
+      <div class="quick-alerts">
+        <div class="quick-alert qa-total">
+          <div class="qa-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div>
+            <div class="qa-val">402</div>
+            <div class="qa-label">Total de produtos</div>
+          </div>
+        </div>
+        <div class="quick-alert qa-sem-foto">
+          <div class="qa-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <div class="qa-val">402</div>
+            <div class="qa-label">Sem foto — urgente</div>
+          </div>
+        </div>
+        <div class="quick-alert qa-estoque">
+          <div class="qa-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>
+            <div class="qa-val">5</div>
+            <div class="qa-label">Estoque baixo ou critico</div>
+          </div>
+        </div>
+        <div class="quick-alert qa-inativos">
+          <div class="qa-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          </div>
+          <div>
+            <div class="qa-val">12</div>
+            <div class="qa-label">Produtos inativos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS DE FILTRO -->
+      <div class="filter-tabs">
+        <button class="ftab active">
+          Todos <span class="ftab-count">402</span>
+        </button>
+        <button class="ftab ftab-warn">
+          Sem foto <span class="ftab-count">402</span>
+        </button>
+        <button class="ftab ftab-danger">
+          Estoque baixo <span class="ftab-count">5</span>
+        </button>
+        <button class="ftab">
+          Granel <span class="ftab-count">318</span>
+        </button>
+        <button class="ftab">
+          Unitario <span class="ftab-count">84</span>
+        </button>
+        <button class="ftab">
+          Inativos <span class="ftab-count">12</span>
+        </button>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="filters-bar">
+        <div class="search-wrap">
+          <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Buscar por nome, codigo ou categoria...">
+        </div>
+        <select class="filter-select">
+          <option>Todas as categorias</option>
+          <option>Castanhas</option>
+          <option>Graos e Sementes</option>
+          <option>Frutas Secas</option>
+          <option>Oleos e Adocantes</option>
+          <option>Snacks</option>
+          <option>Cereais</option>
+          <option>Suplementos</option>
+          <option>Temperos</option>
+        </select>
+        <select class="filter-select">
+          <option>Tipo: Todos</option>
+          <option>Granel</option>
+          <option>Unitario</option>
+        </select>
+        <select class="filter-select">
+          <option>Ordenar: Nome A-Z</option>
+          <option>Nome Z-A</option>
+          <option>Preco crescente</option>
+          <option>Preco decrescente</option>
+          <option>Estoque critico primeiro</option>
+          <option>Sem foto primeiro</option>
+        </select>
+      </div>
+
+      <!-- TABELA -->
+      <div class="card">
+        <div class="table-wrap">
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Preco</th>
+                <th>Estoque</th>
+                <th>Status</th>
+                <th>Foto</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- sem foto + estoque critico -->
+              <tr class="row-sem-foto">
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <div class="thumb-no-img">SEM FOTO</div>
+                    </div>
+                    <div>
+                      <div class="product-name">Castanha-do-Para</div>
+                      <div class="product-code">COD: 0042</div>
+                      <div class="product-cat">Castanhas</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-granel">Granel</span></td>
+                <td>
+                  <div class="price-main">R$ 14,90</div>
+                  <div class="price-label">por 100 gr</div>
+                </td>
+                <td><span class="stock-badge stock-crit">200 gr · critico</span></td>
+                <td><span class="status-ativo s-ativo"><span class="dot"></span>Ativo</span></td>
+                <td>
+                  <span style="font-size:10px;font-weight:700;color:#92400E;background:#FEF3C7;padding:2px 7px;border-radius:var(--r-pill)">Pendente</span>
+                </td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn" title="Editar produto">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>
+                    <div class="action-btn" title="Upload de foto">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- sem foto + estoque baixo -->
+              <tr class="row-sem-foto">
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <div class="thumb-no-img">SEM FOTO</div>
+                    </div>
+                    <div>
+                      <div class="product-name">Chia Preta</div>
+                      <div class="product-code">COD: 0118</div>
+                      <div class="product-cat">Graos e Sementes</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-granel">Granel</span></td>
+                <td>
+                  <div class="price-main">R$ 6,00</div>
+                  <div class="price-label">por 100 gr</div>
+                </td>
+                <td><span class="stock-badge stock-low">1,2 kg · baixo</span></td>
+                <td><span class="status-ativo s-ativo"><span class="dot"></span>Ativo</span></td>
+                <td><span style="font-size:10px;font-weight:700;color:#92400E;background:#FEF3C7;padding:2px 7px;border-radius:var(--r-pill)">Pendente</span></td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- sem foto, estoque ok -->
+              <tr class="row-sem-foto">
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <div class="thumb-no-img">SEM FOTO</div>
+                    </div>
+                    <div>
+                      <div class="product-name">Amendoim Cru s/ Casca</div>
+                      <div class="product-code">COD: 0011</div>
+                      <div class="product-cat">Castanhas</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-granel">Granel</span></td>
+                <td>
+                  <div class="price-main">R$ 2,50</div>
+                  <div class="price-label">por 100 gr</div>
+                </td>
+                <td><span class="stock-badge stock-ok">8,4 kg · ok</span></td>
+                <td><span class="status-ativo s-ativo"><span class="dot"></span>Ativo</span></td>
+                <td><span style="font-size:10px;font-weight:700;color:#92400E;background:#FEF3C7;padding:2px 7px;border-radius:var(--r-pill)">Pendente</span></td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- sem foto, unitario -->
+              <tr class="row-sem-foto">
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">
+                      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <div class="thumb-no-img">SEM FOTO</div>
+                    </div>
+                    <div>
+                      <div class="product-name">Granola Prinat s/ Acucar</div>
+                      <div class="product-code">COD: 0201</div>
+                      <div class="product-cat">Snacks</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-unit">Unitario</span></td>
+                <td>
+                  <div class="price-main">R$ 8,50</div>
+                  <div class="price-label">por unidade</div>
+                </td>
+                <td><span class="stock-badge stock-low">3 un · baixo</span></td>
+                <td><span class="status-ativo s-ativo"><span class="dot"></span>Ativo</span></td>
+                <td><span style="font-size:10px;font-weight:700;color:#92400E;background:#FEF3C7;padding:2px 7px;border-radius:var(--r-pill)">Pendente</span></td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- COM foto — exemplo de produto completo -->
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb" style="background:var(--cream)">
+                      <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                      <div class="product-name">Oleo de Coco EV Copra 500ml</div>
+                      <div class="product-code">COD: 0387</div>
+                      <div class="product-cat">Oleos e Adocantes</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-unit">Unitario</span></td>
+                <td>
+                  <div class="price-main">R$ 42,00</div>
+                  <div class="price-label">por unidade</div>
+                </td>
+                <td><span class="stock-badge stock-ok">8 un · ok</span></td>
+                <td><span class="status-ativo s-ativo"><span class="dot"></span>Ativo</span></td>
+                <td>
+                  <span style="font-size:10px;font-weight:700;color:var(--badge-diet-tx);background:var(--badge-diet-bg);padding:2px 7px;border-radius:var(--r-pill)">1 foto</span>
+                </td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- inativo -->
+              <tr style="opacity:.55">
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb" style="background:var(--gray-100)">
+                      <svg fill="none" stroke="var(--t4)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                    </div>
+                    <div>
+                      <div class="product-name">Pasta de Amendoim s/ Adicao</div>
+                      <div class="product-code">COD: 0298</div>
+                      <div class="product-cat">Snacks</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tipo-prod tipo-unit">Unitario</span></td>
+                <td>
+                  <div class="price-main" style="color:var(--t4)">R$ 18,90</div>
+                  <div class="price-label">por unidade</div>
+                </td>
+                <td><span class="stock-badge stock-na">— indisponivel</span></td>
+                <td><span class="status-ativo s-inativo"><span class="dot"></span>Inativo</span></td>
+                <td><span style="font-size:10px;font-weight:600;color:var(--t4);background:var(--gray-100);padding:2px 7px;border-radius:var(--r-pill)">1 foto</span></td>
+                <td>
+                  <div class="action-cell">
+                    <div class="action-btn"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="action-btn danger"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="table-info">Mostrando 6 de 402 produtos · ordenado por sem foto primeiro</div>
+          <div class="pagination">
+            <div class="page-btn">
+              <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </div>
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn" style="width:auto;padding:0 8px;font-size:10px">...</div>
+            <div class="page-btn">41</div>
+            <div class="page-btn">
+              <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Configuracoes · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── DS v3.1 TOKENS ─────────────────────────────────────── */
+:root {
+  --g:#00B207;--gd:#2C742F;--gdeep:#002603;--ghover:#1A5C1E;
+  --cream:#F9F5EF;--surface:#F9FAFB;--white:#FFFFFF;
+  --t9:#111827;--t6:#4B5563;--t4:#9CA3AF;--bd:#E5E7EB;
+  --gray-100:#F3F4F6;
+  --color-danger:#EF4444;--color-rating:#FBBF24;
+  --badge-diet-tx:#2C742F;--badge-diet-bg:#EAF7EA;--badge-diet-bd:#C6E6C7;
+  --color-indigo:#3730A3;--color-indigo-bg:#EEF2FF;
+  --color-promo:#C0694A;--color-promo-bg:#FBF1EE;
+
+  /* spacing scale DS v3.1 — base 4px */
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;
+  --s6:24px;--s8:32px;--s10:40px;--s12:48px;--s20:80px;
+
+  /* radius DS v3.1 */
+  --r-input:8px;--r-sel:10px;--r-inner:12px;
+  --r-modal:16px;--r-card:20px;--r-pill:100px;
+
+  /* sombras DS v3.1 */
+  --shadow-card:0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover:0 20px 50px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.04);
+
+  --sidebar-w:220px;--topbar-h:56px;
+  --nav-inactive:rgba(255,255,255,.55);--nav-active:#ffffff;
+  --nav-active-bg:rgba(0,178,7,.12);
+  --ease:.18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--t9);font-size:14px;line-height:1.5;min-height:100vh;display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────── */
+.admin-shell{display:flex;width:100%;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--gdeep);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:40;overflow-y:auto;}
+.sidebar-brand{padding:var(--s5) var(--s4) var(--s4);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:34px;height:34px;background:var(--g);border-radius:var(--r-sel);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:18px;height:18px;color:#fff;}
+.brand-name{font-size:12px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;}
+.brand-tag{font-size:8px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;}
+.sidebar-nav{flex:1;padding:var(--s3) var(--s2);}
+.nav-section{margin-bottom:var(--s1);}
+.nav-section-label{font-size:9px;font-weight:600;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;padding:var(--s2) var(--s2) var(--s1);}
+.nav-item{display:flex;align-items:center;gap:9px;padding:var(--s2) 10px;border-radius:var(--r-inner);font-size:12.5px;font-weight:500;color:var(--nav-inactive);cursor:pointer;transition:all var(--ease);position:relative;text-decoration:none;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:var(--nav-active-bg);color:var(--nav-active);}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--g);border-radius:0 3px 3px 0;}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.65;transition:opacity var(--ease);}
+.nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px var(--s2);border-radius:var(--r-pill);min-width:18px;text-align:center;line-height:1.4;}
+.badge-danger{background:var(--color-danger);color:#fff;}
+.badge-warn{background:var(--color-rating);color:#78350F;}
+.sidebar-footer{padding:10px var(--s2) var(--s4);border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:var(--s2) 10px;border-radius:var(--r-inner);background:rgba(255,255,255,.05);cursor:pointer;transition:background var(--ease);}
+.user-chip:hover{background:rgba(255,255,255,.09);}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--gd));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-name{font-size:11.5px;font-weight:600;color:#fff;}
+.user-role{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+.main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 var(--s6);gap:var(--s3);position:sticky;top:0;z-index:30;flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:600;color:var(--t9);}
+.topbar-sub{font-size:11px;color:var(--t4);margin-left:2px;}
+.topbar-spacer{flex:1;}
+.topbar-icon-btn{width:36px;height:36px;border:1px solid var(--bd);border-radius:var(--r-input);background:var(--gray-100);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--ease);color:var(--t6);}
+.topbar-icon-btn:hover{background:var(--bd);color:var(--t9);}
+.content{padding:var(--s6);flex:1;}
+
+/* ─── BOTOES DS v3.1 ─────────────────────────────────────── */
+/* height: 40px · padding: 0 24px · gap: 8px · radius: --r-sel */
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  height:40px;padding:0 var(--s6);
+  background:var(--g);color:#fff;
+  font-size:12.5px;font-weight:600;font-family:inherit;
+  border:none;border-radius:var(--r-sel);
+  cursor:pointer;transition:background var(--ease);
+}
+.btn-primary:hover{background:var(--ghover);}
+.btn-primary svg{width:14px;height:14px;}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  height:40px;padding:0 var(--s5);
+  background:var(--white);color:var(--t6);
+  font-size:12.5px;font-weight:500;font-family:inherit;
+  border:1px solid var(--bd);border-radius:var(--r-sel);
+  cursor:pointer;transition:all var(--ease);
+}
+.btn-secondary:hover{border-color:var(--gd);color:var(--gd);}
+.btn-secondary svg{width:14px;height:14px;}
+
+.btn-danger{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  height:40px;padding:0 var(--s5);
+  background:var(--white);color:var(--color-danger);
+  font-size:12.5px;font-weight:600;font-family:inherit;
+  border:1px solid #FECACA;border-radius:var(--r-sel);
+  cursor:pointer;transition:all var(--ease);
+}
+.btn-danger:hover{background:#FEF2F2;border-color:var(--color-danger);}
+.btn-danger svg{width:14px;height:14px;}
+
+.btn-sm{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  height:32px;padding:0 var(--s3);
+  font-size:11.5px;font-weight:600;font-family:inherit;
+  border-radius:var(--r-input);cursor:pointer;transition:all var(--ease);
+}
+.btn-sm-primary{background:var(--g);color:#fff;border:none;}
+.btn-sm-primary:hover{background:var(--ghover);}
+.btn-sm-ghost{background:var(--white);color:var(--t6);border:1px solid var(--bd);}
+.btn-sm-ghost:hover{border-color:var(--gd);color:var(--gd);}
+.btn-sm-danger{background:var(--white);color:var(--color-danger);border:1px solid #FECACA;}
+.btn-sm-danger:hover{background:#FEF2F2;}
+.btn-sm svg{width:12px;height:12px;}
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s5);}
+.page-header h1{font-size:20px;font-weight:700;color:var(--t9);letter-spacing:-.02em;}
+.page-header p{font-size:12px;color:var(--t4);margin-top:2px;}
+
+/* tabs laterais de navegacao de configuracoes */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;gap:var(--s4);align-items:start;}
+.settings-nav{background:var(--white);border:1px solid var(--bd);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden;position:sticky;top:calc(var(--topbar-h) + var(--s6));}
+.settings-nav-item{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);font-size:12.5px;font-weight:500;color:var(--t6);cursor:pointer;transition:all var(--ease);border-left:3px solid transparent;text-decoration:none;}
+.settings-nav-item:hover{background:var(--surface);color:var(--t9);}
+.settings-nav-item.active{background:var(--badge-diet-bg);color:var(--gd);border-left-color:var(--g);font-weight:600;}
+.settings-nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.6;}
+.settings-nav-item.active svg,.settings-nav-item:hover svg{opacity:1;}
+.settings-nav-divider{height:1px;background:var(--bd);margin:var(--s1) 0;}
+.settings-nav-label{font-size:9px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;padding:var(--s3) var(--s4) var(--s1);}
+
+.settings-content{display:flex;flex-direction:column;gap:var(--s4);}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden;}
+.card-header{display:flex;align-items:center;padding:var(--s4) var(--s5);border-bottom:1px solid var(--bd);gap:var(--s2);}
+.card-header svg{width:15px;height:15px;flex-shrink:0;}
+.card-title{font-size:13.5px;font-weight:600;color:var(--t9);flex:1;}
+.card-subtitle{font-size:11px;color:var(--t4);}
+.card-body{padding:var(--s5);}
+.card-footer{padding:var(--s3) var(--s5);border-top:1px solid var(--bd);background:var(--gray-100);display:flex;align-items:center;justify-content:flex-end;gap:var(--s2);}
+
+/* ─── FORM ───────────────────────────────────────────────── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);}
+.form-full{grid-column:1/-1;}
+.form-group{display:flex;flex-direction:column;gap:var(--s1);}
+.form-label{font-size:10.5px;font-weight:600;color:var(--t6);}
+.form-input{
+  height:40px;padding:0 var(--s4);
+  border:1px solid var(--bd);border-radius:var(--r-input);
+  font-size:12.5px;font-family:inherit;color:var(--t9);
+  background:var(--white);outline:none;
+  transition:border-color var(--ease);
+  font-variant-numeric:tabular-nums;
+}
+.form-input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,178,7,.08);}
+.form-input::placeholder{color:var(--t4);}
+.form-hint{font-size:10px;color:var(--t4);margin-top:2px;line-height:1.4;}
+.form-hint.warn{color:#92400E;}
+
+/* ─── TOGGLE ─────────────────────────────────────────────── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:var(--s3) 0;}
+.toggle-row+.toggle-row{border-top:1px solid var(--bd);}
+.toggle-info{}
+.toggle-label{font-size:12.5px;font-weight:600;color:var(--t9);}
+.toggle-desc{font-size:11px;color:var(--t4);margin-top:2px;line-height:1.4;}
+.toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;border-radius:var(--r-pill);background:var(--bd);transition:background var(--ease);}
+.toggle-switch input:checked+.toggle-track{background:var(--g);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform var(--ease);pointer-events:none;}
+.toggle-switch input:checked~.toggle-thumb{transform:translateX(18px);}
+
+/* ─── USUARIOS ───────────────────────────────────────────── */
+.user-row{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) 0;}
+.user-row+.user-row{border-top:1px solid var(--bd);}
+.user-row-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.user-row-name{font-size:13px;font-weight:600;color:var(--t9);}
+.user-row-email{font-size:10.5px;color:var(--t4);margin-top:1px;}
+.user-row-actions{margin-left:auto;display:flex;gap:var(--s2);align-items:center;}
+
+.role-badge{display:inline-flex;align-items:center;gap:var(--s1);font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);letter-spacing:.03em;}
+.rb-owner{background:var(--badge-diet-bg);color:var(--badge-diet-tx);border:1px solid var(--badge-diet-bd);}
+.rb-owner-dot{width:5px;height:5px;border-radius:50%;background:var(--g);}
+.rb-super{background:var(--color-indigo-bg);color:var(--color-indigo);border:1px solid #C7D2FE;}
+.rb-super-dot{width:5px;height:5px;border-radius:50%;background:var(--color-indigo);}
+
+/* ─── PERMISSOES TABLE ───────────────────────────────────── */
+.perms-table{width:100%;border-collapse:collapse;}
+.perms-table thead th{padding:var(--s2) var(--s3);text-align:left;font-size:9.5px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;background:var(--gray-100);border-bottom:1px solid var(--bd);}
+.perms-table thead th:first-child{padding-left:var(--s4);}
+.perms-table thead th:not(:first-child){text-align:center;width:100px;}
+.perms-table tbody tr{border-bottom:1px solid var(--bd);}
+.perms-table tbody tr:last-child{border-bottom:none;}
+.perms-table tbody td{padding:var(--s2) var(--s3);font-size:12px;color:var(--t6);vertical-align:middle;}
+.perms-table tbody td:first-child{padding-left:var(--s4);color:var(--t9);font-weight:500;}
+.perms-table tbody td:not(:first-child){text-align:center;}
+.check{color:var(--gd);font-size:15px;font-weight:700;}
+.cross{color:var(--color-danger);font-size:15px;}
+.partial{color:var(--color-rating);font-size:11px;font-weight:600;}
+
+/* ─── THRESHOLD CARD ─────────────────────────────────────── */
+.threshold-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);}
+.threshold-item{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-inner);padding:var(--s4);}
+.threshold-label{font-size:10px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--s3);}
+.threshold-input-row{display:flex;align-items:center;gap:var(--s2);}
+.threshold-input{
+  flex:1;height:40px;padding:0 var(--s3);
+  border:1px solid var(--bd);border-radius:var(--r-input);
+  font-size:14px;font-weight:700;font-family:inherit;
+  color:var(--gdeep);background:var(--white);outline:none;
+  font-variant-numeric:tabular-nums;
+  transition:border-color var(--ease);
+}
+.threshold-input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,178,7,.08);}
+.threshold-unit{font-size:11px;font-weight:600;color:var(--t4);white-space:nowrap;}
+.threshold-hint{font-size:10.5px;color:var(--t4);margin-top:var(--s2);line-height:1.4;}
+
+/* ─── HORARIOS ───────────────────────────────────────────── */
+.horario-row{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) 0;}
+.horario-row+.horario-row{border-top:1px solid var(--bd);}
+.horario-day{font-size:12.5px;font-weight:600;color:var(--t9);width:120px;flex-shrink:0;}
+.horario-inputs{display:flex;align-items:center;gap:var(--s2);flex:1;}
+.horario-input{
+  width:80px;height:40px;padding:0 var(--s3);
+  border:1px solid var(--bd);border-radius:var(--r-input);
+  font-size:13px;font-weight:600;font-family:inherit;
+  color:var(--t9);background:var(--white);outline:none;
+  text-align:center;
+  transition:border-color var(--ease);
+}
+.horario-input:focus{border-color:var(--g);}
+.horario-sep{font-size:12px;color:var(--t4);font-weight:600;}
+.horario-closed{font-size:12px;color:var(--t4);font-style:italic;}
+
+/* ─── FRETE CARD ─────────────────────────────────────────── */
+.frete-row{display:flex;align-items:center;justify-content:space-between;padding:var(--s3) 0;}
+.frete-row+.frete-row{border-top:1px solid var(--bd);}
+.frete-label{font-size:12.5px;color:var(--t9);font-weight:500;}
+.frete-desc{font-size:11px;color:var(--t4);margin-top:2px;}
+.frete-val{font-size:14px;font-weight:700;color:var(--gdeep);font-variant-numeric:tabular-nums;}
+.frete-val.green{color:var(--gd);}
+
+/* ─── ZONA PERIGO ────────────────────────────────────────── */
+.danger-zone{border:1.5px solid #FECACA;border-radius:var(--r-card);overflow:hidden;}
+.danger-zone-header{padding:var(--s4) var(--s5);background:#FEF2F2;border-bottom:1px solid #FECACA;display:flex;align-items:center;gap:var(--s2);}
+.danger-zone-header svg{width:15px;height:15px;color:var(--color-danger);}
+.danger-zone-title{font-size:13.5px;font-weight:600;color:#991B1B;flex:1;}
+.danger-item{display:flex;align-items:center;justify-content:space-between;padding:var(--s4) var(--s5);}
+.danger-item+.danger-item{border-top:1px solid #FEE2E2;}
+.danger-item-label{font-size:12.5px;font-weight:600;color:var(--t9);}
+.danger-item-desc{font-size:11px;color:var(--t4);margin-top:2px;max-width:420px;line-height:1.4;}
+
+/* ─── NOTICE ─────────────────────────────────────────────── */
+.notice{display:flex;align-items:flex-start;gap:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--r-inner);margin-bottom:var(--s4);}
+.notice svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;}
+.notice-text{font-size:11.5px;line-height:1.55;}
+.notice-text strong{font-weight:700;}
+.notice-info{background:var(--color-indigo-bg);border:1px solid #C7D2FE;}
+.notice-info svg{color:var(--color-indigo);}
+.notice-info .notice-text{color:var(--color-indigo);}
+</style>
+</head>
+<body>
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 3h18v2H3zM3 10h18v2H3zM3 17h18v2H3z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Granel da Praça</div>
+        <div class="brand-tag">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Principal</div>
+        <a class="nav-item" href="admin-01-dashboard.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" href="admin-02-pedidos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Pedidos
+          <span class="nav-badge badge-danger">3</span>
+        </a>
+        <a class="nav-item" href="admin-04-produtos-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          Produtos
+          <span class="nav-badge badge-warn">5</span>
+        </a>
+        <a class="nav-item" href="admin-06-clientes-lista.html">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Clientes
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Cupons</div>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Cupons
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatorios
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <a class="nav-item active" href="#">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          Configuracoes
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Andressa</div>
+          <div class="user-role">Owner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <div>
+        <span class="topbar-title">Configuracoes</span>
+        <span class="topbar-sub">— Acesso exclusivo do Owner</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-icon-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="page-header">
+        <div>
+          <h1>Configuracoes</h1>
+          <p>Gerencie usuarios, permissoes, alertas e parametros do sistema</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- NAV LATERAL -->
+        <div class="settings-nav">
+          <div class="settings-nav-label">Acesso</div>
+          <a class="settings-nav-item active" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Usuarios e Permissoes
+          </a>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-label">Operacao</div>
+          <a class="settings-nav-item" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+            Alertas de Estoque
+          </a>
+          <a class="settings-nav-item" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Horarios de Entrega
+          </a>
+          <a class="settings-nav-item" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Frete e Pagamento
+          </a>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-label">Fidelidade</div>
+          <a class="settings-nav-item" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Programa de Fidelidade
+          </a>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-label">Sistema</div>
+          <a class="settings-nav-item" href="#">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            Zona de Perigo
+          </a>
+        </div>
+
+        <!-- CONTEUDO -->
+        <div class="settings-content">
+
+          <!-- USUARIOS E PERMISSOES -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              <span class="card-title">Usuarios com acesso ao admin</span>
+              <span class="card-subtitle">2 de 5 vagas utilizadas</span>
+            </div>
+            <div class="card-body">
+              <!-- usuario owner -->
+              <div class="user-row">
+                <div class="user-row-avatar" style="background:linear-gradient(135deg,var(--badge-diet-bg),#BBF7D0);color:var(--gd)">A</div>
+                <div>
+                  <div class="user-row-name">Andressa Danfre</div>
+                  <div class="user-row-email">andressa@graneldapraca.com.br</div>
+                </div>
+                <div class="user-row-actions">
+                  <span class="role-badge rb-owner"><span class="rb-owner-dot"></span>Owner</span>
+                </div>
+              </div>
+              <!-- usuario supervisora -->
+              <div class="user-row">
+                <div class="user-row-avatar" style="background:linear-gradient(135deg,var(--color-indigo-bg),#C7D2FE);color:var(--color-indigo)">S</div>
+                <div>
+                  <div class="user-row-name">Supervisora de Vendas</div>
+                  <div class="user-row-email">supervisora@graneldapraca.com.br</div>
+                </div>
+                <div class="user-row-actions">
+                  <span class="role-badge rb-super"><span class="rb-super-dot"></span>Supervisora</span>
+                  <button class="btn-sm btn-sm-ghost">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Editar
+                  </button>
+                  <button class="btn-sm btn-sm-danger">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Remover
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Convidar usuario
+              </button>
+            </div>
+          </div>
+
+          <!-- TABELA DE PERMISSOES -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span class="card-title">Permissoes por perfil</span>
+            </div>
+            <table class="perms-table">
+              <thead>
+                <tr>
+                  <th>Acao</th>
+                  <th>Owner</th>
+                  <th>Supervisora</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Ver dashboard e KPIs</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Ver e gerenciar pedidos</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Alterar status de pedido</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Imprimir cupom de separacao</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Editar nome e descricao de produto</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Editar preco de produto</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Fazer upload de fotos de produto</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Ver lista de clientes</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+                <tr><td>Criar novo produto</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+                <tr><td>Ativar ou desativar produto</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+                <tr><td>Cancelar pedido com justificativa</td><td><span class="check">✓</span></td><td><span class="partial">So ate "Em Separacao"</span></td></tr>
+                <tr><td>Gerenciar usuarios e permissoes</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+                <tr><td>Alterar configuracoes do sistema</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+                <tr><td>Ver modulo de Marketing</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ALERTAS DE ESTOQUE -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--color-rating)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="card-title">Alertas de estoque</span>
+            </div>
+            <div class="card-body">
+              <div class="threshold-grid">
+                <div class="threshold-item">
+                  <div class="threshold-label">Produto Granel — alerta quando abaixo de</div>
+                  <div class="threshold-input-row">
+                    <input class="threshold-input" type="number" value="2000" min="0">
+                    <span class="threshold-unit">gramas</span>
+                  </div>
+                  <div class="threshold-hint">Produtos granel com menos de 2.000 gr aparecem com alerta no dashboard e na lista de produtos.</div>
+                </div>
+                <div class="threshold-item">
+                  <div class="threshold-label">Produto Unitario — alerta quando abaixo de</div>
+                  <div class="threshold-input-row">
+                    <input class="threshold-input" type="number" value="5" min="0">
+                    <span class="threshold-unit">unidades</span>
+                  </div>
+                  <div class="threshold-hint">Produtos unitarios com menos de 5 unidades aparecem com alerta no dashboard e na lista de produtos.</div>
+                </div>
+              </div>
+              <div style="margin-top:var(--s4)">
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <div class="toggle-label">Notificar via WhatsApp quando estoque ficar critico</div>
+                    <div class="toggle-desc">Envia mensagem automatica para o numero cadastrado abaixo quando um produto atingir o threshold.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+                <div class="form-group" style="margin-top:var(--s3)">
+                  <label class="form-label">Numero WhatsApp para alertas de estoque</label>
+                  <input class="form-input" type="text" value="+55 34 9 9999-0000" style="max-width:260px">
+                  <div class="form-hint">Formato: +55 DDD 9 XXXX-XXXX</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn-secondary">Cancelar</button>
+              <button class="btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar alertas
+              </button>
+            </div>
+          </div>
+
+          <!-- HORARIOS DE ENTREGA -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="card-title">Horarios de entrega e retirada</span>
+            </div>
+            <div class="card-body">
+              <div class="notice notice-info" style="margin-bottom:var(--s4)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="notice-text">Esses horarios aparecem na barra superior do site e definem o prazo limite para aceitar novos pedidos no dia.</div>
+              </div>
+              <div class="horario-row">
+                <div class="horario-day">Segunda a Sexta</div>
+                <div class="horario-inputs">
+                  <input class="horario-input" type="text" value="10:00">
+                  <span class="horario-sep">ate</span>
+                  <input class="horario-input" type="text" value="17:30">
+                </div>
+              </div>
+              <div class="horario-row">
+                <div class="horario-day">Sabado</div>
+                <div class="horario-inputs">
+                  <input class="horario-input" type="text" value="09:00">
+                  <span class="horario-sep">ate</span>
+                  <input class="horario-input" type="text" value="11:30">
+                </div>
+              </div>
+              <div class="horario-row">
+                <div class="horario-day">Domingo</div>
+                <div class="horario-inputs">
+                  <span class="horario-closed">Fechado — sem entregas</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn-secondary">Cancelar</button>
+              <button class="btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar horarios
+              </button>
+            </div>
+          </div>
+
+          <!-- FRETE E PAGAMENTO -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--gd)" stroke-width="1.6" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <span class="card-title">Frete e pagamento</span>
+            </div>
+            <div class="card-body">
+              <div class="frete-row">
+                <div>
+                  <div class="frete-label">Valor do frete fixo</div>
+                  <div class="frete-desc">Cobrado em todos os pedidos com entrega abaixo do minimo</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--s3)">
+                  <input class="form-input" type="number" value="1500" style="width:120px" placeholder="centavos">
+                  <span style="font-size:11px;color:var(--t4)">= R$ 15,00</span>
+                </div>
+              </div>
+              <div class="frete-row">
+                <div>
+                  <div class="frete-label">Minimo para frete gratis</div>
+                  <div class="frete-desc">Pedidos acima deste valor ganham frete gratis automaticamente</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--s3)">
+                  <input class="form-input" type="number" value="10000" style="width:120px" placeholder="centavos">
+                  <span style="font-size:11px;color:var(--t4)">= R$ 100,00</span>
+                </div>
+              </div>
+              <div class="frete-row">
+                <div>
+                  <div class="frete-label">Parcelamento — minimo 2x</div>
+                  <div class="frete-desc">Pedidos acima deste valor podem parcelar em 2x sem juros</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--s3)">
+                  <input class="form-input" type="number" value="15000" style="width:120px" placeholder="centavos">
+                  <span style="font-size:11px;color:var(--t4)">= R$ 150,00</span>
+                </div>
+              </div>
+              <div class="frete-row">
+                <div>
+                  <div class="frete-label">Parcelamento — minimo 3x</div>
+                  <div class="frete-desc">Pedidos acima deste valor podem parcelar em 3x sem juros</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--s3)">
+                  <input class="form-input" type="number" value="30000" style="width:120px" placeholder="centavos">
+                  <span style="font-size:11px;color:var(--t4)">= R$ 300,00</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn-secondary">Cancelar</button>
+              <button class="btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar configuracoes
+              </button>
+            </div>
+          </div>
+
+          <!-- PROGRAMA DE FIDELIDADE -->
+          <div class="card">
+            <div class="card-header">
+              <svg fill="none" stroke="var(--color-rating)" stroke-width="1.6" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span class="card-title">Programa de fidelidade</span>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Pontos ganhos por R$ gasto</label>
+                  <div style="display:flex;align-items:center;gap:var(--s2)">
+                    <input class="form-input" type="number" value="1" style="width:80px">
+                    <span style="font-size:12px;color:var(--t6)">ponto a cada R$</span>
+                    <input class="form-input" type="number" value="50" style="width:80px">
+                  </div>
+                  <div class="form-hint">Regra atual: 1 ponto a cada R$ 50 gastos</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Valor do desconto por pontos</label>
+                  <div style="display:flex;align-items:center;gap:var(--s2)">
+                    <input class="form-input" type="number" value="10" style="width:80px">
+                    <span style="font-size:12px;color:var(--t6)">pontos = R$</span>
+                    <input class="form-input" type="number" value="15" style="width:80px">
+                  </div>
+                  <div class="form-hint">Regra atual: 10 pontos valem R$ 15,00 de desconto</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Validade dos pontos</label>
+                  <div style="display:flex;align-items:center;gap:var(--s2)">
+                    <input class="form-input" type="number" value="12" style="width:80px">
+                    <span style="font-size:12px;color:var(--t6)">meses apos a ultima compra</span>
+                  </div>
+                  <div class="form-hint">Pontos expiram 12 meses apos a ultima compra do cliente</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Desconto de primeira compra</label>
+                  <div style="display:flex;align-items:center;gap:var(--s2)">
+                    <input class="form-input" type="number" value="10" style="width:80px">
+                    <span style="font-size:12px;color:var(--t6)">% em pedidos acima de R$</span>
+                    <input class="form-input" type="number" value="150" style="width:80px">
+                  </div>
+                  <div class="form-hint">10% de desconto automatico na 1ª compra acima de R$ 150</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn-secondary">Cancelar</button>
+              <button class="btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar fidelidade
+              </button>
+            </div>
+          </div>
+
+          <!-- ZONA DE PERIGO -->
+          <div class="danger-zone">
+            <div class="danger-zone-header">
+              <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="danger-zone-title">Zona de perigo — acoes irreversiveis</span>
+            </div>
+            <div class="danger-item">
+              <div>
+                <div class="danger-item-label">Colocar o site em manutencao</div>
+                <div class="danger-item-desc">O site ficara inacessivel para clientes. Use durante atualizacoes criticas ou incidentes.</div>
+              </div>
+              <button class="btn-danger">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                Ativar manutencao
+              </button>
+            </div>
+            <div class="danger-item">
+              <div>
+                <div class="danger-item-label">Exportar todos os dados (LGPD)</div>
+                <div class="danger-item-desc">Exporta pedidos, clientes e dados do sistema em CSV para fins de auditoria ou portabilidade de dados.</div>
+              </div>
+              <button class="btn-danger">
+                <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar dados
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- /CONTEUDO -->
+
+      </div>
+      <!-- /SETTINGS LAYOUT -->
+
+    </main>
+  </div>
+
+</div>
+</body>
+</html>

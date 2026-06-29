@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cupom de Separação #GP0024 · Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════
+   TELA — visualização no browser antes de imprimir
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --g:     #00B207;
+  --gdeep: #002603;
+  --t9:    #111827;
+  --t6:    #4B5563;
+  --t4:    #9CA3AF;
+  --bd:    #E5E7EB;
+  --cream: #F9F5EF;
+  --color-danger:  #EF4444;
+  --color-rating:  #FBBF24;
+  --color-promo:   #C0694A;
+  --badge-diet-bg: #EAF7EA;
+  --badge-diet-tx: #2C742F;
+  --r-sel:  10px;
+  --r-input: 8px;
+  --r-pill:  100px;
+  --ease: .18s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* layout de preview no browser */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #E5E7EB;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 32px 16px;
+  gap: 24px;
+}
+
+/* ─── TOPBAR DE CONTEXTO (só no browser) ─────────────────── */
+.preview-bar {
+  width: 100%;
+  max-width: 480px;
+  background: var(--gdeep);
+  border-radius: var(--r-sel);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.preview-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.preview-bar-left svg { width: 14px; height: 14px; color: rgba(255,255,255,.5); }
+.preview-bar-title { font-size: 12px; font-weight: 600; color: #fff; }
+.preview-bar-sub { font-size: 10px; color: rgba(255,255,255,.45); margin-top: 1px; }
+.btn-print-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  background: var(--g);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--r-input);
+  cursor: pointer;
+  transition: background var(--ease);
+  flex-shrink: 0;
+}
+.btn-print-preview:hover { background: #1A5C1E; }
+.btn-print-preview svg { width: 14px; height: 14px; }
+
+/* ─── ENVELOPE DO CUPOM (simula bobina 80mm) ─────────────── */
+.cupom-envelope {
+  width: 302px; /* 80mm em 96dpi */
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CUPOM — estilos que valem tanto no browser quanto na impressão
+   Regras: preto/branco, sem fundo colorido, fonte mínima 10px
+   ═══════════════════════════════════════════════════════════ */
+.cupom {
+  width: 100%;
+  padding: 8px;
+  font-family: 'Poppins', monospace;
+  font-size: 11px;
+  color: #000;
+  background: #fff;
+  line-height: 1.4;
+}
+
+/* ─── CABECALHO ──────────────────────────────────────────── */
+.cupom-header {
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #999;
+  margin-bottom: 8px;
+}
+.cupom-logo {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: #000;
+  margin-bottom: 2px;
+}
+.cupom-logo span { /* ponto da marca */ }
+.cupom-tagline {
+  font-size: 9px;
+  color: #555;
+  letter-spacing: .04em;
+}
+.cupom-titulo {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: 8px;
+  color: #000;
+}
+.cupom-subtitulo {
+  font-size: 9px;
+  color: #555;
+  margin-top: 1px;
+}
+
+/* ─── LINHA DIVISORIA ────────────────────────────────────── */
+.divisor { border: none; border-top: 1px dashed #999; margin: 7px 0; }
+.divisor-solid { border: none; border-top: 1px solid #000; margin: 7px 0; }
+
+/* ─── DADOS DO PEDIDO ────────────────────────────────────── */
+.cupom-dados { margin-bottom: 4px; }
+.cupom-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 10.5px;
+}
+.cupom-key {
+  color: #555;
+  white-space: nowrap;
+  font-size: 9.5px;
+  flex-shrink: 0;
+}
+.cupom-val {
+  font-weight: 600;
+  color: #000;
+  text-align: right;
+}
+.cupom-val.big {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+/* badge tipo entrega/retirada — monocromático para térmica */
+.tipo-badge-print {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border: 1.5px solid #000;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* ─── OBSERVACAO DO CLIENTE ──────────────────────────────── */
+.obs-box {
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin: 8px 0;
+  background: #fff;
+}
+.obs-titulo {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #000;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.obs-titulo::before {
+  content: '!';
+  display: inline-flex;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.obs-texto {
+  font-size: 11px;
+  color: #000;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* ─── TABELA DE ITENS ────────────────────────────────────── */
+.items-header {
+  display: grid;
+  grid-template-columns: 1fr 52px 52px 22px;
+  gap: 4px;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #555;
+  padding: 3px 0;
+  border-bottom: 1px solid #000;
+  margin-bottom: 2px;
+}
+.items-header span:not(:first-child) { text-align: right; }
+
+.item-row {
+  display: grid;
+  grid-template-columns: 1fr 52px 52px 22px;
+  gap: 4px;
+  padding: 5px 0;
+  border-bottom: 1px dashed #ccc;
+  align-items: start;
+}
+.item-row:last-child { border-bottom: none; }
+
+.item-nome { font-size: 11px; font-weight: 600; color: #000; line-height: 1.3; }
+.item-cod  { font-size: 9px; color: #555; margin-top: 1px; }
+
+.item-qty {
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+  text-align: right;
+  line-height: 1.3;
+}
+.item-qty-unit { font-size: 9px; color: #555; text-align: right; }
+
+.item-total {
+  font-size: 11px;
+  font-weight: 700;
+  color: #000;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+}
+
+/* checkbox de separação */
+.item-check {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 2px;
+}
+.check-box-print {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #000;
+  border-radius: 2px;
+  background: #fff;
+  flex-shrink: 0;
+  /* quando marcado na tela, aparece o check */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-box-print.checked {
+  background: #000;
+}
+.check-box-print.checked::after {
+  content: '';
+  width: 4px;
+  height: 7px;
+  border: 1.5px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+  display: block;
+}
+
+/* ─── TOTAIS ─────────────────────────────────────────────── */
+.totais-block { margin-top: 4px; }
+.total-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  padding: 2px 0;
+  color: #000;
+}
+.total-linha.final {
+  font-size: 14px;
+  font-weight: 700;
+  padding-top: 5px;
+  margin-top: 3px;
+  border-top: 2px solid #000;
+}
+.total-linha span:last-child { font-variant-numeric: tabular-nums; }
+.total-desconto { color: #333; font-style: italic; }
+
+/* ─── PAGAMENTO ──────────────────────────────────────────── */
+.pagamento-box {
+  border: 1.5px solid #000;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-top: 8px;
+}
+.pagamento-titulo {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 4px;
+  color: #000;
+}
+.pagamento-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  padding: 1px 0;
+}
+.pagamento-metodo {
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+}
+.pagamento-status {
+  font-size: 10px;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* ─── RODAPE DO CUPOM ────────────────────────────────────── */
+.cupom-rodape {
+  text-align: center;
+  padding-top: 8px;
+  font-size: 9px;
+  color: #555;
+  line-height: 1.6;
+}
+.cupom-rodape strong { color: #000; }
+
+/* campo assinatura */
+.assinatura-block {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #999;
+}
+.assinatura-linha {
+  border-bottom: 1px solid #000;
+  height: 24px;
+  margin-bottom: 3px;
+}
+.assinatura-label {
+  font-size: 8.5px;
+  color: #555;
+  text-align: center;
+  letter-spacing: .04em;
+}
+
+/* ─── CODIGO DO PEDIDO GRANDE ────────────────────────────── */
+.codigo-destaque {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #000;
+  padding: 8px 0 4px;
+  border-top: 2px solid #000;
+  margin-top: 4px;
+}
+.codigo-sub {
+  text-align: center;
+  font-size: 8.5px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   @media print — regras exclusivas de impressão
+   Sobrescreve TUDO do layout de browser
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+  /* Remove completamente o layout de browser */
+  body {
+    background: #fff !important;
+    padding: 0 !important;
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  .preview-bar    { display: none !important; }
+  .impl-note      { display: none !important; }
+  .cupom-envelope {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Largura da bobina térmica 80mm
+     Área útil de impressão: ~72mm (margens mecânicas de 4mm cada lado)
+     Fonte mínima: 10px para legibilidade térmica */
+  @page {
+    size: 80mm auto;
+    margin: 4mm;
+  }
+
+  .cupom {
+    width: 72mm !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+  }
+
+  /* Garante preto puro — impressoras térmicas não têm tons de cinza reais */
+  * {
+    color: #000 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .check-box-print.checked {
+    background: #000 !important;
+  }
+  .check-box-print.checked::after {
+    border-color: #fff !important;
+  }
+
+  /* Evita quebra de página no meio de um item */
+  .item-row { page-break-inside: avoid; }
+  .obs-box  { page-break-inside: avoid; }
+
+  /* Esconde botão de impressão */
+  .btn-print-preview { display: none !important; }
+}
+
+/* ─── NOTA DE IMPLEMENTACAO (só browser) ─────────────────── */
+.impl-note {
+  width: 100%;
+  max-width: 480px;
+  background: #FFFBEB;
+  border: 1.5px dashed #FCD34D;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.impl-note-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #92400E;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+.impl-note-body {
+  font-size: 11.5px;
+  color: #78350F;
+  line-height: 1.65;
+}
+.impl-note-body code {
+  background: rgba(0,0,0,.07);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 11px;
+}
+</style>
+</head>
+<body>
+
+  <!-- BARRA DE CONTEXTO (browser only) -->
+  <div class="preview-bar">
+    <div class="preview-bar-left">
+      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      <div>
+        <div class="preview-bar-title">Cupom de Separacao · #GP0024</div>
+        <div class="preview-bar-sub">Bematech MP 4200 TH · Bobina 80mm · Preview antes de imprimir</div>
+      </div>
+    </div>
+    <button class="btn-print-preview" onclick="window.print()">
+      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Imprimir cupom
+    </button>
+  </div>
+
+  <!-- ENVELOPE DA BOBINA (browser only) -->
+  <div class="cupom-envelope">
+
+    <!-- ═══ CUPOM — este bloco é o que imprime ═══ -->
+    <div class="cupom">
+
+      <!-- CABECALHO -->
+      <div class="cupom-header">
+        <div class="cupom-logo">GRANEL DA PRACA</div>
+        <div class="cupom-tagline">Uberlandia · MG · (34) 9 9999-0000</div>
+        <div class="cupom-titulo">Cupom de Separacao</div>
+        <div class="cupom-subtitulo">Documento interno · nao e nota fiscal</div>
+      </div>
+
+      <!-- CODIGO DESTAQUE -->
+      <div class="codigo-destaque">#GP0024</div>
+      <div class="codigo-sub">29/06/2026 · 12:18 · Impresso as 12:25</div>
+
+      <hr class="divisor">
+
+      <!-- DADOS DO PEDIDO -->
+      <div class="cupom-dados">
+        <div class="cupom-linha">
+          <span class="cupom-key">Cliente</span>
+          <span class="cupom-val">Maria Silva</span>
+        </div>
+        <div class="cupom-linha">
+          <span class="cupom-key">Telefone</span>
+          <span class="cupom-val">(34) 9 9999-0001</span>
+        </div>
+        <div class="cupom-linha">
+          <span class="cupom-key">Tipo</span>
+          <span class="cupom-val">
+            <span class="tipo-badge-print">Entrega</span>
+          </span>
+        </div>
+        <div class="cupom-linha">
+          <span class="cupom-key">Endereco</span>
+          <span class="cupom-val" style="text-align:right;font-size:10px;line-height:1.4">
+            R. das Flores, 123 · Apto 42<br>
+            Jardim Botanico · 38408-123
+          </span>
+        </div>
+      </div>
+
+      <hr class="divisor">
+
+      <!-- OBSERVACAO DO CLIENTE -->
+      <div class="obs-box">
+        <div class="obs-titulo">Observacao do cliente</div>
+        <div class="obs-texto">
+          Por favor, embalar os produtos separadamente. A castanha pode vir em saco duplo.
+        </div>
+      </div>
+
+      <hr class="divisor">
+
+      <!-- ITENS DO PEDIDO -->
+      <div class="items-header">
+        <span>Produto</span>
+        <span>Qtd</span>
+        <span>Total</span>
+        <span></span>
+      </div>
+
+      <!-- Item 1 — granel, nao separado -->
+      <div class="item-row">
+        <div>
+          <div class="item-nome">Castanha-do-Para</div>
+          <div class="item-cod">COD: 0042 · Granel</div>
+        </div>
+        <div>
+          <div class="item-qty">500 gr</div>
+          <div class="item-qty-unit">5 × 100gr</div>
+        </div>
+        <div class="item-total">R$ 74,50</div>
+        <div class="item-check">
+          <div class="check-box-print"></div>
+        </div>
+      </div>
+
+      <!-- Item 2 — granel, nao separado -->
+      <div class="item-row">
+        <div>
+          <div class="item-nome">Chia Preta</div>
+          <div class="item-cod">COD: 0118 · Granel</div>
+        </div>
+        <div>
+          <div class="item-qty">300 gr</div>
+          <div class="item-qty-unit">3 × 100gr</div>
+        </div>
+        <div class="item-total">R$ 18,00</div>
+        <div class="item-check">
+          <div class="check-box-print"></div>
+        </div>
+      </div>
+
+      <!-- Item 3 — unitario, JA SEPARADO -->
+      <div class="item-row">
+        <div>
+          <div class="item-nome">Oleo de Coco EV Copra 500ml</div>
+          <div class="item-cod">COD: 0387 · Unitario</div>
+        </div>
+        <div>
+          <div class="item-qty">1 un</div>
+          <div class="item-qty-unit">Unitario</div>
+        </div>
+        <div class="item-total">R$ 42,00</div>
+        <div class="item-check">
+          <div class="check-box-print checked"></div>
+        </div>
+      </div>
+
+      <!-- Item 4 — granel, nao separado -->
+      <div class="item-row">
+        <div>
+          <div class="item-nome">Amendoim Cru s/ Casca</div>
+          <div class="item-cod">COD: 0011 · Granel</div>
+        </div>
+        <div>
+          <div class="item-qty">200 gr</div>
+          <div class="item-qty-unit">2 × 100gr</div>
+        </div>
+        <div class="item-total">R$ 5,00</div>
+        <div class="item-check">
+          <div class="check-box-print"></div>
+        </div>
+      </div>
+
+      <hr class="divisor-solid">
+
+      <!-- TOTAIS -->
+      <div class="totais-block">
+        <div class="total-linha">
+          <span>Subtotal (4 itens)</span>
+          <span>R$ 139,50</span>
+        </div>
+        <div class="total-linha total-desconto">
+          <span>Desconto 1a compra (10%)</span>
+          <span>- R$ 5,00</span>
+        </div>
+        <div class="total-linha">
+          <span>Frete</span>
+          <span>GRATIS</span>
+        </div>
+        <div class="total-linha final">
+          <span>TOTAL</span>
+          <span>R$ 134,50</span>
+        </div>
+      </div>
+
+      <hr class="divisor">
+
+      <!-- PAGAMENTO -->
+      <div class="pagamento-box">
+        <div class="pagamento-titulo">Pagamento</div>
+        <div class="pagamento-linha">
+          <span class="pagamento-metodo">Pix</span>
+          <span style="font-size:10px;font-weight:700">R$ 134,50</span>
+        </div>
+        <div class="pagamento-status">Pago e confirmado · ID: MP-2026062900124</div>
+      </div>
+
+      <hr class="divisor">
+
+      <!-- CAMPO DE ASSINATURA -->
+      <div class="assinatura-block">
+        <div class="assinatura-linha"></div>
+        <div class="assinatura-label">Conferido e separado por</div>
+      </div>
+
+      <hr class="divisor">
+
+      <!-- RODAPE -->
+      <div class="cupom-rodape">
+        <strong>Granel da Praca</strong><br>
+        Obrigada pela sua compra<br>
+        Uberlandia · MG<br>
+        graneldapraca.com.br<br><br>
+        <span style="font-size:8.5px">
+          Este nao e um documento fiscal.<br>
+          Duvidas? WhatsApp (34) 9 9999-0000
+        </span>
+      </div>
+
+    </div>
+    <!-- /cupom -->
+
+  </div>
+  <!-- /envelope -->
+
+  <!-- NOTA DE IMPLEMENTACAO (browser only) -->
+  <div class="impl-note">
+    <div class="impl-note-title">Nota de Implementacao — visivel somente neste HTML de referencia</div>
+    <div class="impl-note-body">
+      <strong>Rota:</strong> <code>/admin/pedidos/[id]/imprimir</code> — abre esta pagina em nova aba e dispara <code>window.print()</code> automaticamente.<br><br>
+      <strong>Impressora:</strong> Bematech MP 4200 TH — bobina termica 80mm. Nao usa tinta — qualquer cor impressa e convertida para preto. Por isso todos os estilos do cupom sao preto (#000) e branco (#fff).<br><br>
+      <strong>@page size:</strong> <code>80mm auto</code> — altura automatica conforme o numero de itens. Nunca definir altura fixa.<br><br>
+      <strong>Observacao do cliente:</strong> bordas duplas e exclamacao "!" para que nunca seja ignorada durante a separacao fisica.<br><br>
+      <strong>Checkbox de separacao:</strong> no admin digital (tela 03), marcar um item como separado atualiza <code>order_items.is_separated = true</code> no Supabase e dispara verificacao — quando todos os itens estiverem separados, status do pedido avanca automaticamente de <code>em_separacao</code> para <code>saiu_para_entrega</code> (entrega) ou <code>pronto_para_retirada</code> (retirada).<br><br>
+      <strong>Fonte:</strong> Poppins funciona bem em impressoras termicas modernas. Em impressoras mais antigas ou legadas, substituir por <code>font-family: monospace</code> para garantir compatibilidade.
+    </div>
+  </div>
+
+</body>
+</html>
