@@ -20,6 +20,86 @@ Design system próprio — **sem** shadcn/ui.
 
 ---
 
+## Orders — Schema e Regras de Negócio (Fase 5A/5B)
+
+> Leia esta seção antes de qualquer migration, query ou componente relacionado a pedidos.
+
+### Gateway de pagamento — DEFINITIVO
+**Mercado Pago** em todo o projeto. Referências a "Asaas" em documentos anteriores estão incorretas — ignorar completamente.
+
+### Campo tipo_entrega — obrigatório
+```sql
+tipo_entrega TEXT NOT NULL CHECK (tipo_entrega IN ('entrega', 'retirada'))
+```
+Definido pelo cliente no checkout. **Nunca alterável após criação do pedido.**
+
+### Enum order_status — FECHADO
+
+Fluxo bifurcado por `tipo_entrega`:
+
+**Entrega:**
+`recebido` → `aceito` → `em_separacao` → `saiu_para_entrega` → `entregue`
+
+**Retirada:**
+`recebido` → `aceito` → `em_separacao` → `pronto_para_retirada` → `retirado`
+
+```sql
+status TEXT NOT NULL CHECK (status IN (
+  'recebido',
+  'aceito',
+  'em_separacao',
+  'saiu_para_entrega',
+  'pronto_para_retirada',
+  'entregue',
+  'retirado',
+  'cancelado'
+))
+```
+
+### Regras de cancelamento
+- `recebido` → `aceito`: cancelamento livre pela supervisora no admin
+- `em_separacao` em diante: cancelamento **exige justificativa obrigatória** no admin
+- Justificativa registrada em `admin_audit_log` com `user_id`, `acao`, `motivo`, `timestamp`
+- **Nunca DELETE físico** — `status = 'cancelado'` + registro no audit log
+
+### Regras de transição de status
+- `saiu_para_entrega` → apenas quando `tipo_entrega = 'entrega'`
+- `pronto_para_retirada` → apenas quando `tipo_entrega = 'retirada'`
+- `retirado` → marcado pela supervisora no admin quando cliente retira na loja
+- `entregue` → marcado pela supervisora no admin após confirmação de entrega
+
+### Notificação ao cliente por mudança de status
+Cada transição dispara notificação WhatsApp automática (via n8n — Fase 7).
+O cliente acompanha em tempo real via `/pedido/[codigo]` (Supabase Realtime).
+
+### Admin — mesmo projeto Next.js
+O painel admin vive no Route Group `(admin)/` do mesmo projeto.
+**Não é projeto separado.** Decisão fechada.
+
+### Três layouts da Fase 5B
+1. `/admin/*` — Dashboard Admin
+2. `/admin/pedidos/[id]/imprimir` — Cupom de separação térmico Bematech 80mm
+3. `/pedido/[codigo]` — Acompanhamento público do pedido (OrderTimeline + Realtime)
+
+### Cupom de separação térmico — Bematech MP 4200 TH
+- Bobina térmica **80mm** — coluna única, sem fundo colorido, `@media print` only
+- **Quem imprime:** supervisora, pelo admin
+- **Campos obrigatórios:**
+  - Código do pedido (ex: GP0001)
+  - Nome do cliente
+  - Tipo: Entrega / Retirada
+  - Cada item: código do produto + nome + quantidade exata em gr ou un
+  - Observações do cliente
+  - Total em BRL
+  - Forma de pagamento
+  - Checkbox por item (marcar como separado fisicamente)
+- Marcar item como separado → atualiza `status = 'em_separacao'` no Supabase
+- Rota: `/admin/pedidos/[id]/imprimir`
+- **Substitui** o cupom não-fiscal que era emitido pelo Gommer (sistema descontinuado)
+- NF-e/DANFe continua sendo emitida pelo Explend ERP — não replicar aqui
+
+---
+
 ## Design Tokens (DS v3.1)
 
 Todos os tokens estão mapeados em `tailwind.config.ts`. Nunca usar hex hardcoded.
