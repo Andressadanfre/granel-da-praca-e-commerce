@@ -87,9 +87,11 @@ export async function createMPPreference(
 // CRÍTICO: MP exige unit_price em REAIS, não centavos
 export function cartItemsToMPItems(
   items: ServerCartItem[],
+  productIds: number[],
   productNames: Record<number, string>,
 ): MPPreferenceItem[] {
   return items.map((item, index) => {
+    const productId = productIds[index]
     const totalCents = item.product_type === 'granel'
       ? calcGranelItemServer(item.price_cents, item.quantity_grams ?? 0)
       : calcUnitItemServer(item.price_cents, item.quantity_units ?? 0)
@@ -103,8 +105,8 @@ export function cartItemsToMPItems(
       : item.price_cents
 
     return {
-      id:          String(index),
-      title:       productNames[index] ?? `Produto ${index}`,
+      id:          String(productId),
+      title:       productNames[productId] ?? `Produto ${productId}`,
       quantity,
       unit_price:  unitPriceCents / 100,  // centavos → reais
       currency_id: 'BRL' as const,

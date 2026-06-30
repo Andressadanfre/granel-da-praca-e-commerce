@@ -48,7 +48,13 @@ export const deliveryAddressSchema = z.object({
   zip:          z.string().regex(/^\d{5}-?\d{3}$/, 'CEP inválido'),
 })
 
+export const orderItemInputSchema = z.object({
+  productId: z.number().int().positive(),
+  quantity:  z.number().int().positive(),
+})
+
 export const createOrderSchema = z.object({
+  items:           z.array(orderItemInputSchema).min(1, 'Carrinho vazio'),
   deliveryType:    orderDeliveryTypeSchema,
   paymentMethod:   paymentMethodSchema,
   deliveryAddress: deliveryAddressSchema.nullable(),
