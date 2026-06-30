@@ -59,7 +59,10 @@ export async function createOrderAction(
 
   const subtotalCents = calcSubtotalServer(serverItems)
   const shippingCents = calcFreteServer(subtotalCents)
-  const discountCents = 0  // TODO: cupom — Fase 5B
+  const PIX_DISCOUNT_RATE = 0.05
+  const discountCents = data.paymentMethod === 'pix'
+    ? Math.floor(subtotalCents * PIX_DISCOUNT_RATE)
+    : 0
   const totalCents = subtotalCents + shippingCents - discountCents
 
   // 4. Registrar pedido via RPC atômica (orders + order_items em uma transação)
