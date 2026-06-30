@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checkout — Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{font-family:'Poppins',sans-serif;font-size:14px;}
+:root{
+  --g:#00B207;
+  --gd:#2C742F;
+  --gdeep:#002603;
+  --cream:#F9F5EF;
+  --t9:#111827;
+  --t6:#4B5563;
+  --t4:#9CA3AF;
+  --bd:#E5E7EB;
+  --bg2:#F9FAFB;
+  --suc-bg:#ECFDF5;
+  --suc-bd:#A7F3D0;
+  --suc-tx:#065F46;
+  --rad:8px;
+  --radlg:12px;
+}
+
+/* ─── PAGE ─── */
+.page{background:var(--cream);min-height:100vh;}
+
+/* ─── TOPBAR ─── */
+.topbar{background:#fff;border-bottom:1px solid var(--bd);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{font-size:17px;font-weight:700;color:var(--gdeep);letter-spacing:-.02em;}
+.topbar-logo span{color:var(--g);}
+.topbar-secure{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t6);font-weight:500;}
+.topbar-secure svg{color:var(--gd);}
+.topbar-steps{display:flex;align-items:center;gap:4px;font-size:11px;}
+.step{padding:4px 10px;border-radius:100px;font-weight:600;}
+.step-done{background:#DCFCE7;color:#166534;}
+.step-active{background:var(--gdeep);color:#fff;}
+.step-next{background:var(--bg2);color:var(--t4);border:1px solid var(--bd);}
+.step-sep{color:var(--bd);font-size:10px;padding:0 2px;}
+
+/* ─── LAYOUT ─── */
+.layout{display:flex;gap:16px;padding:20px 24px;max-width:960px;margin:0 auto;align-items:flex-start;}
+.col-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;}
+.col-side{width:296px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
+
+/* ─── BLOCKS ─── */
+.block{background:#fff;border:1px solid var(--bd);border-radius:var(--radlg);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);}
+.block-head{padding:16px 20px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;}
+.block-num{width:22px;height:22px;background:var(--gdeep);color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.block-title{font-size:15px;font-weight:600;color:var(--t9);letter-spacing:-.01em;}
+.block-body{padding:18px 20px;}
+
+/* ─── INPUTS (com floating label) ─── */
+.field{position:relative;margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.field input,.field select{
+  font-family:'Poppins',sans-serif;
+  width:100%;height:48px;
+  border:1.5px solid var(--bd);
+  border-radius:var(--radlg);
+  padding:18px 12px 4px;
+  font-size:13px;color:var(--t9);
+  background:#fff;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+  appearance:none;
+}
+.field select{padding-top:16px;cursor:pointer;}
+.field input:focus,.field select:focus{border-color:var(--gd);box-shadow:0 0 0 3px rgba(44,116,47,.15);}
+.field input:hover:not(:focus),.field select:hover:not(:focus){border-color:#9CA3AF;}
+.field label{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:13px;color:var(--t4);pointer-events:none;
+  transition:all .15s;font-weight:400;
+}
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field select:focus + label,
+.field.has-val label{
+  top:9px;transform:none;font-size:10px;color:var(--gd);font-weight:600;letter-spacing:.02em;text-transform:uppercase;
+}
+.field input::placeholder,.field select::placeholder{color:transparent;}
+
+/* select arrow */
+.field .sel-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--t4);}
+
+/* CEP badge */
+.cep-badge{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:var(--gd);background:#DCFCE7;padding:3px 8px;border-radius:100px;pointer-events:none;}
+
+/* row helpers */
+.row{display:flex;gap:10px;}
+.row .field{flex:1;}
+.col-30{flex:0 0 30%!important;}
+.col-20{flex:0 0 80px!important;}
+
+/* ─── DELIVERY CARDS ─── */
+.delivery-cards{display:flex;gap:10px;margin-bottom:16px;}
+.del-card{flex:1;border:1.5px solid var(--bd);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;}
+.del-card:hover{border-color:#93C5A5;}
+.del-card.active{border-color:var(--gd);background:#F0FDF4;}
+.del-card-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);display:inline-block;margin-right:8px;vertical-align:middle;position:relative;transition:border-color .15s;}
+.del-card.active .del-card-radio{border-color:var(--gd);}
+.del-card.active .del-card-radio::after{content:'';width:8px;height:8px;background:var(--gd);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.del-card-title{font-size:12px;font-weight:600;color:var(--t9);display:inline;}
+.del-card-sub{font-size:10px;color:var(--t6);margin-top:4px;}
+.del-card-tag{font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:100px;display:inline-block;margin-top:6px;}
+
+/* store info box */
+.store-info{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rad);padding:14px 16px;}
+.store-info-name{font-size:12px;font-weight:600;color:var(--t9);margin-bottom:4px;}
+.store-info-sub{font-size:11px;color:var(--t6);line-height:1.6;}
+
+/* ─── PAYMENT OPTIONS ─── */
+.pay-opts{display:flex;flex-direction:column;gap:8px;}
+.pay-opt{border:1.5px solid var(--bd);border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .15s;}
+.pay-opt:hover{border-color:#93C5A5;}
+.pay-opt.active{border-color:var(--gd);background:#F0FDF4;}
+.pay-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);flex-shrink:0;position:relative;transition:border-color .15s;}
+.pay-opt.active .pay-radio{border-color:var(--gd);}
+.pay-opt.active .pay-radio::after{content:'';width:8px;height:8px;background:var(--gd);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.pay-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;background:#fff;flex-shrink:0;}
+.pay-info{flex:1;}
+.pay-name{font-size:13px;font-weight:600;color:var(--t9);}
+.pay-sub{font-size:10px;color:var(--t6);margin-top:1px;}
+.pay-badge-pix{background:var(--suc-bg);color:var(--suc-tx);border:1px solid var(--suc-bd);font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+.pay-badge-inst{background:#EEF2FF;color:#3730A3;font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+
+/* expandable payment detail panels — smooth animation */
+.pay-detail{margin-top:0;padding-top:0;border-top:none;max-height:0;overflow:hidden;transition:max-height .28s ease,padding .2s ease,margin .2s ease;border-top:0px solid var(--bd);}
+.pay-detail.open{max-height:320px;padding-top:14px;margin-top:10px;border-top:1px solid var(--bd);}
+
+/* PIX info box */
+.pix-box{background:var(--suc-bg);border:1px solid var(--suc-bd);border-radius:var(--rad);padding:14px 16px;display:flex;gap:14px;align-items:flex-start;}
+.pix-qr{width:64px;height:64px;border-radius:8px;border:1px dashed #6EE7B7;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:var(--t4);text-align:center;line-height:1.4;}
+.pix-text{font-size:11px;color:var(--suc-tx);line-height:1.65;}
+.pix-text strong{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--suc-tx);}
+
+/* cash troco */
+.troco-box{background:#FEFCE8;border:1px solid #FDE68A;border-radius:var(--rad);padding:12px 14px;}
+.troco-label{font-size:11px;font-weight:600;color:#854D0E;margin-bottom:8px;}
+.troco-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.troco-chip{border:1.5px solid #FDE68A;border-radius:100px;padding:5px 12px;font-size:11px;font-weight:600;color:#92400E;cursor:pointer;background:#fff;transition:all .15s;font-family:'Poppins',sans-serif;}
+.troco-chip:hover{border-color:#F59E0B;background:#FEF9C3;}
+.troco-chip.active{border-color:#F59E0B;background:#FEF9C3;color:#78350F;}
+.troco-inp-wrap{display:none;}
+.troco-inp-wrap.show{display:block;}
+.troco-inp{font-family:'Poppins',sans-serif;width:100%;height:40px;border:1.5px solid #FDE68A;border-radius:var(--rad);padding:0 12px;font-size:13px;color:var(--t9);background:#fff;outline:none;transition:border-color .15s;}
+.troco-inp:focus{border-color:#F59E0B;box-shadow:0 0 0 3px rgba(245,158,11,.1);}
+.troco-inp-label{font-size:10px;font-weight:600;color:#92400E;margin-bottom:4px;display:block;}
+
+/* ─── SIDEBAR ─── */
+.side-block{background:#fff;border:1px solid var(--bd);border-radius:var(--radlg);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);}
+.side-head{padding:14px 18px 12px;border-bottom:1px solid var(--bd);font-size:13px;font-weight:600;color:var(--t9);display:flex;align-items:center;justify-content:space-between;}
+.side-count{font-size:11px;font-weight:500;color:var(--t4);}
+.side-body{padding:16px 18px;}
+
+/* order items */
+.order-items{display:flex;flex-direction:column;gap:0;margin-bottom:14px;}
+.order-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg2);}
+.order-item:first-child{padding-top:0;}
+.order-item:last-child{border-bottom:none;padding-bottom:0;}
+.oi-thumb{width:44px;height:44px;background:var(--bg2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--bd);position:relative;}
+.oi-qty{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;background:var(--gdeep);color:#fff;border-radius:8px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap;}
+.oi-info{flex:1;min-width:0;}
+.oi-name{font-size:11px;font-weight:600;color:var(--t9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.oi-meta{font-size:10px;color:var(--t4);margin-top:1px;}
+.oi-price{font-size:12px;font-weight:700;color:var(--t9);white-space:nowrap;}
+
+/* totals */
+.side-divider{height:0;border-top:1px dashed var(--bd);margin:12px 0;}
+.side-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.side-row .lb{font-size:12px;color:var(--t4);}
+.side-row .vl{font-size:12px;font-weight:500;color:var(--t6);}
+.side-row .vl-green{font-size:12px;font-weight:600;color:var(--suc-tx);}
+.side-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:12px;border-top:1px dashed var(--bd);}
+.side-total .lb{font-size:13px;font-weight:600;color:var(--t9);}
+.side-total .vl{font-size:19px;font-weight:700;color:var(--gdeep);letter-spacing:-.01em;}
+
+/* CTA button */
+.btn-pay{font-family:'Poppins',sans-serif;width:100%;height:52px;background:var(--g);color:#fff;border:none;border-radius:var(--radlg);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .1s;letter-spacing:.04em;margin-top:14px;}
+.btn-pay:hover{background:#1A5C1E;}
+.btn-pay:active{transform:scale(.99);}
+
+/* trust */
+.trust-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t4);font-weight:500;}
+
+/* coupon */
+.promo-wrap{display:flex;gap:8px;}
+.promo-inp{flex:1;height:38px;border:1px solid var(--bd);border-radius:var(--rad);padding:0 12px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--t9);outline:none;transition:border-color .15s;}
+.promo-inp:focus{border-color:var(--gd);}
+.promo-btn{font-family:'Poppins',sans-serif;height:38px;padding:0 14px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rad);font-size:12px;font-weight:600;color:var(--t6);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
+.promo-btn:hover{background:#E5E7EB;color:var(--t9);}
+
+/* whatsapp */
+.wpp-bar{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:var(--radlg);padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.wpp-txt{font-size:11px;color:#166534;line-height:1.4;flex:1;}
+.wpp-btn{font-family:'Poppins',sans-serif;background:var(--g);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.wpp-btn:hover{background:var(--gd);}
+
+/* installment info */
+.inst-info{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:var(--rad);padding:12px 14px;margin-top:0;}
+.inst-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#3730A3;font-weight:600;margin-bottom:10px;}
+.inst-tiers{display:flex;flex-direction:column;gap:6px;}
+.inst-tier{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t6);}
+.inst-tier.active{color:var(--t9);font-weight:600;}
+.inst-tier.locked{opacity:.4;}
+.tier-dot{width:8px;height:8px;border-radius:50%;background:var(--bd);flex-shrink:0;}
+.inst-tier.active .tier-dot{background:var(--g);}
+.inst-tier.locked .tier-dot{background:var(--bd);}
+
+/* ─── MOBILE ─── */
+@media(max-width:700px){
+  .layout{flex-direction:column;padding:12px 16px;}
+  .col-side{width:100%;order:-1;}
+  .topbar-steps{display:none;}
+  .delivery-cards{flex-direction:column;}
+  .row{flex-wrap:wrap;}
+  .col-30,.col-20{flex:1 1 100%!important;}
+  .mobile-accordion{background:#fff;border:1px solid var(--bd);border-radius:var(--radlg);overflow:hidden;margin-bottom:0;}
+  .mob-toggle{width:100%;background:none;border:none;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Poppins',sans-serif;}
+  .mob-toggle-label{font-size:13px;font-weight:600;color:var(--t9);}
+  .mob-toggle-total{font-size:14px;font-weight:700;color:var(--gdeep);}
+  .mob-toggle-arrow{transition:transform .2s;color:var(--t4);}
+  .mob-toggle-arrow.open{transform:rotate(180deg);}
+  .mob-body{display:none;padding:0 18px 16px;}
+  .mob-body.open{display:block;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">Granel<span>da Praça</span></div>
+    <div class="topbar-steps">
+      <span class="step step-done">Carrinho</span>
+      <span class="step-sep">›</span>
+      <span class="step step-active">Checkout</span>
+      <span class="step-sep">›</span>
+      <span class="step step-next">Confirmação</span>
+    </div>
+    <div class="topbar-secure">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Compra segura
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- ═══════════════ COL MAIN ═══════════════ -->
+    <div class="col-main">
+
+      <!-- BLOCO 1: ENTREGA -->
+      <div class="block">
+        <div class="block-head">
+          <div class="block-num">1</div>
+          <div class="block-title">Entrega</div>
+        </div>
+        <div class="block-body">
+
+          <div class="delivery-cards">
+            <div class="del-card active" id="del-home" onclick="selDel('home')">
+              <div>
+                <span class="del-card-radio"></span>
+                <span class="del-card-title">Receber em casa</span>
+              </div>
+              <div class="del-card-sub">Motoboy · Uberlândia · R$15,00</div>
+              <div class="del-card-tag">Entrega hoje</div>
+            </div>
+            <div class="del-card" id="del-store" onclick="selDel('store')">
+              <div>
+                <span class="del-card-radio"></span>
+                <span class="del-card-title">Retirar na loja</span>
+              </div>
+              <div class="del-card-sub">Unidade Fundinho</div>
+              <div class="del-card-tag" style="background:#EEF2FF;color:#3730A3">Frete grátis</div>
+            </div>
+          </div>
+
+          <!-- FORM ENTREGA EM CASA -->
+          <div id="form-home">
+            <!-- CEP -->
+            <div class="field" style="margin-bottom:12px">
+              <input class="inp-fl" id="cep" placeholder=" " maxlength="9" oninput="maskCEP(this)" autocomplete="postal-code"/>
+              <label for="cep">CEP <span style="color:#EF4444">*</span></label>
+              <span class="cep-badge" id="cep-badge">Uberlândia</span>
+            </div>
+
+            <!-- Rua + Número -->
+            <div class="row" style="margin-bottom:12px">
+              <div class="field" style="flex:1;margin-bottom:0">
+                <input placeholder=" " autocomplete="street-address"/>
+                <label>Rua <span style="color:#EF4444">*</span></label>
+              </div>
+              <div class="field col-20" style="margin-bottom:0">
+                <input placeholder=" " autocomplete="address-line2"/>
+                <label>Nº <span style="color:#EF4444">*</span></label>
+              </div>
+            </div>
+
+            <!-- Bairro + Complemento -->
+            <div class="row" style="margin-bottom:12px">
+              <div class="field" style="flex:1;margin-bottom:0">
+                <input placeholder=" "/>
+                <label>Bairro <span style="color:#EF4444">*</span></label>
+              </div>
+              <div class="field" style="flex:1;margin-bottom:0">
+                <input placeholder=" "/>
+                <label>Complemento (opcional)</label>
+              </div>
+            </div>
+
+            <!-- Período -->
+            <div class="field has-val" style="margin-bottom:0">
+              <select>
+                <option value="">Selecione</option>
+                <option selected>Manhã (8h – 12h)</option>
+                <option>Tarde (12h – 18h)</option>
+              </select>
+              <label>Período preferido</label>
+              <svg class="sel-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+
+          <!-- FORM RETIRADA NA LOJA -->
+          <div id="form-store" style="display:none">
+            <div class="store-info">
+              <div class="store-info-name">Fundinho — Praça Clarimundo Carneiro, 119</div>
+              <div class="store-info-sub">Segunda a Sábado · 8h às 18h<br>Retire em até 2h após a confirmação do pedido</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BLOCO 2: IDENTIFICAÇÃO -->
+      <div class="block">
+        <div class="block-head">
+          <div class="block-num">2</div>
+          <div class="block-title">Identificação</div>
+        </div>
+        <div class="block-body">
+          <div class="row" style="margin-bottom:12px">
+            <div class="field" style="margin-bottom:0">
+              <input placeholder=" " autocomplete="name"/>
+              <label>Nome completo <span style="color:#EF4444">*</span></label>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <input placeholder=" " autocomplete="tel"/>
+              <label>WhatsApp <span style="color:#EF4444">*</span></label>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <input placeholder=" " autocomplete="email"/>
+            <label>E-mail <span style="color:#EF4444">*</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO 3: PAGAMENTO -->
+      <div class="block">
+        <div class="block-head">
+          <div class="block-num">3</div>
+          <div class="block-title">Pagamento</div>
+        </div>
+        <div class="block-body">
+          <div class="pay-opts">
+
+            <!-- PIX -->
+            <div class="pay-opt active" id="pay-pix" onclick="selPay('pix')">
+              <div class="pay-radio"></div>
+              <div class="pay-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.207 2.793a1.121 1.121 0 0 1 1.586 0l8.414 8.414a1.121 1.121 0 0 1 0 1.586l-8.414 8.414a1.121 1.121 0 0 1-1.586 0L2.793 12.793a1.121 1.121 0 0 1 0-1.586l8.414-8.414z" stroke="#2C742F" stroke-width="1.6"/><path d="M9 12h6M12 9v6" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div class="pay-info">
+                <div class="pay-name">PIX</div>
+                <div class="pay-sub">Aprovação instantânea · QR Code ou Copia e Cola</div>
+              </div>
+              <span class="pay-badge-pix">5% OFF</span>
+            </div>
+
+            <!-- PIX detail panel -->
+            <div class="pay-detail open" id="detail-pix">
+              <div class="pix-box">
+                <div class="pix-qr">QR<br>Code<br>após<br>pedido</div>
+                <div class="pix-text">
+                  <strong>Como pagar com PIX</strong>
+                  1. Finalize o pedido clicando em "Pagar agora"<br>
+                  2. Abra o app do seu banco e escaneie o QR Code<br>
+                  3. Pagamento confirmado automaticamente em segundos<br><br>
+                  <strong style="font-size:11px">Você economiza R$&nbsp;5,02 pagando com PIX</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARTÃO -->
+            <div class="pay-opt" id="pay-card" onclick="selPay('card')">
+              <div class="pay-radio"></div>
+              <div class="pay-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              </div>
+              <div class="pay-info">
+                <div class="pay-name">Cartão de crédito</div>
+                <div class="pay-sub">Visa, Mastercard, Elo</div>
+              </div>
+              <span class="pay-badge-inst" id="badge-inst">à vista</span>
+            </div>
+
+            <!-- CARTÃO detail panel -->
+            <div class="pay-detail" id="detail-card">
+              <div class="field" style="margin-bottom:10px">
+                <input placeholder=" " maxlength="19" oninput="maskCard(this)"/>
+                <label>Número do cartão</label>
+              </div>
+              <div class="row" style="margin-bottom:10px">
+                <div class="field" style="margin-bottom:0">
+                  <input placeholder=" " maxlength="5" oninput="maskExp(this)"/>
+                  <label>Validade (MM/AA)</label>
+                </div>
+                <div class="field" style="flex:0 0 90px;margin-bottom:0">
+                  <input placeholder=" " maxlength="4"/>
+                  <label>CVV</label>
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:10px">
+                <input placeholder=" " style="text-transform:uppercase"/>
+                <label>Nome no cartão</label>
+              </div>
+              <!-- Parcelas -->
+              <div class="inst-info" id="inst-info">
+                <div class="inst-row">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span id="inst-msg">Parcelamento disponível conforme o valor do pedido</span>
+                </div>
+                <div class="inst-tiers">
+                  <div class="inst-tier" id="tier-1x">
+                    <span class="tier-dot"></span>
+                    <span>1x — qualquer valor</span>
+                  </div>
+                  <div class="inst-tier" id="tier-2x">
+                    <span class="tier-dot"></span>
+                    <span>2x sem juros — pedidos acima de <strong>R$&nbsp;150</strong></span>
+                  </div>
+                  <div class="inst-tier" id="tier-3x">
+                    <span class="tier-dot"></span>
+                    <span>3x sem juros — pedidos acima de <strong>R$&nbsp;300</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALELO / VALE -->
+            <div class="pay-opt" id="pay-alelo" onclick="selPay('alelo')">
+              <div class="pay-radio"></div>
+              <div class="pay-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="3"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div class="pay-info">
+                <div class="pay-name">Alelo</div>
+                <div class="pay-sub">Vale-alimentação · maquininha na entrega</div>
+              </div>
+            </div>
+
+            <!-- DINHEIRO -->
+            <div class="pay-opt" id="pay-cash" onclick="selPay('cash')">
+              <div class="pay-radio"></div>
+              <div class="pay-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+              </div>
+              <div class="pay-info">
+                <div class="pay-name">Dinheiro na entrega</div>
+                <div class="pay-sub">Informe se precisar de troco</div>
+              </div>
+            </div>
+
+            <!-- DINHEIRO detail panel — troco -->
+            <div class="pay-detail" id="detail-cash">
+              <div class="troco-box">
+                <div class="troco-label">Vai precisar de troco?</div>
+                <div class="troco-opts">
+                  <button class="troco-chip active" onclick="selTroco('nao',this)">Não preciso</button>
+                  <button class="troco-chip" onclick="selTroco('sim',this)">Sim, preciso de troco</button>
+                </div>
+                <div class="troco-inp-wrap" id="troco-inp-wrap">
+                  <span class="troco-inp-label">Tenho uma nota de:</span>
+                  <input class="troco-inp" id="troco-val" placeholder="Ex: R$ 200,00" oninput="maskMoney(this)"/>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /col-main -->
+
+    <!-- ═══════════════ COL SIDE ═══════════════ -->
+    <div class="col-side">
+
+      <!-- MOBILE: accordion wrapper -->
+      <div class="mobile-accordion">
+        <button class="mob-toggle" onclick="toggleMobSummary(this)" style="display:none" id="mob-btn">
+          <span class="mob-toggle-label">📦 Resumo do pedido (3 itens)</span>
+          <span>
+            <span class="mob-toggle-total" id="mob-total-label">R$&nbsp;95,28</span>
+            &nbsp;
+            <svg class="mob-toggle-arrow" id="mob-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- RESUMO DO PEDIDO -->
+      <div class="side-block" id="summary-block">
+        <div class="side-head">
+          Resumo do pedido
+          <span class="side-count">3 itens</span>
+        </div>
+        <div class="side-body">
+
+          <div class="order-items">
+            <div class="order-item">
+              <div class="oi-thumb">
+                <svg width="22" height="22" viewBox="0 0 88 88" fill="none" style="opacity:.25"><rect x="8" y="28" width="72" height="52" rx="6" fill="#002603"/><ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603"/></svg>
+                <div class="oi-qty">300g</div>
+              </div>
+              <div class="oi-info">
+                <div class="oi-name">Castanha de Caju W1 Torrada</div>
+                <div class="oi-meta">Granel · R$&nbsp;12,90/100g</div>
+              </div>
+              <div class="oi-price">R$&nbsp;38,70</div>
+            </div>
+
+            <div class="order-item">
+              <div class="oi-thumb">
+                <svg width="22" height="22" viewBox="0 0 88 88" fill="none" style="opacity:.25"><rect x="22" y="16" width="44" height="60" rx="8" fill="#002603"/></svg>
+                <div class="oi-qty">1</div>
+              </div>
+              <div class="oi-info">
+                <div class="oi-name">Óleo de Coco Extra Virgem 500ml</div>
+                <div class="oi-meta">Unidade</div>
+              </div>
+              <div class="oi-price">R$&nbsp;34,90</div>
+            </div>
+
+            <div class="order-item">
+              <div class="oi-thumb">
+                <svg width="22" height="22" viewBox="0 0 88 88" fill="none" style="opacity:.25"><rect x="14" y="20" width="60" height="55" rx="6" fill="#002603"/><circle cx="44" cy="20" r="10" fill="#002603"/></svg>
+                <div class="oi-qty">300g</div>
+              </div>
+              <div class="oi-info">
+                <div class="oi-name">Granola Artesanal Sem Açúcar</div>
+                <div class="oi-meta">Granel · R$&nbsp;8,90/100g</div>
+              </div>
+              <div class="oi-price">R$&nbsp;26,70</div>
+            </div>
+          </div>
+
+          <div class="side-divider"></div>
+
+          <div class="side-row">
+            <span class="lb">Subtotal</span>
+            <span class="vl">R$&nbsp;100,30</span>
+          </div>
+          <div class="side-row" id="row-disc">
+            <span class="lb">Desconto PIX (5%)</span>
+            <span class="vl-green">− R$&nbsp;5,02</span>
+          </div>
+          <div class="side-row">
+            <span class="lb">Frete</span>
+            <span class="vl-green">Grátis 🎉</span>
+          </div>
+
+          <div class="side-total">
+            <span class="lb">Total</span>
+            <span class="vl" id="side-total">R$&nbsp;95,28</span>
+          </div>
+
+          <button class="btn-pay">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            PAGAR AGORA
+          </button>
+
+          <div class="trust-row">
+            <div class="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Site seguro
+            </div>
+            <div class="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Dados protegidos
+            </div>
+            <div class="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Mercado Pago
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUPOM -->
+      <div class="side-block">
+        <div class="side-head">Cupom de desconto</div>
+        <div class="side-body">
+          <div class="promo-wrap">
+            <input class="promo-inp" placeholder="Ex: BEMVINDOUDI"/>
+            <button class="promo-btn">Aplicar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHATSAPP -->
+      <div class="wpp-bar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#00B207"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        <div class="wpp-txt">Dúvidas no pagamento? Fale com a gente agora.</div>
+        <button class="wpp-btn">Chamar</button>
+      </div>
+
+    </div><!-- /col-side -->
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ── DELIVERY ── */
+function selDel(v){
+  ['home','store'].forEach(k=>{
+    document.getElementById('del-'+k).classList.toggle('active',k===v);
+  });
+  document.getElementById('form-home').style.display = v==='home'?'block':'none';
+  document.getElementById('form-store').style.display = v==='store'?'block':'none';
+}
+
+/* ── INSTALLMENT TIERS ── */
+// Subtotal de referência extraído do HTML (em centavos)
+var ORDER_TOTAL_CENTS = 10030; // R$100,30 — trocar pelo valor real via backend
+
+function updateInstTiers(){
+  var t = ORDER_TOTAL_CENTS;
+  var badge = document.getElementById('badge-inst');
+  var t1 = document.getElementById('tier-1x');
+  var t2 = document.getElementById('tier-2x');
+  var t3 = document.getElementById('tier-3x');
+  if(!badge) return;
+
+  // Determinar parcelas disponíveis
+  var maxInst = 1;
+  if(t >= 30000) maxInst = 3;       // ≥ R$300
+  else if(t >= 15000) maxInst = 2;  // ≥ R$150
+
+  // Badge no pay-opt
+  if(maxInst === 3)       badge.textContent = 'até 3x sem juros';
+  else if(maxInst === 2)  badge.textContent = '2x sem juros';
+  else                    badge.textContent = 'à vista';
+
+  // Tiers visuais
+  [t1,t2,t3].forEach(el => el.classList.remove('active','locked'));
+  t1.classList.add('active');
+  if(maxInst >= 2) t2.classList.add('active'); else t2.classList.add('locked');
+  if(maxInst >= 3) t3.classList.add('active'); else t3.classList.add('locked');
+}
+
+/* ── PAYMENT ── */
+var PAY_IDS = ['pix','card','alelo','cash'];
+function selPay(v){
+  PAY_IDS.forEach(k=>{
+    document.getElementById('pay-'+k).classList.toggle('active',k===v);
+    var det = document.getElementById('detail-'+k);
+    if(det) det.classList.toggle('open',k===v);
+  });
+  if(v==='card') updateInstTiers();
+  var disc = document.getElementById('row-disc');
+  var tot  = document.getElementById('side-total');
+  if(v==='pix'){
+    disc.style.display='flex';
+    tot.textContent='R$\u00a095,28';
+  } else {
+    disc.style.display='none';
+    tot.textContent='R$\u00a0100,30';
+  }
+}
+
+/* ── TROCO ── */
+function selTroco(v, el){
+  document.querySelectorAll('.troco-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  var wrap = document.getElementById('troco-inp-wrap');
+  wrap.classList.toggle('show', v==='sim');
+  if(v==='sim') document.getElementById('troco-val').focus();
+}
+
+/* ── MASKS ── */
+function maskCEP(el){
+  var v=el.value.replace(/\D/g,'').slice(0,8);
+  if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5);
+  el.value=v;
+}
+function maskCard(el){
+  var v=el.value.replace(/\D/g,'').slice(0,16);
+  el.value=v.replace(/(.{4})/g,'$1 ').trim();
+}
+function maskExp(el){
+  var v=el.value.replace(/\D/g,'').slice(0,4);
+  if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  el.value=v;
+}
+function maskMoney(el){
+  var v=el.value.replace(/\D/g,'');
+  if(!v){el.value='';return;}
+  v=(parseInt(v,10)/100).toFixed(2);
+  el.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+/* ── MOBILE SUMMARY ACCORDION ── */
+function initMobile(){
+  var btn=document.getElementById('mob-btn');
+  if(window.innerWidth<=700){
+    btn.style.display='flex';
+    document.getElementById('summary-block').style.display='none';
+  } else {
+    btn.style.display='none';
+    document.getElementById('summary-block').style.display='block';
+  }
+}
+function toggleMobSummary(btn){
+  var block=document.getElementById('summary-block');
+  var arrow=document.getElementById('mob-arrow');
+  var open=block.style.display!=='none';
+  block.style.display=open?'none':'block';
+  arrow.classList.toggle('open',!open);
+}
+window.addEventListener('resize',initMobile);
+initMobile();
+updateInstTiers();
+</script>
+</body>
+</html>
