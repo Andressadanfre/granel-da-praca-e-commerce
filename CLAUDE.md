@@ -866,13 +866,13 @@ Nunca commitar com build quebrado.
 ### Rotas relevantes à Fase 5
 | Rota | Status |
 |---|---|
-| /checkout | 🔴 Pendente — lógica de pedido pronta (Server Action), falta UI |
+| /checkout | 🔴 Pendente — layout de referência em docs/checkout-layouts/checkout_page.html, backend pronto (createOrderAction). Sem bloqueador restante. |
 | /pedido/[codigo] | 🔴 Pendente · Fase 5B |
 | /admin/* | 🔴 Pendente · Fase 5B |
 
 ### Componentes pendentes
-- CheckoutStepper.tsx — 🔴 Pendente (UI de checkout, backend já pronto)
-- OrderTimeline.tsx — 🔴 Pendente · Fase 5B
+- CheckoutStepper.tsx — 🔴 Pendente (UI de checkout). Referência: docs/checkout-layouts/checkout_page.html. Backend pronto (createOrderAction em src/lib/orders/actions.ts). Sem bloqueador restante — próxima prioridade de produto.
+- OrderTimeline.tsx — 🔴 Pendente · Fase 5B. Referência: docs/checkout-layouts/order_confirmation.html.
 
 ### Lembrete Fase 5B — botão "Tive um problema com meu pedido"
 Em /pedido/[codigo] e /conta/pedidos (por linha de pedido): botão que abre https://wa.me/5534997819292 com mensagem pré-preenchida via encodeURIComponent contendo o código do pedido. Decisão registrada no PRD (doc 02 — seção Devolução e Problemas com Pedido).
