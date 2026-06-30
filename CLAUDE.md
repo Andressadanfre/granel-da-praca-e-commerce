@@ -369,7 +369,7 @@ try {
 ### Regras absolutas
 - Nunca expor `error.message`, `error.stack` ou mensagem do banco na resposta ao cliente
 - Erros internos: sempre logar via `logger.error()` de `src/lib/logger.ts`
-- Tipos de erro a implementar na Fase 5: `AppError`, `ValidationError`, `AuthError`, `DatabaseError`
+- Tipos de erro tipados (`AppError`, `ValidationError`, `AuthError`, `DatabaseError`) — **não implementados**; padrão real do projeto é `{ success, error }` nas Server Actions + `throw new Error` pontual + `USER_MESSAGES` para mensagens de UI. Decisão a tomar: manter o padrão atual (mais simples, já testado em produção) ou migrar para classes de erro tipadas — avaliar antes da Fase 5B (admin), onde erros mais granulares podem ajudar no audit log.
 
 ## 🔄 Cache e Revalidação — Princípios
 
@@ -843,72 +843,51 @@ Nunca commitar com build quebrado.
 
 ---
 
-## Estado do Projeto — 26/06/2026 · Sessão 053 · HEAD 76fbda4
+## Estado do Projeto — 30/06/2026 · Sessão claude.ai+Cursor · HEAD 15969e7
 
 ### Infraestrutura
-- **Repo:** `github.com/Andressadanfre/granel-da-praca-e-commerce`
-- **Pasta:** `C:\Users\Dell\Documents\projetos\granel-da-praca-e-commerce`
-- **Supabase:** `ymjmgukuojwumvtaglyp` · São Paulo · 402 produtos · 11 categorias
-- **Build:** ✅ limpo
-- **Auditoria 20/05/2026:** ✅ 100% concluída (Blocos 1–9)
+- Supabase ymjmgukuojwumvtaglyp · 402 produtos · 11 categorias
+- Build ✅ limpo (npx tsc --noEmit + npm run build)
+- Auditoria 20/05/2026 ✅ 100%
 
-### Rotas
+### Cadeia A0→A8 — status real
+| Item | Status |
+|---|---|
+| A0 — migration orders/order_items | ✅ Completo |
+| A1 — Zod em Server Actions | ✅ Completo |
+| A2 — HTTP headers next.config.mjs | ✅ Completo |
+| A4 — recálculo de preço server-side | ✅ Completo |
+| A3 — integração Mercado Pago | ✅ Completo — createOrderAction real, RPC create_order_with_items |
+| A5 — Webhook HMAC-SHA256 | 🔴 Próximo passo |
+| A6 — Idempotência | 🔴 Pendente |
+| A7 — Proteção IDOR | 🔴 Pendente |
+| A8 — Sentry + rate limiting Upstash | 🔴 Pendente |
 
+### Rotas relevantes à Fase 5
 | Rota | Status |
 |---|---|
-| `/` | ✅ Homepage completa |
-| `/loja` | ✅ Implementada |
-| `/loja/[categoria]/[slug]` | ✅ Implementada · Sessão 046 |
-| `/carrinho` | ✅ Removida — substituída pelo `CartDrawer` (overlay). Nunca existirá como página separada. |
-| `/checkout` | 🔴 Pendente · Fase 5 |
-| `/pedido/[codigo]` | 🔴 Pendente · Fase 6 |
-| `/pedido/[codigo]/rastreamento` | 🔴 Pendente · HTML ainda não criado |
-| `/conta/login` | 🔴 Pendente · HTML ainda não criado |
-| `/conta/pedidos` | 🔴 Pendente · HTML ainda não criado |
-| `/conta/fidelidade` | 🔴 Pendente |
-| `/admin/*` | 🔴 Pendente · Fase 6 |
+| /checkout | 🔴 Pendente — lógica de pedido pronta (Server Action), falta UI |
+| /pedido/[codigo] | 🔴 Pendente · Fase 5B |
+| /admin/* | 🔴 Pendente · Fase 5B |
 
-### Componentes — Status
+### Componentes pendentes
+- CheckoutStepper.tsx — 🔴 Pendente (UI de checkout, backend já pronto)
+- OrderTimeline.tsx — 🔴 Pendente · Fase 5B
 
-| Arquivo | Status |
-|---|---|
-| `design-tokens.ts` | ✅ Implementado (src/lib/tokens.ts) |
-| `cn.ts` | ✅ Implementado (src/lib/utils.ts) |
-| `Button.tsx` — 5 variantes | ✅ Implementado |
-| `Badge.tsx` | ✅ Implementado |
-| `Input.tsx` | ✅ Implementado |
-| `Card.tsx` | ✅ Implementado · commit d102e19 |
-| `QuantitySelector.tsx` | ✅ Implementado |
-| `ProductCard.tsx` | ✅ Implementado |
-| `ProductCardSkeleton.tsx` | ✅ Implementado |
-| `EmptyState.tsx` — 5 contextos | ✅ Implementado |
-| `Navigation.tsx` | ✅ Implementado |
-| `Footer.tsx` | ✅ Implementado |
-| `HeroBanner.tsx` | ✅ Implementado · slider Framer Motion |
-| `TrustBadges.tsx` | ✅ Implementado |
-| `CategoryGrid.tsx` | ✅ Implementado |
-| `ProductGrid.tsx` | ✅ Implementado · Sessão 044 |
-| `FeaturedProducts.tsx` | ✅ Implementado |
-| `NewsletterPopup.tsx` | ✅ Implementado · commits a6853d9 e 7378521 |
-| `CartDrawer.tsx` | ✅ Implementado · src/components/cart/CartDrawer.tsx · commit 0699a3a |
-| `CartProvider.tsx` | ✅ Implementado · src/components/cart/CartProvider.tsx · commit c24aea1 |
-| `CheckoutStepper.tsx` | 🔴 Pendente |
-| `OrderTimeline.tsx` | 🔴 Pendente |
-| `Modal.tsx` | ✅ Implementado · commit a685057 |
-| `FidelityCard.tsx` | 🔴 Pendente |
-| `AdminSidebar.tsx` | 🔴 Pendente |
+### Lembrete Fase 5B — botão "Tive um problema com meu pedido"
+Em /pedido/[codigo] e /conta/pedidos (por linha de pedido): botão que abre https://wa.me/5534997819292 com mensagem pré-preenchida via encodeURIComponent contendo o código do pedido. Decisão registrada no PRD (doc 02 — seção Devolução e Problemas com Pedido).
 
-### Próximas entregas (prioridade)
-1. Fase 5 — A0: migration `orders` + `order_items` (`20260626000001_create_orders.sql`)
-2. Fase 5 — A1: Zod em Server Actions de checkout
-3. Fase 5 — A2: HTTP headers no `next.config.mjs`
-4. Fase 5 — A4: recálculo de preço server-side (antes do A3)
-5. Fase 5 — A3: integração Mercado Pago
+### Decisão arquitetural nova — RPC atômica para pedidos
+orders + order_items são inseridos via função Postgres create_order_with_items (SECURITY DEFINER), não dois .insert() sequenciais. Evita pedido órfão se o segundo insert falhar. Chamada via getSupabaseServer() — confirmado que authenticated herda EXECUTE de PUBLIC e que SECURITY DEFINER cobre os inserts mesmo com RLS de orders/order_items só tendo policy de SELECT.
 
-### Lembrete `/pedido/[codigo]`
-Ao implementar: botão "Tive um problema com meu pedido" → `https://wa.me/5534997819292`
-com mensagem pré-preenchida via `encodeURIComponent` contendo o código do pedido.
-Idem em `/conta/pedidos` por linha de pedido.
+### Regra de processo nova — regenerar database.ts após migration via MCP
+Toda migration aplicada via Supabase MCP (não via CLI local) deixa src/types/database.ts desatualizado até alguém rodar manualmente:
+npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public
+
+Isso já causou divergência real: database.ts ficou sem 5 tabelas (app_users, admin_users, orders, order_items, admin_audit_log) por múltiplas sessões sem ninguém perceber, porque era escrito manualmente desde a Sessão 044, nunca gerado pelo CLI. Resolvido nesta sessão — regenerado preservando o helper Tables<T> que FeaturedProducts.tsx e product-detail.ts consomem.
+
+### Próximo passo imediato
+A5 — Webhook HMAC-SHA256 do Mercado Pago (MERCADOPAGO_WEBHOOK_SECRET ainda vazio no .env.local — gerar e preencher antes de implementar A5).
 
 ---
 
