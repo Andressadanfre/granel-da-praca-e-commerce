@@ -858,8 +858,8 @@ Nunca commitar com build quebrado.
 | A2 — HTTP headers next.config.mjs | ✅ Completo |
 | A4 — recálculo de preço server-side | ✅ Completo |
 | A3 — integração Mercado Pago | ✅ Completo — createOrderAction real, RPC create_order_with_items |
-| A5 — Webhook HMAC-SHA256 | 🔴 Próximo passo |
-| A6 — Idempotência | 🔴 Pendente |
+| A5 — Webhook HMAC-SHA256 | ✅ Completo e validado em produção |
+| A6 — Idempotência | 🔴 Próximo passo |
 | A7 — Proteção IDOR | 🔴 Pendente |
 | A8 — Sentry + rate limiting Upstash | 🔴 Pendente |
 
@@ -880,6 +880,15 @@ Em /pedido/[codigo] e /conta/pedidos (por linha de pedido): botão que abre http
 ### Decisão arquitetural nova — RPC atômica para pedidos
 orders + order_items são inseridos via função Postgres create_order_with_items (SECURITY DEFINER), não dois .insert() sequenciais. Evita pedido órfão se o segundo insert falhar. Chamada via getSupabaseServer() — confirmado que authenticated herda EXECUTE de PUBLIC e que SECURITY DEFINER cobre os inserts mesmo com RLS de orders/order_items só tendo policy de SELECT.
 
+### Lição crítica — variáveis de ambiente do Mercado Pago em produção
+Confirmar SEMPRE, antes de testar qualquer integração de pagamento, se as env vars MERCADOPAGO_ACCESS_TOKEN e MERCADOPAGO_WEBHOOK_SECRET existem em Vercel Production (Settings → Environments → Production → Environment Variables) — não apenas no .env.local. A A3 ficou sem essas variáveis em produção por múltiplas sessões sem que ninguém percebesse, porque nenhum checkout real havia sido testado em produção ainda.
+
+### Lição crítica — prefixo de token não confirma ambiente teste/produção nesta conta MP
+Nesta conta específica do Mercado Pago, tanto a Public Key quanto o Access Token de teste começam com APP_USR- (não TEST-, como é mais comum). O prefixo do token NÃO é indicador confiável de teste vs. produção aqui — confirme sempre pela URL da aba no painel (/credentials/sandbox vs /credentials/production) e, se possível, por comparação visual direta do valor revelado.
+
+### Lição de processo — edição de .env.local via Claude Code
+Pedir para "abrir o .env.local em editor visual" pode falhar silenciosamente (arquivo não é salvo, sem erro). Caminho confiável: colar o valor diretamente na conversa com o Claude Code, pedindo edição direta via str_replace ou equivalente — não editor visual.
+
 ### Regra de processo nova — regenerar database.ts após migration via MCP
 Toda migration aplicada via Supabase MCP (não via CLI local) deixa src/types/database.ts desatualizado até alguém rodar manualmente:
 npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public
@@ -887,7 +896,7 @@ npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema pub
 Isso já causou divergência real: database.ts ficou sem 5 tabelas (app_users, admin_users, orders, order_items, admin_audit_log) por múltiplas sessões sem ninguém perceber, porque era escrito manualmente desde a Sessão 044, nunca gerado pelo CLI. Resolvido nesta sessão — regenerado preservando o helper Tables<T> que FeaturedProducts.tsx e product-detail.ts consomem.
 
 ### Próximo passo imediato
-A5 — Webhook HMAC-SHA256 do Mercado Pago (MERCADOPAGO_WEBHOOK_SECRET ainda vazio no .env.local — gerar e preencher antes de implementar A5).
+A6 — Idempotência do webhook (guard contra reprocessar o mesmo mp_payment_id duas vezes). A5 está completa: handler em src/app/api/webhooks/mercadopago/route.ts, validado em produção via simulador do painel Mercado Pago (log confirmou autenticação correta e tratamento de erro 404 para pagamento inexistente).
 
 ---
 
