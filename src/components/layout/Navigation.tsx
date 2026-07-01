@@ -43,8 +43,14 @@ async function getCategories(): Promise<CategoryLink[]> {
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
+async function getUserEmail(): Promise<string | null> {
+  const supabase = getSupabaseServer()
+  const { data: { user } } = await supabase.auth.getUser()
+  return user?.email ?? null
+}
+
 export async function Navigation() {
-  const categories = await getCategories()
+  const [categories, userEmail] = await Promise.all([getCategories(), getUserEmail()])
 
   return (
     <header className="sticky top-0 z-50 bg-cream shadow-nav font-sans">
@@ -109,7 +115,7 @@ export async function Navigation() {
 
           {/* Ações */}
           <div className="flex items-center gap-s2 shrink-0">
-            <UserMenuPopover />
+            <UserMenuPopover userEmail={userEmail} />
 
             <Link
               href="/favoritos"

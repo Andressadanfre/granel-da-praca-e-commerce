@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isDev = process.env.NODE_ENV === 'development'
+
 const nextConfig = {
   async headers() {
     return [
@@ -19,14 +21,23 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https:",
-              "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.supabase.co",
-            ].join('; '),
+            value: isDev
+              ? [
+                  "default-src 'self'",
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+                  "style-src 'self' 'unsafe-inline'",
+                  "img-src 'self' data: https: blob:",
+                  "font-src 'self' data: https://fonts.gstatic.com https://fonts.googleapis.com",
+                  "connect-src 'self' https://*.supabase.co ws://localhost:* http://localhost:*",
+                ].join('; ')
+              : [
+                  "default-src 'self'",
+                  "script-src 'self' 'unsafe-inline'",
+                  "style-src 'self' 'unsafe-inline'",
+                  "img-src 'self' data: https:",
+                  "font-src 'self' https://fonts.gstatic.com",
+                  "connect-src 'self' https://*.supabase.co",
+                ].join('; '),
           },
         ],
       },

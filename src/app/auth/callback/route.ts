@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { getSupabaseServer } from '@/lib/supabase/server'
-import { logger } from '@/lib/logger'
+import { createLogger, logError } from '@/lib/logger'
+import { ensureAppUser } from '@/lib/auth/ensureAppUser'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,13 +11,22 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = getSupabaseServer()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
-      return NextResponse.redirect(new URL('/checkout', request.url))
+    if (!error && data.user) {
+      // Sem esta linha, o pedido do usuario quebra por FK (orders.user_id -> app_users.id)
+      try {
+        await ensureAppUser(data.user)
+        return NextResponse.redirect(new URL('/checkout', request.url))
+      } catch (err) {
+        const log = createLogger({ action: 'auth_callback', userId: data.user.id })
+        logError(log, err, {}, 'Falha ao provisionar app_users no callback OAuth')
+        return NextResponse.redirect(new URL('/conta/login?erro=perfil', request.url))
+      }
     }
 
-    logger.error({ route: '/auth/callback' }, 'Falha ao trocar codigo de autenticacao por sessao')
+    const log = createLogger({ action: 'auth_callback' })
+    logError(log, error, {}, 'Falha ao trocar codigo de autenticacao por sessao')
   }
 
   return NextResponse.redirect(new URL('/', request.url))
