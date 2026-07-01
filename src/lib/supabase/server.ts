@@ -27,6 +27,16 @@ export function getSupabaseServer() {
         getAll() {
           return cookieStore.getAll()
         },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
+          } catch {
+            // Chamado a partir de um Server Component - cookies sao somente leitura.
+            // Seguro ignorar: sessao ja foi validada e sera refletida via middleware/Route Handler.
+          }
+        },
       },
     },
   )
