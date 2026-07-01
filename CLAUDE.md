@@ -859,6 +859,7 @@ Nunca commitar com build quebrado.
 | A4 — recálculo de preço server-side | ✅ Completo |
 | A3 — integração Mercado Pago | ✅ Completo — createOrderAction real, RPC create_order_with_items |
 | A5 — Webhook HMAC-SHA256 | ✅ Completo e validado em produção |
+| Auth callback route | ✅ Completo (commit 9724d12) — src/app/auth/callback/route.ts + setAll() em getSupabaseServer |
 | A6 — Idempotência | 🔴 Próximo passo |
 | A7 — Proteção IDOR | 🔴 Pendente |
 | A8 — Sentry + rate limiting Upstash | 🔴 Pendente |
@@ -896,7 +897,30 @@ npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema pub
 Isso já causou divergência real: database.ts ficou sem 5 tabelas (app_users, admin_users, orders, order_items, admin_audit_log) por múltiplas sessões sem ninguém perceber, porque era escrito manualmente desde a Sessão 044, nunca gerado pelo CLI. Resolvido nesta sessão — regenerado preservando o helper Tables<T> que FeaturedProducts.tsx e product-detail.ts consomem.
 
 ### Próximo passo imediato
-A6 — Idempotência do webhook (guard contra reprocessar o mesmo mp_payment_id duas vezes). A5 está completa: handler em src/app/api/webhooks/mercadopago/route.ts, validado em produção via simulador do painel Mercado Pago (log confirmou autenticação correta e tratamento de erro 404 para pagamento inexistente).
+
+MVP — dois bloqueadores reais:
+1. Login/cadastro com Google (Supabase OAuth) — cliente não consegue finalizar pedido sem isso
+2. Admin MVP tela de pedidos — sem isso não há como ver pedidos recebidos no dia do lançamento
+HTML de referência disponível: docs/admin-layouts/admin-02-pedidos-lista.html
+
+### Pendências de ambiente dev — não afetam produção Vercel
+
+CSP em next.config.mjs bloqueia dois comportamentos do Next.js dev:
+- EvalError: script-src sem 'unsafe-eval' quebra HMR — botões não clicáveis em localhost
+- Fontes bloqueadas: font-src sem https://fonts.googleapis.com
+
+Fix identificado: aplicar CSP permissiva apenas quando NODE_ENV === 'development'. Não aplicado por prioridade MVP.
+Workaround: testar em produção (Vercel) onde a CSP não causa problema.
+
+### Stash pendente — CartDrawer refactor (git stash)
+
+git stash aplicado em 01/07/2026 com refactor do CartDrawer.tsx:
+- Footer fixo: apenas Total + botão Finalizar (~116px)
+- Lista rolável: itens + subtotal/frete/banner de parcelamento juntos
+- Objetivo: dar mais espaço visível para lista de produtos em mobile
+- Status: tsc limpo, diff revisado e aprovado, MAS não testado visualmente por causa dos erros de CSP em dev
+
+Para retomar: git stash pop + corrigir CSP dev primeiro + testar visual CartDrawer em mobile
 
 ---
 
