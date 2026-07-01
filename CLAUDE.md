@@ -898,10 +898,35 @@ Isso já causou divergência real: database.ts ficou sem 5 tabelas (app_users, a
 
 ### Próximo passo imediato
 
-MVP — dois bloqueadores reais:
-1. Login/cadastro com Google (Supabase OAuth) — cliente não consegue finalizar pedido sem isso
-2. Admin MVP tela de pedidos — sem isso não há como ver pedidos recebidos no dia do lançamento
-HTML de referência disponível: docs/admin-layouts/admin-02-pedidos-lista.html
+Admin MVP — tela de pedidos e último bloqueador real do MVP.
+HTML aprovado disponível: docs/admin-layouts/admin-02-pedidos-lista.html
+Route group: src/app/(admin)/ — não existe ainda nenhum arquivo nessa pasta
+Login/Cadastro implementado (commit 1d0dab2) — Google requer config externa:
+  1. Google Cloud Console: criar OAuth Client ID, redirect URI https://ymjmgukuojwumvtaglyp.supabase.co/auth/v1/callback
+  2. Supabase: Authentication > Providers > Google — colar Client ID/Secret
+  3. Supabase: Authentication > Providers > Email — desmarcar "Confirm email"
+  4. Supabase: URL Configuration — adicionar localhost e produção na allowlist
+
+### Achado de segurança — create_order_with_items executável por anon
+
+A função Postgres create_order_with_items (SECURITY DEFINER) está executável por PUBLIC
+(inclui anon). createOrderAction já rejeita sem usuário autenticado no código,
+mas o princípio de menor privilégio sugere restringir.
+
+Correção (próxima migration de segurança):
+```sql
+revoke execute on function public.create_order_with_items from public;
+grant execute on function public.create_order_with_items to authenticated, service_role;
+```
+
+### Arquitetura de auth (implementada em 01/07/2026)
+
+- `/conta/login` e `/conta/cadastro` — rotas de auth (sem route group)
+- `src/lib/auth/actions.ts` — Server Actions: `signInWithPasswordAction`, `signUpWithPasswordAction`, `signOutAction`
+- `src/lib/auth/ensureAppUser.ts` — upsert em `app_users` via `getSupabaseAdmin()` — OBRIGATÓRIO pela FK `orders.user_id -> app_users.id`
+- `src/middleware.ts` — renovação de sessão em toda navegação (exclui `api/webhooks`)
+- `src/app/auth/callback/route.ts` — chama `ensureAppUser` após OAuth Google
+- **Nunca** redirecionar para `/checkout` sem antes garantir que `app_users` existe para o `user.id`
 
 ### Pendências de ambiente dev — não afetam produção Vercel
 
