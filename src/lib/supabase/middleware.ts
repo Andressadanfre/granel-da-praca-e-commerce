@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import type { User } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 
 /**
@@ -9,7 +10,9 @@ import type { Database } from '@/types/database'
  * getSupabaseServer() porque aqui os cookies vem de request/response, nao de
  * next/headers cookies().
  */
-export async function updateSession(request: NextRequest): Promise<NextResponse> {
+export async function updateSession(
+  request: NextRequest,
+): Promise<{ response: NextResponse; user: User | null }> {
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient<Database>(
@@ -31,7 +34,7 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
     },
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  return response
+  return { response, user }
 }
