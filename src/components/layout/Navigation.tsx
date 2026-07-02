@@ -33,7 +33,7 @@ async function getCategories(): Promise<CategoryLink[]> {
     if (error || !data) return []
 
     return data.map((c) => ({
-      href:  `/categoria/${c.slug}`,
+      href:  `/loja?categoria=${c.slug}`,
       label: c.name,
     }))
   } catch {
