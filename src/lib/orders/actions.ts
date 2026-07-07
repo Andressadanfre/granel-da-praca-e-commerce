@@ -1,5 +1,6 @@
 'use server'
 
+import { ensureAppUser } from '@/lib/auth/ensureAppUser'
 import { getSupabaseServer } from '@/lib/supabase/server'
 import { logger, logError, logWarn } from '@/lib/logger'
 import { createOrderSchema } from './schemas'
@@ -64,6 +65,15 @@ export async function createOrderAction(
     ? Math.floor(subtotalCents * PIX_DISCOUNT_RATE)
     : 0
   const totalCents = subtotalCents + shippingCents - discountCents
+
+  // Garantir linha em app_users — FK orders.user_id → app_users.id
+  // Contas criadas direto no painel Supabase não passam pelo cadastro/OAuth
+  try {
+    await ensureAppUser(user)
+  } catch (err) {
+    logError(logger, err, { route: '/checkout', user_id: user.id }, 'Falha ao provisionar app_users antes do pedido')
+    return { success: false, error: 'Não foi possível registrar o pedido.' }
+  }
 
   // 4. Registrar pedido via RPC atômica (orders + order_items em uma transação)
   const rpcItems = serverItems.map((item, idx) => {

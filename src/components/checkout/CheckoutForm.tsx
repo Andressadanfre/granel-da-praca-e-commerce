@@ -142,7 +142,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
 
     // Pagamentos online → redireciona para MP
     if (result.initPoint || result.sandboxInitPoint) {
-      const mpUrl = result.sandboxInitPoint || result.initPoint
+      const mpUrl = result.initPoint || result.sandboxInitPoint
       window.location.href = mpUrl
       return
     }
