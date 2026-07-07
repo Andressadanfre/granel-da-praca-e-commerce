@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Loader2, Leaf, X } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { subscribeNewsletter } from '@/app/actions/newsletter'
@@ -8,10 +9,14 @@ import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'granel_popup_shown'
 const TRIGGER_DELAY = 3000
+const EXCLUDED_PREFIXES = ['/conta', '/checkout', '/pedido', '/admin']
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export function NewsletterPopup() {
+  const pathname = usePathname()
+  const isExcludedRoute = EXCLUDED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<Status>('idle')
@@ -19,6 +24,7 @@ export function NewsletterPopup() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
+    if (isExcludedRoute) return
     if (typeof window === 'undefined') return
     if (localStorage.getItem(STORAGE_KEY)) return
 
@@ -27,7 +33,7 @@ export function NewsletterPopup() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [])
+  }, [isExcludedRoute])
 
   function handleClose() {
     setIsOpen(false)
@@ -53,6 +59,8 @@ export function NewsletterPopup() {
       setErrorMsg(result.error)
     }
   }
+
+  if (isExcludedRoute) return null
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size='xl'>
