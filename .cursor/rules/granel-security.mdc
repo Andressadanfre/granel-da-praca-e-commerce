@@ -37,6 +37,59 @@ alwaysApply: true
 - Auth: 5 req/min por IP
 - Produtos: 60 req/min (pode ser mais liberal)
 
+# Segurança Web
+
+## Headers HTTP obrigatórios (next.config.mjs)
+- `X-Frame-Options: DENY` · `X-Content-Type-Options: nosniff` · `Referrer-Policy: strict-origin-when-cross-origin`
+- `Content-Security-Policy`: `default-src 'self'` · `img-src 'self' data: https:` · `connect-src 'self' https://*.supabase.co` · fontes apenas de fonts.gstatic.com
+
+## XSS
+- Proibido `dangerouslySetInnerHTML` sem sanitização — instalar `isomorphic-dompurify` antes de qualquer uso
+- React escapa `{variavel}` em JSX automaticamente — nunca contornar com HTML bruto
+
+## CSRF
+- Mutações autenticadas: sempre Server Actions (proteção nativa de origin) — nunca Route Handlers
+- Mesmo com Server Actions: validar sessão, autorização e origem esperada
+- Cookies de sessão: `httpOnly; Secure; SameSite=Strict`
+
+## Open Redirect
+- Proibido `redirect(params.url)` — sempre paths internos fixos
+
+## Upload de arquivos (admin)
+- Aceitar apenas: jpg, jpeg, png, webp — máx 5MB
+- Validar MIME type no servidor — nunca confiar no `Content-Type` do cliente
+
+## Identidade no servidor
+- Nunca confiar em `user_id` enviado pelo cliente como parâmetro
+- Sempre: `const { data: { user } } = await supabase.auth.getUser()` → se nulo, `{ success: false, error: 'Não autorizado' }`
+- Toda query de mutação ou leitura sensível inclui `.eq('user_id', user.id)`
+
+## RBAC
+| Ação | customer | admin |
+|---|---|---|
+| Ver próprio pedido | ✅ | ✅ |
+| Ver pedido de terceiros | ❌ | ✅ |
+| Alterar produto/estoque | ❌ | ✅ |
+| Aplicar cupom | ✅ | ✅ |
+
+## IDs públicos
+- orders, payments: UUID obrigatório — nunca int sequencial em URL
+
+## Idempotência de checkout
+- `cart_id` como `idempotency_key` — mesma chave nunca cria dois pedidos
+
+## Auth — fluxo obrigatório
+- `ensureAppUser` (upsert em `app_users` via `getSupabaseAdmin()`) antes de qualquer redirect para `/checkout` — exigido pela FK `orders.user_id → app_users.id`
+
+## Mercado Pago — lições permanentes
+- Env vars `MERCADOPAGO_ACCESS_TOKEN` e `MERCADOPAGO_WEBHOOK_SECRET` devem existir em Vercel Production — conferir SEMPRE antes de testar pagamento (não basta `.env.local`)
+- Nesta conta MP, tokens de TESTE também começam com `APP_USR-` — prefixo NÃO indica ambiente; confirmar pela URL do painel (`/credentials/sandbox` vs `/credentials/production`)
+
+## Postgres — RLS e GRANT são camadas independentes
+- Toda tabela nova exige as DUAS etapas: (1) `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` + `CREATE POLICY`, (2) `GRANT SELECT ON tabela TO anon, authenticated` — sem o GRANT a tabela retorna 401 silencioso para o client anon
+- `service_role` com `rolbypassrls` ainda precisa de GRANT na tabela — bypass de RLS ≠ permissão de tabela; diagnosticar via `information_schema.role_table_grants`
+- Funções `SECURITY DEFINER`: `REVOKE EXECUTE ... FROM PUBLIC` + `GRANT EXECUTE` apenas a `authenticated, service_role`
+
 # Segurança Admin — rotas /admin/*
 
 ## Middleware obrigatório

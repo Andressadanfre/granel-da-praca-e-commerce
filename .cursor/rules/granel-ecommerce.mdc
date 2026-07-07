@@ -10,14 +10,33 @@ alwaysApply: true
 - Design system próprio — sem shadcn/ui
 
 # Design Tokens (DS v3.1)
-- Background geral: #F9F5EF (cream) — nunca branco puro
-- CTA principal: #00B207 — exclusivo para Finalizar compra, Buscar, Confirmar pedido
-- Add-to-cart: #2C742F — nunca #00B207 nos cards do catálogo
-- Hover todos os CTAs: #1A5C1E
-- Badge promo: #C0694A — NUNCA #E65100
+Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
+
+## Cores (classe → hex → uso)
+- g #00B207 — CTA conversão: Finalizar compra · Buscar · Confirmar pedido (exclusivo)
+- gd #2C742F — Add-to-cart nos cards do catálogo — NUNCA #00B207 aqui
+- gdeep #002603 — TopBar · preços · logo · fundos escuros
+- ghover #1A5C1E — hover único de todos os CTAs
+- g-muted #F1F8E9 — hover botão secondary · g-light #E8F5E9 — eyebrow pill · ícones leves
+- cream #F9F5EF — background geral, NUNCA branco puro · cream-img #F0EBE2 — área de imagem do ProductCard · surface #F9FAFB — cards e inputs
+- Texto: t9 #111827 primário · t7 #374151 preço/kg (AAA) · t6 #4B5563 suporte · t5 #6B7280 preço riscado (AA) · t4 #9CA3AF labels muted
+- bd #E5E7EB — bordas padrão
+- promo #C0694A terracota (NUNCA #E65100) · promo-bg #FBF1EE
+- indigo #3730A3 badge "Por unidade" · indigo-bg #EEF2FF
+- danger #EF4444 · badge-diet-bg #EAF7EA · badge-diet-tx #2C742F · badge-diet-bd #C6E6C7
+- icon-bg #F0FDF4 · warning-bg #FEF3C7 · warning-text #92400E · lime #D4F567 ofertas
+
+## Border-radius
+- rounded-input 8px · rounded-sel 10px (QuantitySelector) · rounded-inner 12px (painéis/badges) · rounded-modal 16px · rounded-card 20px (ProductCard) · rounded-pill 100px
+
+## Shadows
+- shadow-card (ProductCard) · shadow-card-hover · shadow-drawer (MobileNavDrawer) · shadow-nav
+
+## Regras gerais
 - stroke-width em todos os SVGs: 1.6
-- border-radius ProductCard: 20px (--r-card)
 - Unidade de peso: gr — nunca g ou gram
+- Badge: apenas 6 variantes (diet, promo, unit, discount, low-stock, featured) — não criar novas sem aprovação
+- Badge com number como children: template literal `${n}% OFF` — nunca JSX com number direto
 
 # QuantitySelector
 - Estado idle: botão "+ Adicionar" full-width, height 40px, bg #2C742F
@@ -35,6 +54,82 @@ alwaysApply: true
   - categories: usa is_active (não is_deleted) · usa sort_order (não display_order) · NÃO tem is_deleted
   - products: usa price_cents + increment_grams · NÃO existe price_per_100g_cents
   - Cálculo granel: price_cents / 10 = preço por 100gr · increment_grams NUNCA é divisor de preço, é só o step do QuantitySelector (100 granel / 1 unit)
+
+# Orders — Domínio (invariantes)
+- Gateway de pagamento DEFINITIVO: Mercado Pago — referências a "Asaas" em docs antigos estão erradas, ignorar
+- `tipo_entrega TEXT NOT NULL CHECK (IN ('entrega', 'retirada'))` — definido no checkout, NUNCA alterável após criação
+- Enum order_status FECHADO: recebido · aceito · em_separacao · saiu_para_entrega · pronto_para_retirada · entregue · retirado · cancelado
+- Fluxo entrega: recebido → aceito → em_separacao → saiu_para_entrega → entregue
+- Fluxo retirada: recebido → aceito → em_separacao → pronto_para_retirada → retirado
+- saiu_para_entrega só quando tipo_entrega='entrega' · pronto_para_retirada só quando tipo_entrega='retirada'
+- Cancelamento: livre até 'aceito'; de 'em_separacao' em diante exige justificativa obrigatória registrada em admin_audit_log
+- Nunca DELETE físico de pedido — status='cancelado' + audit log
+- orders + order_items inseridos via RPC atômica create_order_with_items (SECURITY DEFINER) — nunca dois .insert() sequenciais
+- Admin vive no route group (admin)/ do MESMO projeto Next.js — decisão fechada, não é projeto separado
+- Cupom de separação térmico: Bematech MP 4200 TH, bobina 80mm, coluna única, @media print only, rota /admin/pedidos/[id]/imprimir. Campos: código pedido (GP0001), cliente, tipo entrega/retirada, itens (código + nome + quantidade em gr/un), observações, total BRL, forma de pagamento, checkbox por item. Marcar item separado → status='em_separacao'. NF-e continua no Explend ERP — não replicar
+
+# Regras de Negócio
+- Granel: incremento mínimo 100 gr, sem teto · ≥1000 gr exibe em kg com vírgula BR (1 kg, 1,5 kg)
+- Preço por 100 gr exibido: Math.round(price_cents / 10) · preço por kg: price_cents direto
+- Estoque: in_stock venda normal · low_stock badge "Últimas unidades" + venda permitida · out_of_stock botão desabilitado · proibido estoque negativo (validar no servidor)
+- Preço no checkout: SEMPRE relido do banco — se mudou desde a adição ao carrinho, notificar antes de confirmar
+- Produto is_active=false ou is_deleted=true → notFound() em toda rota, nunca em listagens/busca
+- Frete: R$ 15,00 fixo · grátis ≥ R$ 100,00 · calculado exclusivamente no servidor
+- Parcelamento: 2x sem juros ≥ R$ 150,00 · 3x sem juros ≥ R$ 300,00
+- PIX: 5% de desconto — aplicado no servidor
+- Fidelidade (carimbo digital): 1 ponto / R$ 50,00 · 10 pontos = R$ 15,00 de desconto automático · expira em 12 meses sem atividade · não combinável com 1ª compra nem cupons · UI em /conta/fidelidade (10 espaços)
+- 1ª compra: 10% automático na primeira compra ≥ R$ 150,00 — sem cupom
+- Cupom: validar no servidor (ativo, prazo, used_count < max_uses) · decremento atômico via RPC
+- Botão "Tive um problema com meu pedido" (em /pedido/[codigo] e /conta/pedidos): abre https://wa.me/5534997819292 com mensagem pré-preenchida (encodeURIComponent) contendo o código do pedido
+- Notificação de mudança de status: WhatsApp automático via n8n · cliente acompanha em /pedido/[codigo] via Supabase Realtime
+
+# Padrões Next.js
+## Error handling — padrão único
+- Server Actions: retornar { success: false, error: 'mensagem amigável' } / { success: true, data } — nunca throw bruto para a UI
+- Route Handlers: try/catch → logger.error() + resposta genérica 500
+- Nunca expor error.message, error.stack ou mensagem do banco ao cliente
+
+## Cache e revalidação
+- Rota que lê searchParams/cookies() ou admin com mutações: export const dynamic = 'force-dynamic'
+- Rota pública sem filtros dinâmicos: export const revalidate = N (ISR)
+- Server Actions que alteram dados públicos: revalidatePath('/loja') + revalidatePath da PDP ao final
+- generateMetadata + Page com a mesma query: deduplicar com cache() do React — 1 query por requisição
+
+## localStorage e hidratação
+- isMounted + skeleton apenas para componentes 100% dependentes de browser (ex: badge do carrinho) — nunca return null em elemento LCP
+- Alternativa preferida para subcomponentes isolados: dynamic(() => import('./X'), { ssr: false })
+
+## Performance
+- Core Web Vitals: LCP < 2.5s · CLS < 0.1 · INP < 200ms
+- First Load JS < 250kb gzip — conferir no npm run build
+- Lazy loading obrigatório: modais, drawers, admin, componentes pesados — const X = dynamic(() => import('./X'))
+- Imagens: next/image sempre · WebP/AVIF · priority só no LCP · sizes descritivo em todo fill
+
+## SEO — rotas públicas
+- generateMetadata obrigatório: title `${nome} | Granel da Praça` · description ≤155 chars · openGraph.images via pickPrimaryImage(images) (products NÃO tem image_url) · alternates.canonical
+
+## Observabilidade
+- logger de src/lib/logger.ts (pino) — logger.info/warn/error · nunca console.*
+- Todo log: request_id sempre · user_id quando autenticado · route — nunca senha, token, CPF, cartão, session
+- src/lib/sanitizeForLog.ts para mascarar dados sensíveis (LGPD)
+- Admin: toda alteração de produto/preço/estoque/cupom gera registro de audit (quem · o quê · quando · valor anterior · valor novo)
+
+# Componentes
+- HeroBanner.tsx → Server Component — não adicionar hooks nem handlers
+- HeroSlider.tsx → Client Component — novos slides apenas no array SLIDES · imagens em public/images/hero/
+- Framer Motion: ease como [n,n,n,n] tuple tipada — nunca number[]
+- pickPrimaryImage(images) em src/lib/utils.ts — url com is_primary=true, ou a primeira, ou null
+
+# Lições Permanentes (técnicas)
+- pr-12 em overflow-x-auto não garante padding no fim do scroll → spacer shrink-0 inline
+- Cache webpack corrompido após criar/mover arquivo → npm run build:clean
+- "missing required error components" no dev → taskkill /F /IM node.exe + Remove-Item -Recurse -Force .next + npm run dev
+- Import default vs named → Select-String "^export" no arquivo antes de importar
+- poppins.variable no <html> não aplica fonte → poppins.className no <body>
+- Navigation é sticky → <main> não precisa de padding-top de compensação
+- <Link> envolvendo ProductCard é HTML inválido (<a> não pode conter <button>) → renderizar sem wrapper
+- Migration via Supabase MCP deixa src/types/database.ts desatualizado → regenerar com npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public (preservar helper Tables<T>)
+- Notion MCP: insert_content confiável · update_content falha silenciosamente em células de tabela → inserir bloco no topo com position: start
 
 # Código
 - Server Components por padrão — 'use client' só para interatividade real
