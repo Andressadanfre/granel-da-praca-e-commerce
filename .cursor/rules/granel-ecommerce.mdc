@@ -65,7 +65,7 @@ Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
 - Cancelamento: livre até 'aceito'; de 'em_separacao' em diante exige justificativa obrigatória registrada em admin_audit_log
 - Nunca DELETE físico de pedido — status='cancelado' + audit log
 - orders + order_items inseridos via RPC atômica create_order_with_items (SECURITY DEFINER) — nunca dois .insert() sequenciais
-- Admin vive no route group (admin)/ do MESMO projeto Next.js — decisão fechada, não é projeto separado
+- Admin em `src/app/admin/` (sem route group) no MESMO projeto Next.js — parênteses removeriam o prefixo `/admin` da URL e quebrariam o middleware RBAC. Decisão fechada, não é projeto separado
 - Cupom de separação térmico: Bematech MP 4200 TH, bobina 80mm, coluna única, @media print only, rota /admin/pedidos/[id]/imprimir. Campos: código pedido (GP0001), cliente, tipo entrega/retirada, itens (código + nome + quantidade em gr/un), observações, total BRL, forma de pagamento, checkbox por item. Marcar item separado → status='em_separacao'. NF-e continua no Explend ERP — não replicar
 
 # Regras de Negócio
@@ -140,6 +140,7 @@ Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
 - CartIcon usa localStorage key 'granel:cart_count' + eventos 'storage' (cross-tab) e 'cart:updated' (same-tab)
 - SearchBar navega para /loja?q= via router.push com encodeURIComponent
 - Para atualizar badge do carrinho: window.dispatchEvent(new CustomEvent('cart:updated', { detail: novoCount }))
+- Mobile-First estrito: classes sem prefixo = mobile (390px); escalar com md: (tablet) e lg: (desktop) conforme breakpoints do DS v3.1 — nunca desktop-first com max-*
 
 # Terminal
 - PowerShell only — nunca bash ou sh
@@ -170,6 +171,11 @@ Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
 # ERRADO: className={['flex', condition && 'border-l'].filter(Boolean).join(' ')}
 # CERTO: className={cn('flex', condition && 'border-l')}
 # REGRA: sempre cn() de @/lib/utils para classes condicionais
+
+### Mobile-First
+# ERRADO: className="flex-row max-md:flex-col" — desktop-first com max-*
+# CERTO: className="flex-col md:flex-row lg:gap-6" — base = mobile (390px), md: tablet, lg: desktop
+# REGRA: Mobile-First estrito: classes sem prefixo = mobile (390px); escalar com md: (tablet) e lg: (desktop) conforme breakpoints do DS v3.1 — nunca desktop-first com max-*
 
 ### Hex isolado com constante nomeada
 # QUANDO: hex sem token no DS v3.1 usado por decisão intencional de escopo

@@ -19,7 +19,7 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 
 - Design system próprio (DS v3.1) — **sem** shadcn/ui. Tokens em `tailwind.config.ts` e `.cursor/rules/granel-ecommerce.mdc`.
 - Gateway de pagamento DEFINITIVO: **Mercado Pago**. Referências a "Asaas" em docs antigos estão erradas — ignorar.
-- Admin no route group `(admin)/` do **mesmo** projeto — decisão fechada.
+- Admin em `src/app/admin/` (sem route group) no **mesmo** projeto — parênteses removeriam o prefixo `/admin` da URL e quebrariam o middleware RBAC. Decisão fechada.
 
 ---
 
@@ -130,7 +130,7 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 
 ## Checklist Pré-Commit
 
-- [ ] Zero `console.*` — `Select-String -r "console\." src/`
+- [ ] Zero `console.*` — `Select-String -r "console\." src/` (ok para ASCII puro; não confiável em conteúdo acentuado — usar `Get-Content -Raw`)
 - [ ] Zero `as any` / `as unknown as` / `@ts-ignore` sem justificativa
 - [ ] Zero `style` estático · classes condicionais via `cn()` · zero hex novo fora de `tailwind.config.ts`
 - [ ] Nenhuma query com campos inexistentes (`price_per_100g_cents`, `image_url` em products, `is_deleted` em categories)
