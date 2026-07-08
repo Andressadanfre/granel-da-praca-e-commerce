@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { CartItem } from '@/lib/cart/types'
 import type { OrderDeliveryType, PaymentMethod } from '@/lib/orders/types'
@@ -196,7 +197,14 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
       {/* Aviso de sessão pendente */}
       {!prefillEmail && (
         <div className="bg-[#FEF9C3] border-b border-[#FDE68A] px-4 py-2.5 text-center text-[12px] text-[#854D0E] font-medium">
-          Você não está logado. Preencha seus dados abaixo — faça login para acompanhar o pedido futuramente.
+          Você não está logado. Preencha seus dados abaixo —{' '}
+          <Link
+            href="/conta/login?redirect=/checkout"
+            className="font-semibold underline hover:text-[#713F12]"
+          >
+            faça login
+          </Link>{' '}
+          para acompanhar o pedido futuramente.
         </div>
       )}
 

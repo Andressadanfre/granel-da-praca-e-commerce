@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signInWithPasswordAction } from '@/lib/auth/actions'
+import { safeRedirect } from '@/lib/auth/safeRedirect'
 import { GoogleButton } from './GoogleButton'
 
 interface LoginFormProps {
@@ -12,6 +13,8 @@ interface LoginFormProps {
 
 export function LoginForm({ initialError = null }: LoginFormProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const postLoginPath = safeRedirect(searchParams.get('redirect'))
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,7 +35,7 @@ export function LoginForm({ initialError = null }: LoginFormProps) {
       return
     }
 
-    router.push('/checkout')
+    router.push(postLoginPath)
   }
 
   return (
@@ -42,7 +45,7 @@ export function LoginForm({ initialError = null }: LoginFormProps) {
         <p className="mt-1 text-sm text-t6">Acesse sua conta para finalizar seu pedido</p>
 
         <div className="mt-6">
-          <GoogleButton />
+          <GoogleButton redirectPath={postLoginPath} />
         </div>
 
         <div className="my-5 flex items-center gap-3 text-xs text-t4">

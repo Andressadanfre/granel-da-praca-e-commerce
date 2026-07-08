@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase/server'
 import { LoginForm } from '@/components/auth/LoginForm'
+import { safeRedirect } from '@/lib/auth/safeRedirect'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 interface LoginPageProps {
-  searchParams: { erro?: string }
+  searchParams: { erro?: string; redirect?: string }
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
@@ -19,12 +21,16 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
-    redirect('/checkout')
+    redirect(safeRedirect(searchParams.redirect))
   }
 
   const initialError = searchParams.erro === 'perfil'
     ? 'Não foi possível completar seu login. Tente novamente.'
     : null
 
-  return <LoginForm initialError={initialError} />
+  return (
+    <Suspense fallback={null}>
+      <LoginForm initialError={initialError} />
+    </Suspense>
+  )
 }

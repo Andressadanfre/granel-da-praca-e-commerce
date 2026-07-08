@@ -3,15 +3,25 @@
 import { useState } from 'react'
 import { getSupabase } from '@/lib/supabase/client'
 
-export function GoogleButton() {
+interface GoogleButtonProps {
+  redirectPath?: string
+}
+
+export function GoogleButton({ redirectPath = '/' }: GoogleButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleClick() {
     setIsLoading(true)
     const supabase = getSupabase()
+
+    const callbackUrl = new URL('/auth/callback', window.location.origin)
+    if (redirectPath !== '/') {
+      callbackUrl.searchParams.set('redirect', redirectPath)
+    }
+
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: callbackUrl.toString() },
     })
   }
 
