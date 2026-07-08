@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Castanha de Caju W1 — Granel da Praça</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─────────────────────────────────────────
+   TOKENS — Design System Granel da Praça v3.0
+───────────────────────────────────────── */
+:root {
+  --g:       #00B207;
+  --gd:      #2C742F;
+  --gdeep:   #002603;
+  --ghover:  #1A5C1E;
+  --cream:   #F9F5EF;
+  --cream-img: #F0EBE2;
+  --surface: #F9FAFB;
+  --white:   #ffffff;
+  --t9:      #111827;
+  --t6:      #4B5563;
+  --t4:      #9CA3AF;
+  --bd:      #E5E7EB;
+  --green-light: #EAF7EA;
+  --green-mid:   #C6E6C7;
+
+  /* Border-radius canônico */
+  --r-input:  8px;
+  --r-sel:   10px;
+  --r-inner: 12px;
+  --r-modal: 16px;
+  --r-card:  20px;
+  --r-pill: 100px;
+
+  /* Spacing scale */
+  --s1:  4px;  --s2:  8px;  --s3: 12px;  --s4: 16px;
+  --s5: 20px;  --s6: 24px;  --s8: 32px;  --s10: 40px;
+  --s12: 48px; --s20: 80px;
+
+  /* Sombras */
+  --shadow-card:       0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover: 0 20px 50px rgba(0,0,0,.09), 0 4px 12px rgba(0,0,0,.04);
+
+  /* Transição padrão */
+  --ease: .18s cubic-bezier(.4,0,.2,1);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--cream);
+  color: var(--t9);
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────
+   LAYOUT PDP
+   max-width: 1280px · padding: 32px 80px
+   grid: 480px imagem | 1fr info
+───────────────────────────────────────── */
+.pdp-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--s8) var(--s20) var(--s20);
+}
+
+.pdp-grid {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Coluna de imagem — sticky desktop */
+.pdp-img-col {
+  position: sticky;
+  top: var(--s6);
+}
+
+/* Wrap da imagem — aspect-ratio 1:1 garante quadrado perfeito */
+.pdp-img-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--r-modal);
+  overflow: hidden;
+  background: var(--cream-img);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdp-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pdp-placeholder   { width: 128px; height: 128px; opacity: .10; }
+
+/* ─────────────────────────────────────────
+   COLUNA INFO
+───────────────────────────────────────── */
+.pdp-info { display: flex; flex-direction: column; }
+
+/* Token caption (11px/500) */
+.pdp-category {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--t4);
+  margin-bottom: var(--s2);
+}
+
+/* Token display-md (26px/700) */
+.pdp-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--t9);
+  line-height: 1.3;
+  letter-spacing: -.02em;
+  margin-bottom: var(--s3);
+}
+
+/* Badges — pill (border-radius: 100px) */
+.pdp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--s5);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-pill);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  border: 1px solid transparent;
+}
+
+/* Variantes de badge — conforme DS */
+.badge--diet { background: #EAF7EA; color: #2C742F; border-color: #C6E6C7; }
+.badge--org  { background: #ECFDF5; color: #065F46; border-color: #6EE7B7; }
+.badge--unit { background: #EEF2FF; color: #3730A3; border-color: #C7D2FE; }
+.badge--new  { background: #2C742F; color: #fff;    border-color: #2C742F; }
+.badge--promo{ background: #FFF3E0; color: #C0694A; border-color: #FFDAAA; } /* terracota DS */
+
+.divider { height: 1px; background: var(--bd); margin: var(--s4) 0; }
+
+/* ─────────────────────────────────────────
+   BLOCO DE PREÇO
+   Token caption (11px) / price-main (36px/700)
+───────────────────────────────────────── */
+.pdp-price-ref  { font-size: 11px; color: var(--t4); margin-bottom: 4px; }
+.pdp-price-row  { display: flex; align-items: baseline; gap: var(--s2); margin-bottom: 4px; }
+.pdp-price-main { font-size: 36px; font-weight: 700; color: var(--gdeep); line-height: 1; letter-spacing: -.03em; }
+.pdp-price-unit { font-size: 13px; font-weight: 500; color: var(--t6); }
+.pdp-price-kg   { font-size: 11px; color: var(--t4); margin-bottom: var(--s5); }
+
+/* ─────────────────────────────────────────
+   QUANTITY SELECTOR — Split variant (PDP)
+   Frame horizontal · Fixed height 52px
+   Border rectangular 12px — não pill
+───────────────────────────────────────── */
+.qty-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--t6);
+  margin-bottom: var(--s2);
+}
+
+.qty-stepper {
+  display: flex;
+  align-items: stretch;
+  height: 52px;
+  border-radius: var(--r-inner);
+  border: 1.5px solid var(--bd);
+  background: var(--white);
+  overflow: hidden;
+  user-select: none;
+  margin-bottom: var(--s2);
+}
+
+/* Botões − e + do stepper — Fixed 52×52 */
+.qty-stepper__btn {
+  width: 52px;
+  min-width: 52px;
+  background: transparent;
+  border: none;
+  color: var(--gd);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease);
+  flex-shrink: 0;
+}
+
+.qty-stepper__btn:hover  { background: var(--green-light); }
+.qty-stepper__btn:active { background: var(--green-mid); }
+
+/* Display central — separadores laterais 1px */
+.qty-stepper__display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-left:  1px solid var(--bd);
+  border-right: 1px solid var(--bd);
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.2;
+}
+
+/* Token body-md / caption */
+.qty-stepper__display strong { font-size: 15px; font-weight: 600; color: var(--t9); }
+.qty-stepper__display small  { font-size: 10px; color: var(--t4); font-weight: 400; }
+
+.pdp-subtotal { font-size: 12px; color: var(--t4); text-align: right; margin-bottom: var(--s4); }
+.pdp-subtotal strong { color: var(--t9); font-weight: 600; }
+
+/* ─────────────────────────────────────────
+   CTA PRINCIPAL — "Adicionar ao Carrinho"
+   bg: #00B207 (conversão máxima) · height: 52px
+   border-radius: 12px (--r-inner)
+   stroke-width: 1.6 no ícone
+───────────────────────────────────────── */
+.btn-add-cart {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 52px;
+  background: var(--g);
+  color: var(--white);
+  border: none;
+  border-radius: var(--r-inner);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background var(--ease);
+  margin-bottom: var(--s3);
+}
+
+.btn-add-cart:hover  { background: var(--ghover); }
+.btn-add-cart:active { background: var(--gdeep); }
+
+/* ─────────────────────────────────────────
+   BOTÕES DE AÇÃO SECUNDÁRIOS (Favoritar / Compartilhar)
+   border: 1.5px #E5E7EB · hover: borda + texto #2C742F
+   border-radius: 8px (--r-input)
+───────────────────────────────────────── */
+.pdp-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: var(--s5);
+}
+
+.btn-action {
+  font-family: 'Poppins', sans-serif;
+  flex: 1;
+  height: 44px;
+  border-radius: var(--r-input);
+  border: 1.5px solid var(--bd);
+  background: var(--white);
+  color: var(--t6);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all var(--ease);
+}
+
+.btn-action:hover          { border-color: var(--gd); color: var(--gd); }
+.btn-action.active         { border-color: #C0694A; background: #FFF3E0; color: #C0694A; } /* terracota DS */
+
+/* ─────────────────────────────────────────
+   TRUST ROW — TrustBadge horizontal compacto
+   Container ícone: Fixed 16×16 (inline, não círculo)
+   stroke-width: 1.6 canônico
+───────────────────────────────────────── */
+.trust-row {
+  display: flex;
+  border-radius: var(--r-input);
+  border: 1px solid var(--bd);
+  overflow: hidden;
+  background: var(--white);
+}
+
+.trust-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  border-right: 1px solid var(--bd);
+}
+
+.trust-item:last-child { border-right: none; }
+
+.trust-item span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.trust-item .t-title { font-size: 10px; font-weight: 600; color: var(--t9); }
+.trust-item .t-sub   { font-size: 10px; color: var(--t4); }
+
+/* ─────────────────────────────────────────
+   ACORDEÕES
+   border-top geral · cada item border-bottom
+   trigger: 15px/600 · body: 14px/500 #1F2937
+───────────────────────────────────────── */
+.accordions { border-top: 1px solid var(--bd); margin-top: var(--s12); }
+.accordion  { border-bottom: 1px solid var(--bd); }
+
+.accordion__trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--t9);
+  padding: var(--s5) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--ease);
+}
+
+.accordion__trigger:hover { color: var(--gd); }
+
+/* Chevron — stroke-width 1.6 canônico */
+.accordion__chevron {
+  flex-shrink: 0;
+  transition: transform .22s ease;
+  color: var(--t4);
+}
+
+.accordion.open .accordion__chevron { transform: rotate(180deg); }
+
+.accordion__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .28s ease, padding .22s ease;
+}
+
+.accordion.open .accordion__body { max-height: 800px; padding-bottom: var(--s6); }
+
+/* Token body-sm (14px/500) */
+.accordion__body p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F2937;
+  line-height: 1.75;
+}
+
+.accordion__body ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: var(--s3);
+}
+
+.accordion__body ul li {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F2937;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.6;
+}
+
+/* Bullet circular — Fixed 6×6 */
+.accordion__body ul li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gd);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* Tabela nutricional */
+.nutri-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.nutri-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--t4);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: var(--s2) 0;
+  border-bottom: 1px solid var(--bd);
+}
+
+.nutri-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bd);
+  font-size: 13px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+.nutri-table td:last-child  { text-align: right; font-weight: 600; color: var(--t9); }
+.nutri-table tr:last-child td { border-bottom: none; }
+
+/* ─────────────────────────────────────────
+   SEÇÃO SUGESTÕES
+   margin-top: 80px (--s20) · eyebrow + título
+   Grid: 4col desktop · 3col tablet · 2col mobile
+───────────────────────────────────────── */
+.section-related { margin-top: var(--s20); }
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gd);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 6px;
+}
+
+/* Token display-sm (22px/700) */
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--t9);
+  letter-spacing: -.02em;
+  margin-bottom: var(--s6);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s5);
+}
+
+/* ─────────────────────────────────────────
+   PRODUCT CARD — nos relacionados
+   border-radius: 20px (--r-card) canônico
+   hover: translateY(-4px) · shadow-card-hover
+───────────────────────────────────────── */
+.card {
+  font-family: 'Poppins', sans-serif;
+  background: var(--cream);
+  border-radius: var(--r-card);           /* ← corrigido de 16px para 20px */
+  border: 1px solid var(--bd);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--ease), box-shadow var(--ease);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);            /* ← corrigido de -3px para -4px */
+  box-shadow: var(--shadow-card-hover);   /* ← corrigido para token canônico */
+}
+
+.card__img-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Badges absolutos sobre a imagem
+   Constraint: Left/Top (diet) | Right/Top (promo/org) */
+.card__badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Wishlist — círculo absoluto Right/Top · Fixed 30×30 */
+.card__wishlist {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: var(--cream);
+  border-radius: 50%;
+  border: 1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--ease);
+}
+
+.card__wishlist:hover { background: var(--white); }
+
+/* Card body — padding canônico 16px 18px 20px */
+.card__body {
+  padding: var(--s4) 18px var(--s5);     /* ← corrigido de 14px 14px 16px */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Token caption (10px/500) */
+.card__category      { font-size: 10px; font-weight: 500; color: var(--t4); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+/* Token body-sm (13px/600) · line-clamp 2 */
+.card__name          { font-size: 13px; font-weight: 600; color: var(--t9); line-height: 1.35; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(13px * 1.35 * 2); }
+.card__price-ref     { font-size: 11px; color: var(--t4); margin-bottom: 2px; }
+/* Token price-md (18px/600) */
+.card__price-main    { font-size: 18px; font-weight: 600; color: var(--gdeep); line-height: 1; }
+.card__price-unit-label { font-size: 11px; color: var(--t6); margin-top: 3px; }
+.card__spacer        { flex: 1; min-height: var(--s2); }
+
+/* Botão "Adicionar" no card de sugestão
+   bg: #2C742F (add-to-cart) — NÃO #00B207
+   border-radius: 10px (--r-sel) */
+.card__qty-btn {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 40px;
+  background: var(--gd);                 /* ← corrigido de #00B207 para #2C742F */
+  color: var(--white);
+  border: none;
+  border-radius: var(--r-sel);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background var(--ease);
+}
+
+.card__qty-btn:hover { background: var(--ghover); }
+
+/* Card stepper nos relacionados — Split variant menor
+   height: 40px · border-radius: 8px */
+.card-stepper {
+  display: flex;
+  align-items: stretch;
+  height: 40px;
+  border-radius: var(--r-input);
+  border: 1.5px solid var(--bd);
+  background: var(--white);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Botões − e + do card stepper — Fixed 36×36 */
+.card-stepper__btn {
+  width: 36px;
+  min-width: 36px;
+  background: transparent;
+  border: none;
+  color: var(--gd);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease);
+  flex-shrink: 0;
+}
+
+.card-stepper__btn:hover  { background: var(--green-light); }
+.card-stepper__btn:active { background: var(--green-mid); }
+
+.card-stepper__display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-left:  1px solid var(--bd);
+  border-right: 1px solid var(--bd);
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.2;
+}
+
+.card-stepper__display strong { font-size: 12px; font-weight: 600; color: var(--t9); }
+.card-stepper__display small  { font-size: 9px;  color: var(--t4); }
+
+/* ─────────────────────────────────────────
+   RESPONSIVIDADE
+───────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pdp-wrap  { padding: var(--s6) var(--s6) var(--s12); }
+  .pdp-grid  { grid-template-columns: 1fr 1fr; gap: var(--s8); }
+  .pdp-img-col { position: static; }
+  .pdp-name  { font-size: 22px; }
+  .related-grid { grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+}
+
+@media (max-width: 768px) {
+  .pdp-wrap  { padding: var(--s4) var(--s4) var(--s12); }
+  .pdp-grid  { grid-template-columns: 1fr; gap: var(--s5); }
+  .pdp-img-col { position: static; }
+  .pdp-name  { font-size: 20px; }
+  .pdp-price-main { font-size: 28px; }
+  /* Trust row oculta no mobile — informação não prioritária */
+  .trust-row { display: none; }
+  .accordions    { margin-top: var(--s8); }
+  .section-related { margin-top: 56px; }
+  .section-title { font-size: 18px; }
+  .related-grid  { grid-template-columns: repeat(2, 1fr); gap: var(--s3); }
+  .card__img-wrap { height: 150px; }
+  .card__name    { font-size: 12px; }
+  .card__price-main { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  .related-grid  { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .card__img-wrap { height: 130px; }
+}
+</style>
+</head>
+<body>
+<div style="background:var(--cream);min-height:100vh;">
+<div class="pdp-wrap">
+
+  <!-- GRID PRINCIPAL — 480px imagem + 1fr info -->
+  <div class="pdp-grid">
+
+    <!-- COLUNA IMAGEM — sticky desktop -->
+    <div class="pdp-img-col">
+      <!-- aspect-ratio:1 garante quadrado sem distorção -->
+      <div class="pdp-img-wrap">
+        <svg class="pdp-placeholder" viewBox="0 0 88 88" fill="none" aria-hidden="true">
+          <ellipse cx="44" cy="52" rx="30" ry="22" fill="#002603"/>
+          <ellipse cx="44" cy="38" rx="20" ry="16" fill="#002603"/>
+          <ellipse cx="36" cy="30" rx="8"  ry="6"  fill="#002603"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- COLUNA INFO -->
+    <div class="pdp-info">
+
+      <!-- Categoria — token caption -->
+      <p class="pdp-category">Castanhas</p>
+
+      <!-- Nome — token display-md (26px/700) -->
+      <h1 class="pdp-name">Castanha de Caju W1 Torrada Sem Sal</h1>
+
+      <!-- Badges — pills 100px border-radius -->
+      <div class="pdp-badges">
+        <span class="badge badge--diet">Sem Glúten</span>
+        <span class="badge badge--diet">Vegano</span>
+        <span class="badge badge--org">Natural</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Bloco de preço — hierarquia: ref (11px) / main (36px) / kg (11px) -->
+      <p class="pdp-price-ref">Preço por 100gr</p>
+      <div class="pdp-price-row">
+        <span class="pdp-price-main">R$ 12,90</span>
+        <span class="pdp-price-unit">/ 100gr</span>
+      </div>
+      <p class="pdp-price-kg">R$ 129,00/kg</p>
+
+      <!-- QuantitySelector — Split variant PDP -->
+      <p class="qty-label">Quantidade</p>
+      <div class="qty-stepper">
+        <!-- Botão − — Fixed 52×52, stroke-width 1.6 -->
+        <button class="qty-stepper__btn" onclick="pdpDec()" aria-label="Diminuir">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="qty-stepper__display">
+          <strong id="qty-display">100 gr</strong>
+          <small>100gr por clique</small>
+        </div>
+        <!-- Botão + — Fixed 52×52, stroke-width 1.6 -->
+        <button class="qty-stepper__btn" onclick="pdpInc()" aria-label="Aumentar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5"  y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="pdp-subtotal">Total: <strong id="pdp-subtotal">R$ 12,90</strong></p>
+
+      <!-- CTA principal — #00B207, height 52px, stroke-width 1.6 -->
+      <button class="btn-add-cart" onclick="pdpAddCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        Adicionar ao Carrinho
+      </button>
+
+      <!-- Ações secundárias — borda #E5E7EB, hover #2C742F, favorito ativo: terracota DS -->
+      <div class="pdp-actions">
+        <button class="btn-action" id="btn-wish" onclick="toggleWish()">
+          <svg id="wish-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span id="wish-label">Favoritar</span>
+        </button>
+        <button class="btn-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5"  r="3"/>
+            <circle cx="6"  cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59"  y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"/>
+          </svg>
+          Compartilhar
+        </button>
+      </div>
+
+      <!-- Trust Row — stroke-width 1.6, container ícone inline (não circular) -->
+      <div class="trust-row">
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5"  cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <span><span class="t-title">Entrega hoje</span><span class="t-sub">pedido até 14h</span></span>
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          <span><span class="t-title">Frete grátis</span><span class="t-sub">acima de R$ 100</span></span>
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+          <span><span class="t-title">100% natural</span><span class="t-sub">sem conservantes</span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACORDEÕES — "Como usar" aberto por padrão no desktop, fechado mobile -->
+  <div class="accordions">
+
+    <div class="accordion open" id="acc-uso">
+      <!-- Chevron stroke-width 1.6 -->
+      <button class="accordion__trigger" onclick="toggleAcc('acc-uso')">
+        Como usar
+        <svg class="accordion__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="accordion__body">
+        <p>As castanhas de caju W1 torradas são versáteis e deliciosas. Consuma diretamente como snack, adicione em saladas, granolas, iogurtes ou receitas doces e salgadas. Por serem torradas sem sal, mantêm o sabor natural e preservam as propriedades nutricionais.</p>
+        <ul>
+          <li>Consuma como snack puro ou temperado com especiarias</li>
+          <li>Acrescente em saladas, granolas e bowls</li>
+          <li>Use em receitas de brigadeiro, pé de moleque ou paçoca</li>
+          <li>Misture com frutas secas para um mix energético</li>
+          <li>Armazene em recipiente fechado em local fresco e seco por até 60 dias</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion" id="acc-nutri">
+      <button class="accordion__trigger" onclick="toggleAcc('acc-nutri')">
+        Informações nutricionais
+        <svg class="accordion__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="accordion__body">
+        <p style="font-size:11px;color:var(--t4);margin-bottom:12px;font-weight:400;">Porção de 30gr (aproximadamente 10 unidades)</p>
+        <table class="nutri-table">
+          <thead><tr><th>Nutriente</th><th style="text-align:right">Quantidade</th></tr></thead>
+          <tbody>
+            <tr><td>Valor energético</td><td>174 kcal</td></tr>
+            <tr><td>Carboidratos</td>   <td>8,5 g</td></tr>
+            <tr><td>Proteínas</td>      <td>5,1 g</td></tr>
+            <tr><td>Gorduras totais</td><td>14,0 g</td></tr>
+            <tr><td>Gorduras saturadas</td><td>2,8 g</td></tr>
+            <tr><td>Fibra alimentar</td><td>0,9 g</td></tr>
+            <tr><td>Sódio</td>          <td>0 mg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="accordion" id="acc-sobre">
+      <button class="accordion__trigger" onclick="toggleAcc('acc-sobre')">
+        Sobre o produto
+        <svg class="accordion__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="accordion__body">
+        <p>A Castanha de Caju W1 é a classificação mais nobre do caju — castanhas inteiras, grandes e uniformes. Torradas artesanalmente sem adição de sal ou conservantes, preservando sabor e valor nutricional.</p>
+        <ul>
+          <li>Origem: Nordeste do Brasil (Ceará)</li>
+          <li>Classificação: W1 — inteiras e selecionadas</li>
+          <li>Processamento: torrada sem adição de sal ou óleo</li>
+          <li>Sem glúten, vegana e sem conservantes artificiais</li>
+          <li>Vendida a granel — pague apenas pelo que precisar</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUGESTÕES — margin-top 80px (--s20) · 4col desktop / 2col mobile -->
+  <div class="section-related">
+    <p class="section-eyebrow">Sugestões para você</p>
+    <h2 class="section-title">Você também pode gostar</h2>
+    <div class="related-grid">
+
+      <!-- Card 1 — Granel · badge diet -->
+      <div class="card">
+        <div class="card__img-wrap" style="background:linear-gradient(145deg,#FFF8E1,#FFECB3);">
+          <svg style="opacity:.12;width:60px;height:60px;" viewBox="0 0 88 88" fill="none">
+            <ellipse cx="30" cy="50" rx="14" ry="10" fill="#002603"/>
+            <ellipse cx="55" cy="44" rx="12" ry="9"  fill="#002603"/>
+            <ellipse cx="44" cy="34" rx="10" ry="8"  fill="#002603"/>
+          </svg>
+          <div class="card__badges"><span class="badge badge--diet">Sem Glúten</span></div>
+          <!-- Wishlist — círculo Fixed 30×30, constraint Right/Top -->
+          <div class="card__wishlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__category">Castanhas</div>
+          <div class="card__name">Mix Premium de Castanhas e Nozes</div>
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 15,50</span></div>
+          <div class="card__price-unit-label">R$ 155,00/kg</div>
+          <div class="card__spacer"></div>
+          <!-- Botão add-to-cart: #2C742F — NÃO #00B207 -->
+          <div id="r0">
+            <button class="card__qty-btn" onclick="event.stopPropagation();addR(0,15.5,'granel')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5"  y1="12" x2="19" y2="12"/>
+              </svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Granel · badge org -->
+      <div class="card">
+        <div class="card__img-wrap" style="background:linear-gradient(145deg,#E8F5E9,#C8E6C9);">
+          <svg style="opacity:.12;width:60px;height:60px;" viewBox="0 0 88 88" fill="none">
+            <circle cx="44" cy="44" r="26" fill="#002603"/>
+          </svg>
+          <div class="card__badges"><span class="badge badge--org">Orgânico</span></div>
+          <div class="card__wishlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__category">Castanhas</div>
+          <div class="card__name">Amendoim Cru Orgânico Graúdo</div>
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 3,90</span></div>
+          <div class="card__price-unit-label">R$ 39,00/kg</div>
+          <div class="card__spacer"></div>
+          <div id="r1">
+            <button class="card__qty-btn" onclick="event.stopPropagation();addR(1,3.9,'granel')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5"  y1="12" x2="19" y2="12"/>
+              </svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Unidade · badge unit -->
+      <div class="card">
+        <div class="card__img-wrap" style="background:linear-gradient(145deg,#EDE7F6,#D1C4E9);">
+          <svg style="opacity:.12;width:60px;height:60px;" viewBox="0 0 88 88" fill="none">
+            <rect x="20" y="20" width="48" height="48" rx="8" fill="#002603"/>
+          </svg>
+          <div class="card__badges"><span class="badge badge--unit">Por unidade</span></div>
+          <div class="card__wishlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__category">Óleos e Adoçantes</div>
+          <div class="card__name">Pasta de Amendoim Integral Crocante 450g</div>
+          <div class="card__price-ref">Preço por unidade</div>
+          <div><span class="card__price-main">R$ 22,90</span></div>
+          <div class="card__spacer"></div>
+          <div id="r2">
+            <button class="card__qty-btn" onclick="event.stopPropagation();addR(2,22.9,'unit')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5"  y1="12" x2="19" y2="12"/>
+              </svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 — Granel · badge new -->
+      <div class="card">
+        <div class="card__img-wrap" style="background:linear-gradient(145deg,#FFF3E0,#FFCC80);">
+          <svg style="opacity:.12;width:60px;height:60px;" viewBox="0 0 88 88" fill="none">
+            <ellipse cx="44" cy="50" rx="26" ry="18" fill="#002603"/>
+            <ellipse cx="44" cy="36" rx="16" ry="12" fill="#002603"/>
+          </svg>
+          <div class="card__badges"><span class="badge badge--new">Novidade</span></div>
+          <div class="card__wishlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__category">Frutas Secas</div>
+          <div class="card__name">Tâmara Medjool Premium Importada</div>
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 18,90</span></div>
+          <div class="card__price-unit-label">R$ 189,00/kg</div>
+          <div class="card__spacer"></div>
+          <div id="r3">
+            <button class="card__qty-btn" onclick="event.stopPropagation();addR(3,18.9,'granel')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5"  y1="12" x2="19" y2="12"/>
+              </svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /pdp-wrap -->
+</div>
+
+<script>
+// ── PDP PRINCIPAL ──
+const PRICE = 12.9, STEP = 100;
+let qty = 100;
+
+function fmtW(g) {
+  return g >= 1000
+    ? (g / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 1 }) + ' kg'
+    : g + ' gr';
+}
+
+function fmtBRL(v) {
+  return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function render() {
+  document.getElementById('qty-display').textContent  = fmtW(qty);
+  document.getElementById('pdp-subtotal').textContent = fmtBRL((qty / 100) * PRICE);
+}
+
+function pdpDec()     { qty = Math.max(STEP, qty - STEP); render(); }
+function pdpInc()     { qty += STEP; render(); }
+function pdpAddCart() { alert('✓ ' + fmtW(qty) + ' — Total: ' + fmtBRL((qty / 100) * PRICE)); }
+
+// ── WISHLIST — ativo usa terracota DS (#C0694A) ──
+let wl = false;
+
+function toggleWish() {
+  wl = !wl;
+  const b = document.getElementById('btn-wish');
+  const i = document.getElementById('wish-icon');
+  const l = document.getElementById('wish-label');
+  b.classList.toggle('active', wl);
+  i.setAttribute('fill',   wl ? '#C0694A' : 'none');
+  i.setAttribute('stroke', wl ? '#C0694A' : 'currentColor');
+  l.textContent = wl ? 'Favoritado' : 'Favoritar';
+}
+
+// ── ACORDEÕES — fechados no mobile, primeiro aberto no desktop ──
+function toggleAcc(id) {
+  const a = document.getElementById(id);
+  const o = a.classList.contains('open');
+  document.querySelectorAll('.accordion').forEach(x => x.classList.remove('open'));
+  if (!o) a.classList.add('open');
+}
+
+function initAcc() {
+  if (window.innerWidth < 768)
+    document.querySelectorAll('.accordion').forEach(a => a.classList.remove('open'));
+}
+
+window.addEventListener('resize', initAcc);
+initAcc();
+
+// ── CARDS RELACIONADOS ──
+const rS = {};
+
+function addR(id, price, type) {
+  rS[id] = { qty: type === 'granel' ? 100 : 1, price, type };
+  renderR(id);
+}
+
+function renderR(id) {
+  const s = rS[id];
+  const d = s.type === 'granel' ? fmtW(s.qty) : s.qty + ' un.';
+  const t = s.type === 'granel' ? fmtBRL((s.qty / 100) * s.price) : fmtBRL(s.qty * s.price);
+  document.getElementById('r' + id).innerHTML = `
+    <div class="card-stepper">
+      <button class="card-stepper__btn" onclick="event.stopPropagation();decR(${id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+      <div class="card-stepper__display">
+        <strong>${d}</strong><small>${t}</small>
+      </div>
+      <button class="card-stepper__btn" onclick="event.stopPropagation();incR(${id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5"  y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>`;
+}
+
+function decR(id) {
+  const s    = rS[id];
+  const step = s.type === 'granel' ? 100 : 1;
+  s.qty = Math.max(0, s.qty - step);
+  if (s.qty === 0) {
+    const fn = `addR(${id},${s.price},'${s.type}')`;
+    document.getElementById('r' + id).innerHTML = `
+      <button class="card__qty-btn" onclick="event.stopPropagation();${fn}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5"  y1="12" x2="19" y2="12"/>
+        </svg>
+        Adicionar
+      </button>`;
+    delete rS[id];
+  } else {
+    renderR(id);
+  }
+}
+
+function incR(id) {
+  rS[id].qty += rS[id].type === 'granel' ? 100 : 1;
+  renderR(id);
+}
+
+render();
+</script>
+</body>
+</html>

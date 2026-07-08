@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Footer — Granel da Praça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:#F9F5EF;}
+
+:root{
+  --g:#00B207;
+  --gd:#2C742F;
+  --gdeep:#002603;
+  --cream:#F9F5EF;
+  --t9:#111827;
+  --t6:#4B5563;
+  --t4:#9CA3AF;
+  --bd:#E5E7EB;
+  --surface:#F9FAFB;
+  --ease:.18s cubic-bezier(.4,0,.2,1);
+
+  /* tokens específicos do footer — sobre fundo escuro */
+  --ft-bg:#002603;
+  --ft-bg2:#012e04;           /* linha divisória e hover */
+  --ft-text:rgba(255,255,255,.82);
+  --ft-muted:rgba(255,255,255,.42);
+  --ft-border:rgba(255,255,255,.08);
+  --ft-link-hover:#86EFAC;    /* verde-pastel para hover sobre escuro */
+}
+
+/* ══════════════════════════════════════════
+   NEWSLETTER STRIP — faixa acima do footer
+══════════════════════════════════════════ */
+.newsletter{
+  background:var(--gd);
+  padding:40px 0;
+  position:relative;
+  overflow:hidden;
+}
+/* blob decorativo sutil */
+.newsletter::before{
+  content:'';
+  position:absolute;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,178,7,.25) 0%,transparent 70%);
+  top:-150px;right:-80px;
+  pointer-events:none;
+}
+.newsletter-inner{
+  max-width:1280px;margin:0 auto;
+  padding:0 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  position:relative;z-index:1;
+}
+.nl-copy{}
+.nl-eyebrow{
+  font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.6);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:6px;
+}
+.nl-title{
+  font-size:20px;font-weight:700;
+  color:#fff;line-height:1.25;
+  letter-spacing:-.01em;
+}
+.nl-title span{color:#86EFAC;}
+.nl-sub{
+  font-size:12.5px;color:rgba(255,255,255,.65);
+  margin-top:4px;
+}
+.nl-form{
+  display:flex;
+  gap:8px;
+  flex-shrink:0;
+}
+.nl-input{
+  font-family:'Poppins',sans-serif;
+  height:46px;
+  width:280px;
+  border:1.5px solid rgba(255,255,255,.25);
+  border-radius:100px;
+  background:rgba(0,0,0,.18);
+  color:#fff;
+  font-size:13px;
+  padding:0 20px;
+  outline:none;
+  transition:border-color var(--ease),background var(--ease);
+  backdrop-filter:blur(8px);
+}
+.nl-input::placeholder{color:rgba(255,255,255,.45);}
+.nl-input:focus{
+  border-color:rgba(255,255,255,.55);
+  background:rgba(0,0,0,.22);
+}
+.nl-btn{
+  font-family:'Poppins',sans-serif;
+  height:46px;padding:0 24px;
+  background:#fff;
+  color:var(--gd);
+  border:none;border-radius:100px;
+  font-size:13px;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  transition:background var(--ease),color var(--ease),transform var(--ease);
+  letter-spacing:.02em;
+}
+.nl-btn:hover{background:#F0FDF4;transform:translateY(-1px);}
+.nl-privacy{
+  font-size:10px;color:rgba(255,255,255,.62);
+  margin-top:6px;text-align:center;
+}
+
+/* ══════════════════════════════════════════
+   FOOTER PRINCIPAL
+══════════════════════════════════════════ */
+.footer{
+  background:var(--ft-bg);
+  position:relative;
+  overflow:hidden;
+}
+
+/* textura sutil — linhas orgânicas no fundo */
+.footer::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(0,178,7,.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 5% 85%, rgba(44,116,47,.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* ── BODY DO FOOTER: 4 colunas ── */
+.footer-body{
+  max-width:1280px;margin:0 auto;
+  padding:64px 40px 48px;
+  display:grid;
+  grid-template-columns:260px 1fr 1fr 1fr;
+  gap:48px;
+  position:relative;z-index:1;
+}
+
+/* ── COLUNA 1: MARCA ── */
+.ft-brand{}
+.ft-logo-wrap{
+  margin-bottom:18px;
+  display:flex;align-items:center;
+}
+/* Logo SVG inline — versão branca */
+.ft-logo{
+  height:36px;width:auto;
+  /* inverte a cor do SVG para branco sobre fundo escuro */
+  filter:brightness(0) invert(1);
+  opacity:.92;
+  display:block;
+}
+.ft-tagline{
+  font-size:12.5px;
+  color:var(--ft-text);
+  line-height:1.65;
+  margin-bottom:24px;
+  max-width:220px;
+}
+
+/* redes sociais */
+.ft-social{
+  display:flex;gap:8px;
+  margin-bottom:28px;
+}
+.social-btn{
+  width:36px;height:36px;
+  border-radius:0;
+  border:none;
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  color:rgba(255,255,255,.42); /* ft-muted */
+  text-decoration:none;
+  transition:color var(--ease),transform var(--ease);
+  padding:6px;
+}
+.social-btn:hover{
+  color:rgba(134,239,172,.9); /* verde-pastel sobre escuro */
+  transform:translateY(-2px);
+}
+.social-btn svg{flex-shrink:0;}
+
+/* selos de segurança */
+.ft-badges{
+  display:flex;gap:6px;flex-wrap:wrap;
+}
+.ft-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:500;
+  color:var(--ft-muted);
+  border:1px solid var(--ft-border);
+  border-radius:6px;
+  padding:4px 9px;
+}
+.ft-badge svg{flex-shrink:0;color:rgba(134,239,172,.7);}
+
+/* ── COLUNAS 2–4: LINKS ── */
+.ft-col-title{
+  font-size:11px;font-weight:700;
+  color:#fff;
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.ft-col-title::after{
+  content:'';flex:1;
+  height:1px;background:var(--ft-border);
+}
+
+.ft-links{
+  display:flex;flex-direction:column;gap:4px;
+  list-style:none;
+}
+.ft-links li a{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:400;
+  color:rgba(255,255,255,.55); /* cinza claro — títulos ficam em branco puro */
+  text-decoration:none;
+  padding:7px 0;
+  transition:color var(--ease),gap var(--ease);
+}
+.ft-links li a:hover{
+  color:#fff;
+  gap:10px;
+}
+.ft-links li a svg{
+  opacity:0;
+  transition:opacity var(--ease);
+  flex-shrink:0;
+}
+.ft-links li a:hover svg{opacity:1;}
+
+/* tag de novidade */
+.ft-new{
+  font-size:9px;font-weight:700;
+  background:var(--g);color:#fff;
+  padding:1px 6px;border-radius:100px;
+  letter-spacing:.04em;
+  vertical-align:middle;
+  margin-left:2px;
+}
+
+/* bloco de contato dentro da col */
+.ft-contact{
+  display:flex;flex-direction:column;gap:14px;
+  margin-top:4px;
+}
+.ft-contact-item{
+  display:flex;align-items:flex-start;gap:10px;
+}
+.ft-contact-icon{
+  width:32px;height:32px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--ft-border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.ft-contact-icon svg{color:rgba(134,239,172,.8);}
+.ft-contact-text{}
+.ft-contact-label{
+  font-size:10.5px;font-weight:700;
+  color:rgba(255,255,255,.88); /* negrito, quase branco — hierarquia forte */
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:4px;
+}
+.ft-contact-val{
+  font-size:12.5px;font-weight:400;
+  color:rgba(255,255,255,.58); /* suave — subordinado ao label */
+  line-height:1.6;
+}
+.ft-contact-val a{
+  color:rgba(255,255,255,.75);text-decoration:none;
+  transition:color var(--ease);
+}
+.ft-contact-val a:hover{color:var(--ft-link-hover);}
+
+/* horário */
+.ft-hours{
+  font-size:11px;color:var(--ft-muted);
+  margin-top:3px;line-height:1.5;
+}
+
+/* ── DIVIDER ── */
+.footer-divider{
+  max-width:1280px;margin:0 auto;
+  padding:0 40px;
+  position:relative;z-index:1;
+}
+.footer-divider hr{
+  border:none;
+  border-top:1px solid var(--ft-border);
+}
+
+/* ── FOOTER BOTTOM ── */
+.footer-bottom{
+  max-width:1280px;margin:0 auto;
+  padding:20px 40px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.ft-copy{
+  font-size:11.5px;color:var(--ft-muted);
+  line-height:1.5;
+}
+.ft-copy strong{color:rgba(255,255,255,.6);font-weight:600;}
+
+/* métodos de pagamento */
+.ft-payments{
+  display:flex;align-items:center;gap:6px;
+}
+.ft-payments-label{
+  font-size:10px;font-weight:500;
+  color:var(--ft-muted);letter-spacing:.06em;
+  text-transform:uppercase;margin-right:4px;
+}
+.pay-pill{
+  height:26px;padding:0 10px;
+  border-radius:6px;
+  border:1px solid var(--ft-border);
+  background:rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.6);
+  letter-spacing:.03em;
+  white-space:nowrap;
+}
+/* pills monocromáticas — classes de cor removidas */
+
+/* links legais */
+.ft-legal{
+  display:flex;gap:16px;flex-wrap:wrap;
+}
+.ft-legal a{
+  font-size:11px;color:var(--ft-muted);
+  text-decoration:none;
+  transition:color var(--ease);
+}
+.ft-legal a:hover{color:rgba(255,255,255,.7);}
+
+/* ══════════════════════════════════════════
+   RESPONSIVO
+══════════════════════════════════════════ */
+@media(max-width:960px){
+  .footer-body{
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+  }
+  .ft-brand{grid-column:1/-1;}
+  .newsletter-inner{flex-direction:column;align-items:flex-start;gap:24px;}
+  .nl-form{width:100%;}
+  .nl-input{flex:1;}
+}
+@media(max-width:600px){
+  .footer-body{grid-template-columns:1fr;padding:40px 20px 32px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;padding:16px 20px 28px;gap:16px;}
+  .newsletter-inner{padding:0 20px;}
+  .footer-divider{padding:0 20px;}
+  .ft-payments{flex-wrap:wrap;}
+  .ft-legal{gap:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NEWSLETTER STRIP
+══════════════════════════════════════════ -->
+<div class="newsletter">
+  <div class="newsletter-inner">
+    <div class="nl-copy">
+      <div class="nl-eyebrow">Newsletter</div>
+      <div class="nl-title">Receba ofertas e <span>novidades</span> em primeira mão</div>
+      <div class="nl-sub">Sem spam. Só o que é bom — produtos, receitas e promoções exclusivas.</div>
+    </div>
+    <div>
+      <div class="nl-form">
+        <input class="nl-input" type="email" placeholder="seu@email.com" aria-label="E-mail para newsletter"/>
+        <button class="nl-btn">Quero receber</button>
+      </div>
+      <div class="nl-privacy">Ao se inscrever você concorda com nossa Política de Privacidade.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER PRINCIPAL
+══════════════════════════════════════════ -->
+<footer class="footer" aria-label="Rodapé">
+
+  <div class="footer-body">
+
+    <!-- ── COL 1: MARCA ── -->
+    <div class="ft-brand">
+
+      <div class="ft-logo-wrap">
+        <!--
+          LOGO SVG INLINE — versão branca via filter:brightness(0) invert(1)
+          Substituir pelo mesmo SVG do Header quando converter para .tsx:
+          <img src="/images/logo/granel-logo.svg" class="ft-logo" alt="Granel da Praça"/>
+        -->
+        <svg class="ft-logo" height="36" width="auto" style="height:36px;width:auto;display:block;" viewBox="0 0 174 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M86.7268 29.0213C86.7268 29.0227 86.7268 29.0246 86.7268 29.0259L86.682 33.7255C86.6793 33.9854 86.467 34.1935 86.2071 34.1912C85.9492 34.1884 85.7415 33.9784 85.7415 33.7209C85.7415 33.7195 85.7415 33.7177 85.7415 33.7163L85.7862 29.0172C85.789 28.7573 86.0017 28.5487 86.2616 28.551C86.5196 28.5538 86.7268 28.7638 86.7268 29.0213Z" fill="#373737"/>
+          <path d="M86.4227 8.10517C87.462 7.22784 87.9891 6.16497 87.9891 4.94196C87.9891 3.30452 87.0605 1.75476 86.5344 1.00757C85.4106 2.52179 84.8416 3.90679 84.8416 5.13303C84.8416 6.80094 85.9219 7.75396 86.4227 8.10517Z" fill="#373737"/>
+          <path d="M89.5028 10.1919C89.5124 10.1374 89.5314 10.0852 89.5586 10.0377C89.5752 9.98786 89.5918 9.93802 89.6075 9.88725C90.1886 8.00751 89.56 6.14485 89.2318 5.37181L88.8968 5.50288C88.7445 6.88834 88.0204 8.08089 86.7388 9.05284C86.5948 9.16175 86.4 9.17883 86.2389 9.09576C86.1476 9.04869 84.0823 7.95444 83.9106 5.46273L83.6688 5.35059C83.2137 6.65205 82.2768 10.5126 85.9417 13.1257L85.9584 11.4153C85.9611 11.1555 86.1729 10.9473 86.4328 10.9497C86.6912 10.9524 86.8989 11.162 86.8989 11.4199C86.8989 11.4213 86.8989 11.4232 86.8989 11.4246L86.8823 13.1534C88.1782 12.3582 89.0574 11.365 89.5028 10.1919Z" fill="#373737"/>
+          <path d="M90.3394 10.6412C89.7482 12.1144 88.5838 13.3254 86.8716 14.2489L86.8319 18.3794C86.8291 18.6392 86.6168 18.8469 86.357 18.8446C86.099 18.8423 85.8913 18.6323 85.8913 18.3748C85.8913 18.3729 85.8913 18.3715 85.8913 18.3702L85.931 14.2507C84.241 13.2086 83.2902 11.939 82.79 10.6652C82.7724 10.6611 82.7544 10.6555 82.7369 10.6486C81.9671 10.3555 81.3994 10.0985 81.0237 9.91479C80.7293 11.3123 80.1741 15.0039 81.818 17.718C81.8619 17.791 81.9075 17.8625 81.9542 17.9327C81.9754 17.9585 81.9943 17.9857 82.01 18.0153C82.9538 19.3901 84.4066 20.2979 86.3335 20.7179C88.4052 20.3085 89.9443 19.3292 90.9075 17.8053C92.604 15.1234 92.1208 11.4216 91.8527 10.0186C91.5089 10.1788 91.0067 10.3952 90.3394 10.6412Z" fill="#373737"/>
+          <path d="M86.8012 21.5774L86.755 26.3596C86.7522 26.6189 86.5395 26.8275 86.2801 26.8252C86.0203 26.8225 85.8154 26.6277 85.8145 26.3503L85.8606 21.5714C83.8623 21.0822 82.3296 20.0954 81.2935 18.6306C80.3229 18.3057 79.1668 17.6545 78.4806 17.2415C78.2235 18.8701 77.8127 23.1687 80.0008 25.9507C81.3345 27.6463 83.4409 28.5217 86.263 28.555C89.087 28.5767 91.2118 27.7418 92.5779 26.0716C94.8186 23.333 94.4895 19.0275 94.2648 17.3933C93.5669 17.7953 92.3896 18.4285 91.4103 18.7331C90.3484 20.1725 88.8018 21.1274 86.8012 21.5774Z" fill="#373737"/>
+          <path d="M97.6794 16.2573C97.6794 20.7261 97.4796 23.6429 96.5168 26.1185C93.9914 32.6082 88.3739 31.6054 88.3171 31.5948C88.0629 31.5458 87.8921 31.3008 87.9447 31.0442C87.9936 30.7899 88.2396 30.6228 88.4944 30.6713C88.6937 30.7087 93.4063 31.5191 95.6404 25.7769C96.8385 22.6973 96.7887 18.7476 96.6978 11.578C96.6604 8.64606 96.6147 4.99503 96.6493 0.669732C96.6511 0.409901 96.8634 0.200836 97.1228 0.203144C97.3817 0.205451 97.5899 0.415442 97.5899 0.672966C97.5899 0.674351 97.5899 0.675734 97.5899 0.677118C97.5548 4.99595 97.6009 8.63914 97.6379 11.5665C97.6595 13.3046 97.6794 14.8575 97.6794 16.2573Z" fill="#373737"/>
+          <path d="M75.4353 0.465222C75.4386 0.20539 75.6513-0.00228852 75.9112 1.90448e-05C76.1687 0.00324963 76.3764 0.213236 76.3764 0.47076L76.3289 4.80482C76.2116 8.454 76.1184 11.386 75.8895 18.55C75.7644 22.496 75.6393 25.5978 76.9025 25.5978C79.0282 31.3866 83.9761 30.6703 84.1856 30.6371C84.4413 30.5964 84.6827 30.7704 84.7238 31.0261C84.7279 31.052 84.7298 31.0773 84.7298 31.1018C84.7298 31.3284 84.5668 31.5273 84.3365 31.5656C84.2775 31.5749 78.4195 32.4554 76.0196 25.9218C74.8183 22.6487 74.9461 18.6377 75.1787 11.3565C75.272 8.42816 75.3878 4.78452 75.4353 0.465222Z" fill="#373737"/>
+          <path d="M22.4007 110.421C22.8248 107.6 23.7451 105.379 25.1615 103.758C26.5834 102.138 28.3856 101.328 30.5737 101.328C31.3559 101.328 32.0505 101.526 32.6569 101.918C33.2573 102.314 33.7645 102.877 34.1721 103.609L35.6277 93.9375H41.0832L37.3025 119.123H32.5245L32.4751 117.007C31.8414 117.795 31.1358 118.401 30.353 118.825C29.5759 119.25 28.7327 119.46 27.829 119.465C25.7624 119.46 24.2302 118.655 23.2439 117.04C22.2516 115.426 21.9544 113.331 22.3564 110.757L22.4007 110.421Z" fill="#373737"/>
+          <path d="M118.683 119.905H122.705V124.008H118.683V119.905Z" fill="#373737"/>
+        </svg>
+      </div>
+
+      <p class="ft-tagline">
+        Produtos naturais a granel com qualidade, transparência e cuidado. Dois espaços físicos em Uberlândia desde 2019.
+      </p>
+
+      <!-- Redes sociais -->
+      <div class="ft-social">
+        <a href="https://instagram.com/graneldapraca" class="social-btn" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="https://wa.me/5534997819292" class="social-btn" aria-label="WhatsApp Fundinho" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/>
+          </svg>
+        </a>
+        <a href="https://graneldapraca.goomer.app/" class="social-btn" aria-label="Cardápio Online" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Selos -->
+      <div class="ft-badges">
+        <span class="ft-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra segura
+        </span>
+        <span class="ft-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Mercado Pago
+        </span>
+      </div>
+    </div>
+
+    <!-- ── COL 2: LOJA ── -->
+    <div>
+      <div class="ft-col-title">Loja</div>
+      <ul class="ft-links">
+        <li><a href="/loja">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Todos os produtos
+        </a></li>
+        <li><a href="/loja/oleaginosas">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Castanhas &amp; Oleaginosas
+        </a></li>
+        <li><a href="/loja/graos">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Grãos &amp; Leguminosas
+        </a></li>
+        <li><a href="/loja/farinhas">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Farinhas &amp; Cereais
+        </a></li>
+        <li><a href="/loja/chas">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Chás &amp; Infusões
+        </a></li>
+        <li><a href="/loja/superalimentos">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Superalimentos
+          <span class="ft-new">NOVO</span>
+        </a></li>
+        <li><a href="/ofertas">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Ofertas da semana
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- ── COL 3: INFORMAÇÕES ── -->
+    <div>
+      <div class="ft-col-title">Informações</div>
+      <ul class="ft-links">
+        <li><a href="/sobre">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Sobre nós
+        </a></li>
+        <li><a href="/como-funciona">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Como funciona
+        </a></li>
+        <li><a href="/entrega">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Entrega e retirada
+        </a></li>
+        <li><a href="/fidelidade">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Programa de fidelidade
+        </a></li>
+        <li><a href="/faq">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Perguntas frequentes
+        </a></li>
+        <li><a href="/minha-conta">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Minha conta
+        </a></li>
+        <li><a href="/rastreio">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Rastrear pedido
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- ── COL 4: CONTATO ── -->
+    <div>
+      <div class="ft-col-title">Contato</div>
+      <div class="ft-contact">
+
+        <div class="ft-contact-item">
+          <div class="ft-contact-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="ft-contact-text">
+            <div class="ft-contact-label">Fundinho</div>
+            <div class="ft-contact-val">
+              Pça. Clarimundo Carneiro, 119<br>
+              <a href="https://wa.me/5534997819292">(34) 99781-9292</a>
+            </div>
+            <div class="ft-hours">Seg–Sáb · 8h às 18h</div>
+          </div>
+        </div>
+
+        <div class="ft-contact-item">
+          <div class="ft-contact-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="ft-contact-text">
+            <div class="ft-contact-label">UMC</div>
+            <div class="ft-contact-val">
+              R. Rafael Marino Neto, 600<br>
+              <a href="https://wa.me/5534979699191">(34) 97969-9191</a>
+            </div>
+            <div class="ft-hours">Seg–Sáb · 8h às 18h</div>
+          </div>
+        </div>
+
+        <div class="ft-contact-item">
+          <div class="ft-contact-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="1"/>
+              <path d="M16 8h4l3 5v3h-7V8z"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="ft-contact-text">
+            <div class="ft-contact-label">Entrega</div>
+            <div class="ft-contact-val">
+              Somente em Uberlândia<br>
+              Pedidos até 14h · Sem domingos
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="footer-divider"><hr/></div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+    <div class="ft-copy">
+      © 2025 <strong>Granel da Praça</strong>. Todos os direitos reservados.<br>
+      Uberlândia, MG · CNPJ 00.000.000/0001-00
+    </div>
+
+    <div class="ft-payments">
+      <span class="ft-payments-label">Aceito</span>
+      <span class="pay-pill">PIX</span>
+      <span class="pay-pill">Mercado Pago</span>
+      <span class="pay-pill">Crédito</span>
+      <span class="pay-pill">Débito</span>
+      <span class="pay-pill">Alelo</span>
+      <span class="pay-pill">Dinheiro</span>
+    </div>
+
+    <div class="ft-legal">
+      <a href="/privacidade">Privacidade</a>
+      <a href="/termos">Termos de uso</a>
+      <a href="/cookies">Cookies</a>
+    </div>
+
+  </div>
+
+</footer>
+
+</body>
+</html>

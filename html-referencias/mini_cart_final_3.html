@@ -1,0 +1,386 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --g:#00B207;--gd:#2C742F;--gdeep:#002603;
+  --cream:#F9F5EF;--sand:#EDE8DF;
+  --t9:#111827;--t6:#4B5563;--t4:#9CA3AF;
+  --bd:#E5E7EB;--bg-item:#F9FAFB;
+}
+
+.scene{background:#CBC6BC;border-radius:16px;display:flex;min-height:720px;overflow:hidden;position:relative;font-family:'Poppins',sans-serif;}
+.bg{flex:1;background:#DDD8CF;padding:24px 18px;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;}
+.bg-card{width:120px;height:160px;background:#F0EBE2;border-radius:12px;opacity:.4;}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,0.34);z-index:10;border-radius:16px;}
+
+/* DRAWER */
+.dr{position:absolute;top:0;right:0;bottom:0;width:356px;background:#fff;border-radius:0 20px 20px 0;z-index:20;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,0.15);}
+
+/* HEADER */
+.dr-head{padding:22px 24px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.dr-title{font-size:15px;font-weight:700;color:var(--t9);display:flex;align-items:center;gap:8px;}
+.dr-badge{background:var(--g);color:#fff;font-size:10px;font-weight:700;border-radius:100px;padding:2px 9px;}
+.dr-x{width:32px;height:32px;background:#F9FAFB;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t6);}
+.dr-x:hover{background:#F3F4F6;}
+
+/* FREIGHT */
+.freight{padding:14px 24px 12px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.freight-txt{font-size:11px;color:var(--t6);margin-bottom:10px;line-height:1.5;}
+.freight-txt b{color:var(--gd);font-weight:700;}
+.freight-wrap{position:relative;height:8px;}
+.freight-track{height:8px;background:#E5E7EB;border-radius:100px;overflow:hidden;}
+.freight-prog{height:100%;background:var(--g);border-radius:100px;transition:width .5s ease;}
+.truck-ico{position:absolute;top:50%;transform:translateY(-50%);transition:left .5s ease;pointer-events:none;}
+.freight-labels{display:flex;justify-content:space-between;margin-top:6px;}
+.freight-labels span{font-size:9px;color:var(--t4);font-weight:500;}
+.freight-labels span:last-child{color:var(--gd);font-weight:700;}
+
+/* ITEMS SCROLL */
+.dr-items{flex:1;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:#E5E7EB transparent;}
+
+/* ITEM CARD */
+.item{background:var(--bg-item);border:1px solid var(--bd);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+
+.item-top{display:flex;gap:12px;align-items:flex-start;}
+.item-thumb{width:52px;height:52px;border-radius:8px;background:var(--sand);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(0,0,0,0.05);}
+
+.item-info{flex:1;min-width:0;}
+.item-badges{display:flex;align-items:center;gap:5px;margin-bottom:4px;}
+.item-cat{font-size:9px;font-weight:500;color:var(--t4);text-transform:uppercase;letter-spacing:.07em;}
+.tbadge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:9px;font-weight:700;width:fit-content;}
+.tbadge-g{background:#DCFCE7;color:#166534;}
+.tbadge-u{background:#EEF2FF;color:#3730A3;}
+.item-name{font-size:12px;font-weight:600;color:var(--t9);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.item-meta{font-size:10px;color:var(--t6);margin-top:3px;}
+
+.item-del{width:28px;height:28px;min-width:28px;background:#fff;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#9CA3AF;flex-shrink:0;transition:background .15s,color .15s,border-color .15s;}
+.item-del:hover{background:#FEF2F2;color:#DC2626;border-color:#FECACA;}
+
+/* STEPPER ROW — preço à direita */
+.item-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+
+/* STEPPER: fundo #F3F4F6, badge branco central */
+.stepper{display:flex;align-items:center;background:#F3F4F6;border-radius:8px;height:38px;gap:2px;padding:3px;}
+.s-btn{width:32px;height:32px;min-width:32px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gd);border-radius:8px;transition:background .15s;flex-shrink:0;}
+.s-btn:hover{background:rgba(44,116,47,.12);}
+.s-btn:active{background:rgba(44,116,47,.2);}
+.s-mid{background:#fff;border-radius:8px;height:32px;min-width:56px;display:flex;align-items:center;justify-content:center;border:1px solid #E5E7EB;}
+.s-input{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--t9);background:transparent;border:none;outline:none;text-align:center;width:100%;padding:0;caret-color:var(--gd);}
+.s-input::selection{background:rgba(0,178,7,.12);}
+.s-val{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--t9);padding:0 10px;}
+
+.item-price{font-size:14px;font-weight:700;color:var(--t9);white-space:nowrap;flex-shrink:0;}
+
+/* FOOTER */
+.dr-foot{padding:18px 24px 24px;border-top:1px solid var(--bd);background:#fff;flex-shrink:0;display:flex;flex-direction:column;gap:0;}
+.foot-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.foot-row{display:flex;justify-content:space-between;align-items:center;}
+.foot-row .lb{font-size:12px;color:var(--t4);}
+.foot-row .vl{font-size:12px;font-weight:500;color:var(--t6);}
+.foot-delivery{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:500;color:var(--gd);margin-top:1px;}
+.foot-divider{height:0;border-top:1px dashed #E5E7EB;margin:12px 0;}
+.foot-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
+.foot-total .lb{font-size:14px;font-weight:600;color:var(--t9);}
+.foot-total .vl{font-size:22px;font-weight:700;color:var(--gdeep);letter-spacing:-.02em;}
+
+.inst-banner{
+  display:flex;align-items:flex-start;gap:10px;
+  background:#EEF2FF;border:1px solid #C7D2FE;
+  border-radius:10px;padding:11px 13px;
+  margin-top:10px;
+}
+.inst-banner svg{flex-shrink:0;margin-top:1px;}
+.inst-banner-text{font-size:11px;line-height:1.55;color:#3730A3;}
+.inst-banner-text strong{display:block;font-size:12px;font-weight:700;color:#312E81;margin-bottom:2px;}
+.inst-banner-text em{font-style:normal;color:#4338CA;font-weight:600;}
+.inst-banner.unlocked{background:#ECFDF5;border-color:#6EE7B7;}
+.inst-banner.unlocked svg{color:#065F46 !important;}
+.inst-banner.unlocked .inst-banner-text{color:#065F46;}
+.inst-banner.unlocked .inst-banner-text strong{color:#022C22;}
+.inst-banner.unlocked .inst-banner-text em{color:#059669;}
+.inst-progress-wrap{margin-top:6px;}
+.inst-progress-track{height:3px;background:#C7D2FE;border-radius:100px;overflow:hidden;}
+.inst-progress-bar{height:100%;background:#4F46E5;border-radius:100px;transition:width .3s ease;}
+.inst-banner.unlocked .inst-progress-track{background:#A7F3D0;}
+.inst-banner.unlocked .inst-progress-bar{background:#10B981;}
+.btn-cta{font-family:'Poppins',sans-serif;width:100%;height:56px;background:var(--gd);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s;letter-spacing:.04em;margin-bottom:10px;}
+.btn-cta:hover{background:#1A5C1E;}
+.btn-back{font-family:'Poppins',sans-serif;width:100%;height:30px;background:transparent;color:var(--t4);border:none;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:color .15s;}
+.btn-back:hover{color:var(--t6);}
+</style>
+
+<div class="scene">
+  <div class="bg">
+    <div class="bg-card"></div><div class="bg-card"></div><div class="bg-card"></div>
+    <div class="bg-card"></div><div class="bg-card"></div><div class="bg-card"></div>
+  </div>
+  <div class="dim"></div>
+
+  <div class="dr">
+
+    <div class="dr-head">
+      <div class="dr-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Seu Carrinho
+        <span class="dr-badge" id="hd-cnt">3</span>
+      </div>
+      <div class="dr-x" aria-label="Fechar">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </div>
+
+    <div class="freight">
+      <div class="freight-txt" id="fr-txt">Faltam <b>R$ 38,10</b> para Frete Grátis em Uberlândia</div>
+      <div class="freight-wrap">
+        <div class="freight-track"><div class="freight-prog" id="fr-prog" style="width:62%"></div></div>
+        <div class="truck-ico" id="fr-truck" style="left:calc(62% - 10px)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+      </div>
+      <div class="freight-labels"><span>R$ 0</span><span>R$ 100 — Grátis 🎉</span></div>
+    </div>
+
+    <div class="dr-items">
+
+      <!-- GRANEL 1 -->
+      <div class="item" id="it-g1">
+        <div class="item-top">
+          <div class="item-thumb">
+            <svg width="30" height="30" viewBox="0 0 88 88" fill="none" style="opacity:.2"><rect x="8" y="28" width="72" height="52" rx="6" fill="#002603"/><ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603"/></svg>
+          </div>
+          <div class="item-info">
+            <div class="item-badges">
+              <span class="item-cat">Oleaginosas</span>
+              <span class="tbadge tbadge-g">Granel</span>
+            </div>
+            <div class="item-name">Castanha de Caju W1 Torrada com Sal Marinho</div>
+            <div class="item-meta">R$ 12,90 / 100g</div>
+          </div>
+          <button class="item-del" onclick="rmv('g1')" aria-label="Remover">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+        <div class="item-bottom">
+          <div class="stepper">
+            <button class="s-btn" onclick="dec('g1')" aria-label="−100g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="s-mid">
+              <input class="s-input" id="v-g1" type="text" inputmode="numeric" value="300g"
+                onfocus="this.value=Q.g1" onblur="blurG(this,'g1')" onkeydown="if(event.key==='Enter'||event.key==='Escape')this.blur()"/>
+            </div>
+            <button class="s-btn" onclick="inc('g1')" aria-label="+100g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <span class="item-price" id="p-g1">R$ 38,70</span>
+        </div>
+      </div>
+
+      <!-- UNIDADE -->
+      <div class="item" id="it-u1">
+        <div class="item-top">
+          <div class="item-thumb">
+            <svg width="30" height="30" viewBox="0 0 88 88" fill="none" style="opacity:.2"><rect x="22" y="16" width="44" height="60" rx="8" fill="#002603"/><rect x="26" y="20" width="36" height="10" rx="3" fill="#002603" opacity=".4"/></svg>
+          </div>
+          <div class="item-info">
+            <div class="item-badges">
+              <span class="item-cat">Suplementos</span>
+              <span class="tbadge tbadge-u">Unidade</span>
+            </div>
+            <div class="item-name">Óleo de Coco Extra Virgem 500ml</div>
+            <div class="item-meta">R$ 34,90 / un.</div>
+          </div>
+          <button class="item-del" onclick="rmv('u1')" aria-label="Remover">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+        <div class="item-bottom">
+          <div class="stepper">
+            <button class="s-btn" onclick="dec('u1')" aria-label="−1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="s-mid">
+              <span class="s-val" id="v-u1">1 un.</span>
+            </div>
+            <button class="s-btn" onclick="inc('u1')" aria-label="+1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <span class="item-price" id="p-u1">R$ 34,90</span>
+        </div>
+      </div>
+
+      <!-- GRANEL 2 -->
+      <div class="item" id="it-g2">
+        <div class="item-top">
+          <div class="item-thumb">
+            <svg width="30" height="30" viewBox="0 0 88 88" fill="none" style="opacity:.2"><rect x="14" y="20" width="60" height="55" rx="6" fill="#002603"/><circle cx="44" cy="20" r="10" fill="#002603"/></svg>
+          </div>
+          <div class="item-info">
+            <div class="item-badges">
+              <span class="item-cat">Grãos</span>
+              <span class="tbadge tbadge-g">Granel</span>
+            </div>
+            <div class="item-name">Granola Artesanal Sem Açúcar e Sem Glúten</div>
+            <div class="item-meta">R$ 8,90 / 100g</div>
+          </div>
+          <button class="item-del" onclick="rmv('g2')" aria-label="Remover">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+        <div class="item-bottom">
+          <div class="stepper">
+            <button class="s-btn" onclick="dec('g2')" aria-label="−100g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="s-mid">
+              <input class="s-input" id="v-g2" type="text" inputmode="numeric" value="300g"
+                onfocus="this.value=Q.g2" onblur="blurG(this,'g2')" onkeydown="if(event.key==='Enter'||event.key==='Escape')this.blur()"/>
+            </div>
+            <button class="s-btn" onclick="inc('g2')" aria-label="+100g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <span class="item-price" id="p-g2">R$ 26,70</span>
+        </div>
+      </div>
+
+    </div><!-- /items -->
+
+    <div class="dr-foot">
+      <div class="foot-rows">
+        <div class="foot-row">
+          <span class="lb">Subtotal</span>
+          <span class="vl" id="ft-sub">R$ 100,30</span>
+        </div>
+        <div class="foot-delivery">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Entrega rápida em Uberlândia
+        </div>
+        <div class="foot-row" style="margin-top:2px">
+          <span class="lb">Frete</span>
+          <span class="vl" id="ft-frete" style="color:var(--t6)">R$ 15,00</span>
+        </div>
+      </div>
+
+      <div class="foot-divider"></div>
+
+      <!-- BANNER DE PARCELAMENTO — dinâmico -->
+      <div class="inst-banner" id="inst-banner">
+        <svg id="inst-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4338CA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="4" width="22" height="16" rx="2"/>
+          <line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+        <div class="inst-banner-text">
+          <strong id="inst-title">Parcele em 2x sem juros</strong>
+          <span id="inst-msg">Faltam <em id="inst-rem">R$&nbsp;49,70</em> para parcelar em <em>2x sem juros</em> no cartão</span>
+          <div class="inst-progress-wrap">
+            <div class="inst-progress-track">
+              <div class="inst-progress-bar" id="inst-bar" style="width:68%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-total">
+        <span class="lb">Total</span>
+        <span class="vl" id="ft-total">R$ 100,30</span>
+      </div>
+
+      <button class="btn-cta">
+        Finalizar Compra
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <button class="btn-back">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        Continuar comprando
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const Q={g1:300,u1:1,g2:300};
+const R={g1:0.129,u1:34.90,g2:0.089};
+const alive={g1:true,u1:true,g2:true};
+
+function fG(v){if(v>=1000){const k=v/1000;return(Number.isInteger(k)?k:k.toFixed(1).replace('.',','))+' kg';}return v+'g';}
+function fR(v){return 'R$ '+v.toFixed(2).replace('.',',');}
+
+function dec(k){
+  if(k==='u1'){if(Q.u1>1){Q.u1--;render(k);}}
+  else{if(Q[k]>100){Q[k]-=100;render(k);}}
+}
+function inc(k){
+  if(k==='u1'){Q.u1++;render(k);}
+  else{Q[k]+=100;render(k);}
+}
+function render(k){
+  const tot=k==='u1'?Q.u1*R.u1:Q[k]*R[k];
+  document.getElementById('p-'+k).textContent=fR(tot);
+  if(k==='u1'){document.getElementById('v-u1').textContent=Q.u1+' un.';}
+  else{document.getElementById('v-'+k).value=fG(Q[k]);}
+  recalc();
+}
+function blurG(el,k){
+  let v=parseInt(el.value);
+  if(isNaN(v)||v<100)v=100;
+  Q[k]=Math.round(v/100)*100;
+  el.value=fG(Q[k]);
+  document.getElementById('p-'+k).textContent=fR(Q[k]*R[k]);
+  recalc();
+}
+function rmv(k){
+  document.getElementById('it-'+k).style.display='none';
+  alive[k]=false;recalc();
+}
+function recalc(){
+  let sub=0;
+  Object.keys(alive).forEach(k=>{if(alive[k])sub+=k==='u1'?Q.u1*R.u1:Q[k]*R[k];});
+  document.getElementById('ft-sub').textContent=fR(sub);
+
+  // ── barra de frete ──
+  const pct=Math.min(sub/100*100,100);
+  document.getElementById('fr-prog').style.width=pct+'%';
+  document.getElementById('fr-truck').style.left='calc('+pct+'% - 10px)';
+  const rem=Math.max(100-sub,0);
+  const ff=document.getElementById('ft-frete');
+  const frete=sub>=100?0:15;
+  if(rem<=0){
+    document.getElementById('fr-txt').innerHTML='<b style="color:#166534">Frete Grátis desbloqueado!</b> Aproveite.';
+    ff.textContent='Grátis';ff.style.color='#166534';ff.style.fontWeight='700';
+  } else {
+    document.getElementById('fr-txt').innerHTML='Faltam <b>'+fR(rem)+'</b> para Frete Grátis em Uberlândia';
+    ff.textContent='R$ 15,00';ff.style.color='var(--t6)';ff.style.fontWeight='500';
+  }
+  document.getElementById('ft-total').textContent=fR(sub+frete);
+  document.getElementById('hd-cnt').textContent=Object.values(alive).filter(Boolean).length;
+
+  // ── banner de parcelamento ──
+  const INST_MIN = 150; // R$150 mínimo para 2x
+  const banner   = document.getElementById('inst-banner');
+  const instTitle= document.getElementById('inst-title');
+  const instMsg  = document.getElementById('inst-msg');
+  const instBar  = document.getElementById('inst-bar');
+  const instIcon = document.getElementById('inst-icon');
+  const instPct  = Math.min(sub/INST_MIN*100,100);
+  instBar.style.width = instPct+'%';
+
+  if(sub >= INST_MIN){
+    // Desbloqueado
+    banner.className = 'inst-banner unlocked';
+    instIcon.setAttribute('stroke','#059669');
+    instTitle.textContent = '2x sem juros disponível! ✅';
+    instMsg.innerHTML = 'Seu pedido pode ser parcelado em <em>2x sem juros</em> no cartão de crédito.';
+  } else {
+    const falta = INST_MIN - sub;
+    banner.className = 'inst-banner';
+    instIcon.setAttribute('stroke','#4338CA');
+    instTitle.textContent = 'Parcele em 2x sem juros';
+    instMsg.innerHTML = 'Faltam <em>'+fR(falta)+'</em> para parcelar em <em>2x sem juros</em> no cartão';
+  }
+}
+</script>

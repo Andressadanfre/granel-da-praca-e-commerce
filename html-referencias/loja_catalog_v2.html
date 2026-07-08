@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja — Granel da Praça</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─────────────────────────────────────────
+   TOKENS — Design System Granel da Praça v3.0
+───────────────────────────────────────── */
+:root {
+  --g:       #00B207;
+  --gd:      #2C742F;
+  --gdeep:   #002603;
+  --ghover:  #1A5C1E;
+  --cream:   #F9F5EF;
+  --surface: #F9FAFB;
+  --white:   #ffffff;
+  --t9:      #111827;
+  --t6:      #4B5563;
+  --t4:      #9CA3AF;
+  --bd:      #E5E7EB;
+  --gray-100:#F3F4F6;
+
+  /* Badge tokens */
+  --badge-diet-bg:   #EAF7EA;
+  --badge-diet-tx:   #2C742F;
+  --badge-diet-bd:   #C6E6C7;
+  --badge-promo-bg:  #FFF3E0;
+  --badge-promo-tx:  #C0694A; /* terracota DS — nunca #E65100 */
+  --badge-promo-bd:  #FFDAAA;
+
+  /* Border-radius canônico */
+  --r-input:  8px;
+  --r-sel:   10px;
+  --r-inner: 12px;
+  --r-modal: 16px;
+  --r-card:  20px;
+  --r-pill: 100px;
+
+  /* Spacing scale */
+  --s1:  4px;  --s2:  8px;  --s3: 12px;  --s4: 16px;
+  --s5: 20px;  --s6: 24px;  --s8: 32px;  --s10: 40px;
+  --s12: 48px; --s20: 80px;
+
+  /* Sombras */
+  --shadow-card:       0 10px 30px rgba(0,0,0,.05);
+  --shadow-card-hover: 0 20px 50px rgba(0,0,0,.09), 0 4px 12px rgba(0,0,0,.04);
+
+  /* Transição */
+  --ease: .18s cubic-bezier(.4,0,.2,1);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--cream);
+  color: var(--t9);
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────
+   TOPBAR
+   bg: #002603 (--gdeep) — cor canônica DS
+   Não usar #111827 (cinza) — reservado para texto
+───────────────────────────────────────── */
+.topbar {
+  background: var(--gdeep);
+  color: rgba(255,255,255,.9);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 9px var(--s5);
+  letter-spacing: .02em;
+}
+
+/* ─────────────────────────────────────────
+   HEADER — 3 camadas: TopBar + MiddleBar + NavBar
+   bg: #2C742F (--gd) · sticky · z-index 100
+   padding lateral: 80px (--s20) conforme grid desktop
+───────────────────────────────────────── */
+.header {
+  background: var(--gd);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--s20);     /* ← 80px lateral conforme grid desktop */
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Container circular do logo — Fixed 40×40 */
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-text strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.logo-text span {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,.65);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+/* Busca — max-width 400px desktop conforme DS */
+.search-bar {
+  flex: 1;
+  position: relative;
+  max-width: 400px;
+}
+
+.search-bar input {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid rgba(255,255,255,.2);
+  border-radius: var(--r-pill);
+  padding: 0 var(--s4) 0 42px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--t9);
+  background: rgba(255,255,255,.95);
+  outline: none;
+  transition: border-color var(--ease);
+}
+
+.search-bar input::placeholder { color: var(--t4); }
+.search-bar input:focus { border-color: var(--white); }
+
+.search-bar svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--t4);
+  pointer-events: none;
+}
+
+/* Grupo de ações — direita do header · constraint Right/Center */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,.85);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px var(--s1);
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  transition: color var(--ease);
+}
+
+.btn-icon:hover { color: var(--white); }
+
+/* Botão carrinho — bg #00B207 (CTA conversão) · pill */
+.btn-cart {
+  background: var(--g);
+  color: var(--white);
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  position: relative;
+  white-space: nowrap;
+  transition: background var(--ease);
+}
+
+.btn-cart:hover { background: var(--ghover); }
+
+/* Badge de contagem — círculo Fixed 18×18 */
+.cart-badge {
+  background: var(--white);
+  color: var(--gd);
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────
+   NAV CATEGORIAS
+   bg: white · sticky abaixo do header (top: 72px)
+───────────────────────────────────────── */
+.nav-cats {
+  background: var(--white);
+  border-bottom: 1px solid var(--bd);
+  position: sticky;
+  top: 72px;
+  z-index: 90;
+}
+
+.nav-cats-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--s20);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 48px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-cats-inner::-webkit-scrollbar { display: none; }
+
+.nav-cat-item {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t6);
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.nav-cat-item:hover  { background: var(--gray-100); color: var(--t9); }
+.nav-cat-item.active { background: var(--gd); color: var(--white); font-weight: 600; }
+
+/* ─────────────────────────────────────────
+   FILTERS BAR
+───────────────────────────────────────── */
+.filters-bar {
+  background: var(--cream);
+  border-bottom: 1px solid var(--bd);
+  padding: var(--s3) 0;
+}
+
+.filters-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--s20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  flex-wrap: wrap;
+}
+
+.filters-left {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  flex-wrap: wrap;
+}
+
+.filters-count { font-size: 13px; color: var(--t4); white-space: nowrap; }
+.filters-count strong { color: var(--gdeep); font-weight: 600; }
+
+.filter-pills { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+
+/* Filter pill — border-radius: 100px */
+.filter-pill {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--bd);
+  background: var(--white);
+  color: var(--t6);
+  cursor: pointer;
+  transition: all var(--ease);
+  white-space: nowrap;
+}
+
+.filter-pill:hover  { border-color: var(--gd); color: var(--gd); }
+.filter-pill.active { background: var(--badge-diet-bg); border-color: var(--gd); color: var(--gd); font-weight: 600; }
+
+.filters-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.sort-label    { font-size: 12px; font-weight: 500; color: var(--t4); white-space: nowrap; }
+
+/* Sort select — pill */
+.sort-select {
+  border: 1.5px solid var(--bd);
+  border-radius: var(--r-pill);
+  padding: 7px 32px 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t9);
+  font-family: 'Poppins', sans-serif;
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='1.6'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--ease);
+}
+
+.sort-select:focus { border-color: var(--gd); }
+
+/* ─────────────────────────────────────────
+   PAGE CONTAINER
+   max-width 1280px · padding lateral 40px desktop
+───────────────────────────────────────── */
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--s8) var(--s10) var(--s20);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--t4);
+  margin-bottom: var(--s6);
+}
+
+.breadcrumb a { color: var(--t4); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gd); }
+.breadcrumb span { color: var(--t9); font-weight: 500; }
+
+/* ─────────────────────────────────────────
+   PRODUCT GRID — 4 colunas desktop
+   gap: 24px conforme spacing scale
+───────────────────────────────────────── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s6);             /* ← 24px conforme DS */
+}
+
+/* ─────────────────────────────────────────
+   PRODUCT CARD
+   border-radius: 20px (--r-card) canônico
+   hover: translateY(-4px) + shadow-card-hover
+───────────────────────────────────────── */
+.card {
+  font-family: 'Poppins', sans-serif;
+  background: var(--cream);
+  border-radius: var(--r-card);
+  border: 1px solid var(--bd);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--ease), box-shadow var(--ease);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Imagem — Fixed height 200px conforme DS */
+.card__img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #F0EBE2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card__img-placeholder { width: 88px; height: 88px; opacity: .18; }
+
+/* Badges sobre imagem — posição absoluta Left/Top
+   top/left: 12px garante margem consistente em relação à borda e ao placeholder */
+.card__badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Badge — pill (border-radius: 100px) */
+.badge {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  letter-spacing: .03em;
+  border: 1px solid transparent;
+}
+
+.badge--diet  { background: var(--badge-diet-bg);  color: var(--badge-diet-tx);  border-color: var(--badge-diet-bd); }
+.badge--promo { background: var(--badge-promo-bg); color: var(--badge-promo-tx); border-color: var(--badge-promo-bd); }
+.badge--unit  { background: #EEF2FF; color: #3730A3; border-color: #C7D2FE; }
+.badge--new   { background: var(--gd); color: var(--white); }
+.badge--org   { background: #ECFDF5; color: #065F46; border-color: #6EE7B7; }
+
+/* Wishlist — área de toque 44×44 (mínimo WCAG para touch targets)
+   Ícone visual 32×32 centralizado dentro da área de toque
+   Posição: 12px das bordas (era 10px) — margem de segurança para toque */
+.card__wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  background: var(--cream);
+  border-radius: 50%;
+  border: 1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--ease);
+  z-index: 2;
+}
+
+.card__wishlist:hover { background: var(--white); }
+/* Wishlist ativo: terracota DS (#C0694A) — nunca #E65100 */
+.card__wishlist.active svg { stroke: #C0694A; fill: #FFF3E0; }
+
+/* Card body — padding canônico 16px 18px 20px */
+.card__body {
+  padding: var(--s4) 18px var(--s5);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card__category { font-size: 10px; font-weight: 500; color: var(--t4); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+
+/* Título — até 3 linhas, nunca corta a variação de peso/medida
+   min-height reserva espaço de 3 linhas para alinhar os cards entre si */
+.card__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--t9);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(14px * 1.4 * 3); /* reserva 3 linhas — alinhamento entre cards */
+}
+
+/* Variação (peso/volume) — sempre visível, abaixo do nome, nunca truncada */
+.card__variant {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--t6);
+  margin-bottom: 10px;
+}
+
+/* Bloco de preço — height fixo garante alinhamento da base mesmo sem preço antigo
+   min-height cobre o caso mais alto: ref + main + old + kg + disc */
+.card__price-block {
+  min-height: 72px;        /* altura do caso mais completo (com old + disc) */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 14px;
+}
+
+/* Label "Preço por 100gr" removido — redundante com .card__variant
+   Mantido no CSS para cards que precisem (ex: unidade com embalagem variável)
+   mas display:none por padrão no catálogo */
+.card__price-ref  { display: none; }
+
+.card__price-main { font-size: 20px; font-weight: 600; color: var(--gdeep); line-height: 1; margin-top: 2px; }
+
+/* Preço riscado — #6B7280: contraste 5.74:1 sobre #F9F5EF — passa WCAG AA */
+.card__price-old  { font-size: 12px; color: #6B7280; text-decoration: line-through; margin-left: var(--s2); }
+
+/* /kg — #374151 sobre cream: 9.2:1 — passa WCAG AAA
+   Era #4B5563 (7.2:1). Escurecido para reforçar leitura em telas brilhantes */
+.card__price-unit-label { font-size: 11px; color: #374151; margin-top: 2px; }
+.card__price-disc       { font-size: 11px; font-weight: 600; color: var(--badge-promo-tx); margin-top: 3px; }
+
+/* Spacer empurra o botão para a base do card
+   flex:1 é o mecanismo de alinhamento vertical — não usar margin-top no botão */
+.card__spacer { flex: 1; min-height: var(--s2); }
+
+/* ─────────────────────────────────────────
+   QUANTITY SELECTOR — Solid variant (catálogo)
+   Botão idle: bg #2C742F (add-to-cart) — nunca #00B207
+   Pill ativo: bg #2C742F
+   border-radius: 10px (--r-sel)
+───────────────────────────────────────── */
+
+/* Estado idle — botão "Adicionar" */
+.qty-btn-add {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 40px;
+  background: var(--gd);          /* ← #2C742F add-to-cart — nunca #00B207 */
+  color: var(--white);
+  border: none;
+  border-radius: var(--r-sel);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: background var(--ease);
+  letter-spacing: .02em;
+}
+
+.qty-btn-add:hover { background: var(--ghover); }
+
+/* Pill ativo — CSS Grid com 3 colunas iguais
+   Cada coluna ocupa exatamente 1/3 do botão em qualquer largura de tela
+   padding-inline: 8px mantém afastamento das bordas arredondadas */
+.qty-pill {
+  width: 100%;
+  height: 40px;
+  background: var(--gd);
+  border-radius: var(--r-sel);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  padding-inline: 8px;
+  overflow: hidden;
+}
+
+/* Botões − e + — ocupam 1 coluna cada, ícone centralizado via flex */
+.qty-pill__btn {
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background var(--ease);
+}
+
+/* Botão + alinhado à direita dentro da sua coluna */
+.qty-pill__btn:last-child { justify-content: flex-end; }
+
+.qty-pill__btn:hover { background: rgba(0,0,0,.15); }
+
+/* Display da pill — apenas quantidade, sem preço
+   Texto: white puro (#fff) em vez de rgba — contraste máximo sobre #2C742F
+   Contraste #fff sobre #2C742F: 7.1:1 — passa WCAG AAA */
+.qty-pill__display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  padding: var(--s2) var(--s3);
+  border-left:  1px solid rgba(255,255,255,.25);
+  border-right: 1px solid rgba(255,255,255,.25);
+  letter-spacing: .01em;
+}
+
+/* ─────────────────────────────────────────
+   PAGINAÇÃO
+───────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: var(--s12);
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 40px;
+  height: 40px;
+  border-radius: var(--r-sel);
+  border: 1.5px solid var(--bd);
+  background: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  transition: all var(--ease);
+  text-decoration: none;
+  gap: 6px;
+}
+
+.page-btn:hover  { border-color: var(--gd); color: var(--gd); }
+.page-btn.active { background: var(--gd); border-color: var(--gd); color: var(--white); }
+.page-btn.disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.page-dots { color: var(--t4); font-size: 13px; padding: 0 var(--s1); display: flex; align-items: center; }
+
+/* ─────────────────────────────────────────
+   FOOTER
+   bg: #002603 (--gdeep) · padding 48px 80px
+───────────────────────────────────────── */
+.footer {
+  background: var(--gdeep);
+  color: rgba(255,255,255,.7);
+  padding: var(--s12) var(--s20) 28px;
+  margin-top: var(--s20);
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--s10);
+  padding-bottom: var(--s10);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.footer-brand p   { font-size: 13px; line-height: 1.7; margin-top: var(--s3); max-width: 260px; }
+.footer-col h4    { font-size: 12px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
+.footer-col a     { display: block; font-size: 13px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: var(--s2); transition: color var(--ease); }
+.footer-col a:hover { color: var(--white); }
+.footer-bottom    { max-width: 1280px; margin: var(--s5) auto 0; display: flex; align-items: center; justify-content: space-between; font-size: 12px; flex-wrap: wrap; gap: var(--s2); }
+
+/* Container circular do logo no footer — Fixed 36×36 */
+.footer-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVIDADE
+───────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .header-inner      { padding: 0 var(--s6); gap: var(--s4); }
+  .nav-cats-inner    { padding: 0 var(--s6); }
+  .filters-bar-inner { padding: 0 var(--s6); }
+  .page              { padding: var(--s6) var(--s6) var(--s12); }
+  .footer            { padding: var(--s10) var(--s6) var(--s6); }
+  .footer-inner      { grid-template-columns: 1fr 1fr; gap: var(--s8); }
+  .footer-brand      { grid-column: 1 / -1; }
+  .products-grid     { grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+  .logo-text         { display: none; }
+  .nav-cats          { top: 72px; }
+}
+
+@media (max-width: 768px) {
+  .topbar            { font-size: 11px; padding: var(--s2) var(--s4); }
+  .header-inner      { padding: 0 var(--s4); height: 60px; gap: 10px; }
+  /* Logo circular — Fixed 34×34 mobile */
+  .logo-icon         { width: 34px; height: 34px; }
+  .search-bar        { max-width: none; }
+  .btn-icon          { display: none; }
+  .btn-cart span:not(.cart-badge) { display: none; }
+  .btn-cart          { padding: 9px 14px; }
+  .nav-cats          { top: 60px; }
+  .nav-cats-inner    { padding: 0 var(--s4); height: 44px; }
+  .nav-cat-item      { font-size: 12px; padding: 5px 10px; }
+  .filters-bar-inner { padding: 0 var(--s4); gap: 10px; }
+  .filter-pills      { display: none; }
+  .sort-label        { display: none; }
+  .page              { padding: var(--s5) var(--s4) var(--s12); }
+  .breadcrumb        { display: none; }
+  .products-grid     { grid-template-columns: repeat(2, 1fr); gap: var(--s3); }
+  .card__img-wrap    { height: 160px; }
+  .footer            { padding: var(--s8) var(--s4) var(--s5); }
+  .footer-inner      { grid-template-columns: 1fr 1fr; gap: var(--s6); }
+  .footer-brand p    { display: none; }
+  .footer-bottom     { font-size: 11px; }
+  .page-btn          { min-width: 36px; height: 36px; font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .products-grid  { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .card__img-wrap { height: 140px; }
+  .card__name     { font-size: 12px; }
+  .card__price-main { font-size: 17px; }
+  .qty-btn-add    { height: 38px; font-size: 13px; }
+  .footer-inner   { grid-template-columns: 1fr; }
+  .pagination     { gap: var(--s1); }
+  .page-btn.page-num-hide { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR — bg #002603 canônico -->
+<div class="topbar">🚚 Frete GRÁTIS nas compras acima de R$ 100,00 &nbsp;✦&nbsp; Retirada disponível na loja Fundinho · Praça Clarimundo Carneiro, 119</div>
+
+<!-- HEADER — bg #2C742F · padding 80px lateral -->
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <!-- Logo circular — Fixed 40×40 -->
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6">
+          <path d="M12 2a9 9 0 0 1 9 9c0 4.5-6 11-9 11S3 15.5 3 11a9 9 0 0 1 9-9z"/>
+          <path d="M12 7v10M9 9c1 1.5 2 2 3 2s2-.5 3-2"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <strong>Granel da Praça</strong>
+        <span>Produtos Naturais</span>
+      </div>
+    </a>
+
+    <!-- Campo de busca — max-width 400px desktop -->
+    <div class="search-bar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Buscar produtos, categorias...">
+    </div>
+
+    <!-- Ações — constraint Right/Center -->
+    <div class="header-actions">
+      <button class="btn-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        Favoritos
+      </button>
+      <button class="btn-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Minha conta
+      </button>
+      <!-- Carrinho — bg #00B207 (CTA conversão) -->
+      <button class="btn-cart" onclick="openCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span>Carrinho</span>
+        <!-- Badge de contagem — círculo Fixed 18×18 -->
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV CATEGORIAS — sticky top: 72px -->
+<nav class="nav-cats">
+  <div class="nav-cats-inner">
+    <a class="nav-cat-item active" href="#">Todos</a>
+    <a class="nav-cat-item" href="#">Castanhas</a>
+    <a class="nav-cat-item" href="#">Frutas Secas</a>
+    <a class="nav-cat-item" href="#">Sementes</a>
+    <a class="nav-cat-item" href="#">Cereais</a>
+    <a class="nav-cat-item" href="#">Grãos</a>
+    <a class="nav-cat-item" href="#">Suplementos</a>
+    <a class="nav-cat-item" href="#">Óleos e Adoçantes</a>
+    <a class="nav-cat-item" href="#">Chás e Ervas</a>
+    <a class="nav-cat-item" href="#">Cosméticos Naturais</a>
+    <a class="nav-cat-item" href="#">Ofertas</a>
+  </div>
+</nav>
+
+<!-- FILTERS BAR -->
+<div class="filters-bar">
+  <div class="filters-bar-inner">
+    <div class="filters-left">
+      <div class="filters-count"><strong>390</strong> produtos encontrados</div>
+      <div class="filter-pills">
+        <button class="filter-pill active" onclick="toggleFilter(this)">Sem Glúten</button>
+        <button class="filter-pill" onclick="toggleFilter(this)">Vegano</button>
+        <button class="filter-pill" onclick="toggleFilter(this)">Orgânico</button>
+        <button class="filter-pill" onclick="toggleFilter(this)">Em promoção</button>
+        <button class="filter-pill" onclick="toggleFilter(this)">Novidades</button>
+      </div>
+    </div>
+    <div class="filters-right">
+      <span class="sort-label">Ordenar por</span>
+      <select class="sort-select">
+        <option>Mais relevantes</option>
+        <option>Menor preço</option>
+        <option>Maior preço</option>
+        <option>Mais vendidos</option>
+        <option>Novidades</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Navegação">
+    <a href="#">Início</a>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>Loja</span>
+  </nav>
+
+  <!-- GRID DE PRODUTOS -->
+  <div class="products-grid">
+
+    <!-- Card 1 — Granel, castanha de caju -->
+    <div class="card" onclick="goToProduct('castanha-caju-w1')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#FFF8E1,#FFECB3);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <ellipse cx="30" cy="50" rx="14" ry="10" fill="#002603"/>
+          <ellipse cx="55" cy="44" rx="12" ry="9"  fill="#002603"/>
+          <ellipse cx="44" cy="34" rx="10" ry="8"  fill="#002603"/>
+        </svg>
+        <!-- Badges — Left/Top absoluto -->
+        <div class="card__badges">
+          <span class="badge badge--diet">Sem Glúten</span>
+          <span class="badge badge--diet">Vegano</span>
+        </div>
+        <!-- Wishlist — Right/Top · círculo Fixed 32×32 -->
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Castanhas</div>
+        <div class="card__name">Castanha de Caju W1 Torrada Sem Sal</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 12,90</span></div>
+          <div class="card__price-unit-label">R$ 129,00/kg</div>
+        </div>
+        <div class="card__spacer"></div>
+        <!-- Botão add-to-cart: #2C742F — nunca #00B207 no catálogo -->
+        <div class="qty-wrap" id="q1">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(1,12.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 — Granel, granola -->
+    <div class="card" onclick="goToProduct('granola-artesanal')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#FFF3E0,#FFCC80);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <ellipse cx="44" cy="50" rx="26" ry="18" fill="#002603"/>
+          <ellipse cx="30" cy="38" rx="10" ry="8"  fill="#002603"/>
+          <ellipse cx="58" cy="36" rx="12" ry="9"  fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--diet">Sem Glúten</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Cereais</div>
+        <div class="card__name">Granola Artesanal Tropical com Coco</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 8,90</span></div>
+          <div class="card__price-unit-label">R$ 89,00/kg</div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q2">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(2,8.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 — Unidade, óleo de coco -->
+    <div class="card" onclick="goToProduct('oleo-coco-500ml')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#E8F5E9,#C8E6C9);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <rect x="28" y="16" width="32" height="56" rx="8" fill="#002603"/>
+          <rect x="34" y="10" width="20" height="10" rx="4" fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--unit">Por unidade</span>
+          <span class="badge badge--org">Orgânico</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Óleos e Adoçantes</div>
+        <div class="card__name">Óleo de Coco Extra Virgem Orgânico</div>
+        <div class="card__variant">500ml · por unidade</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por unidade</div>
+          <div><span class="card__price-main">R$ 34,90</span></div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q3">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addUnit(3,34.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 — Granel, mix castanhas, promo -->
+    <div class="card" onclick="goToProduct('mix-castanhas-premium')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#F3E5F5,#E1BEE7);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <ellipse cx="30" cy="50" rx="14" ry="10" fill="#002603"/>
+          <ellipse cx="50" cy="42" rx="12" ry="9"  fill="#002603"/>
+          <ellipse cx="62" cy="54" rx="10" ry="8"  fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--promo">−20%</span>
+          <span class="badge badge--diet">Sem Glúten</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Castanhas</div>
+        <div class="card__name">Mix Premium de Castanhas e Nozes Especiais</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span class="card__price-main">R$ 12,40</span>
+            <span class="card__price-old">R$ 15,50</span>
+          </div>
+          <div class="card__price-unit-label">R$ 124,00/kg</div>
+          <div class="card__price-disc">Você economiza R$ 3,10/100gr</div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q4">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(4,12.4)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 — Granel, chia -->
+    <div class="card" onclick="goToProduct('chia-organica')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#E3F2FD,#BBDEFB);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <circle cx="44" cy="44" r="28" fill="#002603" opacity=".6"/>
+          <circle cx="34" cy="36" r="6"  fill="#002603"/>
+          <circle cx="56" cy="52" r="5"  fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--org">Orgânico</span>
+          <span class="badge badge--new">Novidade</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Sementes</div>
+        <div class="card__name">Semente de Chia Orgânica Boliviana</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 5,90</span></div>
+          <div class="card__price-unit-label">R$ 59,00/kg</div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q5">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(5,5.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 — Unidade, argila -->
+    <div class="card" onclick="goToProduct('argila-verde-200g')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#E8EAF6,#C5CAE9);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <rect x="20" y="24" width="48" height="44" rx="6" fill="#002603"/>
+          <rect x="30" y="16" width="28" height="12" rx="4" fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--unit">Por unidade</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Cosméticos Naturais</div>
+        <div class="card__name">Argila Verde Pura</div>
+        <div class="card__variant">200g · por unidade</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por unidade</div>
+          <div><span class="card__price-main">R$ 14,90</span></div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q6">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addUnit(6,14.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 7 — Granel, mix castanhas 2 -->
+    <div class="card" onclick="goToProduct('mix-castanhas')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#FFF3E0,#FFCC80);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <ellipse cx="30" cy="50" rx="14" ry="10" fill="#002603"/>
+          <ellipse cx="50" cy="42" rx="12" ry="9"  fill="#002603"/>
+          <ellipse cx="62" cy="54" rx="10" ry="8"  fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--diet">Sem Glúten</span>
+          <span class="badge badge--org">Orgânico</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Castanhas</div>
+        <div class="card__name">Mix Premium de Castanhas e Nozes</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 15,50</span></div>
+          <div class="card__price-unit-label">R$ 155,00/kg</div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q7">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(7,15.5)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 8 — Granel, tâmara -->
+    <div class="card" onclick="goToProduct('tamara-medjool')">
+      <div class="card__img-wrap" style="background:linear-gradient(145deg,#FBE9E7,#FFCCBC);">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <ellipse cx="44" cy="52" rx="20" ry="28" fill="#002603"/>
+          <ellipse cx="44" cy="28" rx="8"  ry="12" fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--new">Novidade</span>
+        </div>
+        <div class="card__wishlist" onclick="toggleWishlist(event, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__category">Frutas Secas</div>
+        <div class="card__name">Tâmara Medjool Premium Importada</div>
+        <div class="card__variant">A granel · preço por 100gr</div>
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div><span class="card__price-main">R$ 18,90</span></div>
+          <div class="card__price-unit-label">R$ 189,00/kg</div>
+        </div>
+        <div class="card__spacer"></div>
+        <div class="qty-wrap" id="q8">
+          <button class="qty-btn-add" onclick="event.stopPropagation();addGranel(8,18.9)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /products-grid -->
+
+  <!-- PAGINAÇÃO -->
+  <div class="pagination">
+    <a class="page-btn disabled" href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="15 18 9 12 15 6"/></svg>
+      Anterior
+    </a>
+    <a class="page-btn active" href="#">1</a>
+    <a class="page-btn" href="#">2</a>
+    <a class="page-btn page-num-hide" href="#">3</a>
+    <span class="page-dots">...</span>
+    <a class="page-btn page-num-hide" href="#">17</a>
+    <a class="page-btn" href="#">
+      Próximo
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+</div><!-- /page -->
+
+<!-- FOOTER — bg #002603 · padding 48px 80px -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">
+        <!-- Logo circular footer — Fixed 36×36 -->
+        <div class="footer-logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6">
+            <path d="M12 2a9 9 0 0 1 9 9c0 4.5-6 11-9 11S3 15.5 3 11a9 9 0 0 1 9-9z"/>
+            <path d="M12 7v10M9 9c1 1.5 2 2 3 2s2-.5 3-2"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <strong style="color:white">Granel da Praça</strong>
+          <span>Produtos Naturais</span>
+        </div>
+      </div>
+      <p>Produtos naturais a granel em Uberlândia. Qualidade, frescor e preço justo desde 2019.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Loja</h4>
+      <a href="#">Todos os produtos</a>
+      <a href="#">Castanhas</a>
+      <a href="#">Suplementos</a>
+      <a href="#">Ofertas da semana</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ajuda</h4>
+      <a href="#">Como comprar</a>
+      <a href="#">Frete e entrega</a>
+      <a href="#">Trocas e devoluções</a>
+      <a href="#">Fale conosco</a>
+    </div>
+    <div class="footer-col">
+      <h4>Nossas lojas</h4>
+      <a href="#">Fundinho — Pça. Clarimundo Carneiro, 119</a>
+      <a href="#">Seg–Sex 9h–18h · Sáb 9h–12h</a>
+      <a href="#">UMC — R. Rafael Marino Neto, 600</a>
+      <a href="#">WhatsApp</a>
+      <a href="#">Instagram</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Granel da Praça — Todos os direitos reservados</span>
+    <span>Desenvolvido com ♥ em Uberlândia, MG</span>
+  </div>
+</footer>
+
+<script>
+// ── Estado global ──
+const state = {};
+let cartTotal = 0;
+
+function updateCartBadge() {
+  const count = Object.values(state).filter(s => s.qty > 0).length;
+  document.getElementById('cart-count').textContent = count;
+}
+
+// ── GRANEL (incremento 100gr) ──
+function addGranel(id, priceP100gr) {
+  state[id] = { type: 'granel', qty: 100, price: priceP100gr };
+  renderGranel(id);
+  updateCartBadge();
+}
+
+function renderGranel(id) {
+  const s = state[id];
+  const displayGrams = s.qty >= 1000
+    ? (s.qty / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 1 }) + ' kg'
+    : s.qty + ' gr';
+  const total = ((s.qty / 100) * s.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  document.getElementById('q' + id).innerHTML = `
+    <div class="qty-pill">
+      <button class="qty-pill__btn" onclick="event.stopPropagation();decGranel(${id})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="qty-pill__display">${displayGrams}</div>
+      <button class="qty-pill__btn" onclick="event.stopPropagation();incGranel(${id})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>`;
+}
+
+function decGranel(id) {
+  state[id].qty = Math.max(0, state[id].qty - 100);
+  if (state[id].qty === 0) {
+    resetCard(id, 'granel', state[id].price);
+    delete state[id];
+  } else {
+    renderGranel(id);
+  }
+  updateCartBadge();
+}
+
+function incGranel(id) { state[id].qty += 100; renderGranel(id); }
+
+// ── UNIDADE ──
+function addUnit(id, price) {
+  state[id] = { type: 'unit', qty: 1, price };
+  renderUnit(id);
+  updateCartBadge();
+}
+
+function renderUnit(id) {
+  const s = state[id];
+  const total = (s.qty * s.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('q' + id).innerHTML = `
+    <div class="qty-pill">
+      <button class="qty-pill__btn" onclick="event.stopPropagation();decUnit(${id})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="qty-pill__display">${s.qty} un.</div>
+      <button class="qty-pill__btn" onclick="event.stopPropagation();incUnit(${id})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>`;
+}
+
+function decUnit(id) {
+  state[id].qty = Math.max(0, state[id].qty - 1);
+  if (state[id].qty === 0) { resetCard(id, 'unit', state[id].price); delete state[id]; }
+  else renderUnit(id);
+  updateCartBadge();
+}
+
+function incUnit(id) { state[id].qty++; renderUnit(id); }
+
+// ── Reset para botão "Adicionar" ──
+function resetCard(id, type, price) {
+  const fn  = type === 'granel' ? `addGranel(${id},${price})` : `addUnit(${id},${price})`;
+  document.getElementById('q' + id).innerHTML = `
+    <button class="qty-btn-add" onclick="event.stopPropagation();${fn}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Adicionar
+    </button>`;
+}
+
+// ── Wishlist — ativo usa terracota DS (#C0694A) ──
+function toggleWishlist(e, el) {
+  e.stopPropagation();
+  el.classList.toggle('active');
+  const svg = el.querySelector('svg');
+  if (el.classList.contains('active')) {
+    svg.setAttribute('stroke', '#C0694A');
+    svg.setAttribute('fill',   '#FFF3E0');
+  } else {
+    svg.setAttribute('stroke', '#4B5563');
+    svg.setAttribute('fill',   'none');
+  }
+}
+
+// ── Nav Categorias ──
+document.querySelectorAll('.nav-cat-item').forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-cat-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// ── Filter Pills ──
+function toggleFilter(el) { el.classList.toggle('active'); }
+
+// ── Paginação ──
+document.querySelectorAll('.page-btn:not(.disabled)').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    if (btn.querySelector('svg')) return;
+    document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ── Placeholder navegação ──
+function goToProduct(slug) { /* navega para product_detail.html */ }
+function openCart()        { /* abre mini cart drawer */ }
+</script>
+
+</body>
+</html>

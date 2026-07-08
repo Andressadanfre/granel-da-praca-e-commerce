@@ -1,0 +1,464 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+  :root {
+  --surface: #F9FAFB;
+    --green: #00B207;
+    --green-dark: #2C742F;
+    --green-deep: #002603;
+    --cream: #F9F5EF;
+    --cream-border: #E5E7EB;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --badge-bg: #EAF7EA;
+    --badge-text: #2C742F;
+    --badge-prom-bg: #FFF3E0;
+    --badge-prom-text: #E65100;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .scene {
+    background: #EDE9E2;
+    border-radius: 16px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .label-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 620px;
+    justify-content: center;
+  }
+
+  .col-label {
+    flex: 0 0 294px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #7A7570;
+    text-align: center;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .cards-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .card {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    border-radius: 16px;
+    border: 1px solid #E5E7EB;
+    width: 294px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  }
+
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06); }
+
+  .card__img-wrap {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #F0EBE2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .card__img-placeholder {
+    width: 88px;
+    height: 88px;
+    opacity: 0.18;
+  }
+
+  .card__badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.03em;
+  }
+
+  .badge--diet {
+    background: var(--badge-bg);
+    color: var(--badge-text);
+  }
+
+  .badge--promo {
+    background: var(--badge-prom-bg);
+    color: var(--badge-prom-text);
+  }
+
+  .badge--unit {
+    background: #EEF2FF;
+    color: #3730A3;
+  }
+
+  .card__wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: var(--cream);
+    border-radius: 50%;
+    border: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .15s;
+  }
+
+  .card__wishlist:hover { background: #fff; }
+
+  .card__body {
+    padding: 14px 14px 16px;
+  }
+
+  .card__category {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 5px;
+  }
+
+  .card__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+
+  .card__price-block { margin-bottom: 14px; }
+
+  .card__price-ref {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .card__price-main {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--green-deep);
+    line-height: 1;
+  }
+
+  .card__price-unit {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-left: 3px;
+  }
+
+  .card__price-old {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-left: 8px;
+  }
+
+  .card__price-unit-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+  }
+
+  .qty-btn-add {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    height: 40px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: background .15s;
+    letter-spacing: 0.02em;
+  }
+
+  .qty-btn-add:hover { background: #1A5C1E; }
+
+  .qty-pill {
+    width: 100%;
+    height: 48px;
+    background: var(--green);
+    border-radius: 10px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .qty-pill__btn {
+    width: 48px;
+    min-width: 48px;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .12s;
+    flex-shrink: 0;
+  }
+
+  .qty-pill__btn:hover { background: rgba(0,0,0,0.12); }
+
+  .qty-pill__display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+    padding: 8px 12px;
+    border-left: 1px solid rgba(255,255,255,0.2);
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .qty-pill__display span {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    opacity: 0.85;
+  }
+
+  .card__info-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .info-chip {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: rgba(0,178,7,0.08);
+    color: var(--green-dark);
+  }
+</style>
+
+<div class="scene">
+  <div class="label-row">
+    <div class="col-label">Por gramas (granel)</div>
+    <div class="col-label">Por unidade (prateleira)</div>
+  </div>
+
+  <div class="cards-row">
+
+    <div class="card" id="card-granel">
+      <div class="card__img-wrap">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <rect x="8" y="28" width="72" height="52" rx="6" fill="#002603"/>
+          <ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603"/>
+          <circle cx="44" cy="22" r="5" fill="#002603"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--diet">Sem Glúten</span>
+          <span class="badge badge--diet">Vegano</span>
+        </div>
+        <div class="card__wishlist" onclick="event.stopPropagation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card__body">
+        <div class="card__category">Oleaginosas</div>
+        <div class="card__name">Castanha de Caju W1 Torrada</div>
+
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por 100gr</div>
+          <div style="display:flex;align-items:baseline;gap:0">
+            <span class="card__price-main">R$ 12,90</span>
+          </div>
+          <div class="card__price-unit-label" style="color:#4B5563;font-size:11px;margin-top:3px">R$ 129,00/kg</div>
+        </div>
+
+        <div id="granel-btn" onclick="toggleGranel()">
+          <button class="qty-btn-add">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="card-unit">
+      <div class="card__img-wrap">
+        <svg class="card__img-placeholder" viewBox="0 0 88 88" fill="none">
+          <rect x="22" y="16" width="44" height="60" rx="8" fill="#002603"/>
+          <rect x="26" y="20" width="36" height="10" rx="3" fill="#F9F5EF" opacity="0.3"/>
+        </svg>
+        <div class="card__badges">
+          <span class="badge badge--unit">Por unidade</span>
+          <span class="badge badge--promo">Promo</span>
+        </div>
+        <div class="card__wishlist" onclick="event.stopPropagation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card__body">
+        <div class="card__category">Suplementos</div>
+        <div class="card__name">Óleo de Coco Extra Virgem 500ml</div>
+
+        <div class="card__price-block">
+          <div class="card__price-ref">Preço por unidade</div>
+          <div style="display:flex;align-items:baseline;gap:0">
+            <span class="card__price-main">R$ 34,90</span>
+            <span class="card__price-old">R$ 42,00</span>
+          </div>
+          <div class="card__price-unit-label" style="color:#00B207;font-size:11px;font-weight:600;margin-top:3px">17% de desconto</div>
+        </div>
+
+        <div id="unit-btn" onclick="toggleUnit()">
+          <button class="qty-btn-add">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="font-family:'Poppins',sans-serif;font-size:11px;color:#9CA3AF;text-align:center;margin-top:4px">
+    Clique em "Adicionar" para ver o QuantitySelector em ação
+  </div>
+</div>
+
+<script>
+let granelQty = 0;
+let unitQty = 0;
+
+function toggleGranel() {
+  granelQty += 100;
+  renderGranel();
+}
+
+function renderGranel() {
+  const wrap = document.getElementById('granel-btn');
+  const displayGrams = granelQty >= 1000
+    ? (granelQty / 1000).toFixed(granelQty % 1000 === 0 ? 0 : 1).replace('.', ',') + ' kg'
+    : granelQty + ' gr';
+
+  wrap.innerHTML = `
+    <div class="qty-pill">
+      <button class="qty-pill__btn" onclick="event.stopPropagation();decreaseGranel()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="qty-pill__display">
+        ${displayGrams}
+        <span>R$ ${(granelQty * 0.129).toFixed(2).replace('.', ',')}</span>
+      </div>
+      <button class="qty-pill__btn" onclick="event.stopPropagation();increaseGranel()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>`;
+}
+
+function decreaseGranel() {
+  granelQty = Math.max(0, granelQty - 100);
+  if (granelQty === 0) {
+    document.getElementById('granel-btn').innerHTML = `
+      <button class="qty-btn-add" onclick="toggleGranel()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar
+      </button>`;
+  } else { renderGranel(); }
+}
+
+function increaseGranel() { granelQty += 100; renderGranel(); }
+
+function toggleUnit() {
+  unitQty = 1;
+  renderUnit();
+}
+
+function renderUnit() {
+  const wrap = document.getElementById('unit-btn');
+  wrap.innerHTML = `
+    <div class="qty-pill">
+      <button class="qty-pill__btn" onclick="event.stopPropagation();decreaseUnit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <div class="qty-pill__display">
+        ${unitQty} un.
+        <span>R$ ${(unitQty * 34.90).toFixed(2).replace('.', ',')}</span>
+      </div>
+      <button class="qty-pill__btn" onclick="event.stopPropagation();increaseUnit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>`;
+}
+
+function decreaseUnit() {
+  unitQty = Math.max(0, unitQty - 1);
+  if (unitQty === 0) {
+    document.getElementById('unit-btn').innerHTML = `
+      <button class="qty-btn-add" onclick="toggleUnit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar
+      </button>`;
+  } else { renderUnit(); }
+}
+
+function increaseUnit() { unitQty++; renderUnit(); }
+</script>

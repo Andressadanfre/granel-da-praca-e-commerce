@@ -1,0 +1,2489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Granel da Praça — Produtos Naturais a Granel em Uberlândia</title>
+  <meta name="description" content="Produtos naturais a granel e por unidade com entrega em Uberlândia. Qualidade, frescor e variedade desde 2019."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Poppins',sans-serif;background:#F9F5EF;overflow-x:hidden;}
+
+/* ══ ANNOUNCEMENT BAR ══ */
+.ann-msg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:0 16px; }
+.ann-msg-1 { animation:annCycle1 8s ease-in-out infinite; }
+.ann-msg-2 { animation:annCycle2 8s ease-in-out infinite; }
+@keyframes annCycle1 {
+  0%,40%  { opacity:1; }
+  50%,90% { opacity:0; }
+  100%    { opacity:1; }
+}
+@keyframes annCycle2 {
+  0%,40%  { opacity:0; }
+  50%,90% { opacity:1; }
+  100%    { opacity:0; }
+}
+
+/* ══ HEADER — nav links ══ */
+.h-nav-a {
+  display:flex; align-items:center; gap:5px;
+  padding:10px 10px; white-space:nowrap;
+  font-size:13px; font-weight:600; color:#374151;
+  text-decoration:none;
+  transition:color .15s;
+  border-bottom:2px solid transparent;
+}
+.h-nav-a:hover { color:#00B207; }
+.h-nav-a.active { color:#002603; border-bottom-color:#00B207; }
+.h-nav-a.promo  { color:#DC2626; }
+.h-nav-a.promo:hover { color:#b91c1c; }
+
+/* search focus ring */
+.h-search:focus-within { border-color:#00B207 !important; box-shadow:0 0 0 3px rgba(0,178,7,.12); }
+
+/* ══ USER POPOVER ══ */
+.h-popover {
+  position:absolute; top:calc(100% + 8px); right:0;
+  width:248px; background:#fff;
+  border:1px solid #E5E7EB; border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+  padding:18px; z-index:60;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transform:translateY(-4px);
+  transition:opacity .16s ease, transform .16s ease, visibility 0s linear .16s;
+}
+.h-popover.open {
+  opacity:1; visibility:visible; pointer-events:auto;
+  transform:translateY(0);
+  transition:opacity .16s ease, transform .16s ease, visibility 0s;
+}
+/* Desktop hover — CSS only */
+@media(min-width:769px){
+  .h-usr-wrap:hover .h-popover {
+    opacity:1; visibility:visible; pointer-events:auto;
+    transform:translateY(0);
+    transition:opacity .16s ease, transform .16s ease, visibility 0s;
+  }
+}
+.h-pop-title { font-size:11px; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
+.h-pop-google {
+  display:flex; align-items:center; gap:10px; width:100%;
+  padding:10px 14px; border:1.5px solid #E5E7EB; border-radius:10px;
+  background:#fff; cursor:pointer; font-family:'Poppins',sans-serif;
+  font-size:13px; font-weight:500; color:#111827; text-decoration:none;
+  transition:border-color .14s, background .14s; margin-bottom:10px;
+}
+.h-pop-google:hover { border-color:#4285F4; background:#F0F4FF; }
+.h-pop-divider { display:flex; align-items:center; gap:8px; margin:10px 0; font-size:11px; color:#9CA3AF; }
+.h-pop-divider::before,.h-pop-divider::after { content:''; flex:1; height:1px; background:#E5E7EB; }
+.h-pop-login {
+  display:block; width:100%; padding:10px; text-align:center;
+  background:#2C742F; color:#fff; border:none; border-radius:10px;
+  font-family:'Poppins',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; text-decoration:none; margin-bottom:8px;
+  transition:background .14s;
+}
+.h-pop-login:hover { background:#00B207; }
+.h-pop-signup {
+  display:block; width:100%; padding:10px; text-align:center;
+  background:transparent; color:#2C742F; border:1.5px solid #2C742F;
+  border-radius:10px; font-family:'Poppins',sans-serif; font-size:13px;
+  font-weight:600; cursor:pointer; text-decoration:none;
+  transition:background .14s;
+}
+.h-pop-signup:hover { background:#F0FDF4; }
+
+/* ══ MOBILE NAV DRAWER ══ */
+.h-mobile-nav {
+  display:none; flex-direction:column;
+  position:absolute; top:100%; left:0; right:0;
+  background:#fff; border-top:1px solid #E5E7EB;
+  box-shadow:0 8px 24px rgba(0,0,0,.08); z-index:50;
+  padding:8px 0 12px;
+}
+.h-mobile-nav.open { display:flex; }
+.h-mobile-nav a {
+  padding:12px 20px; font-size:14px; font-weight:600; color:#374151;
+  text-decoration:none; display:flex; align-items:center; gap:8px;
+  transition:background .12s;
+}
+.h-mobile-nav a:hover { background:#F9FAFB; color:#00B207; }
+.h-mobile-nav a.promo { color:#DC2626; }
+
+/* ══ FOOTER ══ */
+.foot-link { color:#9CA3AF; text-decoration:none; font-size:13px; transition:color .18s; }
+.foot-link:hover { color:#fff; }
+.foot-nl-input:focus { outline:none; border-color:rgba(255,255,255,.8); }
+
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Poppins',sans-serif;background:#F9F5EF;overflow-x:hidden;}
+
+:root{
+  --g:#00B207;
+  --gd:#2C742F;
+  --gdeep:#002603;
+  --cream:#F9F5EF;
+  --t9:#111827;
+  --t6:#4B5563;
+  --t4:#9CA3AF;
+  --bd:#E5E7EB;
+  --surface:#F9FAFB;
+  --ease:.18s cubic-bezier(.4,0,.2,1);
+  --container:1280px;
+  --pad:40px;
+}
+
+/* ── UTILITÁRIOS COMUNS ── */
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--pad);}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;color:var(--gd);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:12px;
+}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--g);flex-shrink:0;}
+.section-title{
+  font-size:clamp(26px,3vw,36px);font-weight:800;
+  color:var(--gdeep);letter-spacing:-.02em;line-height:1.15;
+  margin-bottom:12px;
+}
+.section-sub{
+  font-size:15px;font-weight:400;color:var(--t6);
+  line-height:1.65;max-width:520px;
+}
+.section-header{margin-bottom:48px;}
+.section-header--center{text-align:center;}
+.section-header--center .section-sub{margin:0 auto;}
+
+/* Animações de entrada — visíveis por padrão, animação é enhancement */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeRight{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:translateX(0);}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(-14px);}to{opacity:1;transform:translateX(0);}}
+@keyframes countUp{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease);}
+.reveal.visible{opacity:1;transform:none;}
+
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}}
+
+/* ══════════════════════════════════════════
+   SEÇÃO 1 — CATEGORIAS
+   Grid de 5 ícones + "Ver tudo" ao final
+══════════════════════════════════════════ */
+/* 5. Tipografia específica da seção categorias */
+.categories .section-title{
+  font-weight:800;
+  color:var(--gdeep); /* #002603 — verde quase preto */
+}
+.categories{
+  padding:64px 0 56px;
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+}
+/* linha orgânica sutil no topo */
+.categories::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--bd) 20%,var(--bd) 80%,transparent);
+}
+
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:16px;
+}
+
+.cat-card{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  padding:32px 16px 26px;
+  background:#fff;
+  border:none; /* 1. sem borda hard */
+  border-radius:20px; /* 1. radius consistente */
+  box-shadow:0 4px 20px rgba(0,0,0,.03); /* 1. sombra suavíssima */
+  cursor:pointer;text-decoration:none;
+  transition:
+    box-shadow var(--ease),
+    transform var(--ease),
+    background var(--ease),
+    border-color var(--ease),
+    color var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.cat-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(145deg,rgba(0,178,7,.04) 0%,transparent 60%);
+  opacity:0;
+  transition:opacity var(--ease);
+}
+/* 4. hover: sobe 10px + sombra mais difusa */
+.cat-card:hover{
+  box-shadow:0 16px 48px rgba(0,38,3,.10),0 4px 12px rgba(0,38,3,.05);
+  transform:translateY(-10px);
+}
+.cat-card:hover::before{opacity:1;}
+
+.cat-icon-wrap{
+  width:60px;height:60px;
+  border-radius:50%; /* 2. círculo perfeito */
+  background:#F0FDF4; /* 2. verde-pastel claríssimo */
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--ease),transform var(--ease);
+  flex-shrink:0;
+}
+.cat-card:hover .cat-icon-wrap{
+  background:#DCFCE7;
+  transform:scale(1.05); /* leve expansão do círculo */
+}
+/* 4. ícone escala 1.1 independente do wrapper */
+.cat-icon-wrap svg{
+  transition:transform var(--ease);
+  color:var(--gd); /* cor canônica */
+}
+.cat-card:hover .cat-icon-wrap svg{transform:scale(1.1);}
+
+.cat-name{
+  font-size:12px;font-weight:600;
+  color:var(--t9);text-align:center;
+  line-height:1.4;letter-spacing:.01em;
+}
+.cat-count{
+  font-size:12px;font-weight:500;
+  color:var(--t4);
+  text-transform:uppercase;
+  letter-spacing:1px; /* 4. letter-spacing editorial 1px */
+  margin-top:auto; /* 2. empurra para a base — alinhamento perfeito */
+}
+
+/* 3. card "Ver tudo" — borda tracejada, fundo sutil. Não escuro. */
+.cat-card--all{
+  background:rgba(0,178,7,.03); /* verde muito sutil */
+  border:1.5px dashed rgba(0,178,7,.35) !important; /* borda tracejada verde */
+  box-shadow:none;
+}
+.cat-card--all::before{
+  background:linear-gradient(145deg,rgba(0,178,7,.05) 0%,transparent 60%);
+  opacity:1;
+}
+.cat-card--all:hover{
+  background:var(--g); /* 3. verde principal no hover */
+  border-color:var(--g) !important;
+  box-shadow:0 16px 48px rgba(0,178,7,.20),0 4px 12px rgba(0,178,7,.12) !important;
+}
+.cat-card--all .cat-icon-wrap{
+  background:rgba(0,178,7,.08);
+  border:1px dashed rgba(0,178,7,.25);
+}
+.cat-card--all:hover .cat-icon-wrap{background:rgba(255,255,255,.2);}
+.cat-card--all:hover .cat-name{color:#fff;}
+.cat-card--all:hover .cat-count{color:rgba(255,255,255,.8);}
+.cat-card--all:hover .cat-icon-wrap svg{color:#fff;}
+.cat-card--all .cat-name{color:var(--gd);font-weight:700;transition:color var(--ease);}
+.cat-card--all .cat-count{color:var(--g);transition:color var(--ease);}
+.cat-card--all .cat-icon-wrap svg{color:var(--g);transition:color var(--ease);}
+
+/* ══════════════════════════════════════════
+   SEÇÃO 2 — PRODUTOS EM DESTAQUE
+   Grid 4 colunas com ProductCards
+══════════════════════════════════════════ */
+.featured{
+  padding:72px 0;
+  background:var(--cream);
+}
+.featured-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:40px;
+  flex-wrap:wrap;gap:16px;
+}
+.featured-link{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:600;color:var(--gd);
+  text-decoration:none;white-space:nowrap;
+  transition:gap var(--ease),color var(--ease);
+  padding-bottom:2px;
+  border-bottom:1px solid transparent;
+  transition:border-color var(--ease),gap var(--ease);
+}
+.featured-link:hover{gap:11px;border-bottom-color:var(--gd);}
+
+/* ProductCard — inline (versão compacta para homepage) */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px; /* espaço ligeiramente maior para respiração */
+}
+
+/* 1. ARQUITETURA DO CARD — duas partes + sombra suave */
+.p-card{
+  background:#fff; /* base branca */
+  border:none;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.05); /* 1. sombra suave canônica */
+  transition:box-shadow var(--ease),transform var(--ease);
+  cursor:pointer;
+  /* 5. flex-column para alinhar botão na base */
+  display:flex;flex-direction:column;
+}
+.p-card:hover{
+  box-shadow:0 20px 50px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.04);
+  transform:translateY(-4px);
+}
+
+/* 1. TOPO — área de imagem com border-radius só no topo */
+.p-card-img{
+  position:relative;
+  width:100%;height:200px;
+  background:linear-gradient(145deg,#E8F5E9,#C8E6C9);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  /* radius só no topo — base fica reta para unir com o body */
+  border-radius:20px 20px 0 0;
+  flex-shrink:0;
+}
+.p-card-img svg{opacity:.14;}
+
+/* 3. BADGES — pílulas brancas flutuando no canto superior esquerdo */
+.p-card-badges{
+  position:absolute;top:12px;left:12px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.p-badge{
+  font-size:9px;font-weight:700;
+  padding:4px 9px;border-radius:100px;
+  letter-spacing:.04em;
+  backdrop-filter:blur(4px);
+}
+/* 3. tags diet — pílulas BRANCAS com opacidade 90% */
+.p-badge--diet{
+  background:rgba(255,255,255,.9);
+  color:var(--gd);
+  border:1px solid rgba(0,0,0,.06);
+}
+/* 3. badge promo — destaque terroso sofisticado no canto superior DIREITO */
+.p-badge--promo{
+  background:#C0694A; /* terracota queimado — sofisticado */
+  color:#fff;
+  border:none;
+}
+.p-badge--new{
+  background:rgba(255,255,255,.9);
+  color:#3730A3;
+  border:1px solid rgba(0,0,0,.06);
+}
+/* promo fica no canto direito — muda posição via classe extra */
+.p-badge-promo-wrap{
+  position:absolute;top:12px;right:12px;
+}
+
+/* botão de coração */
+.p-heart{
+  position:absolute;top:12px;right:12px;
+  width:32px;height:32px;
+  background:rgba(255,255,255,.9);
+  border-radius:50%;border:1px solid rgba(0,0,0,.06);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:background var(--ease),transform var(--ease);
+  backdrop-filter:blur(6px);
+}
+.p-heart:hover{background:#fff;transform:scale(1.12);}
+
+/* 1. BASE — fundo branco puro, radius só na base */
+.p-card-body{
+  padding:16px 18px 20px;
+  background:#fff; /* 1. branco puro */
+  border-radius:0 0 20px 20px;
+  /* 5. flex-column + flex:1 para empurrar botão sempre para baixo */
+  display:flex;flex-direction:column;
+  flex:1;
+}
+
+/* 2. TIPOGRAFIA */
+.p-cat{
+  font-size:9.5px;font-weight:600;
+  color:var(--t4);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:6px;
+}
+.p-name{
+  font-size:13.5px;font-weight:600;
+  color:#222; /* 2. #222 — ligeiramente mais quente que #111827 */
+  line-height:1.4;
+  margin-bottom:14px;
+  /* 2. line-clamp: máximo 2 linhas */
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:calc(13.5px * 1.4 * 2); /* reserva altura de 2 linhas */
+}
+.p-price-label{font-size:10px;color:var(--t4);margin-bottom:4px;}
+
+/* 2. PREÇO — maior peso visual + unidade ao lado em cinza menor */
+.p-price-row{
+  display:flex;align-items:baseline;gap:5px;
+  margin-bottom:4px;
+}
+.p-price{
+  font-size:20px;font-weight:700;
+  color:var(--gdeep);letter-spacing:-.02em;line-height:1;
+}
+.p-price-unit{
+  font-size:11px;font-weight:400;
+  color:var(--t4); /* cinza discreto */
+  white-space:nowrap;
+}
+/* 2. preço por kg — discreto abaixo */
+.p-price-kg{
+  font-size:11px;color:#777;
+  margin-bottom:16px;
+  letter-spacing:.01em;
+}
+.p-price-old{
+  font-size:11px;color:var(--t4);
+  text-decoration:line-through;
+}
+.p-price-disc{
+  display:inline-block;
+  font-size:10px;font-weight:700;
+  color:#C0694A; /* mesmo terracota do badge promo */
+  background:#FBF1EE;
+  padding:2px 7px;border-radius:100px;
+  margin-bottom:14px;
+}
+
+/* 5. spacer empurra botão para a base */
+.p-spacer{flex:1;}
+
+/* 4. BOTÃO — border-radius 12px, padding generoso, hover mais escuro suave */
+.p-btn{
+  font-family:'Poppins',sans-serif;
+  width:100%;height:44px; /* padding generoso */
+  background:var(--g);color:#fff;
+  border:none;border-radius:12px; /* 4. radius 12px */
+  font-size:13px;font-weight:600;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  letter-spacing:.02em;
+  transition:
+    background var(--ease),
+    transform var(--ease),
+    box-shadow var(--ease);
+  box-shadow:0 2px 8px rgba(0,178,7,.18);
+  flex-shrink:0; /* não comprime nunca */
+}
+.p-btn:hover{
+  background:#1A5C1E; /* 4. levemente mais escuro */
+  transform:translateY(-1px);
+  box-shadow:0 5px 16px rgba(0,178,7,.28);
+}
+.p-btn:active{transform:translateY(0);box-shadow:none;}
+
+/* ══════════════════════════════════════════
+   SEÇÃO 3 — DIFERENCIAIS
+   3 colunas com ícone grande, título, texto
+══════════════════════════════════════════ */
+.diferenciais{
+  padding:96px 0; /* 5. espaçamento generoso — interface respira */
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.diferenciais::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--bd) 20%,var(--bd) 80%,transparent);
+}
+/* blob orgânico sutil — mantido, só reposicionado */
+.diferenciais::after{
+  content:'';
+  position:absolute;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,178,7,.04) 0%,transparent 70%);
+  top:-120px;right:-80px;pointer-events:none;
+}
+
+/* 5. cabeçalho com margin-bottom generoso */
+.diferenciais .section-header{
+  margin-bottom:64px;
+}
+
+/* 1. GRID — gap maior para respiração */
+.dif-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+
+/* 1. CARD — border-radius 24px, borda sutil #E0E0E0, sem sombra em repouso */
+.dif-card{
+  padding:40px 36px 36px;
+  border-radius:24px; /* 1. amigável e moderno */
+  border:1px solid #E0E0E0; /* 1. borda sutil — não var(--bd) que é mais pesado */
+  background:var(--cream); /* 1. fundo creme suave */
+  position:relative;
+  overflow:hidden;
+  transition:
+    border-color var(--ease),
+    box-shadow var(--ease),
+    transform var(--ease),
+    background var(--ease);
+}
+/* 1. card central com destaque leve */
+.dif-card:nth-child(2){
+  background:#F7FDF7; /* creme com leve toque verde — destaque suavíssimo */
+  border-color:rgba(0,178,7,.18);
+}
+/* 1. hover — sombra de profundidade aparece só aqui */
+.dif-card:hover{
+  border-color:rgba(0,178,7,.3);
+  box-shadow:0 12px 36px rgba(0,38,3,.08),0 4px 10px rgba(0,38,3,.04);
+  transform:translateY(-4px);
+}
+/* linha verde que cresce na base — mantida */
+.dif-card::before{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--g),var(--gd));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .32s var(--ease);
+  border-radius:0 0 24px 24px;
+}
+.dif-card:hover::before{transform:scaleX(1);}
+
+/* 2. ÍCONE — círculo 56px, borda-radius 50%, pastel verde, stroke-width 2px */
+.dif-icon{
+  width:56px;height:56px;
+  border-radius:50%; /* 2. círculo */
+  background:#E8F5E9; /* 2. verde pastel — ligeiramente mais saturado que #F0FDF4 */
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;
+  transition:transform var(--ease),background var(--ease);
+  flex-shrink:0;
+}
+.dif-card:hover .dif-icon{
+  transform:scale(1.1);
+  background:#C8E6C9;
+}
+/* 2. cor verde floresta, stroke-width 2px via CSS var sobreescrito */
+.dif-icon svg{
+  color:var(--gd); /* verde floresta */
+}
+
+/* 4. TÍTULO — 20px, weight 700, #1A1A1A */
+.dif-title{
+  font-size:20px;
+  font-weight:700;
+  color:#1A1A1A; /* 4. quase preto — mais quente que #111827 */
+  margin-bottom:12px;
+  letter-spacing:-.02em;
+  line-height:1.25;
+}
+
+/* 4. TEXTO — 15px, line-height 1.6, #4A4A4A */
+.dif-text{
+  font-size:15px;
+  color:#4A4A4A; /* 4. cinza médio-quente */
+  line-height:1.65;
+  margin-bottom:0;
+}
+
+/* 3. BADGE — fundo #E8F5E9, texto verde escuro, padding generoso, radius 100px */
+.dif-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;
+  color:var(--gd); /* 3. verde escuro */
+  background:#E8F5E9; /* 3. canônico */
+  padding:6px 12px; /* 3. padding generoso */
+  border-radius:100px;
+  margin-top:20px;
+  letter-spacing:.02em;
+  border:1px solid rgba(44,116,47,.15);
+}
+/* check ícone dentro do badge — stroke-width 2 para combinar com ícones principais */
+.dif-badge svg{
+  color:var(--g);
+  flex-shrink:0;
+}
+
+/* ══════════════════════════════════════════
+   SEÇÃO 4 — OFERTAS DA SEMANA
+   Banner largo com countdown + 3 cards
+══════════════════════════════════════════ */
+/* ── 1. SEÇÃO: padding generoso, fundo creme ── */
+.ofertas{
+  padding:80px 0;
+  background:var(--cream);
+}
+
+/* ── 1. INNER: fundo verde profundo com variações de profundidade ── */
+.ofertas-inner{
+  background:linear-gradient(145deg, #012504 0%, var(--gdeep) 50%, #001802 100%);
+  border-radius:28px;
+  padding:60px 60px 0;
+  overflow:hidden;
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:56px; /* 4. espaçamento maior — menos poluição */
+  align-items:end;
+  min-height:440px;
+}
+
+/* blobs com mais profundidade e variação de tom — 1. */
+.ofertas-inner::before{
+  content:'';position:absolute;
+  width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,178,7,.18) 0%,rgba(0,100,4,.08) 40%,transparent 70%);
+  top:-160px;right:-100px;pointer-events:none;
+}
+.ofertas-inner::after{
+  content:'';position:absolute;
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(44,116,47,.14) 0%,transparent 65%);
+  bottom:-80px;left:28%;pointer-events:none;
+}
+
+.ofertas-copy{
+  padding-bottom:60px;
+  position:relative;z-index:1;
+}
+
+/* ── 1. WCAG: eyebrow com contraste suficiente (.75 > .6) ── */
+.ofertas-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.75); /* WCAG AA sobre #002603 */
+  text-transform:uppercase;letter-spacing:.14em;
+  margin-bottom:20px;
+}
+.ofertas-pulse{
+  width:8px;height:8px;border-radius:50%;
+  background:#86EFAC; /* verde-lima visível */
+  box-shadow:0 0 0 0 rgba(134,239,172,.5);
+  animation:pulseRing 1.6s ease-out infinite;
+}
+@keyframes pulseRing{
+  0%{box-shadow:0 0 0 0 rgba(134,239,172,.5);}
+  70%{box-shadow:0 0 0 8px rgba(134,239,172,0);}
+  100%{box-shadow:0 0 0 0 rgba(134,239,172,0);}
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.ofertas-title{
+  font-size:clamp(28px,3vw,42px);font-weight:800;
+  color:#fff;line-height:1.08;letter-spacing:-.025em;
+  margin-bottom:14px;
+}
+.ofertas-title span{color:#86EFAC;}
+
+/* ── 1. WCAG: subtítulo com contraste (.75 melhor que .65) ── */
+.ofertas-sub{
+  font-size:14.5px;color:rgba(255,255,255,.75);
+  line-height:1.65;margin-bottom:36px;max-width:360px;
+}
+
+/* ── 3. COUNTDOWN: mais urgente, robusto e dinâmico ── */
+.countdown{
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:36px;
+}
+.cd-block{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  /* fundo mais contrastante — glassmorphism real */
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  padding:14px 18px;
+  min-width:72px;
+  box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.15);
+  position:relative;overflow:hidden;
+}
+/* linha de luz no topo do bloco — 3. efeito premium */
+.cd-block::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+}
+.cd-num{
+  font-size:32px;font-weight:800;color:#fff; /* 3. maior — mais urgente */
+  letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.cd-label{
+  font-size:9px;font-weight:700;
+  color:rgba(255,255,255,.55);
+  text-transform:uppercase;letter-spacing:.12em;
+}
+.cd-sep{
+  font-size:28px;font-weight:800;
+  color:rgba(255,255,255,.4);
+  line-height:1;padding-bottom:18px;
+  text-shadow:0 0 12px rgba(134,239,172,.4); /* leve glow verde */
+}
+
+/* ── 3. BTN OFERTAS: sombra projetada clara, hover com escala e sombra maior ── */
+.btn-ofertas{
+  font-family:'Poppins',sans-serif;
+  display:inline-flex;align-items:center;gap:10px;
+  height:52px;padding:0 32px; /* mais generoso */
+  background:var(--g);color:#fff;
+  border:none;border-radius:100px;
+  font-size:14px;font-weight:700;
+  letter-spacing:.03em;cursor:pointer;
+  /* 3. sombra projetada real — claramente clicável */
+  box-shadow:
+    0 4px 0 rgba(0,100,4,.6),      /* sombra de elevação */
+    0 6px 20px rgba(0,178,7,.35);   /* glow difuso */
+  transition:
+    background var(--ease),
+    box-shadow var(--ease),
+    transform var(--ease);
+  text-decoration:none;
+  position:relative;top:0;
+}
+.btn-ofertas:hover{
+  background:#1A5C1E;
+  /* 3. hover: eleva, sombra maior e mais clara */
+  box-shadow:
+    0 6px 0 rgba(0,80,3,.7),
+    0 12px 32px rgba(0,178,7,.45);
+  transform:translateY(-3px);
+}
+.btn-ofertas:active{
+  transform:translateY(1px);
+  box-shadow:0 2px 0 rgba(0,100,4,.6),0 4px 12px rgba(0,178,7,.25);
+}
+
+/* ── 4. CARDS: gap maior, padding generoso ── */
+.ofertas-cards{
+  display:flex;
+  flex-direction:column;
+  gap:16px; /* 4. era 14px */
+  padding-bottom:48px;
+  position:relative;z-index:1;
+}
+.oferta-card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:18px 20px; /* 4. padding mais generoso */
+  display:flex;align-items:center;gap:16px;
+  backdrop-filter:blur(12px);
+  transition:background var(--ease),border-color var(--ease),transform var(--ease),box-shadow var(--ease);
+  position:relative;
+}
+.oferta-card:hover{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.22);
+  transform:translateX(-6px);
+  box-shadow:0 8px 28px rgba(0,0,0,.2);
+}
+
+/* ── 2. THUMB: espaço real para imagem, não SVG genérico ── */
+.oferta-thumb{
+  width:64px;height:64px;border-radius:14px; /* 2. maior — mais visual */
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  overflow:hidden;
+  position:relative;
+}
+/* placeholder que simula uma imagem vibrante */
+.oferta-thumb::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(145deg,rgba(134,239,172,.15),rgba(0,178,7,.08));
+}
+.oferta-thumb img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  border-radius:13px;
+}
+.oferta-thumb svg{opacity:.35;position:relative;z-index:1;}
+
+.oferta-info{flex:1;min-width:0;}
+/* ── 1. WCAG: nome com contraste total #fff ── */
+.oferta-name{
+  font-size:13px;font-weight:600;
+  color:#fff; /* contraste total */
+  margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+/* ── 1. WCAG: meta com .65 (melhor que .5) ── */
+.oferta-meta{font-size:10.5px;color:rgba(255,255,255,.65);}
+
+.oferta-price{flex-shrink:0;text-align:right;}
+/* ── 2. PREÇO ATUAL: mais robusto, maior ── */
+.oferta-price-new{
+  font-size:17px;font-weight:800; /* 2. era 14px */
+  color:#fff; /* branco total — máxima legibilidade */
+  line-height:1;
+  letter-spacing:-.02em;
+}
+/* ── 1. WCAG: preço antigo mais visível (.5 → .55) ── */
+.oferta-price-old{
+  font-size:10.5px;
+  color:rgba(255,255,255,.55);
+  text-decoration:line-through;
+  margin-top:3px;
+}
+/* ── 2. DISC: fundo verde-lima/amarelo suave com texto preto — destaque visual ── */
+.oferta-disc{
+  font-size:10px;font-weight:800;
+  background:#D4F567; /* verde-lima suave — vibrante, saúde */
+  color:#1A3A00;      /* verde muito escuro — contraste ~11:1 */
+  padding:3px 8px;border-radius:100px;
+  display:inline-block;margin-top:5px;
+  letter-spacing:.02em;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+/* ── 2. QUICK ADD: botão + em cada card ── */
+.oferta-quick-add{
+  width:34px;height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:background var(--ease),border-color var(--ease),transform var(--ease);
+  color:rgba(255,255,255,.8);
+}
+.oferta-quick-add:hover{
+  background:var(--g);
+  border-color:var(--g);
+  color:#fff;
+  transform:scale(1.12);
+}
+
+/* ==============================================
+   SEÇÃO 5 — AVALIAÇÕES GOOGLE  (v4 — Ritual/Aesop aesthetic)
+   12-col grid: 4col summary + 8col feed
+   ============================================== */
+.avaliacoes {
+  padding: 100px 0 96px;
+  background: #F9F8F3;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+/* blob orgânico de fundo */
+.avaliacoes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 56% 48% at 92% 12%, rgba(44,116,47,.055) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 36% at 8% 88%,  rgba(0,38,3,.035)   0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ── 12-col container ── */
+.rv-grid {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* ─────────────────────────────
+   SUMMARY CARD (4 colunas)
+───────────────────────────── */
+.rv-summary {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 20px rgba(0,38,3,.045);
+  position: sticky;
+  top: 88px;
+}
+.rv-summary-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  margin-bottom: 24px;
+}
+/* Nota grande */
+.rv-score-block {
+  text-align: center;
+  padding: 24px 0 20px;
+  border-top: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9;
+  margin-bottom: 20px;
+}
+.rv-score {
+  font-size: clamp(3.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  color: #1A2E1A;
+  letter-spacing: -.05em;
+  line-height: 1;
+  display: block;
+}
+.rv-score-label {
+  font-size: .65rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: 4px;
+  display: block;
+}
+.rv-stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin: 10px 0 8px;
+}
+.rv-stars-row svg { width: 1rem; height: 1rem; }
+.rv-total {
+  font-size: .7rem;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+/* Trusted badge */
+.rv-trusted {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  background: #F0FDF4;
+  border: 1px solid rgba(44,116,47,.18);
+  border-radius: 10px;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #2C742F;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 20px;
+}
+.rv-trusted svg { width: .75rem; height: .75rem; flex-shrink: 0; }
+/* CTA link */
+.rv-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: .6rem 1rem;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  background: transparent;
+  color: #374151;
+  font-family: 'Poppins', sans-serif;
+  font-size: .7rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color .18s, color .18s, background .18s;
+  white-space: nowrap;
+}
+.rv-cta:hover {
+  border-color: #2C742F;
+  color: #2C742F;
+  background: #F0FDF4;
+}
+.rv-cta svg { width: .72rem; height: .72rem; flex-shrink: 0; }
+
+/* ─────────────────────────────
+   REVIEW FEED (8 colunas)
+───────────────────────────── */
+.rv-feed {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ── Card individual ── */
+.rv-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 26px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 1px 12px rgba(0,38,3,.04), 0 4px 24px rgba(0,38,3,.03);
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.rv-card:hover {
+  box-shadow: 0 8px 32px rgba(0,38,3,.10);
+  transform: translateY(-3px);
+}
+/* Card destaque — linha inteira */
+.rv-card--featured {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  gap: 32px;
+  background: linear-gradient(120deg, #fff 60%, #F6FBF6);
+  border-color: rgba(44,116,47,.18);
+}
+.rv-featured-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+
+/* Card top row: estrelas + ícone de aspas */
+.rv-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.rv-card-stars { display: flex; gap: 2px; }
+.rv-card-stars svg { width: .85rem; height: .85rem; }
+.rv-quote-icon {
+  color: rgba(44,116,47,.18);
+  flex-shrink: 0;
+}
+.rv-quote-icon svg { width: 1.4rem; height: 1.4rem; display: block; }
+
+/* Texto — SEM itálico, contraste WCAG AA garantido */
+.rv-card-text {
+  font-size: .855rem;
+  color: #374151;           /* contraste 9.2:1 sobre #fff */
+  line-height: 1.75;
+  font-style: normal;       /* ← sem itálico conforme especificado */
+  font-weight: 400;
+  flex: 1;
+}
+
+/* Footer do card */
+.rv-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid #F1F5F9;
+  gap: 8px;
+}
+.rv-author { display: flex; align-items: center; gap: 10px; }
+
+/* Avatar circular com borda dupla */
+.rv-avatar-wrap { position: relative; flex-shrink: 0; }
+.rv-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  font-weight: 700;
+  outline: 3px solid #fff;
+  box-shadow: 0 0 0 4px rgba(44,116,47,.14);
+  overflow: hidden;
+}
+.rv-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+/* Dot de verificado sobre o avatar */
+.rv-avatar-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 1rem;
+  height: 1rem;
+  background: #2C742F;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rv-avatar-dot svg { width: .5rem; height: .5rem; }
+
+.rv-author-info { display: flex; flex-direction: column; gap: 3px; }
+.rv-author-name { font-size: .76rem; font-weight: 600; color: #1A2E1A; line-height: 1.2; }
+.rv-author-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.rv-author-date { font-size: .62rem; color: #9CA3AF; font-weight: 500; }
+
+/* Badge Comprador Verificado */
+.rv-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: .58rem;
+  font-weight: 600;
+  color: #2C742F;
+  background: #F0FDF4;
+  border: 1px solid rgba(44,116,47,.2);
+  border-radius: 100px;
+  padding: 1px 6px;
+}
+.rv-verified-badge svg { width: .5rem; height: .5rem; }
+
+/* Tag Google */
+.rv-google-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .6rem;
+  font-weight: 600;
+  color: #D1D5DB;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.rv-google-tag svg { width: .75rem; height: .75rem; }
+
+/* ─────────────────────────────
+   RESPONSIVE
+───────────────────────────── */
+
+@media(max-width:1024px){
+  .rv-grid { grid-template-columns: 1fr; gap: 32px; }
+  .rv-summary { position: static; display: grid; grid-template-columns: auto 1fr; grid-template-areas: "src src" "score score" "badge badge" "cta cta"; column-gap: 28px; row-gap: 0; align-items: center; }
+  .rv-summary-source { grid-area: src; }
+  .rv-score-block { grid-area: score; border: none; padding: 12px 0; margin: 0; }
+  .rv-trusted { grid-area: badge; }
+  .rv-cta { grid-area: cta; }
+}
+@media(max-width:768px){
+  .rv-feed { grid-template-columns: 1fr; }
+  .rv-card--featured { flex-direction: column; }
+  .rv-featured-body { width: 100%; }
+}
+@media(max-width:480px){
+  .rv-summary { grid-template-columns: 1fr; grid-template-areas: "src" "score" "badge" "cta"; }
+  .rv-card { padding: 20px 16px 16px; }
+}
+
+/* ══════════════════════════════════════════
+   SEÇÃO 6 — MARCAS / PARCEIROS
+   Carrossel infinito (CSS only)
+══════════════════════════════════════════ */
+.marcas{
+  padding:56px 0;
+  background:var(--cream);
+  position:relative;overflow:hidden;
+}
+.marcas::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--bd) 20%,var(--bd) 80%,transparent);
+}
+.marcas-label{
+  font-size:10.5px;font-weight:600;color:var(--t4);
+  text-transform:uppercase;letter-spacing:.1em;
+  text-align:center;margin-bottom:28px;
+}
+/* fades laterais */
+.marcas-track-wrap{
+  position:relative;
+  overflow:hidden;
+}
+.marcas-track-wrap::before,
+.marcas-track-wrap::after{
+  content:'';
+  position:absolute;top:0;bottom:0;width:120px;
+  z-index:2;pointer-events:none;
+}
+.marcas-track-wrap::before{left:0;background:linear-gradient(to right,var(--cream),transparent);}
+.marcas-track-wrap::after{right:0;background:linear-gradient(to left,var(--cream),transparent);}
+
+.marcas-track{
+  display:flex;gap:0;
+  animation:scrollLeft 28s linear infinite;
+  width:max-content;
+}
+.marcas-track:hover{animation-play-state:paused;}
+@keyframes scrollLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+.marca-item{
+  display:flex;align-items:center;justify-content:center;
+  width:160px;height:64px;
+  flex-shrink:0;
+  padding:0 28px;
+  opacity:.45;
+  filter:grayscale(1);
+  transition:opacity var(--ease),filter var(--ease);
+  cursor:default;
+}
+.marcas-track:hover .marca-item:hover{opacity:.85;filter:none;}
+.marca-item span{
+  font-size:13px;font-weight:700;color:var(--t9);
+  letter-spacing:.03em;white-space:nowrap;
+}
+/* divisor entre marcas */
+.marca-sep{
+  width:1px;height:24px;
+  background:var(--bd);
+  flex-shrink:0;
+  align-self:center;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVO
+══════════════════════════════════════════ */
+@media(max-width:1024px){
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
+  .products-grid{grid-template-columns:repeat(2,1fr);}
+  .dif-grid{grid-template-columns:1fr 1fr;}
+  .ofertas-inner{grid-template-columns:1fr;padding:48px 36px 0;}
+  /* tablet: grid 2 colunas nos cards — wrap seguro com overflow:hidden em cada card */
+  .ofertas-cards{flex-direction:row;flex-wrap:wrap;padding-bottom:36px;gap:12px;}
+  .oferta-card{flex:1 1 calc(50% - 6px);min-width:220px;overflow:hidden;}
+  .av-layout{grid-template-columns:1fr;gap:32px;}
+  .av-rating-panel{
+    position:static;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-areas:"logo logo" "badge badge" "score bars" "stars bars" "total bars" "cta cta";
+    column-gap:28px;row-gap:6px;
+    text-align:left;align-items:center;
+  }
+  .av-google-logo{grid-area:logo;justify-content:flex-start;}
+  .av-trusted-badge{grid-area:badge;}
+  .av-score{grid-area:score;font-size:3rem;}
+  .av-stars{grid-area:stars;justify-content:flex-start;}
+  .av-total{grid-area:total;margin-bottom:0;}
+  .av-bar-list{grid-area:bars;}
+  .av-cta-btn{grid-area:cta;width:auto;margin-top:12px;}
+}
+@media(max-width:768px){
+  :root{--pad:20px;}
+  .cat-grid{grid-template-columns:repeat(3,1fr);gap:12px;}
+  .cat-card{padding:20px 12px 18px;}
+  .cat-icon-wrap{width:52px;height:52px;}
+  .products-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+  .dif-grid{grid-template-columns:1fr;}
+  .av-cards{grid-template-columns:1fr;}
+  .av-card--featured{flex-direction:column;}
+  .av-featured-body{width:100%;}
+  .ofertas-inner{border-radius:20px;padding:36px 24px 0;}
+  /* cards em coluna única no mobile — elimina overflow lateral */
+  .ofertas-cards{flex-direction:column;flex-wrap:nowrap;gap:12px;}
+  .oferta-card{flex:none;min-width:0;width:100%;padding:14px 16px;}
+  /* botão + não some mais — área mínima garantida */
+  .oferta-quick-add{width:36px;height:36px;flex-shrink:0;}
+  /* nome do produto quebra linha em vez de cortar */
+  .oferta-name{white-space:normal;overflow:visible;text-overflow:unset;line-height:1.3;}
+  .oferta-thumb{width:52px;height:52px;}
+  .oferta-price-new{font-size:15px;}
+  .countdown{flex-wrap:wrap;}
+  .cd-block{min-width:56px;padding:10px 12px;}
+  .cd-num{font-size:22px;}
+}
+@media(max-width:480px){
+  .section-title{font-size:24px;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .products-grid{grid-template-columns:1fr;}
+  .av-rating-panel{grid-template-columns:1fr;grid-template-areas:"logo" "badge" "score" "stars" "total" "bars" "cta";}
+  .av-cta-btn{width:100%;}
+  .av-card{padding:20px 16px;}
+  .av-card--featured{padding:20px 16px;}
+  /* ofertas 480px: força coluna única, padding reduzido */
+  .ofertas-cards{flex-direction:column;flex-wrap:nowrap;}
+  .oferta-card{flex:none;width:100%;min-width:0;padding:12px 14px;}
+  .ofertas-inner{padding:28px 16px 0;}
+  .btn-ofertas{width:100%;justify-content:center;}
+  .ofertas-title{font-size:clamp(22px,7vw,32px);}
+}
+
+
+/* ══ RESPONSIVE FOOTER ══ */
+@media(max-width:1024px){
+  .ft-grid { grid-template-columns:1fr 1fr !important; gap:32px 24px !important; }
+}
+@media(max-width:768px){
+  .ft-nl-strip { flex-direction:column !important; align-items:flex-start !important; }
+  .ft-nl-strip form { width:100% !important; }
+  .ft-nl-strip input { width:100% !important; }
+  .ft-grid { grid-template-columns:1fr 1fr !important; }
+  .ft-bottom { flex-direction:column !important; align-items:flex-start !important; gap:12px !important; }
+  .ft-bottom > div:last-child { text-align:left !important; }
+  .ft-outer { padding:32px 20px !important; }
+  .ft-nl-outer { padding:28px 20px !important; }
+}
+@media(max-width:480px){
+  .ft-grid { grid-template-columns:1fr !important; }
+  .ft-badges { flex-wrap:wrap !important; gap:8px !important; }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     HEADER — 3 linhas empilhadas, sticky, z-50
+     ROW 1 · Announcement Bar
+     ROW 2 · Main Header  (Logo | Search | Actions)
+     ROW 3 · Category Nav (desktop) / Mobile Drawer
+     ════════════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-white shadow-sm" style="font-family:'Poppins',sans-serif;">
+
+  <!-- ── ROW 1: Announcement Bar ── -->
+  <div class="w-full" style="background:#0D1A0D;">
+    <div class="relative flex items-center justify-center overflow-hidden" style="height:36px;">
+      <p class="ann-msg ann-msg-1 text-white text-xs font-medium whitespace-nowrap">
+        🎉 10% OFF na sua primeira compra acima de R$&nbsp;150
+      </p>
+      <p class="ann-msg ann-msg-2 text-white text-xs font-medium whitespace-nowrap">
+        🚚 Frete GRÁTIS nas compras acima de R$&nbsp;100,00
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ── ROW 2: Main Header ── -->
+  <div class="border-b border-gray-100">
+    <div class="max-w-screen-xl mx-auto px-5 md:px-10 flex items-center justify-between gap-4" style="height:68px;">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 flex-shrink-0 no-underline">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Granel da Praça">
+          <circle cx="20" cy="20" r="20" fill="#002603"/>
+          <path d="M20 30 C13 26 10 19 13 13 C16 8 22 8 24 13 C26 18 24 26 20 30Z" fill="#00B207"/>
+          <path d="M20 30 C27 26 30 19 27 13 C25 9 21 10 20 14 C19 18 20 26 20 30Z" fill="#2C742F"/>
+          <line x1="20" y1="30" x2="20" y2="34" stroke="#00B207" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="16" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.7" transform="rotate(-20 16 22)"/>
+          <ellipse cx="24" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.5" transform="rotate(20 24 22)"/>
+        </svg>
+        <div class="leading-tight hidden sm:block">
+          <div class="text-sm font-bold tracking-tight" style="color:#002603; letter-spacing:-.01em;">Granel da Praça</div>
+          <div class="font-medium uppercase" style="color:#00B207; font-size:9px; letter-spacing:.08em;">Produtos Naturais</div>
+        </div>
+      </a>
+
+      <!-- Search — única, centralizada, desktop -->
+      <div class="h-search flex-1 max-w-xl relative hidden md:flex items-center border rounded-xl bg-gray-50 transition-all" style="border:1.5px solid #E5E7EB;">
+        <svg class="absolute left-3 text-gray-400 pointer-events-none flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar produtos, categorias..." class="w-full h-10 pl-9 pr-4 bg-transparent text-sm outline-none" style="font-family:'Poppins',sans-serif; color:#111827;" />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 flex-shrink-0">
+
+        <!-- Search icon — mobile only -->
+        <button id="h-search-btn" aria-label="Buscar" class="flex md:hidden items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:text-gray-800 transition-colors" style="background:transparent; border:none; cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+
+        <!-- User popover -->
+        <div class="h-usr-wrap relative">
+          <button id="h-usr-btn" aria-label="Minha conta" aria-expanded="false" aria-haspopup="true"
+            class="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors rounded-lg px-2 py-1.5"
+            style="background:transparent; border:none; cursor:pointer; font-family:'Poppins',sans-serif;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="hidden sm:inline whitespace-nowrap">Entrar</span>
+          </button>
+
+          <!-- Popover panel — z-60 -->
+          <div id="h-popover" class="h-popover" role="dialog" aria-label="Acesso à conta">
+            <p class="h-pop-title">Acesse sua conta</p>
+
+            <!-- Google -->
+            <a href="/auth/google" class="h-pop-google">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Continuar com Google
+            </a>
+
+            <div class="h-pop-divider">ou</div>
+
+            <a href="/login" class="h-pop-login">Entrar com e-mail</a>
+            <a href="/cadastro" class="h-pop-signup">Criar conta grátis</a>
+          </div>
+        </div>
+
+        <!-- Favoritos -->
+        <a href="/favoritos" aria-label="Favoritos" class="hidden sm:flex items-center justify-center w-10 h-10 text-gray-500 hover:text-gray-800 transition-colors no-underline">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </a>
+
+        <!-- Carrinho -->
+        <button aria-label="Carrinho" class="flex items-center gap-2 text-white text-sm font-semibold rounded-xl relative transition-colors"
+          style="background:#2C742F; border:none; cursor:pointer; height:42px; padding:0 16px; font-family:'Poppins',sans-serif;"
+          onmouseover="this.style.background='#00B207'" onmouseout="this.style.background='#2C742F'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="hidden sm:inline">Carrinho</span>
+          <span class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-white border-2 border-white" style="background:#00B207; font-size:9px; font-weight:700;">3</span>
+        </button>
+
+        <!-- Hamburger — mobile -->
+        <button id="h-hamburger" aria-label="Menu" aria-expanded="false" class="flex md:hidden items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-900 transition-colors" style="background:transparent; border:none; cursor:pointer;">
+          <svg id="h-ham-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Mobile search bar (hidden by default) -->
+    <div id="h-mobile-search" class="hidden px-5 pb-3 md:hidden">
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar produtos..." class="w-full h-10 pl-9 pr-4 rounded-xl text-sm outline-none bg-gray-50" style="border:1.5px solid #E5E7EB; font-family:'Poppins',sans-serif;" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ROW 3: Category Nav (desktop) / Mobile Drawer ── -->
+  <nav id="h-cat-nav" class="border-t border-gray-100 hidden md:block">
+    <div class="max-w-screen-xl mx-auto px-5 md:px-10 flex items-center justify-between overflow-x-auto">
+      <a href="/loja" class="h-nav-a active">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Ver tudo
+      </a>
+      <a href="/categoria/castanhas" class="h-nav-a">Castanhas</a>
+      <a href="/categoria/graos" class="h-nav-a">Grãos &amp; Cereais</a>
+      <a href="/categoria/chas" class="h-nav-a">Chás &amp; Ervas</a>
+      <a href="/categoria/superalimentos" class="h-nav-a gap-2">
+        Superalimentos
+        <span class="text-white text-xs font-bold px-1.5 py-0.5 rounded-full leading-none" style="background:#00B207; font-size:9px;">NOVO</span>
+      </a>
+      <a href="/categoria/suplementos" class="h-nav-a">Suplementos</a>
+      <a href="/categoria/farinhas" class="h-nav-a">Farinhas</a>
+      <a href="/categoria/snacks" class="h-nav-a">Snacks</a>
+      <a href="/categoria/cosmeticos" class="h-nav-a">Cosméticos</a>
+      <a href="/ofertas" class="h-nav-a promo">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        Ofertas da semana
+      </a>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav Drawer -->
+  <div id="h-mobile-nav" class="h-mobile-nav">
+    <a href="/loja" class="font-semibold" style="color:#002603;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Ver todos os produtos
+    </a>
+    <a href="/categoria/castanhas">Castanhas &amp; Oleaginosas</a>
+    <a href="/categoria/graos">Grãos &amp; Cereais</a>
+    <a href="/categoria/chas">Chás &amp; Ervas</a>
+    <a href="/categoria/superalimentos" class="gap-2">
+      Superalimentos
+      <span class="text-white font-bold rounded-full px-1.5 py-0.5" style="background:#00B207; font-size:9px;">NOVO</span>
+    </a>
+    <a href="/categoria/suplementos">Suplementos</a>
+    <a href="/categoria/farinhas">Farinhas</a>
+    <a href="/categoria/snacks">Snacks</a>
+    <a href="/categoria/cosmeticos">Cosméticos</a>
+    <a href="/ofertas" class="promo font-semibold">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Ofertas da semana
+    </a>
+  </div>
+
+</header>
+
+<!-- ════════════════════════════════════════════════
+     HERO — imediatamente após o header, sem gap
+     Layout: 2 colunas desktop | 1 coluna mobile
+     ════════════════════════════════════════════════ -->
+<section aria-label="Banner principal" style="display:block; background:#F9F5EF; overflow:hidden;">
+  <div style="max-width:1280px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:1fr 1fr; align-items:center; min-height:520px; gap:48px;">
+
+    <!-- Coluna esquerda: copy + CTA -->
+    <div style="padding:56px 0;">
+
+      <!-- eyebrow -->
+      <div style="display:inline-flex; align-items:center; gap:8px; background:#E8F5E9; border-radius:100px; padding:6px 14px; margin-bottom:20px;">
+        <span style="width:6px; height:6px; border-radius:50%; background:#00B207; display:inline-block;"></span>
+        <span style="font-size:12px; font-weight:600; color:#2C742F; text-transform:uppercase; letter-spacing:.08em;">Produtos naturais a granel</span>
+      </div>
+
+      <!-- headline -->
+      <h1 style="font-size:clamp(32px, 4vw, 52px); font-weight:800; color:#002603; line-height:1.1; letter-spacing:-.02em; margin:0 0 16px;">
+        Natureza no<br/>
+        <span style="color:#00B207;">seu prato,</span><br/>
+        frescor em<br/>cada grão.
+      </h1>
+
+      <!-- subheadline -->
+      <p style="font-size:16px; color:#4B5563; line-height:1.6; margin:0 0 32px; max-width:400px;">
+        Mais de 390 produtos naturais a granel e por unidade. 
+        Com entrega em Uberlândia e retirada em 2 lojas.
+      </p>
+
+      <!-- trust badges inline -->
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:36px;">
+        <div style="display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:6px 12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span style="font-size:12px; font-weight:600; color:#374151;">Frete grátis acima de R$100</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:6px 12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span style="font-size:12px; font-weight:600; color:#374151;">10% OFF na 1ª compra</span>
+        </div>
+      </div>
+
+      <!-- CTAs -->
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+        <a href="/loja" style="display:inline-flex; align-items:center; gap:8px; background:#00B207; color:#fff; text-decoration:none; font-size:15px; font-weight:700; padding:14px 28px; border-radius:12px; transition:background .18s;"
+          onmouseover="this.style.background='#2C742F'" onmouseout="this.style.background='#00B207'">
+          Ver todos os produtos
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="/ofertas" style="display:inline-flex; align-items:center; gap:8px; background:transparent; color:#002603; text-decoration:none; font-size:15px; font-weight:600; padding:14px 24px; border-radius:12px; border:2px solid #002603; transition:background .18s, color .18s;"
+          onmouseover="this.style.background='#002603';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#002603'">
+          Ver ofertas
+        </a>
+      </div>
+    </div>
+
+    <!-- Coluna direita: imagem visual -->
+    <div style="position:relative; height:520px; border-radius:24px; overflow:hidden; background:#D1E8D1;">
+      <!-- imagem de fundo — substitua src pelo asset real -->
+      <img
+        src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80"
+        alt="Castanhas, grãos e produtos naturais a granel da Granel da Praça"
+        style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;"
+        loading="eager"
+      />
+      <!-- overlay sutil para legibilidade eventual de texto sobre a imagem -->
+      <div style="position:absolute; inset:0; background:linear-gradient(to right, rgba(0,38,3,.08) 0%, transparent 60%); pointer-events:none;"></div>
+
+      <!-- badge flutuante -->
+      <div style="position:absolute; bottom:24px; left:24px; background:#fff; border-radius:12px; padding:12px 16px; box-shadow:0 8px 24px rgba(0,0,0,.12); display:flex; align-items:center; gap:10px;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#E8F5E9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:#002603; line-height:1.2;">+390 produtos</div>
+          <div style="font-size:11px; color:#6B7280;">Desde 2019 em Uberlândia</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CSS Hero responsivo -->
+<style>
+@media(max-width:768px){
+  .hero-grid { grid-template-columns:1fr !important; min-height:auto !important; gap:0 !important; }
+  .hero-copy { padding:40px 0 32px !important; }
+  .hero-img  { height:280px !important; border-radius:16px !important; margin:0 0 40px !important; }
+  section[aria-label="Banner principal"] > div { padding:0 20px !important; display:block !important; }
+}
+@media(max-width:480px){
+  .hero-img { height:220px !important; }
+}
+</style>
+
+<main>
+<!-- ══════════════════════════════════════════
+     SEÇÃO 1 — CATEGORIAS
+══════════════════════════════════════════ -->
+<section class="categories" aria-label="Categorias de produtos">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><span class="eyebrow-dot"></span>Explore por categoria</div>
+      <h2 class="section-title">O que você está buscando?</h2>
+    </div>
+
+    <div class="cat-grid">
+
+      <a href="/loja/oleaginosas" class="cat-card reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" color="#2C742F">
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10c0-1.5-.3-2.9-.9-4.2"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <div class="cat-name">Castanhas &amp; Oleaginosas</div>
+        <div class="cat-count">48 produtos</div>
+      </a>
+
+      <a href="/loja/graos" class="cat-card reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2"/>
+            <path d="M12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </div>
+        <div class="cat-name">Grãos &amp; Leguminosas</div>
+        <div class="cat-count">62 produtos</div>
+      </a>
+
+      <a href="/loja/farinhas" class="cat-card reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2h18v4H3zM3 6l2 14h14l2-14"/>
+            <line x1="12" y1="6" x2="12" y2="20"/>
+            <line x1="7.5" y1="6" x2="7" y2="20"/>
+            <line x1="16.5" y1="6" x2="17" y2="20"/>
+          </svg>
+        </div>
+        <div class="cat-name">Farinhas &amp; Cereais</div>
+        <div class="cat-count">55 produtos</div>
+      </a>
+
+      <a href="/loja/chas" class="cat-card reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="2" x2="6" y2="4"/>
+            <line x1="10" y1="2" x2="10" y2="4"/>
+            <line x1="14" y1="2" x2="14" y2="4"/>
+          </svg>
+        </div>
+        <div class="cat-name">Chás &amp; Infusões</div>
+        <div class="cat-count">38 produtos</div>
+      </a>
+
+      <a href="/loja/superalimentos" class="cat-card reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="cat-name">Superalimentos</div>
+        <div class="cat-count">29 produtos</div>
+      </a>
+
+      <a href="/loja" class="cat-card cat-card--all reveal">
+        <div class="cat-icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </div>
+        <div class="cat-name">Ver tudo</div>
+        <div class="cat-count">396 produtos</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SEÇÃO 2 — PRODUTOS EM DESTAQUE
+══════════════════════════════════════════ -->
+<section class="featured" aria-label="Produtos em destaque">
+  <div class="container">
+    <div class="featured-head reveal">
+      <div>
+        <div class="section-eyebrow"><span class="eyebrow-dot"></span>Mais vendidos</div>
+        <h2 class="section-title">Produtos em destaque</h2>
+      </div>
+      <a href="/loja" class="featured-link">
+        Ver todos os produtos
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- Card 1 — Granel com desconto por quantidade -->
+      <div class="p-card reveal">
+        <div class="p-card-img">
+          <svg width="80" height="80" viewBox="0 0 88 88" fill="none"><rect x="8" y="28" width="72" height="52" rx="6" fill="#002603" opacity=".12"/><ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603" opacity=".12"/></svg>
+          <!-- 3. badges brancos no canto esquerdo -->
+          <div class="p-card-badges">
+            <span class="p-badge p-badge--diet">Sem Glúten</span>
+            <span class="p-badge p-badge--diet">Vegano</span>
+          </div>
+          <button class="p-heart" aria-label="Favoritar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="p-card-body">
+          <div class="p-cat">Oleaginosas</div>
+          <div class="p-name">Castanha de Caju W1 Torrada</div>
+          <div class="p-price-label">Preço por 100g</div>
+          <div class="p-price-row">
+            <span class="p-price">R$&nbsp;12,90</span>
+            <span class="p-price-unit">/ 100g</span>
+          </div>
+          <div class="p-price-kg">R$&nbsp;129,00 / kg</div>
+          <div class="p-spacer"></div>
+          <button class="p-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2 — Unidade com promoção -->
+      <div class="p-card reveal">
+        <div class="p-card-img" style="background:linear-gradient(145deg,#FFF8E1,#FFECB3);">
+          <svg width="80" height="80" viewBox="0 0 88 88" fill="none"><rect x="22" y="16" width="44" height="60" rx="8" fill="#002603" opacity=".1"/></svg>
+          <!-- 3. tag "Por unidade" branca esquerda -->
+          <div class="p-card-badges">
+            <span class="p-badge p-badge--new">Por unidade</span>
+          </div>
+          <!-- 3. badge PROMO terracota no canto DIREITO -->
+          <div class="p-badge-promo-wrap">
+            <span class="p-badge p-badge--promo">Promoção</span>
+          </div>
+        </div>
+        <div class="p-card-body">
+          <div class="p-cat">Suplementos</div>
+          <div class="p-name">Óleo de Coco Extra Virgem 500ml</div>
+          <div class="p-price-label">Preço por unidade</div>
+          <div class="p-price-row">
+            <span class="p-price">R$&nbsp;34,90</span>
+            <span class="p-price-old" style="margin-left:6px;font-size:12px;">R$&nbsp;42,00</span>
+          </div>
+          <div class="p-price-disc">−17% de desconto</div>
+          <div class="p-spacer"></div>
+          <button class="p-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-card reveal">
+        <div class="p-card-img" style="background:linear-gradient(145deg,#E8F5E9,#C8E6C9);">
+          <svg width="80" height="80" viewBox="0 0 88 88" fill="none"><rect x="14" y="20" width="60" height="55" rx="6" fill="#002603" opacity=".1"/><circle cx="44" cy="20" r="10" fill="#002603" opacity=".1"/></svg>
+          <div class="p-card-badges">
+            <span class="p-badge p-badge--diet">Orgânico</span>
+          </div>
+          <button class="p-heart" aria-label="Favoritar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="p-card-body">
+          <div class="p-cat">Grãos</div>
+          <div class="p-name">Granola Artesanal Tropical Sem Açúcar</div>
+          <div class="p-price-label">Preço por 100g</div>
+          <div class="p-price-row">
+            <span class="p-price">R$&nbsp;8,90</span>
+            <span class="p-price-unit">/ 100g</span>
+          </div>
+          <div class="p-price-kg">R$&nbsp;89,00 / kg</div>
+          <div class="p-spacer"></div>
+          <button class="p-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="p-card reveal">
+        <div class="p-card-img" style="background:linear-gradient(145deg,#EDE7F6,#D1C4E9);">
+          <svg width="80" height="80" viewBox="0 0 88 88" fill="none"><ellipse cx="44" cy="44" rx="30" ry="28" fill="#002603" opacity=".1"/></svg>
+          <div class="p-card-badges">
+            <span class="p-badge p-badge--diet">Sem Glúten</span>
+          </div>
+          <button class="p-heart" aria-label="Favoritar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="p-card-body">
+          <div class="p-cat">Superalimentos</div>
+          <div class="p-name">Amêndoas Naturais Premium</div>
+          <div class="p-price-label">Preço por 100g</div>
+          <div class="p-price-row">
+            <span class="p-price">R$&nbsp;19,90</span>
+            <span class="p-price-unit">/ 100g</span>
+          </div>
+          <div class="p-price-kg">R$&nbsp;199,00 / kg</div>
+          <div class="p-spacer"></div>
+          <button class="p-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SEÇÃO 3 — DIFERENCIAIS
+══════════════════════════════════════════ -->
+<section class="diferenciais" aria-label="Nossos diferenciais">
+  <div class="container">
+    <div class="section-header section-header--center reveal">
+      <div class="section-eyebrow" style="justify-content:center;"><span class="eyebrow-dot"></span>Por que escolher a gente</div>
+      <h2 class="section-title">Natural de verdade,<br>do começo ao fim</h2>
+      <p class="section-sub" style="margin:12px auto 0;">Cada etapa pensada para você receber o melhor dos produtos naturais — com qualidade, cuidado e transparência.</p>
+    </div>
+
+    <div class="dif-grid">
+
+      <div class="dif-card reveal">
+        <div class="dif-icon">
+          <!-- 2. Lucide Truck — stroke-width:2, 28px, verde floresta -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13" rx="1"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </div>
+        <div class="dif-title">Entrega no mesmo dia</div>
+        <div class="dif-text">Pedidos realizados até as 14h são entregues ainda hoje. Atendemos toda Uberlândia, de segunda a sábado.</div>
+        <span class="dif-badge">
+          <!-- 3. check minimalista — stroke-width:2 -->
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Pediu, chegou
+        </span>
+      </div>
+
+      <div class="dif-card reveal">
+        <div class="dif-icon">
+          <!-- 2. Lucide Shield — stroke-width:2, 28px -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+        <div class="dif-title">Qualidade garantida</div>
+        <div class="dif-text">Selecionamos fornecedores com rigor. Todo produto passa por análise antes de entrar na nossa prateleira.</div>
+        <span class="dif-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Sem mistério
+        </span>
+      </div>
+
+      <div class="dif-card reveal">
+        <div class="dif-icon">
+          <!-- 2. Lucide Sliders — stroke-width:2, 28px -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"/>
+            <line x1="4" y1="10" x2="4" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12" y2="3"/>
+            <line x1="20" y1="21" x2="20" y2="16"/>
+            <line x1="20" y1="12" x2="20" y2="3"/>
+            <line x1="1" y1="14" x2="7" y2="14"/>
+            <line x1="9" y1="8" x2="15" y2="8"/>
+            <line x1="17" y1="16" x2="23" y2="16"/>
+          </svg>
+        </div>
+        <div class="dif-title">Você escolhe o quanto quer</div>
+        <div class="dif-text">100g, 500g ou 2kg — você define. Sem desperdício, sem obrigação de comprar mais do que precisa.</div>
+        <span class="dif-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          A partir de 100g
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SEÇÃO 4 — OFERTAS DA SEMANA
+══════════════════════════════════════════ -->
+<section class="ofertas" aria-label="Ofertas da semana">
+  <div class="container">
+    <div class="ofertas-inner reveal">
+
+      <div class="ofertas-copy">
+        <div class="ofertas-eyebrow">
+          <span class="ofertas-pulse"></span>
+          Apenas esta semana
+        </div>
+        <h2 class="ofertas-title">Descontos que<br>fazem <span>diferença</span></h2>
+        <p class="ofertas-sub">Selecionamos toda semana produtos com preços especiais. Aproveite enquanto durar o estoque.</p>
+
+        <div class="countdown" id="countdown">
+          <div class="cd-block"><span class="cd-num" id="cd-h">18</span><span class="cd-label">Horas</span></div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block"><span class="cd-num" id="cd-m">24</span><span class="cd-label">Min</span></div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block"><span class="cd-num" id="cd-s">07</span><span class="cd-label">Seg</span></div>
+        </div>
+
+        <a href="/ofertas" class="btn-ofertas">
+          Ver todas as ofertas
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="ofertas-cards">
+
+        <!-- Card 1 — Aveia -->
+        <div class="oferta-card">
+          <!-- 2. thumb com placeholder para imagem real -->
+          <div class="oferta-thumb">
+            <!--
+              Substituir por:
+              <img src="/images/produtos/aveia-flocos.jpg" alt="Aveia em Flocos Finos"/>
+            -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 0 0-6.88 2.77C3.61 6.14 3 8 3 10c0 4 3 7 5 9"/><path d="M12 2c1.5 2 3 4.5 3 8s-1.5 6-3 8"/>
+            </svg>
+          </div>
+          <div class="oferta-info">
+            <div class="oferta-name">Aveia em Flocos Finos</div>
+            <div class="oferta-meta">Granel · preço por 100g</div>
+          </div>
+          <div class="oferta-price">
+            <div class="oferta-price-new">R$&nbsp;3,90</div>
+            <div class="oferta-price-old">R$&nbsp;5,50</div>
+            <!-- 2. disc verde-lima #D4F567, texto verde escuro — destaque -->
+            <span class="oferta-disc">−29%</span>
+          </div>
+          <!-- 2. Quick Add -->
+          <button class="oferta-quick-add" aria-label="Adicionar Aveia ao carrinho">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Card 2 — Biomassa -->
+        <div class="oferta-card">
+          <div class="oferta-thumb">
+            <!--
+              Substituir por:
+              <img src="/images/produtos/biomassa-banana.jpg" alt="Biomassa de Banana Verde"/>
+            -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c-4-2-7-6-7-10a7 7 0 0 1 14 0c0 4-3 8-7 10z"/>
+            </svg>
+          </div>
+          <div class="oferta-info">
+            <div class="oferta-name">Biomassa de Banana Verde</div>
+            <div class="oferta-meta">Unidade · 400g</div>
+          </div>
+          <div class="oferta-price">
+            <div class="oferta-price-new">R$&nbsp;12,90</div>
+            <div class="oferta-price-old">R$&nbsp;17,90</div>
+            <span class="oferta-disc">−28%</span>
+          </div>
+          <button class="oferta-quick-add" aria-label="Adicionar Biomassa ao carrinho">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Card 3 — Chia -->
+        <div class="oferta-card">
+          <div class="oferta-thumb">
+            <!--
+              Substituir por:
+              <img src="/images/produtos/chia-preta.jpg" alt="Chia Preta Premium"/>
+            -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </div>
+          <div class="oferta-info">
+            <div class="oferta-name">Chia Preta Premium</div>
+            <div class="oferta-meta">Granel · preço por 100g</div>
+          </div>
+          <div class="oferta-price">
+            <div class="oferta-price-new">R$&nbsp;4,50</div>
+            <div class="oferta-price-old">R$&nbsp;6,90</div>
+            <span class="oferta-disc">−35%</span>
+          </div>
+          <button class="oferta-quick-add" aria-label="Adicionar Chia ao carrinho">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================
+     SEÇÃO 5 — AVALIAÇÕES GOOGLE (v4)
+     ============================================= -->
+<section class="avaliacoes" aria-label="Avaliações dos clientes">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><span class="eyebrow-dot"></span>O que nossos clientes dizem</div>
+      <h2 class="section-title" style="color:#1A2E1A;">Avaliados com 4.9 no Google</h2>
+      <p class="section-sub">Mais de 120 clientes reais. Qualidade, cuidado e frescor verificados.</p>
+    </div>
+
+    <div class="rv-grid">
+
+      <!-- ── Summary Card (4 colunas) ── -->
+      <aside class="rv-summary reveal" role="complementary" aria-label="Resumo de avaliações Google">
+        <div class="rv-summary-source">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google Reviews
+        </div>
+
+        <div class="rv-trusted">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Google Trusted Store
+        </div>
+
+        <div class="rv-score-block">
+          <span class="rv-score" aria-label="Nota 4.9 de 5">4.9</span>
+          <div class="rv-stars-row" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <span class="rv-total">+120 avaliações verificadas</span>
+          <span class="rv-score-label">Média geral</span>
+        </div>
+
+        <a class="rv-cta" href="https://g.page/graneldapraca/review" target="_blank" rel="noopener noreferrer" aria-label="Ver todas as avaliações no Google">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Ver todas as avaliações
+        </a>
+      </aside>
+
+      <!-- ── Review Feed (8 colunas) ── -->
+      <div class="rv-feed" id="rvFeed" role="list" aria-label="Depoimentos de clientes">
+
+        <!-- Card destaque -->
+        <article class="rv-card rv-card--featured reveal" role="listitem">
+          <div class="rv-featured-body">
+            <div class="rv-card-top">
+              <div class="rv-card-stars" aria-label="5 estrelas"><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="rv-quote-icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M9.333 21.333C7.493 21.333 6 19.84 6 18c0-3.893 2.773-7.24 6.667-8.667L14 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347zm12 0C19.493 21.333 18 19.84 18 18c0-3.893 2.773-7.24 6.667-8.667L26 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347z" fill="currentColor"/></svg></div>
+            </div>
+            <p class="rv-card-text">Descobri a Granel da Praça há dois anos e virou a minha parada favorita em Uberlândia. A qualidade é impecável, a variedade enorme e o atendimento sempre atencioso. Começar a receber em casa foi uma mudança de vida!</p>
+            <footer class="rv-card-footer">
+              <div class="rv-author">
+                <div class="rv-avatar-wrap">
+                <div class="rv-avatar" style="background:linear-gradient(135deg,#C6EFCA,#8FD49A);color:#1A4D1E;" aria-label="Foto do cliente">M</div>
+                <div class="rv-avatar-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+              </div>
+                <div class="rv-author-info">
+                  <span class="rv-author-name">Mariana Costa</span>
+                  <div class="rv-author-meta">
+                    <span class="rv-author-date">Cliente há 2 anos</span>
+                    <span class="rv-verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verificado</span>
+                  </div>
+                </div>
+              </div>
+              <div class="rv-google-tag"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</div>
+            </footer>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="rv-card reveal" role="listitem">
+            <div class="rv-card-top">
+              <div class="rv-card-stars" aria-label="5 estrelas"><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="rv-quote-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M9.333 21.333C7.493 21.333 6 19.84 6 18c0-3.893 2.773-7.24 6.667-8.667L14 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347zm12 0C19.493 21.333 18 19.84 18 18c0-3.893 2.773-7.24 6.667-8.667L26 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347z" fill="currentColor"/></svg></div>
+            </div>
+            <p class="rv-card-text">Compro pelo site e é tudo muito fácil. O que eu mais gosto é poder escolher exatamente a quantidade que preciso — sem desperdício e sempre com produto fresco.</p>
+            <footer class="rv-card-footer">
+              <div class="rv-author">
+                <div class="rv-avatar-wrap">
+                <div class="rv-avatar" style="background:linear-gradient(135deg,#D4EDDA,#A8D5B5);color:#1A4D1E;" aria-label="Foto do cliente">R</div>
+                <div class="rv-avatar-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+              </div>
+                <div class="rv-author-info">
+                  <span class="rv-author-name">Rafael Andrade</span>
+                  <div class="rv-author-meta">
+                    <span class="rv-author-date">há 3 semanas</span>
+                    <span class="rv-verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verificado</span>
+                  </div>
+                </div>
+              </div>
+              <div class="rv-google-tag"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</div>
+            </footer>
+          </article>
+
+        <!-- Card 3 -->
+        <article class="rv-card reveal" role="listitem">
+            <div class="rv-card-top">
+              <div class="rv-card-stars" aria-label="5 estrelas"><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="rv-quote-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M9.333 21.333C7.493 21.333 6 19.84 6 18c0-3.893 2.773-7.24 6.667-8.667L14 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347zm12 0C19.493 21.333 18 19.84 18 18c0-3.893 2.773-7.24 6.667-8.667L26 12c-2.24 1.12-3.573 2.8-3.573 4.667h1.24c1.84 0 3.333 1.493 3.333 3.333 0 .747-.267 1.44-.707 1.973-.48.587-1.2.96-2 1.013-.333.027-.653.347-.96.347z" fill="currentColor"/></svg></div>
+            </div>
+            <p class="rv-card-text">Entrega rápida, produto de qualidade e atendimento excelente. Recomendo muito para quem quer comer bem e de forma saudável no dia a dia.</p>
+            <footer class="rv-card-footer">
+              <div class="rv-author">
+                <div class="rv-avatar-wrap">
+                <div class="rv-avatar" style="background:linear-gradient(135deg,#F3E8C8,#E8D4A8);color:#5C4A1A;" aria-label="Foto do cliente">J</div>
+                <div class="rv-avatar-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+              </div>
+                <div class="rv-author-info">
+                  <span class="rv-author-name">Juliana Ferreira</span>
+                  <div class="rv-author-meta">
+                    <span class="rv-author-date">há 1 mês</span>
+                    <span class="rv-verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#2C742F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verificado</span>
+                  </div>
+                </div>
+              </div>
+              <div class="rv-google-tag"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</div>
+            </footer>
+          </article>
+
+      </div><!-- /#rvFeed -->
+    </div><!-- /.rv-grid -->
+  </div><!-- /.container -->
+</section>
+<!-- ══════════════════════════════════════════
+     SEÇÃO 6 — MARCAS / PARCEIROS
+══════════════════════════════════════════ -->
+<section class="marcas" aria-label="Marcas parceiras">
+  <div class="container">
+    <p class="marcas-label">Trabalhamos com as melhores marcas</p>
+  </div>
+
+  <div class="marcas-track-wrap">
+    <!-- Duplicamos os itens para criar loop contínuo -->
+    <div class="marcas-track">
+      <div class="marca-item"><span>Native</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Jasmine</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Mãe Terra</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Biosoft</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Vital Âtman</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Qualitá</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>La Violetera</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Grão Mestre</span></div><div class="marca-sep"></div>
+      <!-- Duplicado para loop -->
+      <div class="marca-item"><span>Native</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Jasmine</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Mãe Terra</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Biosoft</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Vital Âtman</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Qualitá</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>La Violetera</span></div><div class="marca-sep"></div>
+      <div class="marca-item"><span>Grão Mestre</span></div><div class="marca-sep"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ── INTERSECTION OBSERVER — reveal on scroll ──
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      // stagger por ordem dentro do viewport
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => io.observe(el));
+
+// Fallback: força visibilidade após 500ms
+setTimeout(() => {
+  reveals.forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
+}, 500);
+
+// ── COUNTDOWN ──
+function startCountdown() {
+  // Calcula tempo até meia-noite de domingo (fim da semana)
+  const now = new Date();
+  const sunday = new Date();
+  sunday.setDate(now.getDate() + (7 - now.getDay()) % 7 || 7);
+  sunday.setHours(23, 59, 59, 0);
+
+  function update() {
+    const diff = sunday - new Date();
+    if (diff <= 0) return;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+  }
+  update();
+  setInterval(update, 1000);
+}
+startCountdown();
+</script>
+
+
+<script>
+(function(){
+  var BP=768,cards,dots,current=0,startX=0;
+  function init(){
+    cards=document.querySelectorAll('#avCards .av-card');
+    dots=document.querySelectorAll('#avDots .av-dot');
+    if(!cards.length)return;
+    if(window.innerWidth>=BP){disable();return;}
+    enable();
+  }
+  function enable(){
+    var w=document.getElementById('avCards');
+    document.querySelector('.av-dots').style.display='flex';
+    w.style.cssText='display:flex;overflow-x:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:0;';
+    cards.forEach(function(c){c.style.cssText='min-width:100%;scroll-snap-align:start;';c.classList.remove('av-card--featured');});
+    w.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
+    w.addEventListener('touchend',function(e){swipe(startX-e.changedTouches[0].clientX);},{passive:true});
+    dots.forEach(function(d){d.addEventListener('click',function(){goTo(+d.dataset.index);});});
+    w.addEventListener('scroll',function(){var i=Math.round(w.scrollLeft/w.offsetWidth);if(i!==current){current=i;sync();}});
+  }
+  function disable(){document.querySelector('.av-dots').style.display='none';}
+  function swipe(d){if(Math.abs(d)<30)return;goTo(d>0?Math.min(current+1,cards.length-1):Math.max(current-1,0));}
+  function goTo(i){current=i;var w=document.getElementById('avCards');w.scrollTo({left:w.offsetWidth*i,behavior:'smooth'});sync();}
+  function sync(){dots.forEach(function(d,i){d.classList.toggle('active',i===current);d.setAttribute('aria-selected',i===current);});}
+  window.addEventListener('load',init);
+  window.addEventListener('resize',function(){init();});
+})();
+</script>
+
+<script>
+(function(){
+  var BP=768,cards,current=0,startX=0;
+  function getCards(){ return document.querySelectorAll('#rvFeed .rv-card'); }
+  function init(){
+    cards=getCards();
+    if(!cards.length)return;
+    if(window.innerWidth>=BP){disable();return;}
+    enable();
+  }
+  function enable(){
+    var w=document.getElementById('rvFeed');
+    w.style.cssText='display:flex;overflow-x:scroll;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:0;-webkit-overflow-scrolling:touch;';
+    w.style.scrollbarWidth='none';
+    cards.forEach(function(c){c.style.cssText='min-width:calc(100% - 2rem);scroll-snap-align:start;margin-right:1rem;flex-shrink:0;';c.classList.remove('rv-card--featured');});
+    w.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
+    w.addEventListener('touchend',function(e){swipe(startX-e.changedTouches[0].clientX);},{passive:true});
+  }
+  function disable(){
+    var w=document.getElementById('rvFeed');
+    if(w){w.style.cssText='';}
+    getCards().forEach(function(c){c.style.cssText='';});
+  }
+  function swipe(d){
+    if(Math.abs(d)<28)return;
+    var w=document.getElementById('rvFeed');
+    var n=d>0?Math.min(current+1,cards.length-1):Math.max(current-1,0);
+    current=n;
+    w.scrollTo({left:w.offsetWidth*n,behavior:'smooth'});
+  }
+  window.addEventListener('load',init);
+  window.addEventListener('resize',function(){init();});
+})();
+</script>
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer style="background:#0D1A0D; margin-top:0;">
+
+  <!-- Newsletter Strip -->
+  <div style="border-bottom:1px solid rgba(255,255,255,.08);">
+    <div class="ft-nl-strip ft-nl-outer" style="max-width:1280px; margin:0 auto; padding:40px 40px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px;">
+      <div>
+        <h3 style="color:#fff; font-size:18px; font-weight:600; margin:0 0 4px;">Receba novidades e ofertas exclusivas</h3>
+        <p style="color:rgba(255,255,255,.5); font-size:13px; margin:0;">Promoções semanais direto no seu e-mail. Sem spam.</p>
+      </div>
+      <form onsubmit="return false" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <input type="email" placeholder="seu@email.com" class="foot-nl-input" style="height:44px; padding:0 16px; border:1px solid rgba(255,255,255,.3); border-radius:10px; background:transparent; color:#fff; font-family:'Poppins',sans-serif; font-size:13px; width:240px; transition:border-color .2s;" />
+        <button type="submit" style="height:44px; padding:0 24px; background:#fff; color:#002603; border:none; border-radius:10px; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; transition:background .18s;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='#fff'">
+          Quero receber
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4-Column Grid -->
+  <div class="ft-outer" style="max-width:1280px; margin:0 auto; padding:56px 40px; display:grid;">
+    <div class="ft-grid" style="display:grid; grid-template-columns:1.3fr 1fr 1fr 1.3fr; gap:40px;">
+
+    <!-- Col 1 — Sobre -->
+    <div>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Granel da Praça" style="flex-shrink:0;">
+          <circle cx="20" cy="20" r="20" fill="#0D2B0D"/>
+          <path d="M20 30 C13 26 10 19 13 13 C16 8 22 8 24 13 C26 18 24 26 20 30Z" fill="#00B207"/>
+          <path d="M20 30 C27 26 30 19 27 13 C25 9 21 10 20 14 C19 18 20 26 20 30Z" fill="#2C742F"/>
+          <line x1="20" y1="30" x2="20" y2="34" stroke="#00B207" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="16" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.7" transform="rotate(-20 16 22)"/>
+          <ellipse cx="24" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.5" transform="rotate(20 24 22)"/>
+        </svg>
+        <div>
+          <div style="color:#fff; font-size:15px; font-weight:700; line-height:1.2; letter-spacing:-.01em;">Granel da Praça</div>
+          <div style="color:#00B207; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase;">Produtos Naturais</div>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,.45); font-size:13px; line-height:1.7; margin:0 0 20px;">Produtos naturais a granel com qualidade e frescor. Duas unidades em Uberlândia, MG, desde 2019.</p>
+      <div style="display:flex; gap:10px;">
+        <a href="https://instagram.com/graneldapraca" target="_blank" aria-label="Instagram" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.5); text-decoration:none; transition:color .18s, border-color .18s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='rgba(255,255,255,.2)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://wa.me/5534999999999" target="_blank" aria-label="WhatsApp" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.5); text-decoration:none; transition:color .18s, border-color .18s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='rgba(255,255,255,.2)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Col 2 — Loja -->
+    <div>
+      <h4 style="color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin:0 0 20px;">Loja</h4>
+      <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px;">
+        <li><a href="/loja" class="foot-link">Ver todos os produtos</a></li>
+        <li><a href="/categoria/castanhas" class="foot-link">Castanhas &amp; Oleaginosas</a></li>
+        <li><a href="/categoria/graos" class="foot-link">Grãos &amp; Cereais</a></li>
+        <li><a href="/categoria/chas" class="foot-link">Chás &amp; Ervas</a></li>
+        <li style="display:flex; align-items:center; gap:8px;">
+          <a href="/categoria/superalimentos" class="foot-link">Superalimentos</a>
+          <span style="background:#00B207; color:#fff; font-size:9px; font-weight:700; padding:2px 6px; border-radius:100px; line-height:1.4; white-space:nowrap;">NOVO</span>
+        </li>
+        <li><a href="/ofertas" class="foot-link" style="color:#00B207;" onmouseover="this.style.color='#2C742F'" onmouseout="this.style.color='#00B207'">🔥 Ofertas da semana</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 3 — Ajuda -->
+    <div>
+      <h4 style="color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin:0 0 20px;">Ajuda</h4>
+      <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px;">
+        <li><a href="/faq" class="foot-link">Perguntas frequentes</a></li>
+        <li><a href="/rastreio" class="foot-link">Rastrear pedido</a></li>
+        <li><a href="/trocas" class="foot-link">Política de trocas</a></li>
+        <li><a href="/prazos" class="foot-link">Prazos de entrega</a></li>
+        <li><a href="/fidelidade" class="foot-link">Programa de fidelidade</a></li>
+        <li><a href="/privacidade" class="foot-link">Privacidade &amp; LGPD</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 4 — Contato -->
+    <div>
+      <h4 style="color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin:0 0 20px;">Contato</h4>
+      <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px;">
+        <li style="display:flex; align-items:flex-start; gap:10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="color:rgba(255,255,255,.45); font-size:13px; line-height:1.6;">Rua dos Andradas, 110<br>Fundinho, Uberlândia – MG</span>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="color:rgba(255,255,255,.45); font-size:13px; line-height:1.6;">Av. João Naves de Ávila, 2121<br>UMC, Uberlândia – MG</span>
+        </li>
+        <li style="display:flex; align-items:center; gap:10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 5.93 5.93l.86-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/></svg>
+          <a href="tel:+5534999999999" class="foot-link">(34) 99999-9999</a>
+        </li>
+        <li style="display:flex; align-items:center; gap:10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00B207" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="color:rgba(255,255,255,.45); font-size:13px;">Seg–Sáb · 8h às 19h</span>
+        </li>
+      </ul>
+    </div>
+
+    </div><!-- /.ft-grid -->
+  </div><!-- /.ft-outer -->
+
+  <!-- Bottom Bar -->
+  <div style="border-top:1px solid rgba(255,255,255,.08);">
+    <div class="ft-bottom" style="max-width:1280px; margin:0 auto; padding:20px 40px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+      <!-- Selos monocromáticos -->
+      <div class="ft-badges" style="display:flex; align-items:center; gap:16px; opacity:.45;">
+        <span style="border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:4px 10px; color:#fff; font-size:11px; font-weight:700; font-style:italic; letter-spacing:.02em;">VISA</span>
+        <span style="border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:4px 10px; color:#fff; font-size:11px; font-weight:700;">Mastercard</span>
+        <span style="border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:4px 10px; color:#fff; font-size:11px; font-weight:700; letter-spacing:.05em;">PIX</span>
+        <span style="display:flex; align-items:center; gap:5px; border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:4px 10px; color:#fff; font-size:11px; font-weight:600;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          Site Seguro
+        </span>
+      </div>
+      <!-- Legal -->
+      <div style="text-align:right;">
+        <p style="color:#9CA3AF; font-size:11px; margin:0;">© 2025 Granel da Praça. Todos os direitos reservados.</p>
+        <p style="color:#9CA3AF; font-size:11px; margin:4px 0 0;">CNPJ: 00.000.000/0001-00 · Uberlândia, MG</p>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── POPOVER: mobile/tablet clique, desktop hover via CSS ── */
+  var usrBtn   = document.getElementById('h-usr-btn');
+  var popover  = document.getElementById('h-popover');
+  var usrWrap  = document.querySelector('.h-usr-wrap');
+
+  function isMobile(){ return window.innerWidth < 769; }
+
+  if(usrBtn && popover){
+    usrBtn.addEventListener('click', function(e){
+      if(isMobile()){
+        e.stopPropagation();
+        var open = popover.classList.toggle('open');
+        usrBtn.setAttribute('aria-expanded', String(open));
+      }
+    });
+    document.addEventListener('click', function(e){
+      if(isMobile() && usrWrap && !usrWrap.contains(e.target)){
+        popover.classList.remove('open');
+        usrBtn.setAttribute('aria-expanded','false');
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){
+        popover.classList.remove('open');
+        usrBtn.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+
+  /* ── HAMBURGER ── */
+  var hamburger   = document.getElementById('h-hamburger');
+  var mobileNav   = document.getElementById('h-mobile-nav');
+  var hamIcon     = document.getElementById('h-ham-icon');
+  var MENU_LINES  = '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+  var CLOSE_LINES = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+
+  if(hamburger && mobileNav){
+    hamburger.addEventListener('click', function(){
+      var open = mobileNav.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', String(open));
+      if(hamIcon) hamIcon.innerHTML = open ? CLOSE_LINES : MENU_LINES;
+    });
+  }
+
+  /* ── MOBILE SEARCH ── */
+  var searchBtn    = document.getElementById('h-search-btn');
+  var mobileSearch = document.getElementById('h-mobile-search');
+
+  if(searchBtn && mobileSearch){
+    searchBtn.addEventListener('click', function(){
+      var open = mobileSearch.classList.toggle('hidden');
+      /* classList.toggle('hidden') removes it — check reverse */
+      if(!mobileSearch.classList.contains('hidden')){
+        var inp = mobileSearch.querySelector('input');
+        if(inp) inp.focus();
+      }
+    });
+  }
+
+  /* ── RESIZE cleanup ── */
+  window.addEventListener('resize', function(){
+    if(!isMobile()){
+      if(popover) popover.classList.remove('open');
+      if(mobileNav) mobileNav.classList.remove('open');
+      if(mobileSearch) mobileSearch.classList.add('hidden');
+      if(hamIcon) hamIcon.innerHTML = MENU_LINES;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
