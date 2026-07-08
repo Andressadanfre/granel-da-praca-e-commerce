@@ -329,68 +329,71 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 )
               })}
+
+              {/* RESUMO FINANCEIRO — rola junto com a lista de itens */}
+              <div className="mt-2 flex flex-col gap-1.5 border-t border-bd pt-3">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-t4">Subtotal</span>
+                    <span className="text-xs font-medium text-t6">{formatBRL(subtotal)}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium text-gd">
+                    <Truck size={14} strokeWidth={1.6} aria-hidden="true" />
+                    Entrega rápida em Uberlândia
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-t4">Frete</span>
+                    {freteUnlocked ? (
+                      <span className="text-xs font-bold text-g">Grátis 🎉</span>
+                    ) : (
+                      <span className="text-xs font-medium text-t6">{formatBRL(frete)}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* BANNER PARCELAMENTO */}
+                {parc.unlocked ? (
+                  <div className="mt-3 flex items-start gap-2.5 rounded-inner border border-[#6EE7B7] bg-[#ECFDF5] px-3 py-2.5">
+                    <CreditCard
+                      size={16}
+                      strokeWidth={1.6}
+                      className="mt-0.5 shrink-0 text-[#065F46]"
+                      aria-hidden="true"
+                    />
+                    <div className="text-[11px] leading-relaxed text-[#065F46]">
+                      <strong className="block text-xs font-bold">Parcelamento liberado</strong>
+                      Parcelamento em {parc.parcelas}x sem juros disponível!
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-3 flex items-start gap-2.5 rounded-inner border border-[#C7D2FE] bg-indigo-bg px-3 py-2.5">
+                    <CreditCard
+                      size={16}
+                      strokeWidth={1.6}
+                      className="mt-0.5 shrink-0 text-indigo"
+                      aria-hidden="true"
+                    />
+                    <div className="flex-1">
+                      <strong className="block text-xs font-bold text-indigo">
+                        Parcele em 2x sem juros
+                      </strong>
+                      <span className="text-[11px] leading-relaxed text-indigo">
+                        Faltam {formatBRL(parc.faltam)} para parcelar em 2x sem juros no cartão
+                      </span>
+                      <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-pill bg-[#C7D2FE]">
+                        <div
+                          className="h-full rounded-pill bg-indigo transition-[width] duration-300 ease-out"
+                          style={{ width: `${parcProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* FOOTER */}
             <div className="flex-shrink-0 border-t border-bd bg-cream px-6 pb-6 pt-4">
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-t4">Subtotal</span>
-                  <span className="text-xs font-medium text-t6">{formatBRL(subtotal)}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-medium text-gd">
-                  <Truck size={14} strokeWidth={1.6} aria-hidden="true" />
-                  Entrega rápida em Uberlândia
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-t4">Frete</span>
-                  {freteUnlocked ? (
-                    <span className="text-xs font-bold text-g">Grátis 🎉</span>
-                  ) : (
-                    <span className="text-xs font-medium text-t6">{formatBRL(frete)}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* BANNER PARCELAMENTO */}
-              {parc.unlocked ? (
-                <div className="mt-3 flex items-start gap-2.5 rounded-inner border border-[#6EE7B7] bg-[#ECFDF5] px-3 py-2.5">
-                  <CreditCard
-                    size={16}
-                    strokeWidth={1.6}
-                    className="mt-0.5 shrink-0 text-[#065F46]"
-                    aria-hidden="true"
-                  />
-                  <div className="text-[11px] leading-relaxed text-[#065F46]">
-                    <strong className="block text-xs font-bold">Parcelamento liberado</strong>
-                    Parcelamento em {parc.parcelas}x sem juros disponível!
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-3 flex items-start gap-2.5 rounded-inner border border-[#C7D2FE] bg-indigo-bg px-3 py-2.5">
-                  <CreditCard
-                    size={16}
-                    strokeWidth={1.6}
-                    className="mt-0.5 shrink-0 text-indigo"
-                    aria-hidden="true"
-                  />
-                  <div className="flex-1">
-                    <strong className="block text-xs font-bold text-indigo">
-                      Parcele em 2x sem juros
-                    </strong>
-                    <span className="text-[11px] leading-relaxed text-indigo">
-                      Faltam {formatBRL(parc.faltam)} para parcelar em 2x sem juros no cartão
-                    </span>
-                    <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-pill bg-[#C7D2FE]">
-                      <div
-                        className="h-full rounded-pill bg-indigo transition-[width] duration-300 ease-out"
-                        style={{ width: `${parcProgress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <div className="mb-4 mt-3 flex items-baseline justify-between">
                 <span className="text-sm font-semibold text-t9">Total</span>
                 <span className="text-xl font-bold text-gdeep">{formatBRL(total)}</span>

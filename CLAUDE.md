@@ -866,8 +866,8 @@ Nunca commitar com build quebrado.
 ### Rotas relevantes à Fase 5
 | Rota | Status |
 |---|---|
-| /checkout | 🔴 Pendente — layout de referência em docs/checkout-layouts/checkout_page.html, backend pronto (createOrderAction). Sem bloqueador restante. |
-| /pedido/[codigo] | 🔴 Pendente · Fase 5B |
+| /checkout | ✅ Completo (commit c28bb71) |
+| /pedido/[codigo] | ✅ Completo (commit c28bb71) |
 | /admin/* | 🔴 Pendente · Fase 5B |
 
 ### Componentes pendentes
