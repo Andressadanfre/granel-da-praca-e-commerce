@@ -59,7 +59,7 @@ export async function createOrderAction(
   const { items: serverItems, names: productNames } = productResult
 
   const subtotalCents = calcSubtotalServer(serverItems)
-  const shippingCents = calcFreteServer(subtotalCents)
+  const shippingCents = data.deliveryType === 'retirada' ? 0 : calcFreteServer(subtotalCents)
   const PIX_DISCOUNT_RATE = 0.05
   const discountCents = data.paymentMethod === 'pix'
     ? Math.floor(subtotalCents * PIX_DISCOUNT_RATE)
