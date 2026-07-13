@@ -62,7 +62,7 @@ export async function createMPPreference(
       failure: `${appUrl}/pedido/${input.orderCode}?status=falhou`,
       pending: `${appUrl}/pedido/${input.orderCode}?status=pendente`,
     },
-    auto_approve: false,
+    ...(appUrl.startsWith('https') ? { auto_return: 'approved' as const } : {}),
     notification_url: `${appUrl}/api/webhooks/mercadopago`,
     metadata: {
       order_id:   input.orderId,
