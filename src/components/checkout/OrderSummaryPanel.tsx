@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import type { CartItem } from '@/lib/cart/types'
-import type { PaymentMethod } from '@/lib/orders/types'
+import type { OrderDeliveryType, PaymentMethod } from '@/lib/orders/types'
 import { formatBRL, formatGrams } from '@/lib/utils'
 import { FRETE_FIXO_CENTS, FRETE_GRATIS_THRESHOLD } from '@/lib/cart/constants'
 
@@ -24,6 +24,7 @@ interface OrderSummaryPanelProps {
   couponCode: string
   onCouponChange: (val: string) => void
   onApplyCoupon: () => void
+  deliveryType: OrderDeliveryType
 }
 
 export function OrderSummaryPanel({
@@ -34,11 +35,12 @@ export function OrderSummaryPanel({
   couponCode,
   onCouponChange,
   onApplyCoupon,
+  deliveryType,
 }: OrderSummaryPanelProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const subtotalCents = items.reduce((acc, item) => acc + calcItemTotalCents(item), 0)
-  const shippingCents = subtotalCents >= FRETE_GRATIS_THRESHOLD ? 0 : FRETE_FIXO_CENTS
+  const shippingCents = deliveryType === 'retirada' ? 0 : (subtotalCents >= FRETE_GRATIS_THRESHOLD ? 0 : FRETE_FIXO_CENTS)
   const pixDiscountCents = paymentMethod === 'pix'
     ? Math.floor(subtotalCents * PIX_DISCOUNT_RATE)
     : 0

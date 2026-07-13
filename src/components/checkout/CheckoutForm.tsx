@@ -220,6 +220,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
             couponCode={couponCode}
             onCouponChange={setCouponCode}
             onApplyCoupon={() => { /* cupom — Fase 5B */ }}
+            deliveryType={deliveryType}
           />
         </div>
 
