@@ -42,6 +42,8 @@ function mapRelatedToCardProps(product: RelatedProduct): ProductCardProps {
   return {
     id: product.id,
     name: product.name,
+    slug: product.slug,
+    categorySlug: product.category.slug,
     category: product.category.name,
     variant: product.product_type,
     priceInCents,
