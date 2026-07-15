@@ -30,6 +30,7 @@ export interface ProductGridProps {
 interface ProductRow {
   id: number
   name: string
+  slug: string
   description: string | null
   category_id: number
   product_type: ProductType
@@ -39,7 +40,7 @@ interface ProductRow {
   increment_grams: number
   stock_status: StockStatus
   product_images: { url: string; is_primary: boolean }[] | null
-  categories: { category_name: string } | null
+  categories: { category_name: string; category_slug: string } | null
 }
 
 // ─── Mapper ───────────────────────────────────────────────────────────────────
@@ -55,6 +56,8 @@ function toCardProps(p: ProductRow): ProductCardProps {
   return {
     id: p.id,
     name: p.name,
+    slug: p.slug,
+    categorySlug: p.categories?.category_slug ?? '',
     category: p.categories?.category_name ?? '',
     variant: isGranel ? 'granel' : 'unit',
     priceInCents: isGranel ? Math.round(p.price_cents / 10) : p.price_cents,
@@ -218,7 +221,7 @@ export default async function ProductGrid({
   let query = supabase
     .from('products')
     .select(
-      'id, name, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, product_images(url, is_primary), categories(category_name:name)',
+      'id, name, slug, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, product_images(url, is_primary), categories(category_name:name, category_slug:slug)',
       { count: 'exact' },
     )
     .eq('is_active', true)
@@ -244,16 +247,17 @@ export default async function ProductGrid({
   // Normalizar categories — Supabase retorna array em joins com isOneToOne: false
   const products: ProductRow[] = (data ?? []).map((row) => {
     const rawCat = row.categories
-    const categories: { category_name: string } | null =
+    const categories: { category_name: string; category_slug: string } | null =
       rawCat === null || rawCat === undefined
         ? null
         : Array.isArray(rawCat)
-          ? ((rawCat[0] as { category_name: string } | undefined) ?? null)
-          : (rawCat as { category_name: string })
+          ? ((rawCat[0] as { category_name: string; category_slug: string } | undefined) ?? null)
+          : (rawCat as { category_name: string; category_slug: string })
 
     return {
       id: row.id,
       name: row.name,
+      slug: row.slug,
       description: row.description,
       category_id: row.category_id,
       product_type: row.product_type,

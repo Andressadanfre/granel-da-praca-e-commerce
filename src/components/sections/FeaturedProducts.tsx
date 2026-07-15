@@ -7,13 +7,13 @@ import type { ProductCardProps } from '@/components/product/ProductCard'
 import type { Tables } from '@/types/database'
 
 const FEATURED_PRODUCT_SELECT =
-  'id, name, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name)' as const
+  'id, name, slug, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name, slug)' as const
 
 type ProductWithCategory = Pick<
   Tables<'products'>,
-  'id' | 'name' | 'unit' | 'product_type' | 'price_cents' | 'compare_at_cents' | 'stock_status'
+  'id' | 'name' | 'slug' | 'unit' | 'product_type' | 'price_cents' | 'compare_at_cents' | 'stock_status'
 > & {
-  categories: { name: string } | null
+  categories: { name: string; slug: string } | null
 }
 
 function toCardProps(p: ProductWithCategory): ProductCardProps {
@@ -27,6 +27,8 @@ function toCardProps(p: ProductWithCategory): ProductCardProps {
   return {
     id: p.id,
     name: p.name,
+    slug: p.slug,
+    categorySlug: p.categories?.slug ?? '',
     category: p.categories?.name ?? '',
     variant: isGranel ? 'granel' : 'unit',
     // granel: card exibe preço por 100 gr → price_cents já está em centavos/kg

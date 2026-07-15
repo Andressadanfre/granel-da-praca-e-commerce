@@ -37,7 +37,7 @@ export function WishlistButton({ id, initialIsFavorited = false }: WishlistButto
       data-product-id={id}
       aria-label={isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
       onClick={handleToggle}
-      className="absolute flex items-center justify-center"
+      className="absolute z-10 flex items-center justify-center"
       style={{
         top:          '12px',
         right:        '12px',
