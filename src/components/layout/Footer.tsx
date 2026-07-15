@@ -213,7 +213,7 @@ export function Footer() {
                   <p className="text-[10.5px] font-bold text-white/[.88] uppercase tracking-[.1em] mb-1">Entrega</p>
                   <p className="text-[12.5px] text-white/[.58] leading-[1.6]">
                     Somente em Uberlândia<br />
-                    Pedidos até 14h · Sem domingos
+                    Pedidos até 17h (sáb. até 11h) · Sem domingos
                   </p>
                 </div>
               </div>
