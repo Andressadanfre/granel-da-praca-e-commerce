@@ -47,6 +47,23 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - `increment_grams` é **APENAS** o step do QuantitySelector (100 granel / 1 unit). **NUNCA** é divisor de preço — usá-lo no cálculo é a outra forma do erro 10x. Seu único papel server-side é validação de múltiplo: `quantity_grams % increment_grams === 0`.
 - Preço SEMPRE recalculado server-side a partir do banco — nunca aceitar preço do body da requisição.
 
+### Shipping cost — CRITICAL (bug duplicado em 3 arquivos, 13/07)
+
+- Qualquer cálculo de frete deve checar `deliveryType === 'retirada'` → 0.
+- **NUNCA** duplicar a fórmula em múltiplos arquivos (`actions.ts`, `OrderSummaryPanel.tsx`, `schemas.ts` já tiveram cópias divergentes).
+- `calcFreteServer` deve ser a única fonte de verdade — considerar exigir `deliveryType` como parâmetro obrigatório.
+
+### Mercado Pago auto_return
+
+- Obrigatório `'approved'` condicional a `appUrl.startsWith('https')` — MP rejeita `auto_return` com `back_url` localhost.
+- Só dispara redirect automático para pagamento aprovado com **CARTÃO** — Pix nunca aciona, é comportamento nativo do MP, não bug.
+
+### Mercado Pago produção — CRITICAL
+
+- Prefixo `APP_USR-` no token **NÃO** garante que a conta está habilitada para transações reais.
+- Confirmar sempre via painel de desenvolvedor (developers panel → Credenciais de produção) que o formulário de ativação (setor + site + termos) foi completado.
+- Sintoma de conta não ativada: erro `'uma das partes é de teste'` mesmo com cartão real.
+
 ### Padrões Supabase
 
 - Projeto: `ymjmgukuojwumvtaglyp` (São Paulo). Env vars: `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` · `SUPABASE_SERVICE_ROLE_KEY`.
