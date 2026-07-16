@@ -112,6 +112,11 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
             {added ? 'Adicionado!' : `Adicionar ao carrinho • ${formatBRL(displayTotalCents)}`}
           </button>
 
+          <p className="mt-2 flex items-center justify-center gap-[6px] text-[11px] text-t6">
+            <Truck size={13} strokeWidth={1.6} className="text-gd" aria-hidden />
+            Peça até às 17h (sáb. até 11h) e receba ainda hoje em Uberlândia.
+          </p>
+
           <div className="mt-3 flex gap-[10px]">
             <button
               type="button"
