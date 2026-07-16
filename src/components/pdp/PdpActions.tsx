@@ -109,7 +109,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
             className="flex h-[52px] w-full items-center justify-center gap-[10px] rounded-inner bg-g text-[15px] font-bold tracking-[0.02em] text-white transition-colors hover:bg-ghover active:bg-gdeep"
           >
             <ShoppingCart size={18} strokeWidth={1.6} aria-hidden />
-            {added ? 'Adicionado!' : 'Adicionar ao Carrinho'}
+            {added ? 'Adicionado!' : `Adicionar ao carrinho • ${formatBRL(displayTotalCents)}`}
           </button>
 
           <div className="mt-3 flex gap-[10px]">
