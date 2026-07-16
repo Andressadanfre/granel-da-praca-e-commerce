@@ -226,9 +226,9 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <span className="font-bold text-g">🎉 Frete Grátis desbloqueado!</span>
                 ) : (
                   <>
-                    Faltam{' '}
+                    Adicione mais{' '}
                     <span className="font-bold text-g">{formatBRL(freteRemaining)}</span>{' '}
-                    para Frete Grátis em Uberlândia
+                    e economize R$15 no frete
                   </>
                 )}
               </p>
