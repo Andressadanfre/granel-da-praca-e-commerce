@@ -6,6 +6,7 @@ import { HeroBanner } from '@/components/sections/HeroBanner'
 import TrustBadges from '@/components/sections/TrustBadges'
 import DiferenciaisSection from '@/components/sections/DiferenciaisSection'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
+import OfertasSection from '@/components/sections/OfertasSection'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
 import { Footer } from '@/components/layout/Footer'
 
@@ -29,6 +30,9 @@ export default function Home() {
           }
         >
           <FeaturedProducts />
+        </Suspense>
+        <Suspense fallback={null}>
+          <OfertasSection />
         </Suspense>
       </main>
       <Footer />

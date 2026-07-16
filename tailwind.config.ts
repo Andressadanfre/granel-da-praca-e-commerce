@@ -76,10 +76,16 @@ const config: Config = {
           '50%, 90%': { transform: 'translateY(0)',    opacity: '1' },
           '100%':     { transform: 'translateY(100%)', opacity: '0' },
         },
+        'pulse-oferta': {
+          '0%':   { boxShadow: '0 0 0 0 rgba(134, 239, 172, 0.5)' },
+          '70%':  { boxShadow: '0 0 0 8px rgba(134, 239, 172, 0)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(134, 239, 172, 0)' },
+        },
       },
       animation: {
-        'ann-slide':   'ann-slide   6s ease-in-out infinite',
-        'ann-slide-2': 'ann-slide-2 6s ease-in-out infinite',
+        'ann-slide':     'ann-slide     6s ease-in-out infinite',
+        'ann-slide-2':   'ann-slide-2   6s ease-in-out infinite',
+        'pulse-oferta':  'pulse-oferta  1.6s ease-out infinite',
       },
       maxWidth: {
         container: '1280px',
