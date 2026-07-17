@@ -248,12 +248,6 @@ export function ProductCard({
                   {`${formatBRL(pricePerKgInCents)}/kg`}
                 </p>
               )}
-
-              {variant === 'unit' && hasDiscount && (
-                <p className="text-[11px] font-semibold text-promo mt-[3px]">
-                  {discountPercent}% de desconto
-                </p>
-              )}
             </div>
 
             {/* Spacer — empurra botão para a base */}
@@ -299,12 +293,6 @@ export function ProductCard({
               {variant === 'granel' && pricePerKgInCents && (
                 <p className="text-[11px] font-normal text-t7 mt-[3px]">
                   {`${formatBRL(pricePerKgInCents)}/kg`}
-                </p>
-              )}
-
-              {variant === 'unit' && hasDiscount && (
-                <p className="text-[11px] font-semibold text-promo mt-[3px]">
-                  {discountPercent}% de desconto
                 </p>
               )}
             </div>
