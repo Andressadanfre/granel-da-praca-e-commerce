@@ -25,17 +25,14 @@ export function HeroBanner() {
           <h1
             className="font-extrabold text-gdeep leading-[1.1] tracking-[-0.02em] mb-4 text-[clamp(32px,4vw,52px)]"
           >
-            Receba ainda
-            <br />
-            <span className="text-g">hoje</span>
+            Receba <span className="text-g">hoje mesmo</span>
             <br />
             em Uberlândia.
           </h1>
 
           {/* Subtítulo */}
-          <p className="text-base text-t6 leading-relaxed mb-8 max-w-[400px]">
-            Peça até às 17h (sáb. até 11h) e receba ainda hoje. Mais de 390 produtos naturais
-            a granel e por unidade, com retirada em 2 lojas.
+          <p className="text-[17px] font-medium text-t6 leading-relaxed mb-8 max-w-[400px]">
+            Peça até às 17h em dias úteis (sáb. até 11h) e receba ainda hoje em Uberlândia.
           </p>
 
           {/* Pills de benefício */}
@@ -50,7 +47,7 @@ export function HeroBanner() {
             </div>
             <div className="flex items-center gap-[6px] bg-white border border-bd rounded-input px-s3 py-[6px]">
               <Check size={14} strokeWidth={1.6} className="text-g" aria-hidden />
-              <span className="text-xs font-semibold text-t7">Loja física desde 2019</span>
+              <span className="text-xs font-semibold text-t7">Retirada na loja Fundinho</span>
             </div>
           </div>
 
