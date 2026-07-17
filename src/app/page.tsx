@@ -5,6 +5,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { HeroBanner } from '@/components/sections/HeroBanner'
 import TrustBadges from '@/components/sections/TrustBadges'
 import DiferenciaisSection from '@/components/sections/DiferenciaisSection'
+import CompreObjetivoSection from '@/components/sections/CompreObjetivoSection'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
 import OfertasSection from '@/components/sections/OfertasSection'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
@@ -18,6 +19,7 @@ export default function Home() {
         <HeroBanner />
         <TrustBadges />
         <DiferenciaisSection />
+        <CompreObjetivoSection />
         <Suspense
           fallback={
             <section className="bg-[#F9F5EF] py-14 lg:py-20">
