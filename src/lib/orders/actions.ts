@@ -21,6 +21,7 @@ export interface CreateOrderResult {
   success: true
   orderId: string
   orderCode: string
+  trackingToken: string
   preferenceId: string
   initPoint: string
   sandboxInitPoint: string
@@ -118,6 +119,21 @@ export async function createOrderAction(
 
   const { id: orderId, code: orderCode } = rpcData[0]
 
+  // 4b. Buscar tracking_token do pedido recém-criado — RPC não devolve essa coluna.
+  // Filtra por id (PK), não por code — caminho direto e sem ambiguidade.
+  const { data: tokenRow, error: tokenError } = await supabase
+    .from('orders')
+    .select('tracking_token')
+    .eq('id', orderId)
+    .single()
+
+  if (tokenError || !tokenRow) {
+    logError(logger, tokenError, { route: '/checkout', order_id: orderId, user_id: user.id }, 'Erro ao buscar tracking_token do pedido criado')
+    return { success: false, error: 'Não foi possível registrar o pedido.' }
+  }
+
+  const trackingToken = tokenRow.tracking_token
+
   // 5. Criar preferência Mercado Pago (apenas pagamentos online)
   // Dinheiro e alelo são pagos na entrega/retirada — sem preferência MP
   const isPayOnDelivery = (PAY_ON_DELIVERY_METHODS as readonly string[]).includes(data.paymentMethod)
@@ -126,6 +142,7 @@ export async function createOrderAction(
       success: true,
       orderId,
       orderCode,
+      trackingToken,
       preferenceId:     '',
       initPoint:        '',
       sandboxInitPoint: '',
@@ -136,6 +153,7 @@ export async function createOrderAction(
     const mpResult = await createMPPreference({
       orderId,
       orderCode,
+      trackingToken,
       items: cartItemsToMPItems(
         serverItems,
         data.items.map(i => i.productId),
@@ -154,6 +172,7 @@ export async function createOrderAction(
       success: true,
       orderId,
       orderCode,
+      trackingToken,
       preferenceId:     mpResult.preferenceId,
       initPoint:        mpResult.initPoint,
       sandboxInitPoint: mpResult.sandboxInitPoint,

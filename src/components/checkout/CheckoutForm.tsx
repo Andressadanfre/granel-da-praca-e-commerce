@@ -149,7 +149,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
     }
 
     // Pagamento na entrega (dinheiro / alelo) → vai para confirmação
-    router.push(`/pedido/${result.orderCode}?status=sucesso`)
+    router.push(`/pedido/${result.trackingToken}?status=sucesso`)
   }
 
   // Skeleton durante hidratação do localStorage

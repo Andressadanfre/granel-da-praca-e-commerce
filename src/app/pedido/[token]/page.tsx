@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
@@ -9,12 +10,35 @@ import type { OrderDeliveryType, OrderStatus, PaymentMethod } from '@/lib/orders
 export const dynamic = 'force-dynamic'
 
 interface Props {
-  params: { codigo: string }
+  params: { token: string }
 }
 
+// tracking_token = encode(gen_random_bytes(16), 'hex') no banco — sempre hex minúsculo de 32 chars
+const TOKEN_REGEX = /^[0-9a-f]{32}$/
+
+// cache() dedupe entre generateMetadata e o componente na mesma request — uma query só
+const getOrderByToken = cache(async (token: string) => {
+  const supabase = getSupabaseAdmin()
+  const { data: order, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('tracking_token', token)
+    .eq('is_deleted', false)
+    .single()
+
+  if (error || !order) return null
+  return order
+})
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  if (!TOKEN_REGEX.test(params.token)) {
+    return { title: 'Pedido não encontrado | Granel da Praça', robots: { index: false } }
+  }
+
+  const order = await getOrderByToken(params.token)
+
   return {
-    title: `Pedido ${params.codigo.toUpperCase()} | Granel da Praça`,
+    title: order ? `Pedido ${order.code} | Granel da Praça` : 'Pedido não encontrado | Granel da Praça',
     robots: { index: false },
   }
 }
@@ -58,16 +82,12 @@ function statusMessage(
 }
 
 export default async function PedidoPage({ params }: Props) {
+  if (!TOKEN_REGEX.test(params.token)) notFound()
+
+  const order = await getOrderByToken(params.token)
+  if (!order) notFound()
+
   const supabase = getSupabaseAdmin()
-
-  const { data: order, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('code', params.codigo.toUpperCase())
-    .eq('is_deleted', false)
-    .single()
-
-  if (error || !order) notFound()
 
   const { data: items } = await supabase
     .from('order_items')

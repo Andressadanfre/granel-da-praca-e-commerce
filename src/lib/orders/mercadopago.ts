@@ -22,6 +22,7 @@ export interface MPPreferenceItem {
 export interface CreatePreferenceInput {
   orderId: string
   orderCode: string
+  trackingToken: string
   items: MPPreferenceItem[]
   shippingCents: number
   discountCents: number
@@ -58,9 +59,9 @@ export async function createMPPreference(
       : undefined,
     payer: input.payer,
     back_urls: {
-      success: `${appUrl}/pedido/${input.orderCode}?status=sucesso`,
-      failure: `${appUrl}/pedido/${input.orderCode}?status=falhou`,
-      pending: `${appUrl}/pedido/${input.orderCode}?status=pendente`,
+      success: `${appUrl}/pedido/${input.trackingToken}?status=sucesso`,
+      failure: `${appUrl}/pedido/${input.trackingToken}?status=falhou`,
+      pending: `${appUrl}/pedido/${input.trackingToken}?status=pendente`,
     },
     ...(appUrl.startsWith('https') ? { auto_return: 'approved' as const } : {}),
     notification_url: `${appUrl}/api/webhooks/mercadopago`,
