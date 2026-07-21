@@ -2,6 +2,9 @@
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+  // dev e build/produção nunca compartilham cache — evita corrupção quando
+  // o build roda (checagem de tipos) com o dev server ainda vivo
+  distDir: isDev ? '.next-dev' : '.next',
   async headers() {
     return [
       {

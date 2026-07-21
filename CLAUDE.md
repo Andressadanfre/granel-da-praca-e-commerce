@@ -140,8 +140,8 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 ## PowerShell (terminal deste projeto)
 
 - PowerShell 5.1 — nunca bash/sh. Encadeamento: `A; if ($?) { B }` — `&&` não existe no PS 5.1.
-- Cache corrompido após criar/mover arquivo: `npm run build:clean`.
-- Dev server travado: `taskkill /F /IM node.exe` → `Remove-Item -Recurse -Force .next` → `npm run dev`.
+- `distDir` separado por ambiente (`next.config.mjs`): dev escreve em `.next-dev`, build/produção em `.next`. `npm run dev` e `npm run build` convivem em paralelo sem corromper cache — não é mais necessário matar o dev server antes de buildar.
+- Cache corrompido por outro motivo (ex: processo zumbi preso na porta): `npm run build:clean` ou `taskkill /F /IM node.exe` → `Remove-Item -Recurse -Force .next`/`.next-dev` → `npm run dev`.
 
 ---
 
