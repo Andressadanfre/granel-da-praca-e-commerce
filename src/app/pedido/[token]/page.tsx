@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { CheckoutTopbar } from '@/components/checkout/CheckoutTopbar'
 import { OrderTimeline } from '@/components/order/OrderTimeline'
+import { RetryPaymentButton } from '@/components/order/RetryPaymentButton'
 import { formatBRL, formatGrams } from '@/lib/utils'
 import type { OrderDeliveryType, OrderStatus, PaymentMethod } from '@/lib/orders/types'
 
@@ -66,6 +67,12 @@ function statusMessage(
       sub:   'Este pedido foi cancelado. Em caso de dúvidas, entre em contato pelo WhatsApp.',
     }
   }
+  if (paymentStatus === 'falhou') {
+    return {
+      title: 'Pagamento não aprovado',
+      sub:   'Não conseguimos confirmar seu pagamento. Você pode tentar novamente ou entrar em contato pelo WhatsApp se precisar de ajuda.',
+    }
+  }
   if (paymentStatus === 'pendente'
     && (paymentMethod === 'pix' || paymentMethod === 'cartao_credito')) {
     return {
@@ -111,12 +118,14 @@ export default async function PedidoPage({ params }: Props) {
   const isPending = order.payment_status === 'pendente'
     && (order.payment_method === 'pix' || order.payment_method === 'cartao_credito')
 
+  const isFailed = order.payment_status === 'falhou'
+
   const deliveryAddress = order.delivery_address as {
     street?: string; number?: string; complement?: string
     neighborhood?: string; city?: string
   } | null
 
-  const heroColor = order.status === 'cancelado'
+  const heroColor = order.status === 'cancelado' || isFailed
     ? { wrap: 'bg-[#FEF2F2] border-[#FECACA]', stroke: '#EF4444' }
     : isPending
       ? { wrap: 'bg-[#FEF3C7] border-[#FDE68A]', stroke: '#D97706' }
@@ -285,7 +294,7 @@ export default async function PedidoPage({ params }: Props) {
             <div className="absolute top-0 left-0 right-0 h-1 checkout-shimmer-bar" />
 
             <div className={`w-[72px] h-[72px] rounded-full border-2 flex items-center justify-center mx-auto mb-4 checkout-pop-in ${heroColor.wrap}`}>
-              {order.status === 'cancelado' ? (
+              {order.status === 'cancelado' || isFailed ? (
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={heroColor.stroke} strokeWidth="2.5" strokeLinecap="round">
                   <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -311,6 +320,8 @@ export default async function PedidoPage({ params }: Props) {
               <span className="text-[11px] text-t4 font-medium">Número do pedido</span>
               <strong className="text-[13px] font-bold text-t9">{order.code}</strong>
             </div>
+
+            {isFailed && <RetryPaymentButton trackingToken={params.token} />}
           </div>
 
           {/* Timeline */}

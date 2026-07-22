@@ -1,7 +1,7 @@
 'use server'
 
 import { ensureAppUser } from '@/lib/auth/ensureAppUser'
-import { getSupabaseServer } from '@/lib/supabase/server'
+import { getSupabaseServer, getSupabaseAdmin } from '@/lib/supabase/server'
 import { logger, logError, logWarn } from '@/lib/logger'
 import { createOrderSchema } from './schemas'
 import type { ServerCartItem } from './calculations'
@@ -229,4 +229,98 @@ export async function getProductsForOrder(
   })
 
   return { items, names }
+}
+
+// ─── Retry de pagamento — nova preferência MP para pedido já existente ────────
+
+// tracking_token = encode(gen_random_bytes(16), 'hex') no banco — mesmo padrão de src/app/pedido/[token]/page.tsx
+const TOKEN_REGEX = /^[0-9a-f]{32}$/
+
+export interface RetryPaymentResult {
+  success: true
+  initPoint: string
+  sandboxInitPoint: string
+}
+
+export interface RetryPaymentError {
+  success: false
+  error: string
+}
+
+// Gera uma nova preferência MP para o MESMO pedido (orderId/orderCode/trackingToken
+// preservados) — não recria o pedido nem chama create_order_with_items de novo.
+// Autorização é o token, não a sessão — getSupabaseAdmin(), mesma lógica de /pedido/[token].
+export async function retryOrderPayment(
+  trackingToken: string,
+): Promise<RetryPaymentResult | RetryPaymentError> {
+  if (!TOKEN_REGEX.test(trackingToken)) {
+    return { success: false, error: 'Este pedido não pode ser reprocessado.' }
+  }
+
+  const supabase = getSupabaseAdmin()
+
+  // payment_status = 'falhou' exigido na própria query — pedido inexistente e
+  // pedido em outro status retornam o mesmo erro genérico (evita enumeração)
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('id, code, tracking_token, shipping_cents, discount_cents, customer_name, customer_phone, customer_email')
+    .eq('tracking_token', trackingToken)
+    .eq('payment_status', 'falhou')
+    .eq('is_deleted', false)
+    .single()
+
+  if (orderError || !order) {
+    return { success: false, error: 'Este pedido não pode ser reprocessado.' }
+  }
+
+  const { data: items, error: itemsError } = await supabase
+    .from('order_items')
+    .select('product_id, product_name, product_type, price_cents_snapshot, quantity_grams, quantity_units')
+    .eq('order_id', order.id)
+
+  if (itemsError || !items || items.length === 0) {
+    logError(logger, itemsError, { route: '/pedido', order_id: order.id }, 'Erro ao buscar itens para retry de pagamento')
+    return { success: false, error: 'Este pedido não pode ser reprocessado.' }
+  }
+
+  // Preço vem do snapshot salvo no pedido original — nunca do catálogo atual
+  const serverItems: ServerCartItem[] = items.map(item => ({
+    product_type:   item.product_type,
+    price_cents:    item.price_cents_snapshot,
+    quantity_grams: item.quantity_grams,
+    quantity_units: item.quantity_units,
+  }))
+  const productIds = items.map(item => item.product_id)
+  const productNames: Record<number, string> = {}
+  items.forEach(item => { productNames[item.product_id] = item.product_name })
+
+  try {
+    const mpResult = await createMPPreference({
+      orderId:       order.id,
+      orderCode:     order.code,
+      trackingToken: order.tracking_token,
+      items:         cartItemsToMPItems(serverItems, productIds, productNames),
+      shippingCents: order.shipping_cents,
+      discountCents: order.discount_cents,
+      payer: {
+        name:  order.customer_name ?? undefined,
+        email: order.customer_email ?? undefined,
+        phone: order.customer_phone ? { number: order.customer_phone } : undefined,
+      },
+    })
+
+    return {
+      success: true,
+      initPoint:        mpResult.initPoint,
+      sandboxInitPoint: mpResult.sandboxInitPoint,
+    }
+  } catch (mpErr) {
+    logError(
+      logger,
+      mpErr,
+      { route: '/pedido', order_id: order.id },
+      'Erro ao criar preferência MP para retry de pagamento',
+    )
+    return { success: false, error: 'Não foi possível iniciar o pagamento.' }
+  }
 }
