@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { CheckoutTopbar } from '@/components/checkout/CheckoutTopbar'
+import { Footer } from '@/components/layout/Footer'
 import { OrderTimeline } from '@/components/order/OrderTimeline'
 import { RetryPaymentButton } from '@/components/order/RetryPaymentButton'
 import { formatBRL, formatGrams } from '@/lib/utils'
@@ -373,6 +374,8 @@ export default async function PedidoPage({ params }: Props) {
 
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }
