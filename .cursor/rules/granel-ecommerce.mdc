@@ -137,6 +137,7 @@ Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
 - Zero console.log commitado
 - Imports: React → libs externas → componentes internos → tipos → utils
 - Funções puras fora do componente (formatBRL, formatGrams, getCategoryGradient)
+- Nunca usar spread sobre Set/Map (`[...new Set(x)]`) — sempre `Array.from(new Set(x))`. Projeto não tem downlevelIteration no tsconfig
 - CartIcon usa localStorage key 'granel:cart_count' + eventos 'storage' (cross-tab) e 'cart:updated' (same-tab)
 - SearchBar navega para /loja?q= via router.push com encodeURIComponent
 - Para atualizar badge do carrinho: window.dispatchEvent(new CustomEvent('cart:updated', { detail: novoCount }))

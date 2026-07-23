@@ -141,6 +141,7 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 - Funções puras fora do componente (`formatBRL`, `formatGrams` em `src/lib/utils.ts`).
 - Unidade de peso: `gr` — nunca `g` ou `gram`.
 - Error handling: Server Actions retornam `{ success, error }` tipado — nunca expor `error.message`/stack ao cliente.
+- Nunca usar spread sobre `Set`/`Map` (`[...new Set(x)]`) — sempre `Array.from(new Set(x))`. Projeto não tem `downlevelIteration` habilitado no tsconfig; spread sobre iteráveis não-array quebra o build.
 
 ---
 
