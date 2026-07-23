@@ -95,6 +95,26 @@ export function UserMenuPopover({ userEmail }: UserMenuPopoverProps) {
             <p style={{ fontSize: '13px', fontWeight: 600, color: '#111827', marginBottom: '14px', wordBreak: 'break-all' }}>
               {userEmail}
             </p>
+            <a
+              href="/conta"
+              style={{
+                display: 'block',
+                width: '100%',
+                padding: '10px',
+                textAlign: 'center',
+                backgroundColor: 'transparent',
+                color: '#2C742F',
+                border: '1.5px solid #2C742F',
+                borderRadius: '10px',
+                fontSize: '13px',
+                fontWeight: 600,
+                textDecoration: 'none',
+                fontFamily: 'var(--font-poppins), sans-serif',
+                marginBottom: '8px',
+              }}
+            >
+              Meus Pedidos
+            </a>
             <button
               type="button"
               onClick={handleSignOut}
