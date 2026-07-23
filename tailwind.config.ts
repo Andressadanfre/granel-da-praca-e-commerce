@@ -43,8 +43,10 @@ const config: Config = {
         'badge-diet-tx': '#2C742F',
         'badge-diet-bd': '#C6E6C7',
         'icon-bg':      '#F0FDF4',
-        'warning-bg':   '#FEF3C7',
-        'warning-text': '#92400E',
+        // Status âmbar (saiu_para_entrega / pronto_para_retirada) — DS Notion
+        'warning-bg':   '#FFF7E6',
+        'warning-text': '#B45309',
+        'warning-dot':  '#F59E0B',
         // Lime (ofertas)
         lime: '#D4F567',
       },

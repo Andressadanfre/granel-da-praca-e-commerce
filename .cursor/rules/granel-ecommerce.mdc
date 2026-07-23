@@ -24,7 +24,7 @@ Todos mapeados em tailwind.config.ts — nunca hex hardcoded.
 - promo #C0694A terracota (NUNCA #E65100) · promo-bg #FBF1EE
 - indigo #3730A3 badge "Por unidade" · indigo-bg #EEF2FF
 - danger #EF4444 · badge-diet-bg #EAF7EA · badge-diet-tx #2C742F · badge-diet-bd #C6E6C7
-- icon-bg #F0FDF4 · warning-bg #FEF3C7 · warning-text #92400E · lime #D4F567 ofertas
+- icon-bg #F0FDF4 · warning-bg #FFF7E6 · warning-text #B45309 · warning-dot #F59E0B (âmbar status conta) · lime #D4F567 ofertas
 
 ## Border-radius
 - rounded-input 8px · rounded-sel 10px (QuantitySelector) · rounded-inner 12px (painéis/badges) · rounded-modal 16px · rounded-card 20px (ProductCard) · rounded-pill 100px

@@ -20,6 +20,7 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Design system próprio (DS v3.1) — **sem** shadcn/ui. Tokens em `tailwind.config.ts` e `.cursor/rules/granel-ecommerce.mdc`.
 - Gateway de pagamento DEFINITIVO: **Mercado Pago**. Referências a "Asaas" em docs antigos estão erradas — ignorar.
 - Admin em `src/app/admin/` (sem route group) no **mesmo** projeto — parênteses removeriam o prefixo `/admin` da URL e quebrariam o middleware RBAC. Decisão fechada.
+- Área logada do cliente: **`/conta`** (pedidos + dados numa única página). Login/cadastro em `/conta/login` e `/conta/cadastro`.
 
 ---
 
@@ -85,6 +86,12 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - `getSupabaseAdmin()` jamais importado em arquivo `'use client'`.
 - Mutações autenticadas: Server Actions — nunca Route Handlers.
 - Identidade sempre via `supabase.auth.getUser()` no servidor — nunca `user_id` vindo do cliente. Queries sensíveis incluem `.eq('user_id', user.id)`.
+
+### Minha Conta — status e timeline
+
+- Tokens âmbar oficiais do DS (Notion): `warning-bg` `#FFF7E6` · `warning-text` `#B45309` · `warning-dot` `#F59E0B` — usados em `saiu_para_entrega` / `pronto_para_retirada` na UI da conta.
+- Paleta de badges de status da **conta ≠ admin**: divergência **intencional** (expectativa do cliente vs operacional). Não alinhar as duas sem revisitar a decisão no Design System do Notion.
+- `OrderTimeline` vive em `src/components/order/OrderTimeline.tsx` — compartilhado entre `/pedido/[token]` e o card expandido de `/conta`. Reuso 1:1 (sem `variant`) até haver necessidade visual.
 
 ---
 
