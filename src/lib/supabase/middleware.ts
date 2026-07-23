@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 
 /**
@@ -9,10 +9,17 @@ import type { Database } from '@/types/database'
  * o usuario cai deslogado silenciosamente ao navegar. Nao reaproveita
  * getSupabaseServer() porque aqui os cookies vem de request/response, nao de
  * next/headers cookies().
+ *
+ * Retorna tambem o client `supabase` (anon + cookies) para o middleware
+ * reaproveitar em queries sob RLS — sem recriar client nem usar service_role.
  */
 export async function updateSession(
   request: NextRequest,
-): Promise<{ response: NextResponse; user: User | null }> {
+): Promise<{
+  response: NextResponse
+  user: User | null
+  supabase: SupabaseClient<Database>
+}> {
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient<Database>(
@@ -36,5 +43,5 @@ export async function updateSession(
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  return { response, user }
+  return { response, user, supabase }
 }
