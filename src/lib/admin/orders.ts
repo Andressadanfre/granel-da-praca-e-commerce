@@ -6,7 +6,9 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
   const supabase = getSupabaseAdmin()
   const { data, error } = await supabase
     .from('orders')
-    .select('id, code, status, payment_status, delivery_type, total_cents, customer_name, customer_phone, created_at')
+    .select(
+      'id, code, status, payment_status, payment_method, delivery_type, total_cents, customer_name, customer_phone, created_at, order_items(count)',
+    )
     .eq('is_deleted', false)
     .order('created_at', { ascending: false })
 
@@ -14,7 +16,13 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
     throw new Error(error.message)
   }
 
-  return data
+  return (data ?? []).map((row) => {
+    const itemsRelation = row.order_items as { count: number }[] | null
+    const items_count = itemsRelation?.[0]?.count ?? 0
+    const { order_items: _omit, ...rest } = row
+    void _omit
+    return { ...rest, items_count }
+  })
 }
 
 export async function getAdminOrderById(id: string): Promise<AdminOrder | null> {

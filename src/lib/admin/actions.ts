@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { getSupabaseServer, getSupabaseAdmin } from '@/lib/supabase/server'
 import { isAdminUser } from '@/lib/admin/orders'
 import { logger, logError } from '@/lib/logger'
@@ -91,6 +93,7 @@ export async function updateOrderStatus(
       return { success: false, error: 'Erro interno' }
     }
 
+    revalidatePath('/admin/pedidos')
     return { success: true }
   } catch (error) {
     logError(logger, error, { route: 'admin/updateOrderStatus', user_id: user.id, order_id: orderId }, 'Erro inesperado ao atualizar status do pedido')

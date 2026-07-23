@@ -66,6 +66,8 @@ export interface AdminOrder {
 /** Colunas retornadas por getAdminOrders() — subset de AdminOrder para a tabela de listagem. */
 export type AdminOrderListItem = Pick<
   AdminOrder,
-  | 'id' | 'code' | 'status' | 'payment_status' | 'delivery_type'
+  | 'id' | 'code' | 'status' | 'payment_status' | 'payment_method' | 'delivery_type'
   | 'total_cents' | 'customer_name' | 'customer_phone' | 'created_at'
->
+> & {
+  items_count: number
+}
