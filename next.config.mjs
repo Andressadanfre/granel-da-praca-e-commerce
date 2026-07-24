@@ -1,7 +1,12 @@
+import { withSentryConfig } from '@sentry/nextjs'
+
 /** @type {import('next').NextConfig} */
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+  experimental: {
+    instrumentationHook: true,
+  },
   // dev e build/produção nunca compartilham cache — evita corrupção quando
   // o build roda (checagem de tipos) com o dev server ainda vivo
   distDir: isDev ? '.next-dev' : '.next',
@@ -31,7 +36,7 @@ const nextConfig = {
                   "style-src 'self' 'unsafe-inline'",
                   "img-src 'self' data: https: blob:",
                   "font-src 'self' data: https://fonts.gstatic.com https://fonts.googleapis.com",
-                  "connect-src 'self' https://*.supabase.co ws://localhost:* http://localhost:*",
+                  "connect-src 'self' https://*.supabase.co ws://localhost:* http://localhost:* https://*.ingest.us.sentry.io",
                 ].join('; ')
               : [
                   "default-src 'self'",
@@ -39,7 +44,7 @@ const nextConfig = {
                   "style-src 'self' 'unsafe-inline'",
                   "img-src 'self' data: https:",
                   "font-src 'self' https://fonts.gstatic.com",
-                  "connect-src 'self' https://*.supabase.co",
+                  "connect-src 'self' https://*.supabase.co https://*.ingest.us.sentry.io",
                 ].join('; '),
           },
         ],
@@ -48,4 +53,8 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default withSentryConfig(nextConfig, {
+  org: 'granel-da-praca-ecommerce',
+  project: 'granel-ecommerce',
+  silent: !process.env.CI,
+})
