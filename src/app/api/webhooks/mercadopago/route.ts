@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
+import * as Sentry from '@sentry/nextjs'
 
 import { createLogger, logError, logWarn } from '@/lib/logger'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
+import { webhookRatelimit } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -73,6 +75,14 @@ export async function POST(request: NextRequest) {
     requestId: xRequestId ?? crypto.randomUUID(),
   })
 
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const { success: rateLimitOk } = await webhookRatelimit.limit(ip)
+
+  if (!rateLimitOk) {
+    logWarn(log, { route: '/api/webhooks/mercadopago', ip }, 'Rate limit excedido no webhook')
+    return NextResponse.json({ error: 'Muitas requisições' }, { status: 429 })
+  }
+
   const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET
   if (!secret) {
     logError(
@@ -81,6 +91,7 @@ export async function POST(request: NextRequest) {
       { route: '/api/webhooks/mercadopago' },
       'Webhook secret ausente',
     )
+    Sentry.captureException(new Error('MERCADOPAGO_WEBHOOK_SECRET não configurado'))
     return NextResponse.json({ error: 'Configuração inválida' }, { status: 500 })
   }
 
@@ -150,6 +161,9 @@ export async function POST(request: NextRequest) {
       { route: '/api/webhooks/mercadopago', payment_id: paymentId },
       'Falha ao buscar pagamento na API do MP',
     )
+    Sentry.captureException(new Error(`MP API retornou ${mpResponse.status}`), {
+      extra: { payment_id: paymentId },
+    })
     return NextResponse.json({ error: 'Falha ao verificar pagamento' }, { status: 502 })
   }
 
@@ -182,6 +196,7 @@ export async function POST(request: NextRequest) {
       { route: '/api/webhooks/mercadopago', order_id: orderId },
       'Falha ao atualizar payment_status do pedido',
     )
+    Sentry.captureException(updateError, { extra: { order_id: orderId, payment_id: paymentId } })
     return NextResponse.json({ error: 'Falha ao processar' }, { status: 500 })
   }
 
