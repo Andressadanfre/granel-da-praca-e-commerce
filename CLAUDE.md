@@ -80,6 +80,14 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Após migration via MCP: regenerar `src/types/database.ts` com `npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public` (preservar helper `Tables<T>`).
 - Verificar schema via MCP antes de escrever qualquer query.
 
+### Observabilidade e Rate Limiting
+
+- Erros de servidor devem ser reportados ao Sentry via `Sentry.captureException()` além do `logger` Pino — os dois não são substitutos um do outro (Pino é log estruturado local/Vercel, Sentry é alerta + agregação).
+- `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` são env vars obrigatórias em produção (Vercel) — sem elas, build ainda passa mas Sentry/rate limit ficam mudos silenciosamente.
+- `experimental.instrumentationHook: true` é **obrigatório** em `next.config.mjs` enquanto o projeto estiver em Next.js 14.x — removido automaticamente só a partir do 15.
+- Endpoints públicos sensíveis (webhooks, formulários sem auth) devem ter rate limiting via `Ratelimit` do Upstash (`src/lib/rate-limit.ts` é o padrão de referência) — checagem sempre como primeira validação da rota, antes de qualquer verificação de assinatura/payload.
+- CSP (`next.config.mjs`) deve incluir o domínio de ingest do Sentry (`https://*.ingest.us.sentry.io`) no `connect-src` sempre que o Sentry client-side estiver ativo — esquecer isso faz o browser bloquear o envio de erros silenciosamente, sem erro visível no console além do log de CSP.
+
 ### Fronteiras Server/Client (RSC)
 
 - Server Component por padrão — `'use client'` **apenas** para `useState`/`useEffect`/event handlers/browser APIs.
@@ -150,6 +158,7 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 - PowerShell 5.1 — nunca bash/sh. Encadeamento: `A; if ($?) { B }` — `&&` não existe no PS 5.1.
 - `distDir` separado por ambiente (`next.config.mjs`): dev escreve em `.next-dev`, build/produção em `.next`. `npm run dev` e `npm run build` convivem em paralelo sem corromper cache — não é mais necessário matar o dev server antes de buildar.
 - Cache corrompido por outro motivo (ex: processo zumbi preso na porta): `npm run build:clean` ou `taskkill /F /IM node.exe` → `Remove-Item -Recurse -Force .next`/`.next-dev` → `npm run dev`.
+- Porta 3000 travada por processo órfão (comum ao fechar aba do terminal do Cursor sem `Ctrl+C` antes): `predev` já roda automaticamente `scripts/check-port.js` a cada `npm run dev`, liberando a porta sozinho — não precisa mais matar processo manualmente antes de subir o dev.
 
 ---
 
