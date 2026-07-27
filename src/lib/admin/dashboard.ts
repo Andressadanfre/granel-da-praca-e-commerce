@@ -209,6 +209,55 @@ export async function getEstoqueBaixo(limit = 5): Promise<ProdutoEstoqueBaixo[]>
   }))
 }
 
+export interface PaymentBreakdown {
+  method: PaymentMethod
+  label: string
+  count: number
+  percentage: number
+}
+
+export async function getFormasDePagamentoHoje(): Promise<PaymentBreakdown[]> {
+  const supabase = getSupabaseAdmin()
+
+  const agora = new Date()
+  const hoje = agora.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+  const amanha = new Date(agora.getTime() + 86_400_000).toLocaleDateString('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+  })
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('payment_method, status, created_at')
+    .eq('is_deleted', false)
+    .neq('status', 'cancelado')
+    .gte('created_at', `${hoje}T00:00:00-03:00`)
+    .lt('created_at', `${amanha}T00:00:00-03:00`)
+
+  if (error) {
+    logError(logger, error, { action: 'getFormasDePagamentoHoje' }, 'Falha ao buscar formas de pagamento do dia')
+    return []
+  }
+
+  const pedidosHoje = (data ?? []).filter((p) => paraDataLocal(p.created_at) === hoje)
+  const total = pedidosHoje.length
+
+  if (total === 0) return []
+
+  const contagem = pedidosHoje.reduce<Partial<Record<PaymentMethod, number>>>((acc, p) => {
+    acc[p.payment_method] = (acc[p.payment_method] ?? 0) + 1
+    return acc
+  }, {})
+
+  return Object.entries(contagem)
+    .map(([method, count]) => ({
+      method: method as PaymentMethod,
+      label: PAYMENT_METHOD_LABELS[method as PaymentMethod],
+      count: count as number,
+      percentage: Math.round(((count as number) / total) * 100),
+    }))
+    .sort((a, b) => b.count - a.count)
+}
+
 export type AlertaTipo = 'estoque_critico' | 'estoque_baixo' | 'pagamento_pendente'
 
 export interface AlertaDia {
