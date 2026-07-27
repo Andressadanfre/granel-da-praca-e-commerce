@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import { CartProvider } from '@/components/cart/CartProvider'
+import { ToastProvider } from '@/components/ui/ToastProvider'
 import { NewsletterPopup } from '@/components/features/NewsletterPopup'
 import './globals.css'
 
@@ -24,10 +25,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={poppins.variable}>
       <body className={`${poppins.className} antialiased`}>
-        <CartProvider>
-          <NewsletterPopup />
-          {children}
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            <NewsletterPopup />
+            {children}
+          </CartProvider>
+        </ToastProvider>
       </body>
     </html>
   )

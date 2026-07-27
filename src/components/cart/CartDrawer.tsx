@@ -16,6 +16,7 @@ import {
   ArrowLeft,
 } from 'lucide-react'
 import { Badge, type BadgeVariant } from '@/components/ui/Badge'
+import { useToast } from '@/components/ui/ToastProvider'
 import type { CartItem, ProductType } from '@/lib/cart'
 import {
   getCartItems,
@@ -122,10 +123,17 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     }
   }, [isOpen, onClose])
 
+  const { showToast } = useToast()
+
+  const handleRemove = (item: CartItem) => {
+    removeFromCart(item.id)
+    showToast(`${item.name} removido do carrinho`, 'success')
+  }
+
   const handleDecrease = (item: CartItem) => {
     const next = item.quantity - getStep(item)
     if (next <= 0) {
-      removeFromCart(item.id)
+      handleRemove(item)
       return
     }
     updateQuantity(item.id, next)
@@ -293,7 +301,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </div>
                       <button
                         type="button"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => handleRemove(item)}
                         aria-label={`Remover ${item.name}`}
                         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-input text-t4 transition-colors hover:text-danger"
                       >
