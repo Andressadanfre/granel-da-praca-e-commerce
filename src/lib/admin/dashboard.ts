@@ -283,6 +283,7 @@ export async function getAlertasDoDia(): Promise<AlertaDia[]> {
     .eq('is_active', true)
     .eq('is_deleted', false)
     .order('stock_status', { ascending: true })
+    .limit(3)
 
   if (erroProdutos) {
     logError(logger, erroProdutos, { action: 'getAlertasDoDia.produtos' }, 'Falha ao buscar alertas de estoque')
@@ -308,6 +309,7 @@ export async function getAlertasDoDia(): Promise<AlertaDia[]> {
     .in('payment_method', CARTAO_METHODS)
     .lt('created_at', trintaMinAtras)
     .order('created_at', { ascending: true })
+    .limit(3)
 
   if (erroPedidos) {
     logError(logger, erroPedidos, { action: 'getAlertasDoDia.pedidos' }, 'Falha ao buscar alertas de pagamento pendente')
