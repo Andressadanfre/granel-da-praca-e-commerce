@@ -61,6 +61,24 @@ async function resolveCategoryIdsByName(
   return (data ?? []).map((c) => c.id)
 }
 
+/**
+ * Ids de produtos com pelo menos uma foto. Fonte única para o anti-join de "sem foto" —
+ * filtrar `.is('product_images.id', null)` no embed não funciona: sem `!inner` o filtro
+ * não restringe `products` (LEFT JOIN preservado), e com `!inner` o produto sem nenhuma
+ * linha filha nunca chega a ser avaliado pelo `is null`. Usado por getAdminProducts e
+ * getProductTabCounts para que tab e badge nunca dessincronizem.
+ */
+async function getProdutoIdsComFoto(supabase: ReturnType<typeof getSupabaseAdmin>): Promise<number[]> {
+  const { data, error } = await supabase.from('product_images').select('product_id')
+
+  if (error) {
+    logError(logger, error, { action: 'getProdutoIdsComFoto' }, 'Falha ao buscar produtos com foto')
+    return []
+  }
+
+  return Array.from(new Set((data ?? []).map((r) => r.product_id)))
+}
+
 export async function getAdminProducts(params: GetAdminProductsParams = {}): Promise<GetAdminProductsResult> {
   const { search, categoryId, productType, tab = 'todos', sortBy = 'nome_asc', page = 1, pageSize = 20 } = params
   const supabase = getSupabaseAdmin()
@@ -74,9 +92,11 @@ export async function getAdminProducts(params: GetAdminProductsParams = {}): Pro
     if (productType) query = query.eq('product_type', productType)
 
     switch (tab) {
-      case 'sem_foto':
-        query = query.is('product_images.id', null)
+      case 'sem_foto': {
+        const idsComFoto = await getProdutoIdsComFoto(supabase)
+        if (idsComFoto.length > 0) query = query.not('id', 'in', `(${idsComFoto.join(',')})`)
         break
+      }
       case 'estoque_baixo':
         query = query.in('stock_status', ['low_stock', 'out_of_stock'])
         break
@@ -186,13 +206,14 @@ export async function getProductTabCounts(): Promise<ProductTabCounts> {
   })
 
   try {
+    const idsComFoto = await getProdutoIdsComFoto(supabase)
+
+    let semFotoQuery = supabase.from('products').select('id', { count: 'exact', head: true }).eq('is_deleted', false)
+    if (idsComFoto.length > 0) semFotoQuery = semFotoQuery.not('id', 'in', `(${idsComFoto.join(',')})`)
+
     const [todos, semFoto, estoqueBaixo, granel, unit, inativos] = await Promise.all([
       supabase.from('products').select('id', { count: 'exact', head: true }).eq('is_deleted', false),
-      supabase
-        .from('products')
-        .select('id, product_images(id)', { count: 'exact', head: true })
-        .eq('is_deleted', false)
-        .is('product_images.id', null),
+      semFotoQuery,
       supabase
         .from('products')
         .select('id', { count: 'exact', head: true })

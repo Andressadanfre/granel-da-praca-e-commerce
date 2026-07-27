@@ -20,9 +20,9 @@ export const ORDER_STATUS_STYLES: Record<OrderStatus, StatusStyle> = {
 }
 
 export const STOCK_STATUS_STYLES: Record<'in_stock' | 'low_stock' | 'out_of_stock', StatusStyle> = {
-  in_stock:     { bg: '#EAF7EA', text: '#2C742F', label: 'Ok' },
-  low_stock:    { bg: '#FEF3C7', text: '#92400E', label: 'Baixo' },
-  out_of_stock: { bg: '#FEE2E2', text: '#991B1B', label: 'Crítico' },
+  in_stock:     { bg: '#EAF7EA', text: '#2C742F', label: 'Disponível' },
+  low_stock:    { bg: '#FEF3C7', text: '#92400E', label: 'Estoque baixo' },
+  out_of_stock: { bg: '#FEE2E2', text: '#991B1B', label: 'Indisponível' },
 }
 
 const PAYMENT_STATUS_STYLES: Record<PaymentStatus, StatusStyle> = {

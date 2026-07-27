@@ -69,8 +69,10 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 
 - `products.stock_status` (`in_stock`/`low_stock`/`out_of_stock`) é calculado automaticamente por trigger (`recalculate_stock_status`), mas **não impede adicionar ao carrinho nem finalizar checkout** — `AddToCartSelector.tsx` e o fluxo de checkout não checam esse campo.
 - Risco real: cliente pode comprar produto com `out_of_stock` sem nenhum bloqueio do sistema.
-- Todos os 402 produtos existentes foram marcados `low_stock` por padrão (decisão conservadora — força revisão manual, já que não há bloqueio de compra real). Isso é esperado, não bug.
 - Bloqueio de compra por estoque é pendência não implementada — antes de assumir que existe proteção, confirmar no código.
+- **(27/07/2026 → atualizado)** Padrão de `stock_status` quando a quantidade (`stock_quantity_grams`/`stock_quantity_units`) é `NULL` mudou de `low_stock` para **`in_stock`** via migration `fix_stock_status_null_default_to_in_stock` (aplicada via Supabase MCP). Com quantidade real preenchida, o trigger `recalculate_stock_status` continua funcionando pelos limiares normais (baixo→`low_stock`, zero→`out_of_stock`, acima do limiar→`in_stock`) — validado empiricamente. `low_stock`/`out_of_stock` só ocorrem quando já há quantidade real registrada.
+  - **Por quê:** disponibilidade real é controlada manualmente via `is_active` até a integração com o Explend — `stock_status` com quantidade `NULL` não deve mais ser tratado como "requer revisão manual".
+  - Na UI do admin (`src/app/admin/produtos/page.tsx`), quando `stock_status === 'in_stock'` e a quantidade real é `NULL`, o badge mostra "Disponível · não conferido" (mesma cor verde de `in_stock`) para sinalizar que a quantidade nunca foi conferida manualmente, sem tratar isso como alerta de estoque.
 
 ### Padrões Supabase
 

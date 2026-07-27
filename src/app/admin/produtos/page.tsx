@@ -76,10 +76,14 @@ function formatPriceLabel(p: AdminProductListItem): string {
 
 function formatEstoqueLabel(p: AdminProductListItem): string {
   const qty = p.productType === 'granel' ? p.stockQuantityGrams : p.stockQuantityUnits
-  if (qty == null) return '— indisponível'
+  const statusLabel = STOCK_STATUS_STYLES[p.stockStatus].label
+
+  if (qty == null) {
+    return p.stockStatus === 'in_stock' ? `${statusLabel} · não conferido` : statusLabel
+  }
+
   const quantidade = p.productType === 'granel' ? formatGrams(qty) : `${qty} un`
-  const statusLabel = STOCK_STATUS_STYLES[p.stockStatus].label.toLowerCase()
-  return `${quantidade} · ${statusLabel}`
+  return `${quantidade} · ${statusLabel.toLowerCase()}`
 }
 
 interface AdminProdutosPageProps {
