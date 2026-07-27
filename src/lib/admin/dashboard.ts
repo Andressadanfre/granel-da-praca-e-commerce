@@ -6,6 +6,7 @@ import { getAdminOrders } from '@/lib/admin/orders'
 import { ORDER_STATUS_STYLES, PAYMENT_METHOD_LABELS } from '@/lib/admin/labels'
 import { PAY_ON_DELIVERY_METHODS, type PaymentMethod } from '@/lib/orders/types'
 import type { AdminOrderListItem } from '@/types/admin'
+import type { Database } from '@/types/database'
 
 /** Converte um timestamp UTC do banco para a data local (America/Sao_Paulo) no formato YYYY-MM-DD. */
 function paraDataLocal(timestampUTC: string): string {
@@ -167,6 +168,44 @@ export async function getPedidosRecentes(limit = 6): Promise<PedidoRecente[]> {
     ...pedido,
     statusClasse: STATUS_VISUAL_CLASS[pedido.status],
     statusLabel: ORDER_STATUS_STYLES[pedido.status].label,
+  }))
+}
+
+export interface ProdutoEstoqueBaixo {
+  id: number
+  name: string
+  category: string | null
+  productType: Database['public']['Enums']['product_type']
+  stockStatus: 'out_of_stock' | 'low_stock'
+  quantidade: number | null
+  unidade: 'gr' | 'un'
+}
+
+export async function getEstoqueBaixo(limit = 5): Promise<ProdutoEstoqueBaixo[]> {
+  const supabase = getSupabaseAdmin()
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, name, product_type, stock_status, stock_quantity_grams, stock_quantity_units, categories(name)')
+    .in('stock_status', ['out_of_stock', 'low_stock'])
+    .eq('is_active', true)
+    .eq('is_deleted', false)
+    .order('stock_status', { ascending: true })
+    .limit(limit)
+
+  if (error) {
+    logError(logger, error, { action: 'getEstoqueBaixo' }, 'Falha ao buscar produtos com estoque baixo')
+    return []
+  }
+
+  return (data ?? []).map((p) => ({
+    id: p.id,
+    name: p.name,
+    category: (p.categories as { name: string } | null)?.name ?? null,
+    productType: p.product_type,
+    stockStatus: p.stock_status as 'out_of_stock' | 'low_stock',
+    quantidade: p.product_type === 'granel' ? p.stock_quantity_grams : p.stock_quantity_units,
+    unidade: p.product_type === 'granel' ? 'gr' : 'un',
   }))
 }
 
