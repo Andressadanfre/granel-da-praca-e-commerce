@@ -374,10 +374,14 @@ export type Database = {
           is_active: boolean
           is_deleted: boolean
           is_featured: boolean
+          low_stock_threshold_grams: number
+          low_stock_threshold_units: number
           name: string
           price_cents: number
           product_type: Database["public"]["Enums"]["product_type"]
           slug: string
+          stock_quantity_grams: number | null
+          stock_quantity_units: number | null
           stock_status: StockStatus
           unit: Database["public"]["Enums"]["product_unit"]
           updated_at: string
@@ -392,10 +396,14 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
+          low_stock_threshold_grams?: number
+          low_stock_threshold_units?: number
           name: string
           price_cents: number
           product_type?: Database["public"]["Enums"]["product_type"]
           slug: string
+          stock_quantity_grams?: number | null
+          stock_quantity_units?: number | null
           stock_status?: StockStatus
           unit?: Database["public"]["Enums"]["product_unit"]
           updated_at?: string
@@ -410,10 +418,14 @@ export type Database = {
           is_active?: boolean
           is_deleted?: boolean
           is_featured?: boolean
+          low_stock_threshold_grams?: number
+          low_stock_threshold_units?: number
           name?: string
           price_cents?: number
           product_type?: Database["public"]["Enums"]["product_type"]
           slug?: string
+          stock_quantity_grams?: number | null
+          stock_quantity_units?: number | null
           stock_status?: StockStatus
           unit?: Database["public"]["Enums"]["product_unit"]
           updated_at?: string
