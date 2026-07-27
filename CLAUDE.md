@@ -65,6 +65,13 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Confirmar sempre via painel de desenvolvedor (developers panel → Credenciais de produção) que o formulário de ativação (setor + site + termos) foi completado.
 - Sintoma de conta não ativada: erro `'uma das partes é de teste'` mesmo com cartão real.
 
+### Estoque — stock_status NÃO bloqueia compra (27/07/2026)
+
+- `products.stock_status` (`in_stock`/`low_stock`/`out_of_stock`) é calculado automaticamente por trigger (`recalculate_stock_status`), mas **não impede adicionar ao carrinho nem finalizar checkout** — `AddToCartSelector.tsx` e o fluxo de checkout não checam esse campo.
+- Risco real: cliente pode comprar produto com `out_of_stock` sem nenhum bloqueio do sistema.
+- Todos os 402 produtos existentes foram marcados `low_stock` por padrão (decisão conservadora — força revisão manual, já que não há bloqueio de compra real). Isso é esperado, não bug.
+- Bloqueio de compra por estoque é pendência não implementada — antes de assumir que existe proteção, confirmar no código.
+
 ### Padrões Supabase
 
 - Projeto: `ymjmgukuojwumvtaglyp` (São Paulo). Env vars: `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` · `SUPABASE_SERVICE_ROLE_KEY`.
