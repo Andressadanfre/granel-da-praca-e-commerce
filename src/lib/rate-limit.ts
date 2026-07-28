@@ -13,3 +13,10 @@ export const webhookRatelimit = new Ratelimit({
   analytics: true,
   prefix: 'ratelimit:mp-webhook',
 })
+
+export const authRatelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '1 m'), // 5 tentativas por IP por minuto
+  analytics: true,
+  prefix: 'ratelimit:auth',
+})
