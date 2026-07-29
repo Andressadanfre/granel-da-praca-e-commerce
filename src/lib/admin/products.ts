@@ -265,3 +265,83 @@ export async function getActiveCategories(): Promise<CategoriaOption[]> {
 
   return data ?? []
 }
+
+export interface AdminProductForEdit {
+  id: number
+  categoryId: number
+  categoryName: string | null
+  categorySlug: string | null
+  name: string
+  slug: string
+  description: string | null
+  unit: Database['public']['Enums']['product_unit']
+  productType: ProductType
+  priceCents: number
+  compareAtCents: number | null
+  isActive: boolean
+  isFeatured: boolean
+  isDeleted: boolean
+  stockStatus: StockStatus
+  stockQuantityGrams: number | null
+  stockQuantityUnits: number | null
+  lowStockThresholdGrams: number
+  lowStockThresholdUnits: number
+  incrementGrams: number
+  updatedAt: string
+}
+
+const PRODUCT_EDIT_SELECT =
+  'id, category_id, name, slug, description, unit, product_type, price_cents, compare_at_cents, is_active, is_featured, is_deleted, stock_status, stock_quantity_grams, stock_quantity_units, low_stock_threshold_grams, low_stock_threshold_units, increment_grams, updated_at, categories(name, slug)'
+
+/**
+ * Produto completo para a tela de edição. Retorna null se não existir ou estiver soft-deleted
+ * (is_deleted=true) — a página chama notFound() nesses casos.
+ */
+export async function getAdminProductForEdit(id: number): Promise<AdminProductForEdit | null> {
+  const supabase = getSupabaseAdmin()
+
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select(PRODUCT_EDIT_SELECT)
+      .eq('id', id)
+      .eq('is_deleted', false)
+      .maybeSingle()
+
+    if (error) {
+      logError(logger, error, { action: 'getAdminProductForEdit', productId: id }, 'Falha ao buscar produto para edição')
+      return null
+    }
+
+    if (!data) return null
+
+    const category = data.categories as { name: string; slug: string } | null
+
+    return {
+      id: data.id,
+      categoryId: data.category_id,
+      categoryName: category?.name ?? null,
+      categorySlug: category?.slug ?? null,
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      unit: data.unit,
+      productType: data.product_type,
+      priceCents: data.price_cents,
+      compareAtCents: data.compare_at_cents,
+      isActive: data.is_active,
+      isFeatured: data.is_featured,
+      isDeleted: data.is_deleted,
+      stockStatus: data.stock_status as StockStatus,
+      stockQuantityGrams: data.stock_quantity_grams,
+      stockQuantityUnits: data.stock_quantity_units,
+      lowStockThresholdGrams: data.low_stock_threshold_grams,
+      lowStockThresholdUnits: data.low_stock_threshold_units,
+      incrementGrams: data.increment_grams,
+      updatedAt: data.updated_at,
+    }
+  } catch (error) {
+    logError(logger, error, { action: 'getAdminProductForEdit', productId: id }, 'Falha inesperada ao buscar produto para edição')
+    return null
+  }
+}
