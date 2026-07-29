@@ -161,6 +161,7 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 - Unidade de peso: `gr` — nunca `g` ou `gram`.
 - Error handling: Server Actions retornam `{ success, error }` tipado — nunca expor `error.message`/stack ao cliente.
 - Nunca usar spread sobre `Set`/`Map` (`[...new Set(x)]`) — sempre `Array.from(new Set(x))`. Projeto não tem `downlevelIteration` habilitado no tsconfig; spread sobre iteráveis não-array quebra o build.
+- Toggle/switch customizado: o `ToggleSwitch` (inline em `ProductEditForm.tsx`) usa `left-[3px]` explícito no `<span>` do knob — **nunca** `left` implícito/`auto`. Motivo: `left: auto` resolvido pelo browser somado a `translate-x` fixo fazia o knob overflowar o trilho. Qualquer toggle novo deve seguir `left` explícito + `translate` calculado a partir dele.
 
 ---
 
