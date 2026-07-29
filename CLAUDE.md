@@ -88,6 +88,8 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - IDs internos de `categories`/`products` são `integer serial`; `orders`/`payments` expostos em URL são UUID.
 - Após migration via MCP: regenerar `src/types/database.ts` com `npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public` (preservar helper `Tables<T>`).
 - Verificar schema via MCP antes de escrever qualquer query.
+- **GRANT por operação não é automático** (descoberto na Fase 2 do admin — primeira escrita em `products`): `service_role` pode ter `SELECT` numa tabela há anos e mesmo assim **não** ter `UPDATE`/`INSERT`/`DELETE`. GRANT é por operação, não implícito. Antes de qualquer Server Action nova que vá **escrever** numa tabela que até então só era lida pelo admin, confirmar via SQL (`information_schema.role_table_grants`) se `service_role` tem a permissão necessária — **nunca** assumir que vai funcionar só porque a leitura já funciona. Bypass de RLS (`rolbypassrls`) ≠ permissão de tabela.
+- **`revalidatePath` por rota afetada** (mesmo contexto Fase 2): chamar `revalidatePath` para **cada** rota que precisa refletir o dado atualizado — não só a listagem-pai. Uma Server Action que atualiza um recurso e depois redireciona/refresh para a **mesma** página que iniciou a edição precisa de `revalidatePath` específico dessa rota também; sem isso, o Next pode servir cache do cliente mesmo com `router.push`/`router.refresh`.
 
 ### Observabilidade e Rate Limiting
 
