@@ -10,6 +10,15 @@ const nextConfig = {
   // dev e build/produção nunca compartilham cache — evita corrupção quando
   // o build roda (checagem de tipos) com o dev server ainda vivo
   distDir: isDev ? '.next-dev' : '.next',
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ymjmgukuojwumvtaglyp.supabase.co',
+        pathname: '/storage/v1/object/public/product-images/**',
+      },
+    ],
+  },
   async headers() {
     return [
       {
