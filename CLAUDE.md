@@ -82,14 +82,16 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
   - `getSupabase()` de `@/lib/supabase/client` — Client Components
   - `getSupabaseAdmin()` de `@/lib/supabase/server` — bypass RLS, **nunca** em Client Components ou rotas públicas
 - Tabela de usuários: `app_users` — **nunca** `profiles`.
-- Campos que **NÃO EXISTEM** (proibido inventar): `image_url` em `products` (fotos em `product_images`) · `price_per_100g_cents` · `is_deleted` em `categories` (usa `is_active`) · `display_order` (usa `sort_order`).
+- Campos que **NÃO EXISTEM** (proibido inventar): `price_per_100g_cents` · `is_deleted` em `categories` (usa `is_active`) · `display_order` (usa `sort_order`).
 - Soft delete: `is_deleted = true` em `products` — nunca `DELETE` físico.
 - Datas: `YYYY-MM-DD` no banco · `DD/MM/AAAA` na UI. Monetário: centavos (`int`) no banco · `formatBRL(cents)` na UI.
 - IDs internos de `categories`/`products` são `integer serial`; `orders`/`payments` expostos em URL são UUID.
 - Após migration via MCP: regenerar `src/types/database.ts` com `npx supabase gen types typescript --project-id ymjmgukuojwumvtaglyp --schema public` (preservar helper `Tables<T>`).
 - Verificar schema via MCP antes de escrever qualquer query.
 - **GRANT por operação não é automático** (descoberto na Fase 2 do admin — primeira escrita em `products`): `service_role` pode ter `SELECT` numa tabela há anos e mesmo assim **não** ter `UPDATE`/`INSERT`/`DELETE`. GRANT é por operação, não implícito. Antes de qualquer Server Action nova que vá **escrever** numa tabela que até então só era lida pelo admin, confirmar via SQL (`information_schema.role_table_grants`) se `service_role` tem a permissão necessária — **nunca** assumir que vai funcionar só porque a leitura já funciona. Bypass de RLS (`rolbypassrls`) ≠ permissão de tabela.
+- **GRANT em sequences:** GRANT de `INSERT`/`UPDATE` numa tabela **NÃO** concede automaticamente `USAGE` na sequence que gera o ID (coluna serial/identity). Toda tabela nova onde o `service_role` precisa fazer `INSERT` gerando ID automático exige checar/aplicar `GRANT USAGE, SELECT ON SEQUENCE` separadamente do GRANT da tabela — não assuma que está incluso.
 - **`revalidatePath` por rota afetada** (mesmo contexto Fase 2): chamar `revalidatePath` para **cada** rota que precisa refletir o dado atualizado — não só a listagem-pai. Uma Server Action que atualiza um recurso e depois redireciona/refresh para a **mesma** página que iniciou a edição precisa de `revalidatePath` específico dessa rota também; sem isso, o Next pode servir cache do cliente mesmo com `router.push`/`router.refresh`.
+- **Fonte única de dado (evitar leitura de campo obsoleto):** ao adicionar um campo novo a uma tabela que substitui uma fonte de dado antiga (ex: campo direto substituindo uma tabela relacionada, ou um novo formato substituindo um antigo), sempre grep pelo nome da fonte **antiga** em todo o projeto antes de considerar a migração completa — não assuma que só o lugar óbvio (ex: um único componente) precisa ser atualizado. Na Fase 3, a troca de `product_images` para `products.image_url` exigia atualizar 6 lugares diferentes (ProductCard, PDP, produtos relacionados, ofertas, e o reorder do carrinho) — todos long-lived e silenciosamente desatualizados, sem gerar nenhum erro, só dado errado (placeholder de 'sem foto' mesmo com foto salva).
 
 ### Observabilidade e Rate Limiting
 
@@ -162,6 +164,9 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 - Error handling: Server Actions retornam `{ success, error }` tipado — nunca expor `error.message`/stack ao cliente.
 - Nunca usar spread sobre `Set`/`Map` (`[...new Set(x)]`) — sempre `Array.from(new Set(x))`. Projeto não tem `downlevelIteration` habilitado no tsconfig; spread sobre iteráveis não-array quebra o build.
 - Toggle/switch customizado: o `ToggleSwitch` (inline em `ProductEditForm.tsx`) usa `left-[3px]` explícito no `<span>` do knob — **nunca** `left` implícito/`auto`. Motivo: `left: auto` resolvido pelo browser somado a `translate-x` fixo fazia o knob overflowar o trilho. Qualquer toggle novo deve seguir `left` explícito + `translate` calculado a partir dele.
+- **Campos NOT NULL com DEFAULT no banco:** ao montar payload de `INSERT`/`UPDATE`, nunca envie `null` para uma coluna `NOT NULL` com `DEFAULT` só porque o valor é "irrelevante" pro contexto atual (ex: campos que só fazem sentido para um `productType` específico) — o Postgres vai rejeitar. Omita o campo do objeto de payload (spread condicional) para deixar o banco aplicar seu `DEFAULT` na criação, ou preservar o valor já existente na edição.
+- **Logging em dev:** nunca use transport assíncrono (worker thread) do Pino em dev — é frágil com Next.js/Webpack e pode morrer silenciosamente, mascarando o erro real que estava tentando logar. Use stream síncrono (`pino-pretty` como stream direto, sem `transport`) em dev. Produção continua sem pretty (JSON puro). `logWithSanitize` (ou equivalente) deve sempre ter `try/catch` — uma falha de logging nunca pode derrubar o fluxo principal da aplicação.
+- **Serialização de erro do Supabase:** `PostgrestError` do Supabase é objeto plano, não instância de `Error` nativa do JS — serialização de erro para log precisa extrair `message`/`code`/`details`/`hint` explicitamente, ou produz `[object Object]` e mascara a causa real.
 
 ---
 
@@ -179,7 +184,7 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 - [ ] Zero `console.*` — `Select-String -r "console\." src/` (ok para ASCII puro; não confiável em conteúdo acentuado — usar `Get-Content -Raw`)
 - [ ] Zero `as any` / `as unknown as` / `@ts-ignore` sem justificativa
 - [ ] Zero `style` estático · classes condicionais via `cn()` · zero hex novo fora de `tailwind.config.ts`
-- [ ] Nenhuma query com campos inexistentes (`price_per_100g_cents`, `image_url` em products, `is_deleted` em categories)
+- [ ] Nenhuma query com campos inexistentes (`price_per_100g_cents`, `is_deleted` em categories)
 - [ ] Nenhum `getSupabaseAdmin()` em arquivo `'use client'`
 - [ ] `'use client'` só onde há interatividade real · `next/image` em todas as imagens
 - [ ] `npm run build 2>&1` → zero erros · `git diff --staged --stat` → apenas arquivos esperados
