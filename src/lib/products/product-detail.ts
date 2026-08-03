@@ -1,6 +1,5 @@
 import { getSupabaseServer } from '@/lib/supabase/server'
 import type { Tables } from '@/types/database'
-import { pickPrimaryImage } from '@/lib/utils'
 
 type ProductRow = Tables<'products'>
 type CategoryRow = Tables<'categories'>
@@ -19,7 +18,6 @@ export type ProductDetail = Pick<
   | 'stock_status'
   | 'is_featured'
 > & {
-  product_images: { url: string; is_primary: boolean }[] | null
   imageUrl: string | null
   category: Pick<CategoryRow, 'id' | 'name' | 'slug'>
 }
@@ -36,7 +34,6 @@ export type RelatedProduct = Pick<
   | 'increment_grams'
   | 'stock_status'
 > & {
-  product_images: { url: string; is_primary: boolean }[] | null
   imageUrl: string | null
   category: { name: string; slug: string }
 }
@@ -61,7 +58,7 @@ export async function getProductDetail(
       increment_grams,
       stock_status,
       is_featured,
-      product_images(url, is_primary),
+      image_url,
       categories!inner(
         id,
         name,
@@ -76,10 +73,6 @@ export async function getProductDetail(
   if (error || !data || !data.categories) return null
   if (data.categories.slug !== categoriaSlug) return null
 
-  const rawImages = data.product_images as unknown
-  const productImages: { url: string; is_primary: boolean }[] | null =
-    Array.isArray(rawImages) ? (rawImages as { url: string; is_primary: boolean }[]) : null
-
   return {
     id: data.id,
     name: data.name,
@@ -92,8 +85,7 @@ export async function getProductDetail(
     increment_grams: data.increment_grams,
     stock_status: data.stock_status,
     is_featured: data.is_featured,
-    product_images: productImages,
-    imageUrl: pickPrimaryImage(productImages),
+    imageUrl: data.image_url,
     category: {
       id: data.categories.id,
       name: data.categories.name,
@@ -121,7 +113,7 @@ export async function getRelatedProducts(
       compare_at_cents,
       increment_grams,
       stock_status,
-      product_images(url, is_primary),
+      image_url,
       categories!inner(
         name,
         slug
@@ -137,27 +129,20 @@ export async function getRelatedProducts(
     return []
   }
 
-  return data.map((item) => {
-    const rawImages = item.product_images as unknown
-    const productImages: { url: string; is_primary: boolean }[] | null =
-      Array.isArray(rawImages) ? (rawImages as { url: string; is_primary: boolean }[]) : null
-
-    return {
-      id: item.id,
-      name: item.name,
-      slug: item.slug,
-      unit: item.unit,
-      product_type: item.product_type,
-      price_cents: item.price_cents,
-      compare_at_cents: item.compare_at_cents,
-      increment_grams: item.increment_grams,
-      stock_status: item.stock_status,
-      product_images: productImages,
-      imageUrl: pickPrimaryImage(productImages),
-      category: {
-        name: item.categories.name,
-        slug: item.categories.slug,
-      },
-    }
-  })
+  return data.map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.slug,
+    unit: item.unit,
+    product_type: item.product_type,
+    price_cents: item.price_cents,
+    compare_at_cents: item.compare_at_cents,
+    increment_grams: item.increment_grams,
+    stock_status: item.stock_status,
+    imageUrl: item.image_url,
+    category: {
+      name: item.categories.name,
+      slug: item.categories.slug,
+    },
+  }))
 }

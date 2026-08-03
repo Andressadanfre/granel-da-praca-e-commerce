@@ -9,7 +9,6 @@ import { Footer } from '@/components/layout/Footer'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 import { getSupabaseServer } from '@/lib/supabase/server'
-import { pickPrimaryImage } from '@/lib/utils'
 import type { Tables } from '@/types/database'
 
 export const metadata: Metadata = {
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 const OFERTAS_SELECT =
-  'id, name, slug, unit, product_type, price_cents, compare_at_cents, stock_status, product_images(url, is_primary), categories(name, slug)' as const
+  'id, name, slug, unit, product_type, price_cents, compare_at_cents, stock_status, image_url, categories(name, slug)' as const
 
 type OfertaRow = Pick<
   Tables<'products'>,
@@ -32,8 +31,8 @@ type OfertaRow = Pick<
   | 'price_cents'
   | 'compare_at_cents'
   | 'stock_status'
+  | 'image_url'
 > & {
-  product_images: { url: string; is_primary: boolean }[] | null
   categories: { name: string; slug: string } | null
 }
 
@@ -54,7 +53,7 @@ function toCardProps(p: OfertaRow): ProductCardProps {
     originalPriceInCents: isGranel ? Math.round(compareAt / 10) : compareAt,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : p.unit,
-    imageUrl: pickPrimaryImage(p.product_images) ?? undefined,
+    imageUrl: p.image_url ?? undefined,
     state:
       p.stock_status === 'out_of_stock'
         ? 'out-of-stock'

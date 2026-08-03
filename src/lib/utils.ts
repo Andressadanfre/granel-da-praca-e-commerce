@@ -29,9 +29,11 @@ export function formatDate(iso: string): string {
   return `${d}/${m}/${y}`
 }
 
+/** Não utilizada atualmente — mantida para eventual necessidade futura de múltiplas imagens. */
 export function pickPrimaryImage(
   images: { url: string; is_primary: boolean }[] | null
 ): string | null {
   if (!images || images.length === 0) return null
   return (images.find(img => img.is_primary) ?? images[0]).url
 }
+

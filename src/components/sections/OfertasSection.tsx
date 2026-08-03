@@ -4,14 +4,13 @@ import { ArrowRight } from 'lucide-react'
 import { OfertaCard } from '@/components/product/OfertaCard'
 import { OfertasCountdown } from '@/components/sections/OfertasCountdown'
 import { getSupabaseServer } from '@/lib/supabase/server'
-import { pickPrimaryImage } from '@/lib/utils'
 import type { Tables } from '@/types/database'
 
 /** Accent do HTML aprovado (pulse + destaque do H2) — sem token no DS ainda */
 const OFERTAS_MINT = '#86EFAC'
 
 const OFERTAS_SELECT =
-  'id, name, slug, unit, product_type, price_cents, compare_at_cents, increment_grams, product_images(url, is_primary), categories(name, slug)' as const
+  'id, name, slug, unit, product_type, price_cents, compare_at_cents, increment_grams, image_url, categories(name, slug)' as const
 
 type OfertaRow = Pick<
   Tables<'products'>,
@@ -23,8 +22,8 @@ type OfertaRow = Pick<
   | 'price_cents'
   | 'compare_at_cents'
   | 'increment_grams'
+  | 'image_url'
 > & {
-  product_images: { url: string; is_primary: boolean }[] | null
   categories: { name: string; slug: string } | null
 }
 
@@ -114,7 +113,7 @@ export default async function OfertasSection() {
                   slug={p.slug}
                   categorySlug={p.categories!.slug}
                   name={p.name}
-                  imageUrl={pickPrimaryImage(p.product_images)}
+                  imageUrl={p.image_url}
                   unit={isGranel ? 'granel' : 'unit'}
                   priceInCents={
                     isGranel ? Math.round(p.price_cents / 10) : p.price_cents

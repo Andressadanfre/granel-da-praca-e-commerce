@@ -4,7 +4,6 @@ import { revalidatePath } from 'next/cache'
 
 import { createLogger, logError } from '@/lib/logger'
 import { getSupabaseServer } from '@/lib/supabase/server'
-import { pickPrimaryImage } from '@/lib/utils'
 import type { CartItem } from '@/lib/cart/types'
 import { isCompletedStatus } from '@/lib/account/types'
 import {
@@ -29,7 +28,7 @@ type ProductRow = {
   is_active: boolean
   is_deleted: boolean
   categories: { name: string } | null
-  product_images: { url: string; is_primary: boolean }[] | null
+  image_url: string | null
 }
 
 type OrderItemRow = {
@@ -170,7 +169,7 @@ export async function prepareReorderAction(input: unknown): Promise<PrepareReord
       is_active,
       is_deleted,
       categories ( name ),
-      product_images ( url, is_primary )
+      image_url
     `)
     .in('id', productIds)
 
@@ -219,7 +218,7 @@ export async function prepareReorderAction(input: unknown): Promise<PrepareReord
       name: product.name,
       category: product.categories?.name ?? '',
       productType: product.product_type,
-      imageUrl: pickPrimaryImage(product.product_images),
+      imageUrl: product.image_url,
       priceCents:
         product.product_type === 'granel'
           ? Math.round(product.price_cents / 10)

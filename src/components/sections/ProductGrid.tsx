@@ -5,7 +5,7 @@ import { ProductCard } from '@/components/product/ProductCard'
 import { EmptyState } from '@/components/product/EmptyState'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 import type { ProductType, ProductUnit, StockStatus } from '@/types/database'
-import { cn, pickPrimaryImage } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ interface ProductRow {
   compare_at_cents: number | null
   increment_grams: number
   stock_status: StockStatus
-  product_images: { url: string; is_primary: boolean }[] | null
+  image_url: string | null
   categories: { category_name: string; category_slug: string } | null
 }
 
@@ -70,7 +70,7 @@ function toCardProps(p: ProductRow): ProductCardProps {
           : p.compare_at_cents,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : UNIT_LABEL[p.unit],
-    imageUrl: pickPrimaryImage(p.product_images) ?? undefined,
+    imageUrl: p.image_url ?? undefined,
     state:
       p.stock_status === 'out_of_stock'
         ? 'out-of-stock'
@@ -221,7 +221,7 @@ export default async function ProductGrid({
   let query = supabase
     .from('products')
     .select(
-      'id, name, slug, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, product_images(url, is_primary), categories(category_name:name, category_slug:slug)',
+      'id, name, slug, description, category_id, product_type, unit, price_cents, compare_at_cents, increment_grams, stock_status, image_url, categories(category_name:name, category_slug:slug)',
       { count: 'exact' },
     )
     .eq('is_active', true)
@@ -266,7 +266,7 @@ export default async function ProductGrid({
       compare_at_cents: row.compare_at_cents,
       increment_grams: row.increment_grams,
       stock_status: row.stock_status,
-      product_images: Array.isArray(row.product_images) ? row.product_images as { url: string; is_primary: boolean }[] : null,
+      image_url: row.image_url,
       categories,
     }
   })
