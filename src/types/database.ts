@@ -370,6 +370,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: number
+          image_url: string | null
           increment_grams: number
           is_active: boolean
           is_deleted: boolean
@@ -377,6 +378,7 @@ export type Database = {
           low_stock_threshold_grams: number
           low_stock_threshold_units: number
           name: string
+          nutritional_table_image_url: string | null
           price_cents: number
           product_type: Database["public"]["Enums"]["product_type"]
           slug: string
@@ -392,6 +394,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
+          image_url?: string | null
           increment_grams?: number
           is_active?: boolean
           is_deleted?: boolean
@@ -399,6 +402,7 @@ export type Database = {
           low_stock_threshold_grams?: number
           low_stock_threshold_units?: number
           name: string
+          nutritional_table_image_url?: string | null
           price_cents: number
           product_type?: Database["public"]["Enums"]["product_type"]
           slug: string
@@ -414,6 +418,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
+          image_url?: string | null
           increment_grams?: number
           is_active?: boolean
           is_deleted?: boolean
@@ -421,6 +426,7 @@ export type Database = {
           low_stock_threshold_grams?: number
           low_stock_threshold_units?: number
           name?: string
+          nutritional_table_image_url?: string | null
           price_cents?: number
           product_type?: Database["public"]["Enums"]["product_type"]
           slug?: string

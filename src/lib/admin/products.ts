@@ -287,11 +287,13 @@ export interface AdminProductForEdit {
   lowStockThresholdGrams: number
   lowStockThresholdUnits: number
   incrementGrams: number
+  imageUrl: string | null
+  nutritionalTableImageUrl: string | null
   updatedAt: string
 }
 
 const PRODUCT_EDIT_SELECT =
-  'id, category_id, name, slug, description, unit, product_type, price_cents, compare_at_cents, is_active, is_featured, is_deleted, stock_status, stock_quantity_grams, stock_quantity_units, low_stock_threshold_grams, low_stock_threshold_units, increment_grams, updated_at, categories(name, slug)'
+  'id, category_id, name, slug, description, unit, product_type, price_cents, compare_at_cents, is_active, is_featured, is_deleted, stock_status, stock_quantity_grams, stock_quantity_units, low_stock_threshold_grams, low_stock_threshold_units, increment_grams, image_url, nutritional_table_image_url, updated_at, categories(name, slug)'
 
 /**
  * Produto completo para a tela de edição. Retorna null se não existir ou estiver soft-deleted
@@ -338,6 +340,8 @@ export async function getAdminProductForEdit(id: number): Promise<AdminProductFo
       lowStockThresholdGrams: data.low_stock_threshold_grams,
       lowStockThresholdUnits: data.low_stock_threshold_units,
       incrementGrams: data.increment_grams,
+      imageUrl: data.image_url,
+      nutritionalTableImageUrl: data.nutritional_table_image_url,
       updatedAt: data.updated_at,
     }
   } catch (error) {

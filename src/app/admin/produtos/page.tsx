@@ -131,14 +131,13 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
           <h1 className="text-2xl font-bold text-gdeep">Produtos</h1>
           <span className="text-sm font-medium text-t4">({tabCounts.todos})</span>
         </div>
-        <button
-          disabled
-          title="Em breve — Fase 3"
-          className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-sel bg-g px-4 py-2 text-[12px] font-semibold text-white opacity-50"
+        <Link
+          href="/admin/produtos/novo"
+          className="inline-flex items-center gap-1.5 rounded-sel bg-g px-4 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-ghover"
         >
           <Plus size={14} strokeWidth={1.8} aria-hidden />
           Novo produto
-        </button>
+        </Link>
       </div>
 
       <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4">

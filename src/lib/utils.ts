@@ -37,3 +37,18 @@ export function pickPrimaryImage(
   return (images.find(img => img.is_primary) ?? images[0]).url
 }
 
+/**
+ * Normaliza texto para slug de URL: minúsculo, sem acento, espaços → hífen,
+ * sem caracteres especiais. Ex.: "Castanha do Pará" → "castanha-do-para".
+ */
+export function generateSlug(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
