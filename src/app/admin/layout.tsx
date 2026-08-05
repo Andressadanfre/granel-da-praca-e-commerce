@@ -1,14 +1,60 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { LayoutGrid, ClipboardList, Package, Users, Ticket, BarChart3, Settings } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { getSupabaseServer } from '@/lib/supabase/server'
 import { isAdminUser } from '@/lib/admin/orders'
 import { getAdminSessionInfo, getSidebarCounts } from '@/lib/admin/shell'
+import { AdminPermissionToast } from '@/components/admin/AdminPermissionToast'
+import { cn } from '@/lib/utils'
 
 const navLinkClass =
   'flex items-center gap-2 rounded-inner px-3 py-2 text-[13px] font-medium text-white hover:bg-white/10'
+
+type AdminNavItem = {
+  label: string
+  href: string
+  icon: typeof LayoutGrid
+  badge?: number
+  ownerOnly?: boolean
+}
+
+type AdminNavSection = {
+  label: string
+  items: AdminNavItem[]
+  ownerOnly?: boolean
+}
+
+function buildNavSections(counts: Awaited<ReturnType<typeof getSidebarCounts>>): AdminNavSection[] {
+  return [
+    {
+      label: 'PRINCIPAL',
+      items: [
+        { label: 'Dashboard', href: '/admin', icon: LayoutGrid, ownerOnly: true },
+        { label: 'Pedidos', href: '/admin/pedidos', icon: ClipboardList, badge: counts.pedidosPendentes },
+        { label: 'Produtos', href: '/admin/produtos', icon: Package, badge: counts.produtosAlerta },
+        { label: 'Clientes', href: '/admin/clientes', icon: Users, ownerOnly: true },
+      ],
+    },
+    {
+      label: 'CUPONS',
+      ownerOnly: true,
+      items: [
+        { label: 'Cupons', href: '#', icon: Ticket },
+        { label: 'Relatórios', href: '#', icon: BarChart3 },
+      ],
+    },
+    {
+      label: 'SISTEMA',
+      ownerOnly: true,
+      items: [
+        { label: 'Configurações', href: '/admin/configuracoes', icon: Settings },
+      ],
+    },
+  ]
+}
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const supabase = getSupabaseServer()
@@ -27,6 +73,15 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     getSidebarCounts(),
   ])
 
+  const isOwner = session?.role === 'owner'
+  const navSections = buildNavSections(counts)
+  const visibleSections = navSections
+    .filter((section) => !section.ownerOnly || isOwner)
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !item.ownerOnly || isOwner),
+    }))
+
   return (
     <div className="flex min-h-screen">
       <aside className="flex w-[220px] flex-shrink-0 flex-col bg-gdeep px-4 py-6 print:hidden">
@@ -36,62 +91,33 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         </div>
 
         <nav className="flex flex-col gap-5">
-          <div className="flex flex-col gap-1">
-            <p className="px-3 text-[9.5px] font-semibold uppercase tracking-wide text-white/40">Principal</p>
+          {visibleSections.map((section) => (
+            <div key={section.label} className="flex flex-col gap-1">
+              <p className="px-3 text-[9.5px] font-semibold uppercase tracking-wide text-white/40">
+                {section.label}
+              </p>
 
-            <Link href="/admin" className={navLinkClass}>
-              <LayoutGrid size={16} strokeWidth={1.6} />
-              Dashboard
-            </Link>
-
-            <Link href="/admin/pedidos" className={navLinkClass}>
-              <ClipboardList size={16} strokeWidth={1.6} />
-              Pedidos
-              {counts.pedidosPendentes > 0 && (
-                <span className="ml-auto rounded-pill bg-danger px-2 py-0.5 text-[11px] font-semibold text-white">
-                  {`${counts.pedidosPendentes}`}
-                </span>
-              )}
-            </Link>
-
-            <Link href="/admin/produtos" className={navLinkClass}>
-              <Package size={16} strokeWidth={1.6} />
-              Produtos
-              {counts.produtosAlerta > 0 && (
-                <span className="ml-auto rounded-pill bg-promo px-2 py-0.5 text-[11px] font-semibold text-white">
-                  {`${counts.produtosAlerta}`}
-                </span>
-              )}
-            </Link>
-
-            <Link href="/admin/clientes" className={navLinkClass}>
-              <Users size={16} strokeWidth={1.6} />
-              Clientes
-            </Link>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <p className="px-3 text-[9.5px] font-semibold uppercase tracking-wide text-white/40">Cupons</p>
-
-            <Link href="#" className={navLinkClass}>
-              <Ticket size={16} strokeWidth={1.6} />
-              Cupons
-            </Link>
-
-            <Link href="#" className={navLinkClass}>
-              <BarChart3 size={16} strokeWidth={1.6} />
-              Relatórios
-            </Link>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <p className="px-3 text-[9.5px] font-semibold uppercase tracking-wide text-white/40">Sistema</p>
-
-            <Link href="/admin/configuracoes" className={navLinkClass}>
-              <Settings size={16} strokeWidth={1.6} />
-              Configurações
-            </Link>
-          </div>
+              {section.items.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link key={item.href + item.label} href={item.href} className={navLinkClass}>
+                    <Icon size={16} strokeWidth={1.6} />
+                    {item.label}
+                    {item.badge != null && item.badge > 0 && (
+                      <span
+                        className={cn(
+                          'ml-auto rounded-pill px-2 py-0.5 text-[11px] font-semibold text-white',
+                          item.href === '/admin/pedidos' ? 'bg-danger' : 'bg-promo',
+                        )}
+                      >
+                        {`${item.badge}`}
+                      </span>
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          ))}
         </nav>
 
         <div className="mt-auto flex flex-col gap-3 pt-6">
@@ -114,6 +140,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       </aside>
 
       <main className="flex-1 overflow-y-auto bg-cream p-8 print:bg-white print:p-0">
+        <Suspense fallback={null}>
+          <AdminPermissionToast />
+        </Suspense>
         {children}
       </main>
     </div>
