@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     // Query roda APENAS em /admin — zero latência extra em rotas públicas.
     const { data, error } = await supabase
       .from('admin_users')
-      .select('id')
+      .select('id, role')
       .eq('user_id', user.id)
       .eq('is_active', true)
       .limit(1)
@@ -31,6 +31,27 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(
         new URL('/?erro=acesso_negado', request.url),
       )
+    }
+
+    const role = data[0].role as 'owner' | 'supervisora'
+    const { pathname } = request.nextUrl
+
+    if (role === 'supervisora') {
+      const isAllowedArea =
+        pathname.startsWith('/admin/produtos') ||
+        pathname.startsWith('/admin/pedidos')
+
+      const isHomeRoot = pathname === '/admin' || pathname === '/admin/dashboard'
+
+      if (isHomeRoot) {
+        return NextResponse.redirect(new URL('/admin/produtos', request.url))
+      }
+
+      if (!isAllowedArea) {
+        return NextResponse.redirect(
+          new URL('/admin/produtos?erro=sem_permissao', request.url),
+        )
+      }
     }
   }
 
