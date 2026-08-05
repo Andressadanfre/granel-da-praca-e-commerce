@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useToast } from '@/components/ui/ToastProvider'
 
@@ -9,9 +9,11 @@ export function AdminPermissionToast() {
   const router = useRouter()
   const pathname = usePathname()
   const { showToast } = useToast()
+  const hasShown = useRef(false)
 
   useEffect(() => {
-    if (searchParams.get('erro') === 'sem_permissao') {
+    if (searchParams.get('erro') === 'sem_permissao' && !hasShown.current) {
+      hasShown.current = true
       showToast('Você não tem permissão para acessar essa área.', 'error')
       router.replace(pathname)
     }
