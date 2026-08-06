@@ -26,6 +26,20 @@ export default async function ImprimirCupomPage({ params }: Props) {
     ? (order.delivery_address as DeliveryAddressSnapshot | null)
     : null
 
+  function getPagamentoStatusTexto(paymentStatus: string, paymentMethod: string, deliveryType: string, mpPaymentId: string | null): string {
+    if (paymentStatus === 'pago') {
+      return mpPaymentId ? `Pago e confirmado · ID: ${mpPaymentId}` : 'Pago e confirmado'
+    }
+    if (paymentStatus === 'reembolsado') {
+      return 'Reembolsado'
+    }
+    // pendente
+    if (paymentMethod === 'dinheiro') {
+      return `A receber na ${deliveryType === 'entrega' ? 'entrega' : 'retirada'}`
+    }
+    return 'Aguardando confirmação de pagamento'
+  }
+
   return (
     <>
       <style>{`
@@ -80,6 +94,16 @@ export default async function ImprimirCupomPage({ params }: Props) {
         .total-linha.final { font-size: 14px; font-weight: 700; padding-top: 5px; margin-top: 3px; border-top: 2px solid #000; }
         .total-linha span:last-child { font-variant-numeric: tabular-nums; }
         .total-desconto { color: #333; font-style: italic; }
+        .pagamento-box { border: 1.5px solid #000; border-radius: 4px; padding: 6px 8px; margin-top: 8px; }
+        .pagamento-titulo { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; color: #000; }
+        .pagamento-linha { display: flex; justify-content: space-between; font-size: 10.5px; padding: 1px 0; }
+        .pagamento-metodo { font-size: 12px; font-weight: 700; color: #000; }
+        .pagamento-status { font-size: 10px; color: #555; margin-top: 2px; }
+        .cupom-rodape { text-align: center; padding-top: 8px; font-size: 9px; color: #555; line-height: 1.6; }
+        .cupom-rodape strong { color: #000; }
+        .assinatura-block { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #999; }
+        .assinatura-linha { border-bottom: 1px solid #000; height: 24px; margin-bottom: 3px; }
+        .assinatura-label { font-size: 8.5px; color: #555; text-align: center; letter-spacing: .04em; }
         @media print {
           @page { size: 80mm auto; margin: 4mm; }
           body { background: #fff !important; }
@@ -209,13 +233,38 @@ export default async function ImprimirCupomPage({ params }: Props) {
           </div>
         </div>
 
-        <p className="cupom-linha"><strong>Pagamento:</strong> {PAYMENT_METHOD_LABELS[order.payment_method]}</p>
-        <p className="cupom-linha"><strong>Total: {formatBRL(order.total_cents)}</strong></p>
+        <hr className="divisor" />
 
-        <hr className="cupom-divisor" />
+        <div className="pagamento-box">
+          <div className="pagamento-titulo">Pagamento</div>
+          <div className="pagamento-linha">
+            <span className="pagamento-metodo">{PAYMENT_METHOD_LABELS[order.payment_method]}</span>
+            <span style={{ fontSize: '10px', fontWeight: 700 }}>{formatBRL(order.total_cents)}</span>
+          </div>
+          <div className="pagamento-status">
+            {getPagamentoStatusTexto(order.payment_status, order.payment_method, order.delivery_type, order.mp_payment_id)}
+          </div>
+        </div>
 
-        <p className="cupom-assinatura">Separado por: _____________________</p>
-        <p className="cupom-assinatura">Data: ___/___/______</p>
+        <hr className="divisor" />
+
+        <div className="assinatura-block">
+          <div className="assinatura-linha" />
+          <div className="assinatura-label">Conferido e separado por</div>
+        </div>
+
+        <hr className="divisor" />
+
+        <div className="cupom-rodape">
+          <strong>Granel da Praça</strong><br />
+          Obrigada pela sua compra<br />
+          Uberlândia · MG<br />
+          graneldapraca.com.br<br /><br />
+          <span style={{ fontSize: '8.5px' }}>
+            Este não é um documento fiscal.<br />
+            Dúvidas? WhatsApp (34) 9 9999-0000
+          </span>
+        </div>
       </div>
     </>
   )
