@@ -1,9 +1,10 @@
 import 'server-only'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
+import type { AdminRole } from '@/types/admin'
 
 export interface AdminSessionInfo {
   fullName: string
-  role: 'owner' | 'supervisora'
+  role: AdminRole
 }
 
 export async function getAdminSessionInfo(authUserId: string): Promise<AdminSessionInfo | null> {
