@@ -14,6 +14,8 @@ import { OrderActions } from '@/components/admin/OrderActions'
 import { OrderItemsClient } from '@/components/admin/OrderItemsClient'
 import { formatBRL } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: { id: string }
 }

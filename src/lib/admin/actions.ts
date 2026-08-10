@@ -118,19 +118,24 @@ export async function markItemSeparated(
 
   try {
     const supabaseAdmin = getSupabaseAdmin()
-    const { error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('order_items')
       .update({
         is_separated: separated,
         separated_at: separated ? new Date().toISOString() : null,
       })
       .eq('id', itemId)
+      .select('order_id')
+      .single()
 
     if (error) {
       logError(logger, error, { route: 'admin/markItemSeparated', user_id: user.id, item_id: itemId }, 'Erro ao marcar item como separado')
       return { success: false, error: 'Erro interno' }
     }
 
+    if (data?.order_id) {
+      revalidatePath(`/admin/pedidos/${data.order_id}`)
+    }
     return { success: true }
   } catch (error) {
     logError(logger, error, { route: 'admin/markItemSeparated', user_id: user.id, item_id: itemId }, 'Erro inesperado ao marcar item como separado')
