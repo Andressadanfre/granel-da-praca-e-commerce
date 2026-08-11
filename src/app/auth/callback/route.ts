@@ -18,8 +18,10 @@ export async function GET(request: NextRequest) {
 
     if (!error && data.user) {
       // Sem esta linha, o pedido do usuario quebra por FK (orders.user_id -> app_users.id)
+      // Fluxo OAuth nao tem checkbox — consentimento implicito por texto visivel na tela de cadastro.
+      // marketingOptIn sempre false aqui: opt-in de marketing exige acao explicita, nunca default.
       try {
-        await ensureAppUser(data.user)
+        await ensureAppUser(data.user, { marketingOptIn: false, termsVersion: 'v1-10082026' })
         return NextResponse.redirect(new URL(destination, request.url))
       } catch (err) {
         const log = createLogger({ action: 'auth_callback', userId: data.user.id })

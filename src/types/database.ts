@@ -6,12 +6,9 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-// Aliases de topo — retrocompat com ProductGrid.tsx e outros componentes
-export type ProductType = 'granel' | 'unit'
-export type ProductUnit = 'KG' | 'UN' | 'SC' | 'CX' | 'BL'
-export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock'
-
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -89,7 +86,11 @@ export type Database = {
           id: string
           is_active: boolean
           is_deleted: boolean
+          marketing_opt_in: boolean
+          marketing_opt_in_at: string | null
           phone: string | null
+          terms_accepted_at: string | null
+          terms_version: string | null
           updated_at: string
         }
         Insert: {
@@ -100,7 +101,11 @@ export type Database = {
           id: string
           is_active?: boolean
           is_deleted?: boolean
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           phone?: string | null
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           updated_at?: string
         }
         Update: {
@@ -111,7 +116,11 @@ export type Database = {
           id?: string
           is_active?: boolean
           is_deleted?: boolean
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           phone?: string | null
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -384,7 +393,7 @@ export type Database = {
           slug: string
           stock_quantity_grams: number | null
           stock_quantity_units: number | null
-          stock_status: StockStatus
+          stock_status: string
           unit: Database["public"]["Enums"]["product_unit"]
           updated_at: string
         }
@@ -408,7 +417,7 @@ export type Database = {
           slug: string
           stock_quantity_grams?: number | null
           stock_quantity_units?: number | null
-          stock_status?: StockStatus
+          stock_status?: string
           unit?: Database["public"]["Enums"]["product_unit"]
           updated_at?: string
         }
@@ -432,7 +441,7 @@ export type Database = {
           slug?: string
           stock_quantity_grams?: number | null
           stock_quantity_units?: number | null
-          stock_status?: StockStatus
+          stock_status?: string
           unit?: Database["public"]["Enums"]["product_unit"]
           updated_at?: string
         }

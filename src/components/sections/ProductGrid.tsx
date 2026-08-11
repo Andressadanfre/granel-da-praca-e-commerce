@@ -4,7 +4,7 @@ import { getSupabaseServer } from '@/lib/supabase/server'
 import { ProductCard } from '@/components/product/ProductCard'
 import { EmptyState } from '@/components/product/EmptyState'
 import type { ProductCardProps } from '@/components/product/ProductCard'
-import type { ProductType, ProductUnit, StockStatus } from '@/types/database'
+import type { ProductType, ProductUnit, StockStatus } from '@/types/product'
 import { cn } from '@/lib/utils'
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
@@ -265,7 +265,7 @@ export default async function ProductGrid({
       price_cents: row.price_cents,
       compare_at_cents: row.compare_at_cents,
       increment_grams: row.increment_grams,
-      stock_status: row.stock_status,
+      stock_status: row.stock_status as StockStatus,
       image_url: row.image_url,
       categories,
     }

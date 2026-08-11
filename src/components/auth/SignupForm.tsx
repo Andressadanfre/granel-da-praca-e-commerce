@@ -46,6 +46,12 @@ export function SignupForm() {
         <div className="mt-6">
           <GoogleButton />
         </div>
+        <p className="mt-2 text-center text-[11px] leading-[1.5] text-t4">
+          Ao continuar com Google, você concorda com nossos{' '}
+          <Link href="/termos" className="text-g underline">Termos de Uso</Link>{' '}
+          e{' '}
+          <Link href="/privacidade" className="text-g underline">Política de Privacidade</Link>.
+        </p>
 
         <div className="my-5 flex items-center gap-3 text-xs text-t4">
           <span className="h-px flex-1 bg-bd" />

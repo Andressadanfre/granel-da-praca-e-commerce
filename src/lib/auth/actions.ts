@@ -71,7 +71,10 @@ export async function signUpWithPasswordAction(input: unknown): Promise<Result> 
 
   // Sem esta linha, o pedido do usuario quebra por FK (orders.user_id -> app_users.id)
   try {
-    await ensureAppUser(data.user)
+    await ensureAppUser(data.user, {
+      marketingOptIn: parsed.data.marketingOptIn,
+      termsVersion: 'v1-10082026',
+    })
   } catch (err) {
     const log = createLogger({ action: 'signUpWithPasswordAction', userId: data.user.id })
     logError(log, err, {}, 'Falha ao provisionar app_users apos cadastro')
