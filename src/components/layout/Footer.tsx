@@ -2,6 +2,7 @@
 // Server Component — sem 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { NewsletterForm } from './NewsletterForm'
 
@@ -73,24 +74,13 @@ export function Footer() {
         <div className="ft-body max-w-container mx-auto pt-16 pb-12 px-4 sm:px-5 xl:px-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[260px_1fr_1fr_1fr] gap-12 relative z-[1]">
           <div>
             <div className="mb-[18px] flex items-center">
-              <svg
-                height="36"
-                viewBox="0 0 40 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-label="Granel da Praça"
-                className="brightness-0 invert opacity-[.92]"
-              >
-                <circle cx="20" cy="20" r="20" fill="#002603" />
-                <path d="M20 30 C13 26 10 19 13 13 C16 8 22 8 24 13 C26 18 24 26 20 30Z" fill="#00B207" />
-                <path d="M20 30 C27 26 30 19 27 13 C25 9 21 10 20 14 C19 18 20 26 20 30Z" fill="#2C742F" />
-                <line x1="20" y1="30" x2="20" y2="34" stroke="#00B207" strokeWidth="2" strokeLinecap="round" />
-                <ellipse cx="16" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.7" transform="rotate(-20 16 22)" />
-                <ellipse cx="24" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.5" transform="rotate(20 24 22)" />
-              </svg>
-              <span className="ml-2.5 text-sm font-bold text-white/[.92] tracking-[-0.01em]">
-                Granel da Praça
-              </span>
+              <Image
+                src="/images/logo-white.png"
+                alt="Granel da Praça — Produtos Naturais"
+                width={172}
+                height={36}
+                className="h-9 w-auto opacity-[.92]"
+              />
             </div>
 
             <p className="text-[12.5px] text-white/[.82] leading-[1.65] mb-6 max-w-[220px]">

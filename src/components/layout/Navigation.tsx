@@ -2,6 +2,7 @@
 // Server Component — sem 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart } from 'lucide-react'
 
 import { getSupabaseServer } from '@/lib/supabase/server'
@@ -84,30 +85,14 @@ export async function Navigation() {
             className="flex items-center gap-s3 shrink-0 no-underline"
             aria-label="Granel da Praça — página inicial"
           >
-            <svg
-              width="40"
-              height="40"
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="20" cy="20" r="20" fill="#002603" />
-              <path d="M20 30 C13 26 10 19 13 13 C16 8 22 8 24 13 C26 18 24 26 20 30Z" fill="#00B207" />
-              <path d="M20 30 C27 26 30 19 27 13 C25 9 21 10 20 14 C19 18 20 26 20 30Z" fill="#2C742F" />
-              <line x1="20" y1="30" x2="20" y2="34" stroke="#00B207" strokeWidth="1.6" strokeLinecap="round" />
-              <ellipse cx="16" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.7" transform="rotate(-20 16 22)" />
-              <ellipse cx="24" cy="22" rx="2.5" ry="1.5" fill="#F9F5EF" opacity="0.5" transform="rotate(20 24 22)" />
-            </svg>
-
-            <div className="leading-[1.2]">
-              <div className="text-sm font-bold text-gdeep tracking-[-0.01em]">
-                Granel da Praça
-              </div>
-              <div className="text-[9px] font-medium text-g uppercase tracking-[0.08em]">
-                Produtos Naturais
-              </div>
-            </div>
+            <Image
+              src="/images/logo-green.png"
+              alt=""
+              width={210}
+              height={44}
+              priority
+              className="h-11 w-auto"
+            />
           </Link>
 
           {/* Busca desktop */}
