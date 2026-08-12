@@ -481,6 +481,19 @@ export type Database = {
           id: string
         }[]
       }
+      update_order_payment_status: {
+        Args: {
+          p_mp_payment_id: string
+          p_new_status: string
+          p_order_id: string
+        }
+        Returns: {
+          id: string
+          payment_status: string
+          updated: boolean
+          order_found: boolean
+        }[]
+      }
     }
     Enums: {
       admin_role: "owner" | "supervisora"

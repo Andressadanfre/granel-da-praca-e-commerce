@@ -181,13 +181,15 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = getSupabaseAdmin()
-  const { data: updated, error: updateError } = await admin
-    .from('orders')
-    .update({ payment_status: newStatus, mp_payment_id: String(paymentId) })
-    .eq('id', orderId)
-    .eq('is_deleted', false)
-    .select('id')
-    .maybeSingle()
+  const { data: rpcResult, error: updateError } = await admin
+    .rpc('update_order_payment_status', {
+      p_order_id: orderId,
+      p_new_status: newStatus,
+      p_mp_payment_id: String(paymentId),
+    })
+
+  const updated = rpcResult?.[0]?.updated ? { id: rpcResult[0].id } : null
+  const orderFound = rpcResult?.[0]?.order_found ?? false
 
   if (updateError) {
     logError(
@@ -204,7 +206,9 @@ export async function POST(request: NextRequest) {
     logWarn(
       log,
       { route: '/api/webhooks/mercadopago', order_id: orderId, payment_id: paymentId },
-      'Pedido não encontrado para external_reference',
+      orderFound
+        ? 'Update de payment_status bloqueado — status atual já é igual ou mais avançado que o recebido (possível webhook fora de ordem)'
+        : 'Pedido não encontrado para external_reference',
     )
     return NextResponse.json({ received: true }, { status: 200 })
   }
