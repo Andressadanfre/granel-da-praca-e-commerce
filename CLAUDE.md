@@ -107,6 +107,13 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Endpoints públicos sensíveis (webhooks, formulários sem auth) devem ter rate limiting via `Ratelimit` do Upstash (`src/lib/rate-limit.ts` é o padrão de referência) — checagem sempre como primeira validação da rota, antes de qualquer verificação de assinatura/payload.
 - CSP (`next.config.mjs`) deve incluir o domínio de ingest do Sentry (`https://*.ingest.us.sentry.io`) no `connect-src` sempre que o Sentry client-side estiver ativo — esquecer isso faz o browser bloquear o envio de erros silenciosamente, sem erro visível no console além do log de CSP.
 
+### Webhooks — idempotência e precedência de status (padrão, 12/08/2026)
+
+- Webhook que atualiza status de um recurso (ex: `payment_status` de `orders`) nunca deve fazer `UPDATE` incondicional — webhooks podem chegar duplicados ou fora de ordem.
+- Padrão adotado: RPC atômica (`SECURITY DEFINER`) que condiciona o `UPDATE` a uma hierarquia de precedência do status (rank numérico via `CASE`) dentro do próprio SQL — nunca `SELECT` + `UPDATE` separados no Node, que cria race condition entre webhooks concorrentes.
+- Referência: `update_order_payment_status` (`orders.payment_status`) — `pendente`/`falhou` (rank 0) → `pago` (rank 1) → `reembolsado` (rank 2). A RPC retorna `updated` e `order_found` separadamente, para o handler distinguir "recurso não existe" de "update bloqueado por precedência" no log — nunca colapsar os dois casos na mesma mensagem.
+- Índice `UNIQUE` parcial (`WHERE campo IS NOT NULL`) é o padrão para IDs externos (ex: `mp_payment_id`) que devem ser únicos mas frequentemente `NULL` antes de um evento externo confirmar.
+
 ### Fronteiras Server/Client (RSC)
 
 - Server Component por padrão — `'use client'` **apenas** para `useState`/`useEffect`/event handlers/browser APIs.
