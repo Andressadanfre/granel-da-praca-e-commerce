@@ -127,6 +127,12 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Paleta de badges de status da **conta ≠ admin**: divergência **intencional** (expectativa do cliente vs operacional). Não alinhar as duas sem revisitar a decisão no Design System do Notion.
 - `OrderTimeline` vive em `src/components/order/OrderTimeline.tsx` — compartilhado entre `/pedido/[token]` e o card expandido de `/conta`. Reuso 1:1 (sem `variant`) até haver necessidade visual.
 
+### Filtros de data em telas administrativas — padrão "sempre" como default
+
+- Ao implementar filtro de período/data em qualquer lista administrativa nova, NUNCA usar um período restrito (ex: "hoje") como filtro padrão se a lista pode conter itens de pipeline ativo/pendente (não finalizados) — fazer isso esconde itens antigos ainda pendentes da visão padrão, criando risco operacional (o operador pode achar que não há pendências quando há).
+- Confirmado em /admin/pedidos (13/08/2026): filtro padrão mudou de periodo='hoje' para periodo='sempre' após teste real revelar pedidos 'recebido' de dias anteriores escondidos da lista principal, divergindo da contagem do badge do sidebar.
+- Regra geral: resumos/contadores do tipo "X hoje" no header podem e devem continuar filtrados por hoje — é o filtro da LISTA principal que não deve ter esse padrão restritivo quando a lista mistura itens finalizados e pendentes.
+
 ---
 
 ## Workflow de Desenvolvimento
