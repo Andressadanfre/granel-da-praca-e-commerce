@@ -10,7 +10,11 @@ type Result = { success: true } | { success: false; error: string }
 
 export async function subscribeNewsletter(email: string): Promise<Result> {
   const ip = headers().get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-  const { success: rateLimitOk } = await newsletterRatelimit.limit(ip)
+  const rateLimitResult = await newsletterRatelimit.limit(ip)
+  if (rateLimitResult.pending) {
+    await rateLimitResult.pending
+  }
+  const { success: rateLimitOk } = rateLimitResult
   if (!rateLimitOk) {
     return { success: false, error: 'Muitas tentativas. Tente novamente em alguns minutos.' }
   }
