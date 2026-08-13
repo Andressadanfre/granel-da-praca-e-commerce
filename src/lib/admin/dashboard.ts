@@ -2,7 +2,7 @@ import 'server-only'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { logger, logError } from '@/lib/logger'
 import { formatBRL } from '@/lib/utils'
-import { getAdminOrders } from '@/lib/admin/orders'
+import { getAdminOrdersFiltered } from '@/lib/admin/orders'
 import { ORDER_STATUS_STYLES, PAYMENT_METHOD_LABELS } from '@/lib/admin/labels'
 import { PAY_ON_DELIVERY_METHODS, type PaymentMethod } from '@/lib/orders/types'
 import type { AdminOrderListItem } from '@/types/admin'
@@ -162,7 +162,13 @@ export interface PedidoRecente extends AdminOrderListItem {
 }
 
 export async function getPedidosRecentes(limit = 6): Promise<PedidoRecente[]> {
-  const todos = await getAdminOrders()
+  const { orders: todos } = await getAdminOrdersFiltered({
+    status: 'todos',
+    tipo: 'todos',
+    pagamento: 'todos',
+    periodo: 'sempre',
+    pagina: 1,
+  })
 
   return todos.slice(0, limit).map((pedido) => ({
     ...pedido,

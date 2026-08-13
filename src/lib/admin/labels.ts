@@ -1,5 +1,5 @@
 import 'server-only'
-import type { OrderStatus, DeliveryType, PaymentMethod } from '@/types/admin'
+import type { OrderStatus, DeliveryType, PaymentMethod, AdminOrderStatusFilter } from '@/types/admin'
 import type { PaymentStatus } from '@/lib/orders/types'
 
 interface StatusStyle {
@@ -47,6 +47,17 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   cartao_debito: 'Cartão de débito',
   dinheiro: 'Dinheiro',
   alelo: 'Alelo',
+}
+
+export const STATUS_TAB_LABELS: Record<AdminOrderStatusFilter, string> = {
+  todos: 'Todos',
+  recebido: 'Recebido',
+  aceito: 'Aceito',
+  em_separacao: 'Em Separação',
+  saiu_para_entrega: 'Saiu p/ Entrega',
+  pronto_para_retirada: 'Pronto p/ Retirada',
+  entregue_retirado: 'Entregue / Retirado',
+  cancelado: 'Cancelado',
 }
 
 export function formatOrderDateTime(iso: string): string {

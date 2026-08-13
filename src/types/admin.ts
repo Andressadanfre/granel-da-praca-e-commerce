@@ -12,6 +12,22 @@ export type DeliveryType = 'entrega' | 'retirada'
 export type PaymentMethod =
   | 'pix' | 'cartao_credito' | 'cartao_debito' | 'dinheiro' | 'alelo'
 
+export type AdminOrderStatusFilter =
+  | 'todos' | 'recebido' | 'aceito' | 'em_separacao' | 'saiu_para_entrega'
+  | 'pronto_para_retirada' | 'entregue_retirado' | 'cancelado'
+
+export type AdminOrderFilters = {
+  status: AdminOrderStatusFilter
+  tipo: 'todos' | 'entrega' | 'retirada'
+  pagamento: 'todos' | 'pix' | 'cartao_credito' | 'cartao_debito' | 'dinheiro' | 'alelo'
+  /** 'sempre' = sem filtro de data; usado por telas que precisam do conjunto completo (ex: dashboard). */
+  periodo: 'hoje' | 'ontem' | '7dias' | 'personalizado' | 'sempre'
+  de?: string
+  ate?: string
+  busca?: string
+  pagina: number
+}
+
 export interface AdminUser {
   id: string
   user_id: string
@@ -63,7 +79,7 @@ export interface AdminOrder {
   order_items?: OrderItem[]
 }
 
-/** Colunas retornadas por getAdminOrders() — subset de AdminOrder para a tabela de listagem. */
+/** Colunas retornadas por getAdminOrdersFiltered() — subset de AdminOrder para a tabela de listagem. */
 export type AdminOrderListItem = Pick<
   AdminOrder,
   | 'id' | 'code' | 'status' | 'payment_status' | 'payment_method' | 'delivery_type'
