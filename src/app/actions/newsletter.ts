@@ -1,11 +1,20 @@
 'use server'
 
+import { headers } from 'next/headers'
+
 import { createLogger, logError } from '@/lib/logger'
+import { newsletterRatelimit } from '@/lib/rate-limit'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 
 type Result = { success: true } | { success: false; error: string }
 
 export async function subscribeNewsletter(email: string): Promise<Result> {
+  const ip = headers().get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const { success: rateLimitOk } = await newsletterRatelimit.limit(ip)
+  if (!rateLimitOk) {
+    return { success: false, error: 'Muitas tentativas. Tente novamente em alguns minutos.' }
+  }
+
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { success: false, error: 'E-mail inválido.' }
   }

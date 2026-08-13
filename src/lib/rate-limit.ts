@@ -20,3 +20,10 @@ export const authRatelimit = new Ratelimit({
   analytics: true,
   prefix: 'ratelimit:auth',
 })
+
+export const newsletterRatelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '10 m'),
+  analytics: true,
+  prefix: 'ratelimit:newsletter',
+})
