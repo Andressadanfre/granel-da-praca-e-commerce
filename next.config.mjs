@@ -49,11 +49,11 @@ const nextConfig = {
                 ].join('; ')
               : [
                   "default-src 'self'",
-                  "script-src 'self' 'unsafe-inline'",
+                  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
                   "style-src 'self' 'unsafe-inline'",
                   "img-src 'self' data: https:",
                   "font-src 'self' https://fonts.gstatic.com",
-                  "connect-src 'self' https://*.supabase.co https://*.ingest.us.sentry.io",
+                  "connect-src 'self' https://*.supabase.co https://*.ingest.us.sentry.io https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.google.com https://*.doubleclick.net",
                 ].join('; '),
           },
         ],

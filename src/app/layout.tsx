@@ -31,6 +31,7 @@ export default function RootLayout({
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){ dataLayer.push(arguments); }
+            window.gtag = gtag;
             gtag('consent', 'default', {
               analytics_storage: 'denied',
               ad_storage: 'denied',
@@ -41,9 +42,34 @@ export default function RootLayout({
               wait_for_update: 500,
               region: ['BR']
             });
-            window.gtag = gtag;
+            try {
+              var stored = localStorage.getItem('granel_cookie_consent');
+              if (stored) {
+                var state = JSON.parse(stored);
+                gtag('consent', 'update', {
+                  analytics_storage: state.analytics,
+                  ad_storage: state.ads,
+                  ad_user_data: state.ads,
+                  ad_personalization: state.ads,
+                });
+              }
+            } catch (e) {}
           `}
         </Script>
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-C6W30XMXN3"
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.gtag('js', new Date());
+                window.gtag('config', 'G-C6W30XMXN3');
+              `}
+            </Script>
+          </>
+        )}
         <ToastProvider>
           <CartProvider>
             <NewsletterPopup />
