@@ -202,6 +202,7 @@ export async function getProductsForOrder(
     .in('id', productIds)
     .eq('is_active', true)
     .eq('is_deleted', false)
+    .neq('stock_status', 'out_of_stock')
 
   if (error || !data || data.length !== productIds.length) {
     logWarn(
