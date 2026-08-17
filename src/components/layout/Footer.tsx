@@ -240,7 +240,6 @@ export function Footer() {
             {[
               { href: '/privacidade', label: 'Privacidade' },
               { href: '/termos', label: 'Termos de uso' },
-              { href: '/cookies', label: 'Cookies' },
             ].map((link) => (
               <Link
                 key={link.href}
