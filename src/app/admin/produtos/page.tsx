@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Plus, Package, ImageOff, AlertTriangle, EyeOff, Pencil, ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -258,8 +259,18 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                     >
                       <td className="px-5 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-inner border border-bd bg-cream text-t4">
-                            <ImageOff size={16} strokeWidth={1.6} aria-hidden />
+                          <div className="relative flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center overflow-hidden rounded-inner border border-bd bg-cream text-t4">
+                            {p.imageUrl ? (
+                              <Image
+                                src={p.imageUrl}
+                                alt={p.name}
+                                fill
+                                sizes="42px"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <ImageOff size={16} strokeWidth={1.6} aria-hidden />
+                            )}
                           </div>
                           <div>
                             <div className="text-[12px] font-semibold text-t9">{p.name}</div>

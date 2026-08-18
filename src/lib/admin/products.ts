@@ -23,6 +23,7 @@ export interface AdminProductListItem {
   isActive: boolean
   hasPhoto: boolean
   photoCount: number
+  imageUrl: string | null
   createdAt: string
 }
 
@@ -151,6 +152,7 @@ export async function getAdminProducts(params: GetAdminProductsParams = {}): Pro
       isActive: p.is_active,
       hasPhoto: !!p.image_url,
       photoCount: p.image_url ? 1 : 0,
+      imageUrl: p.image_url,
       createdAt: p.created_at,
     }))
 
