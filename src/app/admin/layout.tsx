@@ -19,6 +19,7 @@ type AdminNavItem = {
   icon: typeof LayoutGrid
   badge?: number
   ownerOnly?: boolean
+  comingSoon?: boolean
 }
 
 type AdminNavSection = {
@@ -35,22 +36,22 @@ function buildNavSections(counts: Awaited<ReturnType<typeof getSidebarCounts>>):
         { label: 'Dashboard', href: '/admin', icon: LayoutGrid, ownerOnly: true },
         { label: 'Pedidos', href: '/admin/pedidos', icon: ClipboardList, badge: counts.pedidosPendentes },
         { label: 'Produtos', href: '/admin/produtos', icon: Package, badge: counts.produtosAlerta },
-        { label: 'Clientes', href: '/admin/clientes', icon: Users, ownerOnly: true },
+        { label: 'Clientes', href: '/admin/clientes', icon: Users, ownerOnly: true, comingSoon: true },
       ],
     },
     {
       label: 'CUPONS',
       ownerOnly: true,
       items: [
-        { label: 'Cupons', href: '#', icon: Ticket },
-        { label: 'Relatórios', href: '#', icon: BarChart3 },
+        { label: 'Cupons', href: '#', icon: Ticket, comingSoon: true },
+        { label: 'Relatórios', href: '#', icon: BarChart3, comingSoon: true },
       ],
     },
     {
       label: 'SISTEMA',
       ownerOnly: true,
       items: [
-        { label: 'Configurações', href: '/admin/configuracoes', icon: Settings },
+        { label: 'Configurações', href: '/admin/configuracoes', icon: Settings, comingSoon: true },
       ],
     },
   ]
@@ -99,6 +100,24 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
               {section.items.map((item) => {
                 const Icon = item.icon
+
+                if (item.comingSoon) {
+                  return (
+                    <div
+                      key={item.href + item.label}
+                      className={cn(navLinkClass, 'cursor-not-allowed text-white/40 hover:bg-transparent')}
+                      title="Em breve"
+                      aria-disabled="true"
+                    >
+                      <Icon size={16} strokeWidth={1.6} />
+                      {item.label}
+                      <span className="ml-auto rounded-pill bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/50">
+                        em breve
+                      </span>
+                    </div>
+                  )
+                }
+
                 return (
                   <Link key={item.href + item.label} href={item.href} className={navLinkClass}>
                     <Icon size={16} strokeWidth={1.6} />

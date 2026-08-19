@@ -3,7 +3,6 @@ import Image from 'next/image'
 
 import { Badge } from '@/components/ui/Badge'
 import { AddToCartSelector } from '@/components/product/AddToCartSelector'
-import { WishlistButton } from '@/components/product/WishlistButton'
 import type { ProductForCart } from '@/lib/cart/types'
 import { cn, formatBRL } from '@/lib/utils'
 
@@ -200,8 +199,10 @@ export function ProductCard({
           </>
         )}
 
-        {/* Wishlist — constraint Right/Top */}
-        <WishlistButton id={id} />
+        {/* Wishlist removida (18/08/2026): sem persistência real, mesma
+            decisão já aplicada em /favoritos (removido do menu). Reintroduzir
+            aqui só junto com toggleWishlistInSupabase implementado — ver
+            src/components/product/WishlistButton.tsx (mantido, não usado). */}
       </div>
 
       {/* ── Card body ──────────────────────────────────────────────── */}

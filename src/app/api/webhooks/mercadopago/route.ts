@@ -5,68 +5,13 @@ import * as Sentry from '@sentry/nextjs'
 import { createLogger, logError, logWarn } from '@/lib/logger'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { webhookRatelimit } from '@/lib/rate-limit'
+import { mapMpStatusToPaymentStatus, verifyMpSignature } from '@/lib/orders/mercadopago-webhook'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-
-function mapMpStatusToPaymentStatus(
-  mpStatus: string,
-): 'pendente' | 'pago' | 'falhou' | 'reembolsado' | null {
-  switch (mpStatus) {
-    case 'approved':
-      return 'pago'
-    case 'pending':
-    case 'in_process':
-    case 'in_mediation':
-    case 'authorized':
-      return 'pendente'
-    case 'rejected':
-    case 'cancelled':
-      return 'falhou'
-    case 'refunded':
-    case 'charged_back':
-      return 'reembolsado'
-    default:
-      return null
-  }
-}
-
-function verifyMpSignature(
-  xSignature: string,
-  xRequestId: string | null,
-  dataId: string,
-  secret: string,
-): boolean {
-  const parts = xSignature.split(',').reduce<Record<string, string>>((acc, part) => {
-    const [key, value] = part.trim().split('=')
-    if (key && value) acc[key.trim()] = value.trim()
-    return acc
-  }, {})
-
-  const ts = parts['ts']
-  const v1 = parts['v1']
-  if (!ts || !v1) return false
-
-  // CRÍTICO: data.id deve ser lowercase no manifest — não documentado oficialmente
-  // pelo Mercado Pago, mas confirmado necessário (caso contrário o HMAC nunca bate)
-  const manifestParts: string[] = [`id:${dataId.toLowerCase()}`]
-  if (xRequestId) manifestParts.push(`request-id:${xRequestId}`)
-  manifestParts.push(`ts:${ts}`)
-  const manifest = manifestParts.join(';') + ';'
-
-  const expectedHash = crypto
-    .createHmac('sha256', secret)
-    .update(manifest)
-    .digest('hex')
-
-  const expectedBuffer = Buffer.from(expectedHash, 'hex')
-  const receivedBuffer = Buffer.from(v1, 'hex')
-  if (expectedBuffer.length !== receivedBuffer.length) return false
-  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer)
-}
 
 export async function POST(request: NextRequest) {
   const xRequestId = request.headers.get('x-request-id')
