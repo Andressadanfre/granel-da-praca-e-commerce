@@ -15,13 +15,18 @@ import { formatBRL } from '@/lib/utils'
 
 interface AddToCartSelectorProps {
   product: ProductForCart
+  /** Quando false, omite a linha "Total: R$ X" abaixo do seletor. Default true (ProductCard). */
+  showTotal?: boolean
 }
 
 function readCartQuantity(id: number): number {
   return getCartItems().find((i) => i.id === id)?.quantity ?? 0
 }
 
-export function AddToCartSelector({ product }: AddToCartSelectorProps) {
+export function AddToCartSelector({
+  product,
+  showTotal = true,
+}: AddToCartSelectorProps) {
   const isGranel = product.productType === 'granel'
   const [quantity, setQuantity] = useState(0)
 
@@ -71,7 +76,7 @@ export function AddToCartSelector({ product }: AddToCartSelectorProps) {
         initialQuantity={quantity}
         onQuantityChange={handleQuantityChange}
       />
-      {quantity > 0 && (
+      {showTotal && quantity > 0 && (
         <p className="mt-2 text-right text-xs text-t4">
           Total:{' '}
           <strong className="font-bold text-gdeep">
