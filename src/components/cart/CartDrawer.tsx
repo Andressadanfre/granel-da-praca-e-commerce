@@ -179,7 +179,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Carrinho de compras"
-        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85vh] w-full flex-col rounded-t-modal bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[420px] md:rounded-none"
+        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85vh] w-full flex-col overflow-hidden rounded-t-modal bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[420px] md:rounded-none"
         initial={drawerMotion.initial}
         animate={drawerMotion.animate}
         exit={drawerMotion.exit}
@@ -261,7 +261,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
 
             {/* LISTA DE ITENS */}
-            <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-6 py-3">
+            <div className="relative z-0 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-6 pb-8 pt-3 [mask-image:linear-gradient(to_bottom,black_calc(100%-48px),transparent)]">
               {items.map((item) => {
                 const badge = getBadgeProps(item.productType)
                 const showImage = item.imageUrl && !failedImages.has(item.id)
@@ -340,13 +340,13 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
 
             {/* FOOTER */}
-            <div className="flex-shrink-0 border-t border-bd bg-cream px-6 pb-6 pt-4">
+            <div className="relative z-10 flex-shrink-0 border-t border-bd bg-white px-6 pb-[max(24px,env(safe-area-inset-bottom))] pt-4 shadow-[0_-8px_24px_rgba(0,0,0,.08)]">
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-t4">Subtotal</span>
                   <span className="text-xs font-medium text-t6">{formatBRL(subtotal)}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-medium text-gd">
+                <div className="hidden items-center gap-1.5 text-[10px] font-medium text-gd md:flex">
                   <Truck size={14} strokeWidth={1.6} aria-hidden="true" />
                   Entrega rápida em Uberlândia
                 </div>
