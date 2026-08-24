@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { signUpWithPasswordAction } from '@/lib/auth/actions'
 import { GoogleButton } from './GoogleButton'
@@ -40,6 +41,15 @@ export function SignupForm() {
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-[400px] rounded-card border border-bd bg-white p-8 shadow-card">
+        <Link href="/" className="mb-6 flex justify-center" aria-label="Granel da Praça — página inicial">
+          <Image
+            src="/images/logo-green.png"
+            alt=""
+            width={210}
+            height={44}
+            className="h-9 w-auto"
+          />
+        </Link>
         <h1 className="text-xl font-bold text-t9">Criar conta</h1>
         <p className="mt-1 text-sm text-t6">Leva menos de um minuto</p>
 
