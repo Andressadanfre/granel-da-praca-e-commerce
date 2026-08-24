@@ -3,7 +3,6 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart } from 'lucide-react'
 
 import { getSupabaseServer } from '@/lib/supabase/server'
 
@@ -54,10 +53,9 @@ export async function Navigation() {
   const [categories, userEmail] = await Promise.all([getCategories(), getUserEmail()])
 
   return (
-    <header className="sticky top-0 z-50 bg-cream shadow-nav font-sans">
-
-      {/* ── ROW 1 — Announcement Bar ───────────────────────────── */}
-      <div className="bg-gdeep h-9 flex items-center justify-center overflow-hidden">
+    <>
+      {/* ── ROW 1 — Announcement Bar (rola embora, sem sticky) ─── */}
+      <div className="bg-gdeep h-9 flex items-center justify-center overflow-hidden font-sans">
 
         {/* Desktop: duas mensagens alternadas via Tailwind keyframes */}
         <div className="hidden md:block relative w-full h-9 overflow-hidden">
@@ -75,56 +73,50 @@ export async function Navigation() {
         </p>
       </div>
 
-      {/* ── ROW 2 — Main Header ────────────────────────────────── */}
-      <div className="border-b border-gray-100">
-        <div className="max-w-container mx-auto px-4 md:px-s10 h-16 md:h-[93px] flex items-center justify-between gap-s3">
+      {/* ── ROW 2 — Main Header (sticky; sem overflow — painéis absolute) */}
+      <header className="sticky top-0 z-50 h-16 bg-cream shadow-nav relative font-sans md:h-[93px]">
+        <div className="border-b border-gray-100 h-full">
+          <div className="max-w-container mx-auto px-4 md:px-s10 h-full flex items-center justify-between gap-s3">
 
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-s3 shrink-0 no-underline"
-            aria-label="Granel da Praça — página inicial"
-          >
-            <Image
-              src="/images/logo-green.png"
-              alt=""
-              width={210}
-              height={44}
-              priority
-              className="h-11 w-auto"
-            />
-          </Link>
-
-          {/* Busca desktop */}
-          <SearchBar />
-
-          {/* Ações */}
-          <div className="flex items-center gap-s2 shrink-0">
-            <UserMenuPopover userEmail={userEmail} />
-
+            {/* Logo — completa (ícone + texto) em todos os breakpoints */}
             <Link
-              href="/favoritos"
-              aria-label="Favoritos"
-              className="flex items-center justify-center w-11 h-11 text-t5 no-underline rounded-sel transition-colors duration-[180ms] ease-in-out hover:text-gdeep"
+              href="/"
+              className="flex h-8 shrink-0 items-center no-underline sm:h-11"
+              aria-label="Granel da Praça — página inicial"
             >
-              <Heart size={20} strokeWidth={1.6} />
+              <Image
+                src="/images/logo-green.png"
+                alt=""
+                width={210}
+                height={44}
+                priority
+                className="h-8 w-auto sm:h-11"
+              />
             </Link>
 
-            <CartIcon />
-            <MobileNavDrawer links={categories} />
+            {/* Busca desktop */}
+            <SearchBar />
+
+            {/* Ações — gap menor no mobile para caber a logo completa */}
+            <div className="flex items-center gap-0.5 shrink-0 sm:gap-s2">
+              <UserMenuPopover userEmail={userEmail} />
+
+              <CartIcon />
+              <MobileNavDrawer links={categories} />
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* ── ROW 3 — Category NavBar ────────────────────────────── */}
+      {/* ── ROW 3 — Category NavBar (sticky colada abaixo da ROW 2) */}
       <nav
         aria-label="Categorias"
-        className="bg-gdeep border-t border-[rgba(255,255,255,.08)]"
+        className="sticky top-16 z-40 bg-gdeep border-t border-[rgba(255,255,255,.08)] font-sans md:top-[93px]"
       >
         <div className="max-w-container mx-auto px-4 md:px-s10 h-[58px] flex items-center">
           <CategoryBar categories={categories} />
         </div>
       </nav>
-    </header>
+    </>
   )
 }

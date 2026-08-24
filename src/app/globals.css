@@ -22,7 +22,8 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-poppins), sans-serif;
-  overflow-x: hidden;
+  /* clip não cria scroll container — overflow-x:hidden no body quebra position:sticky */
+  overflow-x: clip;
 }
 
 @layer utilities {

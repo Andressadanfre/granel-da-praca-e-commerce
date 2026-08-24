@@ -84,10 +84,12 @@ export function CategoryBar({ categories }: Props) {
     if (!dropdownOpen) return
     updateDropdownPosition()
     window.addEventListener('resize', updateDropdownPosition)
+    window.addEventListener('scroll', updateDropdownPosition, { passive: true })
     const scrollEl = scrollRef.current
     scrollEl?.addEventListener('scroll', updateDropdownPosition)
     return () => {
       window.removeEventListener('resize', updateDropdownPosition)
+      window.removeEventListener('scroll', updateDropdownPosition)
       scrollEl?.removeEventListener('scroll', updateDropdownPosition)
     }
   }, [dropdownOpen, visibleCount])
@@ -113,7 +115,7 @@ export function CategoryBar({ categories }: Props) {
     <div className="relative w-full">
 
       {/* Seta esquerda */}
-      {!isMobile && showLeft && (
+      {showLeft && (
         <button
           onClick={() => scrollBy(-200)}
           aria-label="Rolar categorias para a esquerda"
@@ -129,7 +131,7 @@ export function CategoryBar({ categories }: Props) {
         ref={scrollRef}
         className="hide-scrollbar flex items-center overflow-x-auto w-full"
       >
-        {!isMobile && showLeft && <div className="shrink-0 w-12" aria-hidden="true" />}
+        {showLeft && <div className="shrink-0 w-12" aria-hidden="true" />}
 
         <Link
           href="/loja"
@@ -190,7 +192,7 @@ export function CategoryBar({ categories }: Props) {
         )}
 
         {/* Espaço para seta direita — no fim do track de scroll */}
-        {!isMobile && showRight && <div className="shrink-0 w-12" aria-hidden="true" />}
+        {showRight && <div className="shrink-0 w-12" aria-hidden="true" />}
       </div>
 
       {/* Dropdown — fixed para não ser cortado por overflow-x-auto */}
@@ -222,7 +224,7 @@ export function CategoryBar({ categories }: Props) {
       )}
 
       {/* Seta direita */}
-      {!isMobile && showRight && (
+      {showRight && (
         <button
           onClick={() => scrollBy(200)}
           aria-label="Rolar categorias para a direita"

@@ -97,7 +97,7 @@ export default async function ProductDetailPage({ params }: Props) {
       <main className="bg-cream min-h-screen">
         <div className="max-w-container mx-auto px-s5 xl:px-0 pt-8 pb-16">
           <div className="grid lg:grid-cols-[480px_1fr] gap-8 lg:gap-12 items-start">
-            <div className="lg:sticky lg:top-[88px]">
+            <div className="lg:sticky lg:top-[167px]">
               <ProductDetailHero produto={produto} />
             </div>
             <div>
