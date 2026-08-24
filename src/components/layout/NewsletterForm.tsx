@@ -29,7 +29,7 @@ export function NewsletterForm() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <input
           type="email"
           value={email}
@@ -38,13 +38,13 @@ export function NewsletterForm() {
           aria-label="E-mail para newsletter"
           required
           disabled={status === 'loading' || status === 'success'}
-          className="h-[46px] w-[280px] border-[1.5px] border-white/25 rounded-pill bg-black/[.18] text-white text-[13px] px-5 outline-none font-sans backdrop-blur transition-[border-color] duration-[180ms] ease-in-out"
+          className="h-[46px] w-full sm:w-[280px] border-[1.5px] border-white/25 rounded-pill bg-black/[.18] text-white text-[13px] px-5 outline-none font-sans backdrop-blur transition-[border-color] duration-[180ms] ease-in-out"
         />
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
           className={cn(
-            'h-[46px] px-6 text-gd border-0 rounded-pill text-[13px] font-bold whitespace-nowrap font-sans tracking-[.02em] transition-[background,transform] duration-[180ms] ease-in-out',
+            'h-[46px] px-6 w-full sm:w-auto text-gd border-0 rounded-pill text-[13px] font-bold whitespace-nowrap font-sans tracking-[.02em] transition-[background,transform] duration-[180ms] ease-in-out',
             status === 'success' ? 'bg-green-200' : 'bg-white',
             status === 'loading' || status === 'success' ? 'cursor-default' : 'cursor-pointer'
           )}
