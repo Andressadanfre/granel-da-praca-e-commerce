@@ -2,7 +2,7 @@
 // Server Component — sem 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, Check, Truck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 import { HeroSlider } from './HeroSlider'
 
@@ -35,23 +35,7 @@ export function HeroBanner() {
             Peça até às 17h em dias úteis (sáb. até 11h) e receba ainda hoje em Uberlândia.
           </p>
 
-          {/* Pills de benefício */}
-          <div className="flex flex-wrap gap-s3 mb-9">
-            <div className="flex items-center gap-[6px] bg-white border border-bd rounded-input px-s3 py-[6px]">
-              <Truck size={14} strokeWidth={1.6} className="text-g" aria-hidden />
-              <span className="text-xs font-semibold text-t7">Frete grátis acima de R$100</span>
-            </div>
-            <div className="flex items-center gap-[6px] bg-white border border-bd rounded-input px-s3 py-[6px]">
-              <Check size={14} strokeWidth={1.6} className="text-g" aria-hidden />
-              <span className="text-xs font-semibold text-t7">10% OFF na 1ª compra</span>
-            </div>
-            <div className="flex items-center gap-[6px] bg-white border border-bd rounded-input px-s3 py-[6px]">
-              <Check size={14} strokeWidth={1.6} className="text-g" aria-hidden />
-              <span className="text-xs font-semibold text-t7">Retirada na loja Fundinho</span>
-            </div>
-          </div>
-
-          {/* CTAs */}
+          {/* CTA */}
           <div className="flex flex-wrap gap-s3 items-center">
             <Link
               href="/loja"
@@ -59,12 +43,6 @@ export function HeroBanner() {
             >
               Ver todos os produtos
               <ArrowRight size={16} strokeWidth={1.6} aria-hidden />
-            </Link>
-            <Link
-              href="/ofertas"
-              className="hero-cta-secondary inline-flex items-center gap-s2 bg-transparent hover:bg-g-muted text-gdeep no-underline text-[15px] font-semibold px-6 py-[14px] rounded-inner border-2 border-gdeep transition-colors duration-[180ms] ease-in-out"
-            >
-              Ver ofertas
             </Link>
           </div>
         </div>
