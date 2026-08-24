@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 
 import { OfertaCard } from '@/components/product/OfertaCard'
 import { OfertasCountdown } from '@/components/sections/OfertasCountdown'
+import { getWeeklyOfferExpiresAt } from '@/lib/offers/weekly-offer'
 import { getSupabaseServer } from '@/lib/supabase/server'
 import type { Tables } from '@/types/database'
 
@@ -52,7 +53,7 @@ async function loadOfertas(): Promise<OfertaRow[]> {
 }
 
 export default async function OfertasSection() {
-  const rows = await loadOfertas()
+  const [rows, expiresAt] = await Promise.all([loadOfertas(), getWeeklyOfferExpiresAt()])
   if (rows.length === 0) return null
 
   return (
@@ -90,7 +91,7 @@ export default async function OfertasSection() {
               enquanto durar o estoque.
             </p>
 
-            <OfertasCountdown />
+            <OfertasCountdown expiresAt={expiresAt} />
 
             <Link
               href="/ofertas"

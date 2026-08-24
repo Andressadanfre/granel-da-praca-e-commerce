@@ -455,6 +455,24 @@ export type Database = {
           },
         ]
       }
+      weekly_offer_settings: {
+        Row: {
+          expires_at: string
+          id: boolean
+          updated_at: string
+        }
+        Insert: {
+          expires_at: string
+          id?: boolean
+          updated_at?: string
+        }
+        Update: {
+          expires_at?: string
+          id?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

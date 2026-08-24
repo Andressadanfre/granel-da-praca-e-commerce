@@ -10,16 +10,8 @@ interface TimeLeft {
   s: string
 }
 
-function getSundayEnd(): Date {
-  const now = new Date()
-  const sunday = new Date()
-  sunday.setDate(now.getDate() + ((7 - now.getDay()) % 7 || 7))
-  sunday.setHours(23, 59, 59, 0)
-  return sunday
-}
-
-function calcTimeLeft(sunday: Date): TimeLeft | null {
-  const diff = sunday.getTime() - Date.now()
+function calcTimeLeft(target: Date): TimeLeft | null {
+  const diff = target.getTime() - Date.now()
   if (diff <= 0) return null
   const h = Math.floor(diff / 3600000)
   const m = Math.floor((diff % 3600000) / 60000)
@@ -48,14 +40,20 @@ function CdBlock({ value, label }: { value: string; label: string }) {
   )
 }
 
-export function OfertasCountdown({ className }: { className?: string }) {
+export function OfertasCountdown({
+  className,
+  expiresAt,
+}: {
+  className?: string
+  expiresAt: string
+}) {
   const [time, setTime] = useState<TimeLeft>({ h: '00', m: '00', s: '00' })
 
   useEffect(() => {
-    const sunday = getSundayEnd()
+    const target = new Date(expiresAt)
 
     function update() {
-      const next = calcTimeLeft(sunday)
+      const next = calcTimeLeft(target)
       if (!next) return
       setTime(next)
     }
@@ -63,7 +61,7 @@ export function OfertasCountdown({ className }: { className?: string }) {
     update()
     const id = window.setInterval(update, 1000)
     return () => window.clearInterval(id)
-  }, [])
+  }, [expiresAt])
 
   return (
     <div

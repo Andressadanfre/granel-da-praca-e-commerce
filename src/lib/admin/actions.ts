@@ -142,3 +142,94 @@ export async function markItemSeparated(
     return { success: false, error: 'Erro interno' }
   }
 }
+
+function isValidFutureIso(expiresAt: string): boolean {
+  const parsed = new Date(expiresAt)
+  return !Number.isNaN(parsed.getTime()) && parsed.getTime() > Date.now()
+}
+
+export async function updateWeeklyOfferExpiresAt(
+  expiresAt: string,
+): Promise<{ success: boolean; error?: string }> {
+  const supabaseServer = getSupabaseServer()
+  const { data: { user } } = await supabaseServer.auth.getUser()
+
+  if (!user) {
+    return { success: false, error: 'Não autenticado' }
+  }
+
+  if (!(await isAdminUser(user.id))) {
+    return { success: false, error: 'Acesso negado' }
+  }
+
+  if (!isValidFutureIso(expiresAt)) {
+    return { success: false, error: 'Data inválida ou no passado' }
+  }
+
+  try {
+    const supabaseAdmin = getSupabaseAdmin()
+    const nextIso = new Date(expiresAt).toISOString()
+
+    const { data: currentSettings, error: fetchError } = await supabaseAdmin
+      .from('weekly_offer_settings')
+      .select('expires_at')
+      .eq('id', true)
+      .maybeSingle()
+
+    if (fetchError) {
+      logError(
+        logger,
+        fetchError,
+        { route: 'admin/updateWeeklyOfferExpiresAt', user_id: user.id },
+        'Erro ao buscar prazo atual da oferta semanal',
+      )
+      return { success: false, error: 'Erro interno' }
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from('weekly_offer_settings')
+      .update({ expires_at: nextIso, updated_at: new Date().toISOString() })
+      .eq('id', true)
+
+    if (updateError) {
+      logError(
+        logger,
+        updateError,
+        { route: 'admin/updateWeeklyOfferExpiresAt', user_id: user.id },
+        'Erro ao atualizar prazo da oferta semanal',
+      )
+      return { success: false, error: 'Erro interno' }
+    }
+
+    const { error: auditError } = await supabaseAdmin.from('admin_audit_log').insert({
+      action: 'update_expires_at',
+      entity: 'weekly_offer_settings',
+      entity_id: 'weekly_offer_settings',
+      user_id: user.id,
+      old_value: { expires_at: currentSettings?.expires_at ?? null },
+      new_value: { expires_at: nextIso },
+    })
+
+    if (auditError) {
+      logError(
+        logger,
+        auditError,
+        { route: 'admin/updateWeeklyOfferExpiresAt', user_id: user.id },
+        'Erro ao registrar audit log',
+      )
+      return { success: false, error: 'Erro interno' }
+    }
+
+    revalidatePath('/admin/produtos')
+    revalidatePath('/')
+    return { success: true }
+  } catch (error) {
+    logError(
+      logger,
+      error,
+      { route: 'admin/updateWeeklyOfferExpiresAt', user_id: user.id },
+      'Erro inesperado ao atualizar prazo da oferta semanal',
+    )
+    return { success: false, error: 'Erro interno' }
+  }
+}

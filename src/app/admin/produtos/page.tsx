@@ -11,7 +11,9 @@ import {
   type AdminProductListItem,
 } from '@/lib/admin/products'
 import { STOCK_STATUS_STYLES } from '@/lib/admin/labels'
+import { getWeeklyOfferExpiresAt } from '@/lib/offers/weekly-offer'
 import { ProductFilters } from '@/components/admin/ProductFilters'
+import { WeeklyOfferCard } from '@/components/admin/WeeklyOfferCard'
 import { formatBRL, formatGrams, cn } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
@@ -116,10 +118,11 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
     pagina: paginaParam,
   }
 
-  const [{ products, total }, tabCounts, categorias] = await Promise.all([
+  const [{ products, total }, tabCounts, categorias, currentExpiresAt] = await Promise.all([
     getAdminProducts({ search: busca, categoryId, productType, tab, sortBy, page, pageSize: PAGE_SIZE }),
     getProductTabCounts(),
     getActiveCategories(),
+    getWeeklyOfferExpiresAt(),
   ])
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
@@ -140,6 +143,8 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
           Novo produto
         </Link>
       </div>
+
+      <WeeklyOfferCard currentExpiresAt={currentExpiresAt} />
 
       <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="flex items-center gap-2.5 rounded-inner border border-bd bg-white p-3.5">
