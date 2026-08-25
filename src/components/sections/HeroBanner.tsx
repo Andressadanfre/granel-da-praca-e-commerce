@@ -9,10 +9,10 @@ import { HeroSlider } from './HeroSlider'
 export function HeroBanner() {
   return (
     <section aria-label="Banner principal" className="bg-cream overflow-hidden">
-      <div className="mx-auto max-w-container px-4 sm:px-s10 grid grid-cols-1 sm:grid-cols-2 items-center sm:min-h-[520px] gap-s12">
+      <div className="mx-auto grid max-w-container grid-cols-1 items-center gap-s12 px-4 py-s10 sm:grid-cols-2 sm:px-s10 lg:py-s12">
 
         {/* ── Coluna de copy ─────────────────────────────────────── */}
-        <div className="py-[56px]">
+        <div>
 
           {/* Eyebrow pill */}
           <div className="inline-flex items-center gap-s2 bg-g-light rounded-pill px-[14px] py-[6px] mb-5">
