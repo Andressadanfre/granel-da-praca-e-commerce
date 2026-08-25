@@ -7,6 +7,7 @@ import type {
   OrderDeliveryType,
   OrderStatus,
   PaymentMethod,
+  PaymentStatus,
 } from '@/lib/orders/types'
 
 type OrderItemRow = {
@@ -24,6 +25,7 @@ type OrderRow = {
   tracking_token: string
   status: OrderStatus
   payment_method: PaymentMethod
+  payment_status: PaymentStatus
   delivery_type: OrderDeliveryType
   total_cents: number
   created_at: string
@@ -56,6 +58,7 @@ export async function loadAccountPageData(
         tracking_token,
         status,
         payment_method,
+        payment_status,
         delivery_type,
         total_cents,
         created_at,
@@ -96,6 +99,7 @@ export async function loadAccountPageData(
     trackingToken: row.tracking_token,
     status: row.status,
     paymentMethod: row.payment_method,
+    paymentStatus: row.payment_status,
     deliveryType: row.delivery_type,
     totalCents: row.total_cents,
     createdAt: row.created_at,

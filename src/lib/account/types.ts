@@ -2,6 +2,7 @@ import type {
   OrderDeliveryType,
   OrderStatus,
   PaymentMethod,
+  PaymentStatus,
 } from '@/lib/orders/types'
 
 export type AccountOrderItem = {
@@ -19,6 +20,7 @@ export type AccountOrder = {
   trackingToken: string
   status: OrderStatus
   paymentMethod: PaymentMethod
+  paymentStatus: PaymentStatus
   deliveryType: OrderDeliveryType
   totalCents: number
   createdAt: string

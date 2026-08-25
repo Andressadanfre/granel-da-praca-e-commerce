@@ -322,7 +322,7 @@ export default async function PedidoPage({ params }: Props) {
               <strong className="text-[13px] font-bold text-t9">{order.code}</strong>
             </div>
 
-            {isFailed && <RetryPaymentButton trackingToken={params.token} />}
+            {(isFailed || isPending) && <RetryPaymentButton trackingToken={params.token} />}
           </div>
 
           {/* Timeline */}

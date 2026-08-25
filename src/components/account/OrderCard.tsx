@@ -7,6 +7,7 @@ import { ChevronDown, Clock } from 'lucide-react'
 import { BuyAgainButton } from '@/components/account/BuyAgainButton'
 import { OrderStatusBadge } from '@/components/account/OrderStatusBadge'
 import { PaymentMethodRow } from '@/components/account/PaymentMethodRow'
+import { RetryPaymentButton } from '@/components/order/RetryPaymentButton'
 import { OrderTimeline } from '@/components/order/OrderTimeline'
 import { formatOrderDateLong } from '@/lib/account/formatOrderDateLong'
 import {
@@ -41,6 +42,9 @@ export function OrderCard({ order }: OrderCardProps) {
   const inProgress = isInProgressStatus(order.status)
   const completed = isCompletedStatus(order.status)
   const hiddenCount = Math.max(0, order.items.length - PREVIEW_ITEMS)
+  const isOnlineMethod = order.paymentMethod === 'pix' || order.paymentMethod === 'cartao_credito' || order.paymentMethod === 'cartao_debito'
+  const paymentPending = isOnlineMethod && order.paymentStatus === 'pendente'
+  const paymentFailed = order.paymentStatus === 'falhou'
 
   return (
     <article
@@ -60,6 +64,20 @@ export function OrderCard({ order }: OrderCardProps) {
           <p className="text-base font-bold text-gdeep">{formatBRL(order.totalCents)}</p>
         </div>
       </div>
+
+      {(paymentPending || paymentFailed) && (
+        <div className="mb-4 flex flex-col gap-2 rounded-inner border border-[#FDE68A] bg-[#FFFBEB] px-4 py-3">
+          <p className="text-[13px] font-semibold text-[#92400E]">
+            {paymentFailed ? 'Pagamento não aprovado' : 'Aguardando confirmação do pagamento'}
+          </p>
+          <p className="text-xs text-[#78350F]">
+            {paymentFailed
+              ? 'Não conseguimos confirmar seu pagamento. Tente novamente para que possamos separar seu pedido.'
+              : 'Assim que o pagamento for aprovado, seu pedido entrará na fila de separação.'}
+          </p>
+          <RetryPaymentButton trackingToken={order.trackingToken} />
+        </div>
+      )}
 
       <ul className="mb-4 flex flex-col gap-2.5">
         {order.items.map((item, index) => {
