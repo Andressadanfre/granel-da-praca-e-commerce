@@ -11,9 +11,15 @@ import {
   calcGranelItemServer,
   calcUnitItemServer,
 } from './calculations'
-import { createMPPreference, cartItemsToMPItems } from './mercadopago'
-import { PAY_ON_DELIVERY_METHODS } from './types'
+import { createMPPreference, cartItemsToMPItems, type MPCheckoutPaymentMethod } from './mercadopago'
+import { PAY_ON_DELIVERY_METHODS, type PaymentMethod } from './types'
 import type { Json } from '@/types/database'
+
+function isMPCheckoutPaymentMethod(
+  method: PaymentMethod,
+): method is MPCheckoutPaymentMethod {
+  return method === 'pix' || method === 'cartao_credito' || method === 'cartao_debito'
+}
 
 // ─── Tipos de retorno ─────────────────────────────────────────────────────────
 
@@ -150,6 +156,10 @@ export async function createOrderAction(
   }
 
   try {
+    if (!isMPCheckoutPaymentMethod(data.paymentMethod)) {
+      return { success: false, error: 'Método de pagamento inválido.' }
+    }
+
     const mpResult = await createMPPreference({
       orderId,
       orderCode,
@@ -161,6 +171,8 @@ export async function createOrderAction(
       ),
       shippingCents,
       discountCents,
+      totalCents,
+      paymentMethod: data.paymentMethod,
       payer: {
         name:  data.customerName ?? undefined,
         email: data.customerEmail ?? undefined,
@@ -260,13 +272,14 @@ export async function retryOrderPayment(
 
   const supabase = getSupabaseAdmin()
 
-  // payment_status = 'falhou' exigido na própria query — pedido inexistente e
-  // pedido em outro status retornam o mesmo erro genérico (evita enumeração)
+  // payment_status em ['falhou', 'pendente'] exigido na própria query —
+  // pedido inexistente e pedido em outro status retornam o mesmo erro
+  // genérico (evita enumeração). 'pendente' cobre pagamento abandonado.
   const { data: order, error: orderError } = await supabase
     .from('orders')
-    .select('id, code, tracking_token, shipping_cents, discount_cents, customer_name, customer_phone, customer_email')
+    .select('id, code, tracking_token, shipping_cents, discount_cents, total_cents, payment_method, customer_name, customer_phone, customer_email')
     .eq('tracking_token', trackingToken)
-    .eq('payment_status', 'falhou')
+    .in('payment_status', ['falhou', 'pendente'])
     .eq('is_deleted', false)
     .single()
 
@@ -296,6 +309,10 @@ export async function retryOrderPayment(
   items.forEach(item => { productNames[item.product_id] = item.product_name })
 
   try {
+    if (!isMPCheckoutPaymentMethod(order.payment_method)) {
+      return { success: false, error: 'Este pedido não pode ser reprocessado.' }
+    }
+
     const mpResult = await createMPPreference({
       orderId:       order.id,
       orderCode:     order.code,
@@ -303,6 +320,8 @@ export async function retryOrderPayment(
       items:         cartItemsToMPItems(serverItems, productIds, productNames),
       shippingCents: order.shipping_cents,
       discountCents: order.discount_cents,
+      totalCents:    order.total_cents,
+      paymentMethod: order.payment_method,
       payer: {
         name:  order.customer_name ?? undefined,
         email: order.customer_email ?? undefined,

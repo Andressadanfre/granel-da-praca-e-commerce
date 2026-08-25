@@ -1,4 +1,5 @@
 import MercadoPagoConfig, { Preference } from 'mercadopago'
+import { PARCELA_2X_THRESHOLD, PARCELA_3X_THRESHOLD } from '@/lib/cart/constants'
 import type { ServerCartItem } from './calculations'
 import { calcGranelItemServer, calcUnitItemServer } from './calculations'
 
@@ -19,6 +20,8 @@ export interface MPPreferenceItem {
   currency_id: 'BRL'
 }
 
+export type MPCheckoutPaymentMethod = 'pix' | 'cartao_credito' | 'cartao_debito'
+
 export interface CreatePreferenceInput {
   orderId: string
   orderCode: string
@@ -26,6 +29,8 @@ export interface CreatePreferenceInput {
   items: MPPreferenceItem[]
   shippingCents: number
   discountCents: number
+  totalCents: number
+  paymentMethod: MPCheckoutPaymentMethod
   payer?: {
     name?: string
     email?: string
@@ -39,6 +44,15 @@ export interface MPPreferenceResult {
   sandboxInitPoint: string // URL de pagamento teste
 }
 
+// ─── Regra de parcelamento — PRD "Pagamentos Online", sem juros ao cliente ──
+// ≥ R$150 → até 2x · ≥ R$300 → até 3x · abaixo disso → à vista obrigatório
+// Nunca acima de 3x em nenhuma hipótese.
+function computeMaxInstallments(totalCents: number): number {
+  if (totalCents >= PARCELA_3X_THRESHOLD) return 3
+  if (totalCents >= PARCELA_2X_THRESHOLD) return 2
+  return 1
+}
+
 // ─── Criação de preferência ───────────────────────────────────────────────────
 export async function createMPPreference(
   input: CreatePreferenceInput,
@@ -47,6 +61,14 @@ export async function createMPPreference(
   const preference = new Preference(client)
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  // Boleto nunca fez parte do escopo do projeto — excluído sempre.
+  // Pix selecionado no site → mostra só Pix no MP. Cartão selecionado →
+  // mostra só cartão (crédito/débito), esconde Pix.
+  const excludedTypes =
+    input.paymentMethod === 'pix'
+      ? [{ id: 'ticket' }, { id: 'credit_card' }, { id: 'debit_card' }]
+      : [{ id: 'ticket' }, { id: 'bank_transfer' }]
 
   const body = {
     external_reference: input.orderId,
@@ -58,6 +80,10 @@ export async function createMPPreference(
       ? input.discountCents / 100
       : undefined,
     payer: input.payer,
+    payment_methods: {
+      installments: computeMaxInstallments(input.totalCents),
+      excluded_payment_types: excludedTypes,
+    },
     back_urls: {
       success: `${appUrl}/pedido/${input.trackingToken}?status=sucesso`,
       failure: `${appUrl}/pedido/${input.trackingToken}?status=falhou`,
