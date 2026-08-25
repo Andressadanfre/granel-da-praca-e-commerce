@@ -7,11 +7,19 @@ import type { ProductCardProps } from '@/components/product/ProductCard'
 import type { Tables } from '@/types/database'
 
 const FEATURED_PRODUCT_SELECT =
-  'id, name, slug, unit, product_type, price_cents, compare_at_cents, stock_status, categories(name, slug)' as const
+  'id, name, slug, unit, product_type, price_cents, compare_at_cents, stock_status, image_url, categories(name, slug)' as const
 
 type ProductWithCategory = Pick<
   Tables<'products'>,
-  'id' | 'name' | 'slug' | 'unit' | 'product_type' | 'price_cents' | 'compare_at_cents' | 'stock_status'
+  | 'id'
+  | 'name'
+  | 'slug'
+  | 'unit'
+  | 'product_type'
+  | 'price_cents'
+  | 'compare_at_cents'
+  | 'stock_status'
+  | 'image_url'
 > & {
   categories: { name: string; slug: string } | null
 }
@@ -42,6 +50,7 @@ function toCardProps(p: ProductWithCategory): ProductCardProps {
           : p.compare_at_cents,
     discountPercent,
     packageLabel: isGranel ? 'A granel' : p.unit,
+    imageUrl: p.image_url ?? undefined,
     state:
       p.stock_status === 'out_of_stock'
         ? 'out-of-stock'
