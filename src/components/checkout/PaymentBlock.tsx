@@ -7,7 +7,7 @@ import { formatBRL } from '@/lib/utils'
 interface PaymentBlockProps {
   paymentMethod: PaymentMethod
   onPaymentMethodChange: (method: PaymentMethod) => void
-  subtotalCents: number
+  totalCents: number
   needsChange: boolean
   changeAmount: string
   onNeedsChangeToggle: (needs: boolean) => void
@@ -33,15 +33,15 @@ function maskMoney(value: string): string {
 export function PaymentBlock({
   paymentMethod,
   onPaymentMethodChange,
-  subtotalCents,
+  totalCents,
   needsChange,
   changeAmount,
   onNeedsChangeToggle,
   onChangeAmountChange,
 }: PaymentBlockProps) {
-  const maxInstallments = subtotalCents >= PARCELA_3X_THRESHOLD
+  const maxInstallments = totalCents >= PARCELA_3X_THRESHOLD
     ? 3
-    : subtotalCents >= PARCELA_2X_THRESHOLD
+    : totalCents >= PARCELA_2X_THRESHOLD
       ? 2
       : 1
 
