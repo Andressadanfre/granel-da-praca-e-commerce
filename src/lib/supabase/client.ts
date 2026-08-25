@@ -1,7 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
 
-function requireEnv(name: string): string {
-  const value = process.env[name]
+function requireEnv(value: string | undefined, name: string): string {
   if (!value) {
     throw new Error(`[Supabase] Variavel de ambiente ausente: ${name}. Verifique o .env.local`)
   }
@@ -11,7 +10,7 @@ function requireEnv(name: string): string {
 // Usar em Client Components ('use client') com ANON_KEY - RLS ativo
 export function getSupabase() {
   return createBrowserClient(
-    requireEnv('NEXT_PUBLIC_SUPABASE_URL'),
-    requireEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+    requireEnv(process.env.NEXT_PUBLIC_SUPABASE_URL, 'NEXT_PUBLIC_SUPABASE_URL'),
+    requireEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, 'NEXT_PUBLIC_SUPABASE_ANON_KEY'),
   )
 }
