@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { Check, Loader2 } from 'lucide-react'
 
 import { updateOrderStatus } from '@/lib/admin/actions'
@@ -16,6 +17,7 @@ const actionBtnClass =
   'flex h-7 w-7 items-center justify-center rounded-input border border-bd bg-white text-t6 transition-colors hover:border-gd hover:bg-badge-diet-bg hover:text-gd disabled:cursor-not-allowed disabled:opacity-50'
 
 export function AcceptOrderButton({ orderId, deliveryType }: AcceptOrderButtonProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -25,7 +27,9 @@ export function AcceptOrderButton({ orderId, deliveryType }: AcceptOrderButtonPr
       const result = await updateOrderStatus(orderId, 'aceito', deliveryType)
       if (!result.success) {
         setError(result.error ?? 'Erro interno')
+        return
       }
+      router.refresh()
     })
   }
 
