@@ -45,25 +45,19 @@ export function UserMenuPopover({ userEmail }: UserMenuPopoverProps) {
         aria-expanded={open}
         aria-haspopup="true"
         onClick={() => setOpen((v) => !v)}
+        className="flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-sel px-2.5 text-[13px] font-medium text-t6 sm:justify-start"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          height: '44px',
-          padding: '0 10px',
           background: 'transparent',
           border: 'none',
           cursor: 'pointer',
-          fontSize: '13px',
-          fontWeight: 500,
-          color: '#4B5563',
           fontFamily: 'var(--font-poppins), sans-serif',
-          borderRadius: '10px',
           transition: 'color .15s',
         }}
       >
         <User size={22} strokeWidth={1.6} />
-        <span style={{ whiteSpace: 'nowrap' }}>{userEmail ? 'Minha conta' : 'Entrar'}</span>
+        <span className="hidden whitespace-nowrap sm:inline">
+          {userEmail ? 'Minha conta' : 'Entrar'}
+        </span>
       </button>
 
       <div
