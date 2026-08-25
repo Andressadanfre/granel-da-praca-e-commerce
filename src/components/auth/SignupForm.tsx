@@ -27,6 +27,7 @@ export function SignupForm() {
       name: name.trim(),
       email: email.trim(),
       password,
+      termsAccepted: true,
     })
 
     if (!result.success) {
@@ -123,6 +124,13 @@ export function SignupForm() {
               {error}
             </div>
           )}
+
+          <p className="text-center text-[11px] leading-[1.5] text-t4">
+            Ao criar sua conta, você concorda com nossos{' '}
+            <Link href="/termos" className="text-g underline">Termos de Uso</Link>{' '}
+            e{' '}
+            <Link href="/privacidade" className="text-g underline">Política de Privacidade</Link>.
+          </p>
 
           <button
             type="submit"
