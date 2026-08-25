@@ -8,22 +8,18 @@ import { NewsletterForm } from './NewsletterForm'
 
 const LOJA_LINKS = [
   { href: '/loja', label: 'Todos os produtos' },
-  { href: '/loja/oleaginosas', label: 'Castanhas & Oleaginosas' },
-  { href: '/loja/graos', label: 'Grãos & Leguminosas' },
-  { href: '/loja/farinhas', label: 'Farinhas & Cereais' },
-  { href: '/loja/chas', label: 'Chás & Infusões' },
-  { href: '/loja/superalimentos', label: 'Superalimentos', badge: 'NOVO' },
+  { href: '/loja?categoria=oleaginosas', label: 'Castanhas & Oleaginosas' },
+  { href: '/loja?categoria=graos', label: 'Grãos & Leguminosas' },
+  { href: '/loja?categoria=farinhas', label: 'Farinhas & Cereais' },
+  { href: '/loja?categoria=chas', label: 'Chás & Infusões' },
+  { href: '/loja?categoria=superalimentos', label: 'Superalimentos', badge: 'NOVO' },
   { href: '/ofertas', label: 'Ofertas da semana' },
 ]
 
 const INFO_LINKS = [
   { href: '/sobre', label: 'Sobre nós' },
-  { href: '/como-funciona', label: 'Como funciona' },
   { href: '/entrega', label: 'Entrega e retirada' },
-  { href: '/fidelidade', label: 'Programa de fidelidade' },
-  { href: '/faq', label: 'Perguntas frequentes' },
-  { href: '/minha-conta', label: 'Minha conta' },
-  { href: '/rastreio', label: 'Rastrear pedido' },
+  { href: '/conta', label: 'Minha conta' },
 ]
 
 const PAYMENT_METHODS = ['PIX', 'Mercado Pago', 'Crédito', 'Débito', 'Alelo', 'Dinheiro']
@@ -84,7 +80,7 @@ export function Footer() {
             </div>
 
             <p className="text-[12.5px] text-white/[.82] leading-[1.65] mb-6 max-w-[220px]">
-              Produtos naturais a granel com qualidade, transparência e cuidado. Dois espaços físicos em Uberlândia desde 2019.
+              Produtos naturais a granel com qualidade, transparência e cuidado. Duas lojas físicas em Uberlândia desde 2019.
             </p>
 
             <div className="flex gap-2 mb-7">
