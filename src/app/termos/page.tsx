@@ -55,7 +55,7 @@ export default function TermosDeUsoPage() {
       <h2>5. Entrega e retirada</h2>
       <ul>
         <li><strong>Frete grátis</strong> para pedidos acima de R$100; frete fixo de <strong>R$15</strong> abaixo desse valor.</li>
-        <li>Pedidos devem ser feitos até <strong>14h</strong> para entrega no mesmo ciclo.</li>
+        <li>Pedidos devem ser feitos até <strong>17h</strong> (dias úteis) ou até <strong>11h</strong> (sábados) para entrega no mesmo dia.</li>
         <li><strong>Não realizamos entregas aos domingos.</strong></li>
         <li>
           <strong>Retirada e entrega dos pedidos do site são realizadas exclusivamente pela
