@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import type { CartItem } from '@/lib/cart/types'
 import type { OrderDeliveryType, PaymentMethod } from '@/lib/orders/types'
 import { getCartItems, clearCart } from '@/lib/cart/storage'
+import { calcFrete } from '@/lib/cart/calculations'
 import { createOrderAction } from '@/lib/orders/actions'
 import { CheckoutTopbar } from './CheckoutTopbar'
 import { DeliveryBlock } from './DeliveryBlock'
@@ -77,6 +78,11 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
     if (item.productType === 'granel') return acc + Math.round(item.priceCents * item.quantity / 100)
     return acc + item.priceCents * item.quantity
   }, 0)
+
+  // Total pro cálculo de parcelamento — mesmo critério do MP (server) e do
+  // OrderSummaryPanel: subtotal + frete, frete zerado se for retirada.
+  const shippingCentsForInstallments = deliveryType === 'retirada' ? 0 : calcFrete(subtotalCents)
+  const totalCentsForInstallments = subtotalCents + shippingCentsForInstallments
 
   async function handleSubmit() {
     setError(null)
@@ -243,7 +249,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
           <PaymentBlock
             paymentMethod={paymentMethod}
             onPaymentMethodChange={setPaymentMethod}
-            subtotalCents={subtotalCents}
+            totalCents={totalCentsForInstallments}
             needsChange={needsChange}
             changeAmount={changeAmount}
             onNeedsChangeToggle={setNeedsChange}
