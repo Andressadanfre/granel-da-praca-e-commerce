@@ -236,6 +236,8 @@ export default async function AdminPedidosPage({
                             <AcceptOrderButton
                               orderId={order.id}
                               deliveryType={order.delivery_type}
+                              paymentStatus={order.payment_status}
+                              paymentMethod={order.payment_method}
                             />
                           )}
 

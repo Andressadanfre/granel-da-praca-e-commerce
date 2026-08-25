@@ -57,6 +57,9 @@ export function OrderActions({ order }: OrderActionsProps) {
   const nextActions = getNextActions(order.status, order.delivery_type)
   const requiresReason = order.status === 'em_separacao'
 
+  const isOnlineMethod = order.payment_method === 'pix' || order.payment_method === 'cartao_credito' || order.payment_method === 'cartao_debito'
+  const paymentUnconfirmed = order.status === 'recebido' && isOnlineMethod && order.payment_status === 'pendente'
+
   function handleAction(action: NextAction) {
     setError(null)
 
@@ -95,6 +98,16 @@ export function OrderActions({ order }: OrderActionsProps) {
     <div className="flex flex-col gap-3 rounded-card border border-bd bg-white p-5 shadow-card">
       <h2 className="text-[13px] font-semibold text-t9">Ações do pedido</h2>
 
+      {paymentUnconfirmed && (
+        <div className="flex flex-col gap-1 rounded-inner border border-[#FDE68A] bg-[#FFFBEB] px-3 py-2.5">
+          <p className="text-[12px] font-semibold text-[#92400E]">Pagamento ainda não confirmado</p>
+          <p className="text-[11px] text-[#78350F]">
+            Não separe os itens antes da confirmação. Se o cliente já avisou que pagou,
+            confira antes de aceitar mesmo assim.
+          </p>
+        </div>
+      )}
+
       {requiresReason && (
         <div className="flex flex-col gap-1.5">
           <label htmlFor="cancel-reason" className="text-[11px] font-medium text-t6">
@@ -113,21 +126,26 @@ export function OrderActions({ order }: OrderActionsProps) {
       {error && <p className="text-[11px] font-medium text-danger">{error}</p>}
 
       <div className="flex flex-col gap-2">
-        {nextActions.map(action => (
-          <button
-            key={action.status}
-            type="button"
-            disabled={isPending}
-            onClick={() => handleAction(action)}
-            className={
-              action.variant === 'danger'
-                ? 'flex h-10 items-center justify-center rounded-sel border border-danger text-[12.5px] font-semibold text-danger transition-colors hover:bg-danger/10 disabled:opacity-50'
-                : 'flex h-10 items-center justify-center rounded-sel bg-g text-[12.5px] font-semibold text-white transition-colors hover:bg-ghover disabled:opacity-50'
-            }
-          >
-            {isPending ? 'Enviando...' : action.label}
-          </button>
-        ))}
+        {nextActions.map(action => {
+          const isAcceptWithUnconfirmedPayment = action.status === 'aceito' && paymentUnconfirmed
+          return (
+            <button
+              key={action.status}
+              type="button"
+              disabled={isPending}
+              onClick={() => handleAction(action)}
+              className={
+                isAcceptWithUnconfirmedPayment
+                  ? 'flex h-10 items-center justify-center rounded-sel border border-[#FDE68A] text-[12.5px] font-semibold text-[#92400E] transition-colors hover:bg-[#FFFBEB] disabled:opacity-50'
+                  : action.variant === 'danger'
+                    ? 'flex h-10 items-center justify-center rounded-sel border border-danger text-[12.5px] font-semibold text-danger transition-colors hover:bg-danger/10 disabled:opacity-50'
+                    : 'flex h-10 items-center justify-center rounded-sel bg-g text-[12.5px] font-semibold text-white transition-colors hover:bg-ghover disabled:opacity-50'
+              }
+            >
+              {isPending ? 'Enviando...' : isAcceptWithUnconfirmedPayment ? 'Já recebi a confirmação — aceitar mesmo assim' : action.label}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
