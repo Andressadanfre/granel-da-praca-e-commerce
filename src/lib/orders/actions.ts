@@ -1,8 +1,11 @@
 'use server'
 
+import { headers } from 'next/headers'
+
 import { ensureAppUser } from '@/lib/auth/ensureAppUser'
 import { getSupabaseServer, getSupabaseAdmin } from '@/lib/supabase/server'
 import { logger, logError, logWarn } from '@/lib/logger'
+import { checkoutRatelimit } from '@/lib/rate-limit'
 import { createOrderSchema } from './schemas'
 import type { ServerCartItem } from './calculations'
 import {
@@ -14,6 +17,10 @@ import {
 import { createMPPreference, cartItemsToMPItems, type MPCheckoutPaymentMethod } from './mercadopago'
 import { PAY_ON_DELIVERY_METHODS, type PaymentMethod } from './types'
 import type { Json } from '@/types/database'
+
+function getClientIp(): string {
+  return headers().get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+}
 
 function isMPCheckoutPaymentMethod(
   method: PaymentMethod,
@@ -42,6 +49,11 @@ export interface CreateOrderError {
 export async function createOrderAction(
   input: unknown,
 ): Promise<CreateOrderResult | CreateOrderError> {
+  const ip = getClientIp()
+  const { success: rateLimitOk } = await checkoutRatelimit.limit(ip)
+  if (!rateLimitOk) {
+    return { success: false, error: 'Muitas tentativas. Aguarde um minuto e tente novamente.' }
+  }
 
   // 1. Validar input com Zod
   const parsed = createOrderSchema.safeParse(input)
@@ -266,6 +278,12 @@ export interface RetryPaymentError {
 export async function retryOrderPayment(
   trackingToken: string,
 ): Promise<RetryPaymentResult | RetryPaymentError> {
+  const ip = getClientIp()
+  const { success: rateLimitOk } = await checkoutRatelimit.limit(ip)
+  if (!rateLimitOk) {
+    return { success: false, error: 'Muitas tentativas. Aguarde um minuto e tente novamente.' }
+  }
+
   if (!TOKEN_REGEX.test(trackingToken)) {
     return { success: false, error: 'Este pedido não pode ser reprocessado.' }
   }

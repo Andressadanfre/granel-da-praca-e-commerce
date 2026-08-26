@@ -27,3 +27,10 @@ export const newsletterRatelimit = new Ratelimit({
   analytics: true,
   prefix: 'ratelimit:newsletter',
 })
+
+export const checkoutRatelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, '1 m'), // 10 pedidos/retries por IP por minuto
+  analytics: true,
+  prefix: 'ratelimit:checkout',
+})
