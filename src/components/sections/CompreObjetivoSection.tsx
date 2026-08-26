@@ -1,22 +1,22 @@
 import Link from 'next/link'
-import { Shield, Wheat, Zap, Beef, ShieldPlus, Leaf } from 'lucide-react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface ObjetivoCard {
   label: string
   query: string
-  icon: React.ReactNode
+  imageSrc: string
 }
 
 // ─── Dados estáticos — termos verificados no Supabase (ILIKE string única) ────
 const OBJETIVOS: ObjetivoCard[] = [
-  { label: 'Antioxidantes', query: 'Antioxidante', icon: <Shield size={28} strokeWidth={1.6} aria-hidden /> },
-  { label: 'Fibras', query: 'Fibras', icon: <Wheat size={28} strokeWidth={1.6} aria-hidden /> },
-  { label: 'Energia', query: 'Energia', icon: <Zap size={28} strokeWidth={1.6} aria-hidden /> },
-  { label: 'Proteína', query: 'Proteína', icon: <Beef size={28} strokeWidth={1.6} aria-hidden /> },
-  { label: 'Imunidade', query: 'Imunidade', icon: <ShieldPlus size={28} strokeWidth={1.6} aria-hidden /> },
-  { label: 'Vegano', query: 'Vegano', icon: <Leaf size={28} strokeWidth={1.6} aria-hidden /> },
+  { label: 'Antioxidantes', query: 'Antioxidante', imageSrc: '/images/objetivos/antioxidantes.webp' },
+  { label: 'Fibras', query: 'Fibras', imageSrc: '/images/objetivos/fibras.webp' },
+  { label: 'Energia', query: 'Energia', imageSrc: '/images/objetivos/energia.webp' },
+  { label: 'Proteína', query: 'Proteína', imageSrc: '/images/objetivos/proteinas.webp' },
+  { label: 'Imunidade', query: 'Imunidade', imageSrc: '/images/objetivos/imunidade.webp' },
+  { label: 'Vegano', query: 'Vegano', imageSrc: '/images/objetivos/veganos.webp' },
 ]
 
 // ─── Componente principal ──────────────────────────────────────────────────────
@@ -54,14 +54,19 @@ export default function CompreObjetivoSection() {
               >
                 <div
                   className={cn(
-                    'flex items-center justify-center rounded-full flex-shrink-0 bg-icon-bg',
-                    'transition-all duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)]',
+                    'relative h-[60px] w-[60px] overflow-hidden rounded-full flex-shrink-0 bg-icon-bg',
+                    'transition-transform duration-[180ms] ease-[cubic-bezier(.4,0,.2,1)]',
                     'group-hover:scale-110',
                   )}
-                  style={{ width: 60, height: 60 }}
                   aria-hidden="true"
                 >
-                  <span className="text-gd">{obj.icon}</span>
+                  <Image
+                    src={obj.imageSrc}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="60px"
+                  />
                 </div>
                 <span className="text-[12px] font-semibold leading-[1.4] tracking-[.01em] text-t9 transition-colors duration-[180ms]">
                   {obj.label}

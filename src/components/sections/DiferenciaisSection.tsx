@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { Dumbbell, ShoppingBag, Utensils } from 'lucide-react'
+import Image from 'next/image'
 
 // ─── tipos ────────────────────────────────────────────────────────────────────
 
 interface Card {
-  icon: React.ReactNode
+  imageSrc: string
   badge: string
   title: string
   text: string
@@ -16,21 +16,21 @@ interface Card {
 
 const CARDS: Card[] = [
   {
-    icon: <Dumbbell size={26} strokeWidth={1.6} aria-hidden />,
+    imageSrc: '/images/diferenciais/entrega-no-mesmo-dia.webp',
     badge: 'ENTREGA NO MESMO DIA',
     title: 'Pré-Treino 100% Natural',
     text: 'Energia limpa para a sua rotina, sem aditivos químicos.',
     href: '/loja?categoria=suplementos',
   },
   {
-    icon: <ShoppingBag size={26} strokeWidth={1.6} aria-hidden />,
+    imageSrc: '/images/diferenciais/qualidade-garantida.webp',
     badge: 'QUALIDADE GARANTIDA',
     title: 'Compre a Granel',
     text: 'Escolha a quantidade exata que você precisa, sem desperdício.',
     featured: true,
   },
   {
-    icon: <Utensils size={26} strokeWidth={1.6} aria-hidden />,
+    imageSrc: '/images/diferenciais/estilo-de-vida.webp',
     badge: 'ESTILO DE VIDA',
     title: 'Receitas Saudáveis',
     text: 'Inspirações práticas e fit para aplicar com nossos produtos.',
@@ -75,17 +75,20 @@ function DifCard({ card }: { card: Card }) {
         "
       />
 
-      {/* ícone circular */}
-      <div
-        className="
-          relative z-10 mb-5 flex h-14 w-14 shrink-0
-          items-center justify-center rounded-full
-          bg-g-light text-gd
-          transition-[background,transform] duration-[180ms]
-          group-hover:scale-110 group-hover:bg-badge-diet-bd
-        "
-      >
-        {card.icon}
+      {/* imagem do card — 600×400, full-bleed no topo */}
+      <div className="relative z-10 -mx-9 -mt-9 mb-5 overflow-hidden">
+        <Image
+          src={card.imageSrc}
+          alt=""
+          width={600}
+          height={400}
+          className="
+            h-auto w-full object-cover
+            transition-transform duration-[180ms]
+            group-hover:scale-105
+          "
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 380px"
+        />
       </div>
 
       {/* badge
