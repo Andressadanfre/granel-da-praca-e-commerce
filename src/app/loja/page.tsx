@@ -6,6 +6,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import ProductGrid from '@/components/sections/ProductGrid'
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton'
+import { SortSelect } from '@/components/product/SortSelect'
 import { getSupabaseServer } from '@/lib/supabase/server'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
@@ -17,6 +18,7 @@ interface LojaPageProps {
     categoria?: SearchValue
     q?: SearchValue
     pagina?: SearchValue
+    ordenar?: SearchValue
   }
 }
 
@@ -44,6 +46,7 @@ export default async function LojaPage({ searchParams }: LojaPageProps) {
   const q = first(searchParams.q)?.trim() || undefined
   const paginaStr = first(searchParams.pagina)
   const pagina = Math.max(1, paginaStr ? (Number.parseInt(paginaStr, 10) || 1) : 1)
+  const ordenar = first(searchParams.ordenar)
 
   const titulo = categoria
     ? await fetchCategoryName(categoria)
@@ -54,16 +57,19 @@ export default async function LojaPage({ searchParams }: LojaPageProps) {
       <Navigation />
       <main className="bg-cream min-h-screen">
         <section className="max-w-[1280px] mx-auto px-5 xl:px-0 pb-14 lg:pb-20">
-          <div className="mb-6 pt-10">
-            <h1 className="text-2xl font-bold text-gdeep leading-tight">
-              {titulo}
-            </h1>
-            {q && (
-              <p className="mt-1 text-sm text-t6">
-                Resultados para:{' '}
-                <span className="font-semibold text-t9">&ldquo;{q}&rdquo;</span>
-              </p>
-            )}
+          <div className="mb-6 pt-10 flex items-end justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="text-2xl font-bold text-gdeep leading-tight">
+                {titulo}
+              </h1>
+              {q && (
+                <p className="mt-1 text-sm text-t6">
+                  Resultados para:{' '}
+                  <span className="font-semibold text-t9">&ldquo;{q}&rdquo;</span>
+                </p>
+              )}
+            </div>
+            <SortSelect />
           </div>
 
           <Suspense
@@ -73,7 +79,7 @@ export default async function LojaPage({ searchParams }: LojaPageProps) {
               </div>
             }
           >
-            <ProductGrid categoria={categoria} q={q} pagina={pagina} />
+            <ProductGrid categoria={categoria} q={q} pagina={pagina} ordenar={ordenar} />
           </Suspense>
         </section>
       </main>

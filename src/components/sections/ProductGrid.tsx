@@ -25,6 +25,7 @@ export interface ProductGridProps {
   categoria?: string
   q?: string
   pagina?: number
+  ordenar?: string
 }
 
 interface ProductRow {
@@ -84,10 +85,11 @@ function toCardProps(p: ProductRow): ProductCardProps {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function buildHref(pagina: number, categoria?: string, q?: string): string {
+function buildHref(pagina: number, categoria?: string, q?: string, ordenar?: string): string {
   const params = new URLSearchParams()
   if (categoria) params.set('categoria', categoria)
   if (q) params.set('q', q)
+  if (ordenar) params.set('ordenar', ordenar)
   if (pagina > 1) params.set('pagina', String(pagina))
   const qs = params.toString()
   return `/loja${qs ? `?${qs}` : ''}`
@@ -100,11 +102,13 @@ function Paginacao({
   totalPaginas,
   categoria,
   q,
+  ordenar,
 }: {
   paginaAtual: number
   totalPaginas: number
   categoria?: string
   q?: string
+  ordenar?: string
 }) {
   if (totalPaginas <= 1) return null
 
@@ -132,7 +136,7 @@ function Paginacao({
     >
       {paginaAtual > 1 ? (
         <Link
-          href={buildHref(paginaAtual - 1, categoria, q)}
+          href={buildHref(paginaAtual - 1, categoria, q, ordenar)}
           className={cn(btnBase, 'border border-bd text-t6 hover:bg-g-muted')}
           aria-label="Página anterior"
         >
@@ -155,7 +159,7 @@ function Paginacao({
         ) : (
           <Link
             key={p}
-            href={buildHref(p, categoria, q)}
+            href={buildHref(p, categoria, q, ordenar)}
             aria-current={p === paginaAtual ? 'page' : undefined}
             className={cn(
               btnBase,
@@ -171,7 +175,7 @@ function Paginacao({
 
       {paginaAtual < totalPaginas ? (
         <Link
-          href={buildHref(paginaAtual + 1, categoria, q)}
+          href={buildHref(paginaAtual + 1, categoria, q, ordenar)}
           className={cn(btnBase, 'border border-bd text-t6 hover:bg-g-muted')}
           aria-label="Próxima página"
         >
@@ -195,6 +199,7 @@ export default async function ProductGrid({
   categoria,
   q,
   pagina = 1,
+  ordenar,
 }: ProductGridProps) {
   const supabase = getSupabaseServer()
 
@@ -236,8 +241,15 @@ export default async function ProductGrid({
     query = query.or(`name.ilike.%${qSafe}%,description.ilike.%${qSafe}%`)
   }
 
+  const sortMap: Record<string, { column: string; ascending: boolean }> = {
+    menor_preco: { column: 'price_cents', ascending: true },
+    maior_preco: { column: 'price_cents', ascending: false },
+    mais_recentes: { column: 'created_at', ascending: false },
+  }
+  const sort = (ordenar && sortMap[ordenar]) || { column: 'name', ascending: true }
+
   const { data, count, error } = await query
-    .order('name', { ascending: true })
+    .order(sort.column, { ascending: sort.ascending })
     .range(from, to)
 
   if (error) {
@@ -289,6 +301,7 @@ export default async function ProductGrid({
         totalPaginas={totalPaginas}
         categoria={categoria}
         q={q}
+        ordenar={ordenar}
       />
     </div>
   )
