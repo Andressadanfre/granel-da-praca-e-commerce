@@ -234,4 +234,17 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 | WhatsApp UMC (quiosque, sem retirada) | (34) 99796-9191 · Rua Rafael Marino Neto, 600 |
 | Site institucional (provisório) | www.graneldapraca.com.br · repo `Andressadanfre/graneldapraca-landing` |
 
-**Estado atual de implementação: ver topo do log no Notion Mapa do Projeto — nunca este arquivo.**
+## Estado atual — 27/08/2026
+
+HEAD: `7dc6a50` (push confirmado em origin/master)
+Commits da sessão: `43b47eb`, `7dc6a50`
+
+Fechado:
+- Home reordenada: Hero → TrustBadges → CompreObjetivo → Ofertas → FeaturedProducts → Diferenciais
+- CompreObjetivoSection: imagem preenche card, carrossel mobile
+- FeaturedProducts: carrossel mobile
+- HeroBanner/HeroSlider: imagem visível em todos os breakpoints, contador +400 produtos
+
+Bug corrigido (registrar como aprendizado): técnica de bleed `-mx-5 px-N` em containers com overflow-x-auto não funciona — o navegador auto-compensa o scrollLeft inicial no valor exato da margem negativa, cancelando o padding. Não usar essa técnica para respiro em carrosséis neste projeto; deixar o <ul> herdar o padding do container pai sem margem negativa.
+
+Pendente: design-system-v3-1.md seção "Hero Banner" desatualizada (spec documentada não bate com HeroSlider real) — não é regressão desta sessão, só ficou mais visível.
