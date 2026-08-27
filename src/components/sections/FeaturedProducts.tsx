@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 import { getSupabaseAdmin } from '@/lib/supabase/server'
+import { cn } from '@/lib/utils'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { ProductCardProps } from '@/components/product/ProductCard'
 import type { Tables } from '@/types/database'
@@ -119,12 +120,27 @@ export default async function FeaturedProducts() {
           </Link>
         </div>
 
-        {/* Grid */}
-        <div className="featured-products__grid grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+        {/* Carrossel mobile / grid desktop */}
+        <ul
+          className={cn(
+            'flex lg:grid lg:grid-cols-4',
+            'gap-4 lg:gap-6',
+            'overflow-x-auto lg:overflow-visible',
+            'snap-x snap-mandatory scroll-smooth',
+            '[&::-webkit-scrollbar]:hidden',
+            'list-none m-0 p-0',
+          )}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {products.map((product) => (
-            <ProductCard key={product.id} {...product} className="w-full max-w-none" />
+            <li
+              key={product.id}
+              className="flex-shrink-0 w-[68vw] max-w-[260px] lg:max-w-none min-w-[220px] lg:min-w-0 lg:w-auto snap-start"
+            >
+              <ProductCard {...product} className="w-full max-w-none" />
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* Link mobile */}
         <div className="mt-8 flex justify-center md:hidden">

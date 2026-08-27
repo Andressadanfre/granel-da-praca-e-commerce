@@ -18,8 +18,10 @@ export default function Home() {
       <main>
         <HeroBanner />
         <TrustBadges />
-        <DiferenciaisSection />
         <CompreObjetivoSection />
+        <Suspense fallback={null}>
+          <OfertasSection />
+        </Suspense>
         <Suspense
           fallback={
             <section className="bg-[#F9F5EF] py-14 lg:py-20">
@@ -33,9 +35,7 @@ export default function Home() {
         >
           <FeaturedProducts />
         </Suspense>
-        <Suspense fallback={null}>
-          <OfertasSection />
-        </Suspense>
+        <DiferenciaisSection />
       </main>
       <Footer />
     </>
