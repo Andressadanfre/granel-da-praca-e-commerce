@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 type Step = 'carrinho' | 'checkout' | 'confirmacao'
@@ -24,8 +25,19 @@ export function CheckoutTopbar({ activeStep }: CheckoutTopbarProps) {
   return (
     <header className="bg-white border-b border-bd sticky top-0 z-50 shadow-nav">
       <div className="max-w-container mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-[17px] font-bold text-gdeep tracking-[-0.02em]">
-          Granel<span className="text-g">da Praça</span>
+        <Link
+          href="/"
+          className="flex h-8 shrink-0 items-center no-underline sm:h-11"
+          aria-label="Granel da Praça — página inicial"
+        >
+          <Image
+            src="/images/logo-green.png"
+            alt=""
+            width={210}
+            height={44}
+            priority
+            className="h-8 w-auto sm:h-11"
+          />
         </Link>
 
         <div className="hidden sm:flex items-center gap-1 text-[11px]">

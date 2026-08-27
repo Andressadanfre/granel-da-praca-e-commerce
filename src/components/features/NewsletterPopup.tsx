@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Loader2, Leaf, X } from 'lucide-react'
+import { Loader2, Leaf } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { subscribeNewsletter } from '@/app/actions/newsletter'
 import { cn } from '@/lib/utils'
@@ -78,16 +78,6 @@ export function NewsletterPopup() {
 
         {/* Coluna direita — conteúdo */}
         <div className='flex flex-1 flex-col justify-center px-8 py-10'>
-
-          {/* Fechamento mobile */}
-          <button
-            type='button'
-            onClick={handleClose}
-            className='absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-t4 transition hover:bg-gray-100 hover:text-t9 md:hidden'
-            aria-label='Fechar'
-          >
-            <X className='h-4 w-4' strokeWidth={1.6} />
-          </button>
 
           {status === 'success' ? (
             <div className='flex flex-col items-center gap-3 text-center'>
