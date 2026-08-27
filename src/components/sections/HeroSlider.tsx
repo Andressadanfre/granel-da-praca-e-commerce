@@ -100,7 +100,7 @@ export function HeroSlider() {
         </div>
         <div>
           <div className="text-[13px] font-bold text-gdeep leading-[1.2]">
-            +390 produtos
+            +400 produtos
           </div>
           <div className="text-[11px] text-t5">
             Desde 2019 em Uberlândia

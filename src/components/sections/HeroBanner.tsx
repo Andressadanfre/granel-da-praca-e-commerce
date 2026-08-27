@@ -47,7 +47,7 @@ export function HeroBanner() {
           </div>
         </div>
 
-        <div className="hidden sm:block">
+        <div>
           <HeroSlider />
         </div>
       </div>
