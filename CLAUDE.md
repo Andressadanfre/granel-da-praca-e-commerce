@@ -234,17 +234,22 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 | WhatsApp UMC (quiosque, sem retirada) | (34) 99796-9191 · Rua Rafael Marino Neto, 600 |
 | Site institucional (provisório) | www.graneldapraca.com.br · repo `Andressadanfre/graneldapraca-landing` |
 
-## Estado atual — 27/08/2026
+## Estado atual — 27/08/2026 (fim de sessão)
 
-HEAD: `7dc6a50` (push confirmado em origin/master)
-Commits da sessão: `43b47eb`, `7dc6a50`
+HEAD: `ae5b152` (push confirmado em origin/master)
+Commits desde a última atualização: `fc8a3e9`, `379b538`, `ae5b152`
 
-Fechado:
-- Home reordenada: Hero → TrustBadges → CompreObjetivo → Ofertas → FeaturedProducts → Diferenciais
-- CompreObjetivoSection: imagem preenche card, carrossel mobile
-- FeaturedProducts: carrossel mobile
-- HeroBanner/HeroSlider: imagem visível em todos os breakpoints, contador +400 produtos
+Fechado nesta parte:
+- Ordenação em /loja (SortSelect.tsx + ProductGrid.tsx) — Relevância/Menor preço/Maior preço/Mais recentes. "Mais vendidos" adiado (sem coluna de contagem de vendas em products).
+- Logo real (Image, não texto) no CheckoutTopbar — vale para /checkout e /pedido/[token].
+- Removido X duplicado no NewsletterPopup.tsx (Modal.tsx já renderiza um por padrão).
+- Removido bloco @media (prefers-color-scheme: dark) do globals.css — causava fundo preto em páginas sem bg explícito (ex: /entrega). Site não tem modo escuro.
 
-Bug corrigido (registrar como aprendizado): técnica de bleed `-mx-5 px-N` em containers com overflow-x-auto não funciona — o navegador auto-compensa o scrollLeft inicial no valor exato da margem negativa, cancelando o padding. Não usar essa técnica para respiro em carrosséis neste projeto; deixar o <ul> herdar o padding do container pai sem margem negativa.
+Achados da auditoria UX/UI, ainda não corrigidos:
+- /receitas e /sobre — 404 real, decisão tomada de criar as duas (conteúdo pendente de definição com a Andressa antes de implementar)
+- 5 links de categoria no rodapé com slug errado (Footer.tsx): oleaginosas, graos, chas, superalimentos, suplementos — não batem com slugs reais (graos-e-sementes, chas-e-infusoes, suplementos-naturais; dois não existem como categoria)
+- Imagens sumindo no carrinho/checkout mobile (reportado pela Andressa) — não reproduzido, falta isolar (página exata, produtos, aba Rede do DevTools)
 
-Pendente: design-system-v3-1.md seção "Hero Banner" desatualizada (spec documentada não bate com HeroSlider real) — não é regressão desta sessão, só ficou mais visível.
+Lição registrada: seletor de pagamento do checkout foi erroneamente reportado como bug crítico durante a auditoria (falso positivo por instabilidade da sessão de automação) — retratado após reteste em página limpa. Sempre revalidar em estado fresco antes de reportar bug como confirmado.
+
+Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 links do Footer.tsx.
