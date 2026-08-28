@@ -1,5 +1,6 @@
 'use server'
 
+import crypto from 'node:crypto'
 import { headers } from 'next/headers'
 
 import { ensureAppUser } from '@/lib/auth/ensureAppUser'
@@ -28,6 +29,12 @@ function isMPCheckoutPaymentMethod(
   return method === 'pix' || method === 'cartao_credito' || method === 'cartao_debito'
 }
 
+function splitCustomerName(fullName: string): { name: string; surname?: string } {
+  const parts = fullName.trim().split(/\s+/)
+  if (parts.length <= 1) return { name: parts[0] ?? '' }
+  return { name: parts[0], surname: parts.slice(1).join(' ') }
+}
+
 // ─── Tipos de retorno ─────────────────────────────────────────────────────────
 
 export interface CreateOrderResult {
@@ -37,7 +44,6 @@ export interface CreateOrderResult {
   trackingToken: string
   preferenceId: string
   initPoint: string
-  sandboxInitPoint: string
 }
 
 export interface CreateOrderError {
@@ -75,7 +81,7 @@ export async function createOrderAction(
   if (!productResult) {
     return { success: false, error: 'Um ou mais produtos não estão disponíveis' }
   }
-  const { items: serverItems, names: productNames } = productResult
+  const { items: serverItems, names: productNames, descriptions: productDescriptions } = productResult
 
   const subtotalCents = calcSubtotalServer(serverItems)
   const shippingCents = data.deliveryType === 'retirada' ? 0 : calcFreteServer(subtotalCents)
@@ -161,9 +167,8 @@ export async function createOrderAction(
       orderId,
       orderCode,
       trackingToken,
-      preferenceId:     '',
-      initPoint:        '',
-      sandboxInitPoint: '',
+      preferenceId: '',
+      initPoint:    '',
     }
   }
 
@@ -171,6 +176,8 @@ export async function createOrderAction(
     if (!isMPCheckoutPaymentMethod(data.paymentMethod)) {
       return { success: false, error: 'Método de pagamento inválido.' }
     }
+
+    const { name: payerFirstName, surname: payerSurname } = splitCustomerName(data.customerName ?? '')
 
     const mpResult = await createMPPreference({
       orderId,
@@ -180,15 +187,18 @@ export async function createOrderAction(
         serverItems,
         data.items.map(i => i.productId),
         productNames,
+        productDescriptions,
       ),
       shippingCents,
       discountCents,
       totalCents,
       paymentMethod: data.paymentMethod,
+      idempotencyKey: crypto.randomUUID(),
       payer: {
-        name:  data.customerName ?? undefined,
-        email: data.customerEmail ?? undefined,
-        phone: data.customerPhone ? { number: data.customerPhone } : undefined,
+        name:    payerFirstName || undefined,
+        surname: payerSurname,
+        email:   data.customerEmail ?? undefined,
+        phone:   data.customerPhone ? { number: data.customerPhone } : undefined,
       },
     })
 
@@ -197,9 +207,8 @@ export async function createOrderAction(
       orderId,
       orderCode,
       trackingToken,
-      preferenceId:     mpResult.preferenceId,
-      initPoint:        mpResult.initPoint,
-      sandboxInitPoint: mpResult.sandboxInitPoint,
+      preferenceId: mpResult.preferenceId,
+      initPoint:    mpResult.initPoint,
     }
   } catch (mpErr) {
     logError(
@@ -216,13 +225,13 @@ export async function createOrderAction(
 // Garante que o preço usado é o do banco, nunca o enviado pelo cliente
 export async function getProductsForOrder(
   clientItems: { productId: number; quantity: number }[],
-): Promise<{ items: ServerCartItem[], names: Record<number, string> } | null> {
+): Promise<{ items: ServerCartItem[], names: Record<number, string>, descriptions: Record<number, string> } | null> {
   const productIds = clientItems.map(i => i.productId)
   const supabase = getSupabaseServer()
 
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, price_cents, product_type')
+    .select('id, name, description, price_cents, product_type')
     .in('id', productIds)
     .eq('is_active', true)
     .eq('is_deleted', false)
@@ -238,7 +247,11 @@ export async function getProductsForOrder(
   }
 
   const names: Record<number, string> = {}
-  data.forEach(p => { names[p.id] = p.name ?? '' })
+  const descriptions: Record<number, string> = {}
+  data.forEach(p => {
+    names[p.id] = p.name ?? ''
+    descriptions[p.id] = p.description ?? ''
+  })
 
   const items: ServerCartItem[] = clientItems.map(clientItem => {
     const product = data.find(p => p.id === clientItem.productId)
@@ -253,7 +266,7 @@ export async function getProductsForOrder(
     }
   })
 
-  return { items, names }
+  return { items, names, descriptions }
 }
 
 // ─── Retry de pagamento — nova preferência MP para pedido já existente ────────
@@ -264,7 +277,6 @@ const TOKEN_REGEX = /^[0-9a-f]{32}$/
 export interface RetryPaymentResult {
   success: true
   initPoint: string
-  sandboxInitPoint: string
 }
 
 export interface RetryPaymentError {
@@ -326,31 +338,41 @@ export async function retryOrderPayment(
   const productNames: Record<number, string> = {}
   items.forEach(item => { productNames[item.product_id] = item.product_name })
 
+  const { data: productDescRows } = await supabase
+    .from('products')
+    .select('id, description')
+    .in('id', productIds)
+  const productDescriptions: Record<number, string> = {}
+  productDescRows?.forEach(p => { productDescriptions[p.id] = p.description ?? '' })
+
   try {
     if (!isMPCheckoutPaymentMethod(order.payment_method)) {
       return { success: false, error: 'Este pedido não pode ser reprocessado.' }
     }
 
+    const { name: payerFirstName, surname: payerSurname } = splitCustomerName(order.customer_name ?? '')
+
     const mpResult = await createMPPreference({
       orderId:       order.id,
       orderCode:     order.code,
       trackingToken: order.tracking_token,
-      items:         cartItemsToMPItems(serverItems, productIds, productNames),
+      items:         cartItemsToMPItems(serverItems, productIds, productNames, productDescriptions),
       shippingCents: order.shipping_cents,
       discountCents: order.discount_cents,
       totalCents:    order.total_cents,
       paymentMethod: order.payment_method,
+      idempotencyKey: crypto.randomUUID(),
       payer: {
-        name:  order.customer_name ?? undefined,
-        email: order.customer_email ?? undefined,
-        phone: order.customer_phone ? { number: order.customer_phone } : undefined,
+        name:    payerFirstName || undefined,
+        surname: payerSurname,
+        email:   order.customer_email ?? undefined,
+        phone:   order.customer_phone ? { number: order.customer_phone } : undefined,
       },
     })
 
     return {
       success: true,
-      initPoint:        mpResult.initPoint,
-      sandboxInitPoint: mpResult.sandboxInitPoint,
+      initPoint: mpResult.initPoint,
     }
   } catch (mpErr) {
     logError(

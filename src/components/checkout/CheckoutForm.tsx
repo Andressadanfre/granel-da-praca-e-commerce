@@ -148,9 +148,8 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
     clearCart()
 
     // Pagamentos online → redireciona para MP
-    if (result.initPoint || result.sandboxInitPoint) {
-      const mpUrl = result.initPoint || result.sandboxInitPoint
-      window.location.href = mpUrl
+    if (result.initPoint) {
+      window.location.href = result.initPoint
       return
     }
 

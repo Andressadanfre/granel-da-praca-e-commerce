@@ -23,8 +23,7 @@ export function RetryPaymentButton({ trackingToken }: RetryPaymentButtonProps) {
         return
       }
 
-      const mpUrl = result.initPoint || result.sandboxInitPoint
-      window.location.href = mpUrl
+      window.location.href = result.initPoint
     })
   }
 

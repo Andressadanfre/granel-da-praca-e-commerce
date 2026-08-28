@@ -15,6 +15,7 @@ function getMPClient(): MercadoPagoConfig {
 export interface MPPreferenceItem {
   id: string
   title: string
+  description?: string
   quantity: number
   unit_price: number        // em reais (não centavos) — requisito da API MP
   currency_id: 'BRL'
@@ -31,8 +32,10 @@ export interface CreatePreferenceInput {
   discountCents: number
   totalCents: number
   paymentMethod: MPCheckoutPaymentMethod
+  idempotencyKey: string
   payer?: {
     name?: string
+    surname?: string
     email?: string
     phone?: { number?: string }
   }
@@ -40,8 +43,7 @@ export interface CreatePreferenceInput {
 
 export interface MPPreferenceResult {
   preferenceId: string
-  initPoint: string       // URL de pagamento produção
-  sandboxInitPoint: string // URL de pagamento teste
+  initPoint: string
 }
 
 // ─── Regra de parcelamento — PRD "Pagamentos Online", sem juros ao cliente ──
@@ -84,6 +86,7 @@ export async function createMPPreference(
       installments: computeMaxInstallments(input.totalCents),
       excluded_payment_types: excludedTypes,
     },
+    statement_descriptor: 'GRANEL PRACA',
     back_urls: {
       success: `${appUrl}/pedido/${input.trackingToken}?status=sucesso`,
       failure: `${appUrl}/pedido/${input.trackingToken}?status=falhou`,
@@ -97,16 +100,18 @@ export async function createMPPreference(
     },
   }
 
-  const result = await preference.create({ body })
+  const result = await preference.create({
+    body,
+    requestOptions: { idempotencyKey: input.idempotencyKey },
+  })
 
   if (!result.id) {
     throw new Error('Mercado Pago não retornou ID de preferência')
   }
 
   return {
-    preferenceId:    result.id,
-    initPoint:       result.init_point       ?? '',
-    sandboxInitPoint: result.sandbox_init_point ?? '',
+    preferenceId: result.id,
+    initPoint:    result.init_point ?? '',
   }
 }
 
@@ -116,6 +121,7 @@ export function cartItemsToMPItems(
   items: ServerCartItem[],
   productIds: number[],
   productNames: Record<number, string>,
+  productDescriptions: Record<number, string>,
 ): MPPreferenceItem[] {
   return items.map((item, index) => {
     const productId = productIds[index]
@@ -134,6 +140,7 @@ export function cartItemsToMPItems(
     return {
       id:          String(productId),
       title:       productNames[productId] ?? `Produto ${productId}`,
+      description: productDescriptions[productId] || productNames[productId] || `Produto ${productId}`,
       quantity,
       unit_price:  unitPriceCents / 100,  // centavos → reais
       currency_id: 'BRL' as const,
