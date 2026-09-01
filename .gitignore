@@ -38,3 +38,8 @@ next-env.d.ts
 
 database-diff.txt
 .env*
+
+# Backups de banco (contem PII de clientes - nunca versionar)
+# Apenas backups na raiz do repo. NAO ignora supabase/migrations/*.sql (codigo-fonte).
+/backup-*.sql
+/*.sql
