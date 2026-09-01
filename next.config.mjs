@@ -56,6 +56,10 @@ const nextConfig = {
                   "connect-src 'self' https://*.supabase.co https://*.ingest.us.sentry.io https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.google.com https://*.doubleclick.net",
                 ].join('; '),
           },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
         ],
       },
     ]
