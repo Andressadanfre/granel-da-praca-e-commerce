@@ -44,12 +44,6 @@ export async function POST(request: NextRequest) {
   const url = new URL(request.url)
   const dataId = url.searchParams.get('data.id')
 
-  logWarn(
-    log,
-    { route: '/api/webhooks/mercadopago', debug_xSignature: xSignature, debug_xRequestId: xRequestId, debug_dataId: dataId },
-    'DEBUG TEMPORARIO - valores brutos recebidos no webhook (remover depois)',
-  )
-
   if (!xSignature || !dataId) {
     logWarn(log, { route: '/api/webhooks/mercadopago' }, 'Webhook recebido sem assinatura ou data.id')
     return NextResponse.json({ error: 'Requisição inválida' }, { status: 400 })
