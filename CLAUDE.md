@@ -65,6 +65,13 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Confirmar sempre via painel de desenvolvedor (developers panel → Credenciais de produção) que o formulário de ativação (setor + site + termos) foi completado.
 - Sintoma de conta não ativada: erro `'uma das partes é de teste'` mesmo com cartão real.
 
+### Mercado Pago — FECHADO (01/09/2026)
+
+- Webhook confirma pagamento ponta a ponta em produção (cartão + Pix), automático.
+- Qualidade da integração MP: **92/100** (aprovada). Causa da "Avaliação indisponível" era o campo "usa plataforma de e-commerce = Sim/Outras" na config da app MP; corrigido para "Não". Medido com Payment ID `175705914245`.
+- Causa raiz do botão travado/Pix ausente: atualização de segurança pendente nas notificações da conta MP (não era código nem chave Pix).
+- Debug do `route.ts` removido. Ticket **WCS-47798** encerrado.
+
 ### Estoque — stock_status NÃO bloqueia compra (27/07/2026)
 
 - `products.stock_status` (`in_stock`/`low_stock`/`out_of_stock`) é calculado automaticamente por trigger (`recalculate_stock_status`), mas **não impede adicionar ao carrinho nem finalizar checkout** — `AddToCartSelector.tsx` e o fluxo de checkout não checam esse campo.
@@ -135,6 +142,13 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Confirmado em /admin/pedidos (13/08/2026): filtro padrão mudou de periodo='hoje' para periodo='sempre' após teste real revelar pedidos 'recebido' de dias anteriores escondidos da lista principal, divergindo da contagem do badge do sidebar.
 - Regra geral: resumos/contadores do tipo "X hoje" no header podem e devem continuar filtrados por hoje — é o filtro da LISTA principal que não deve ter esse padrão restritivo quando a lista mistura itens finalizados e pendentes.
 
+### Segurança — estado 01/09
+
+- RLS auditado ao vivo: **10/10 tabelas**, 0 vazamento PII, 0 policy permissiva.
+- Headers: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, CSP, `Permissions-Policy`. 4/4 + CSP.
+- `npm audit`: 4 highs não-breaking resolvidos; 6 restantes (`next`/`postcss` patch 14.2.x, `sharp` upgrade isolado, `glob`/`eslint` devDep). **NUNCA** rodar `npm audit fix --force`.
+- Pipeline de imagem do admin (`product-actions.ts`) converte JPEG→WebP q80 via sharp automaticamente no upload — pode subir foto em JPEG sem penalizar peso.
+
 ---
 
 ## Workflow de Desenvolvimento
@@ -158,6 +172,11 @@ Ler arquivo(s) → Diagnóstico → Aguardar aprovação → Código → Build �
 - SQL destrutivo (`DELETE`, `DROP`, `TRUNCATE`) · `UPDATE`/`DELETE` sem `WHERE`
 - Instalar novas dependências
 - Commitar com build quebrado
+
+### Banco de dados — Cursor vs Andressa (01/09/2026)
+
+- Operações de banco (dump, backup, migration, mudança de schema) rodam **SEMPRE** no terminal de Andressa ou via Supabase MCP — **NUNCA** delegadas ao agente do Cursor.
+- Motivo: em 01/09 o agente tentou baixar binários do PostgreSQL da web e rodar um `pg_dump` não solicitado. Cursor edita arquivos; banco é Andressa + Claude via MCP.
 
 ### Commits
 
@@ -234,16 +253,19 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 | WhatsApp UMC (quiosque, sem retirada) | (34) 99796-9191 · Rua Rafael Marino Neto, 600 |
 | Site institucional (provisório) | www.graneldapraca.com.br · repo `Andressadanfre/graneldapraca-landing` |
 
-## Estado atual — 27/08/2026 (fim de sessão)
+## Estado atual — 01/09/2026 (fim de sessão)
 
-HEAD: `ae5b152` (push confirmado em origin/master)
-Commits desde a última atualização: `fc8a3e9`, `379b538`, `ae5b152`
+HEAD: `192b79d` (2026-09-01) — feat(security): Permissions-Policy
+Commits da sessão: `e035d6d` (remove debug webhook MP), `99ff8bc` (npm audit fix 4 CVEs), `192b79d` (Permissions-Policy). Todos em origin/master.
 
-Fechado nesta parte:
-- Ordenação em /loja (SortSelect.tsx + ProductGrid.tsx) — Relevância/Menor preço/Maior preço/Mais recentes. "Mais vendidos" adiado (sem coluna de contagem de vendas em products).
-- Logo real (Image, não texto) no CheckoutTopbar — vale para /checkout e /pedido/[token].
-- Removido X duplicado no NewsletterPopup.tsx (Modal.tsx já renderiza um por padrão).
-- Removido bloco @media (prefers-color-scheme: dark) do globals.css — causava fundo preto em páginas sem bg explícito (ex: /entrega). Site não tem modo escuro.
+Fechado nesta sessão:
+- Webhook MP confirma pagamento ponta a ponta em produção (cartão + Pix), automático. Ticket WCS-47798 encerrado.
+- Qualidade da integração MP: 92/100 (aprovada). Debug do `route.ts` removido.
+- Headers de segurança: Permissions-Policy adicionado. RLS 10/10. 4 highs npm audit resolvidos.
+
+On the horizon:
+- Backup: Supabase Free **NÃO** tem backup automático. Rotina: export CSV manual pelo painel (Table Editor), semanal e antes de mudanças grandes. Upgrade Pro planejado. Perda de dados no Free é irreversível.
+- 2FA no admin: 0 fatores MFA, 1 admin ativo. Resolver antes da integração Explend.
 
 Achados da auditoria UX/UI, ainda não corrigidos:
 - /receitas e /sobre — 404 real, decisão tomada de criar as duas (conteúdo pendente de definição com a Andressa antes de implementar)
