@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronDown, Clock } from 'lucide-react'
 
 import { BuyAgainButton } from '@/components/account/BuyAgainButton'
@@ -86,10 +87,17 @@ export function OrderCard({ order }: OrderCardProps) {
 
           return (
             <li key={`${order.id}-${item.productId}-${index}`} className="flex items-center gap-3">
-              <div
-                className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-inner bg-cream-img"
-                aria-hidden
-              />
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-inner bg-cream-img">
+                {item.imageUrl ? (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.productName}
+                    width={44}
+                    height={44}
+                    className="h-full w-full object-cover"
+                  />
+                ) : null}
+              </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-semibold text-t9">{item.productName}</p>
                 <p className="mt-px text-[11.5px] text-t6">{itemQtyLabel(item)}</p>

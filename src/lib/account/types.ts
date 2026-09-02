@@ -8,6 +8,7 @@ import type {
 export type AccountOrderItem = {
   productId: number
   productName: string
+  imageUrl: string | null
   productType: 'granel' | 'unit'
   quantityGrams: number | null
   quantityUnits: number | null

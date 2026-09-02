@@ -17,6 +17,7 @@ type OrderItemRow = {
   quantity_grams: number | null
   quantity_units: number | null
   item_total_cents: number
+  products: { image_url: string | null } | { image_url: string | null }[] | null
 }
 
 type OrderRow = {
@@ -68,7 +69,10 @@ export async function loadAccountPageData(
           product_type,
           quantity_grams,
           quantity_units,
-          item_total_cents
+          item_total_cents,
+          products (
+            image_url
+          )
         )
       `)
       .eq('user_id', authUserId)
@@ -103,14 +107,18 @@ export async function loadAccountPageData(
     deliveryType: row.delivery_type,
     totalCents: row.total_cents,
     createdAt: row.created_at,
-    items: (row.order_items ?? []).map((item) => ({
-      productId: item.product_id,
-      productName: item.product_name,
-      productType: item.product_type,
-      quantityGrams: item.quantity_grams,
-      quantityUnits: item.quantity_units,
-      itemTotalCents: item.item_total_cents,
-    })),
+    items: (row.order_items ?? []).map((item) => {
+      const product = Array.isArray(item.products) ? item.products[0] : item.products
+      return {
+        productId: item.product_id,
+        productName: item.product_name,
+        imageUrl: product?.image_url ?? null,
+        productType: item.product_type,
+        quantityGrams: item.quantity_grams,
+        quantityUnits: item.quantity_units,
+        itemTotalCents: item.item_total_cents,
+      }
+    }),
   }))
 
   return { user, orders }
