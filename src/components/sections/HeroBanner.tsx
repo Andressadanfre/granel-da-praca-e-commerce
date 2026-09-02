@@ -27,12 +27,12 @@ export function HeroBanner() {
           >
             Receba <span className="text-g">hoje mesmo</span>
             <br />
-            em Uberlândia.
+            em Uberlândia!
           </h1>
 
           {/* Subtítulo */}
           <p className="text-[17px] font-medium text-t6 leading-relaxed mb-8 max-w-[400px]">
-            Peça até às 17h em dias úteis (sáb. até 11h) e receba ainda hoje em Uberlândia.
+            Compre até as 17h em dias úteis (ou até 11h aos sábados) e entregamos no mesmo dia.
           </p>
 
           {/* CTA */}
