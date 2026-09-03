@@ -73,6 +73,24 @@ body {
 .ann-msg-1 { animation: annCycle1 8s ease-in-out infinite; }
 .ann-msg-2 { animation: annCycle2 8s ease-in-out infinite; }
 
+/* === TrustBadges — marquee contínuo === */
+@keyframes trust-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-trust-marquee {
+  animation: trust-marquee 28s linear infinite;
+}
+.animate-trust-marquee:hover,
+.animate-trust-marquee:focus-within {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-trust-marquee {
+    animation: none;
+  }
+}
+
 /* === Nav hover states === */
 .nav-cart-btn:hover { background-color: #1A5C1E !important; }
 .nav-search-wrap:focus-within {
