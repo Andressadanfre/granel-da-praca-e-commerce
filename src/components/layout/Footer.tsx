@@ -8,11 +8,11 @@ import { NewsletterForm } from './NewsletterForm'
 
 const LOJA_LINKS = [
   { href: '/loja', label: 'Todos os produtos' },
-  { href: '/loja?categoria=oleaginosas', label: 'Castanhas & Oleaginosas' },
-  { href: '/loja?categoria=graos', label: 'Grãos & Leguminosas' },
+  { href: '/loja?categoria=castanhas', label: 'Castanhas & Oleaginosas' },
+  { href: '/loja?categoria=graos-e-sementes', label: 'Grãos & Leguminosas' },
   { href: '/loja?categoria=farinhas', label: 'Farinhas & Cereais' },
-  { href: '/loja?categoria=chas', label: 'Chás & Infusões' },
-  { href: '/loja?categoria=superalimentos', label: 'Superalimentos', badge: 'NOVO' },
+  { href: '/loja?categoria=chas-e-infusoes', label: 'Chás & Infusões' },
+  { href: '/loja?categoria=suplementos-naturais', label: 'Superalimentos', badge: 'NOVO' },
   { href: '/ofertas', label: 'Ofertas da semana' },
 ]
 
