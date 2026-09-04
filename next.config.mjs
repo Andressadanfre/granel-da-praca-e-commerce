@@ -22,6 +22,14 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/llms.txt',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          { key: 'Vary', value: 'Accept, Accept-Encoding' },
+          { key: 'Cache-Control', value: 'public, max-age=3600' },
+        ],
+      },
+      {
         source: '/(.*)',
         headers: [
           {
@@ -59,6 +67,10 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept, Accept-Encoding',
           },
         ],
       },

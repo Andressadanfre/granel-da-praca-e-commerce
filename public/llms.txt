@@ -1,0 +1,34 @@
+# Granel da Praça
+> Loja online de produtos naturais a granel em Uberlândia, MG.
+
+## O que vendemos
+Castanhas, grãos, sementes, farinhas, chás, suplementos naturais, temperos, chocolates e snacks saudáveis — vendidos a granel, a partir de 100 gramas, com entrega no mesmo dia em Uberlândia.
+
+## Páginas principais
+- Catálogo completo: /loja
+- Ofertas da semana: /ofertas
+- Receitas com produtos naturais: /receitas
+- Sobre nós e contato: /sobre
+- Política de privacidade: /privacidade
+- Termos de uso: /termos
+
+## Contato e unidades
+- Unidade Fundinho (matriz): Rua Coronel Antônio Alves Pereira, 302 — WhatsApp (34) 99781-9292
+- Unidade UMC: Rua Rafael Marino Neto, 600 — WhatsApp (34) 99796-9191
+- Instagram: @graneldapraca
+- Horário Fundinho: segunda a sábado, 9h às 18h
+- Horário UMC: segunda a sexta, 8h às 18h
+
+## Estrutura do site
+O site é um e-commerce Next.js com:
+- Catálogo de produtos por categoria (/loja?categoria=[slug])
+- Página de produto (/loja/[categoria]/[slug])
+- Carrinho e checkout com Mercado Pago (cartão e Pix)
+- Área do cliente (/conta)
+- Rastreamento de pedido (/pedido/[token])
+
+## Categorias disponíveis
+castanhas, graos-e-sementes, temperos-e-especiarias, chas-e-infusoes, frutas-secas, snacks, chocolates-de-verdade, farinhas, oleos-e-adocantes-naturais, suplementos-naturais, cosmeticos-naturais
+
+## Sitemap
+https://graneldapraca.com.br/sitemap.xml
