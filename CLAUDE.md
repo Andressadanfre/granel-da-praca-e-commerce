@@ -275,3 +275,10 @@ Achados da auditoria UX/UI, ainda não corrigidos:
 Lição registrada: seletor de pagamento do checkout foi erroneamente reportado como bug crítico durante a auditoria (falso positivo por instabilidade da sessão de automação) — retratado após reteste em página limpa. Sempre revalidar em estado fresco antes de reportar bug como confirmado.
 
 Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 links do Footer.tsx.
+
+## Infraestrutura e segurança (10-13/09/2026)
+
+- Backup automático diário do banco via GitHub Actions (`.github/workflows/backup-db.yml`), `pg_dump` com `postgresql-client-17` (a versão padrão do runner Ubuntu é 16, incompatível com Postgres 17 do Supabase). Secret `SUPABASE_DB_URL` guarda a connection string (Session pooler). Artifact retido 90 dias.
+- MCP do Cursor configurado project-scoped em `.cursor/mcp.json`: Supabase (só `apply_migration`/`execute_sql`), Vercel e Figma (só leitura), Context7 (busca de doc). Nenhum servidor tem ferramenta de gasto/pausa/destrutiva habilitada.
+- Supabase Advisors (13/09): `search_path` mutável em `generate_order_code`/`recalculate_stock_status`; `rls_auto_enable` e `create_order_with_items` expostas como SECURITY DEFINER via RPC — atenção: `create_order_with_items` já valida `p_user_id` contra `auth.uid()` no corpo da função, não tratar como vulnerabilidade de spoofing ativa sem reler o código. Leaked Password Protection desabilitado no Auth.
+- `next`/`postcss`: 2 CVEs críticos sem patch na 14.2.x (só existe em 15.5.24/16.3.3). RCE Windows não afeta hosting Vercel (Linux). RCE AVIF só se `next.config` tiver `formats: ['image/avif']` — ainda não confirmado.
