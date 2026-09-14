@@ -51,7 +51,7 @@ function buildNavSections(counts: Awaited<ReturnType<typeof getSidebarCounts>>):
       label: 'SISTEMA',
       ownerOnly: true,
       items: [
-        { label: 'Configurações', href: '/admin/configuracoes', icon: Settings, comingSoon: true },
+        { label: 'Configurações', href: '/admin/configuracoes', icon: Settings },
       ],
     },
   ]
@@ -67,6 +67,13 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   if (!(await isAdminUser(user.id))) {
     redirect('/?erro=acesso_negado')
+  }
+
+  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+  const needsMfaChallenge = aal != null && aal.currentLevel !== aal.nextLevel
+
+  if (needsMfaChallenge) {
+    return <div className="min-h-screen bg-cream">{children}</div>
   }
 
   const [session, counts] = await Promise.all([

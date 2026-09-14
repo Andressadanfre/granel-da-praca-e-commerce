@@ -1,5 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
+import { safeAdminRedirect } from '@/lib/auth/safeRedirect'
+
+function isAdminMfaChallengePath(pathname: string): boolean {
+  return (
+    pathname === '/admin/mfa-challenge' ||
+    pathname.startsWith('/admin/mfa-challenge/')
+  )
+}
 
 export async function middleware(request: NextRequest) {
   const { response, user, supabase } = await updateSession(request)
@@ -35,11 +43,13 @@ export async function middleware(request: NextRequest) {
 
     const role = data[0].role as 'owner' | 'supervisora'
     const { pathname } = request.nextUrl
+    const isMfaChallengePath = isAdminMfaChallengePath(pathname)
 
     if (role === 'supervisora') {
       const isAllowedArea =
         pathname.startsWith('/admin/produtos') ||
-        pathname.startsWith('/admin/pedidos')
+        pathname.startsWith('/admin/pedidos') ||
+        isMfaChallengePath
 
       const isHomeRoot = pathname === '/admin' || pathname === '/admin/dashboard'
 
@@ -52,6 +62,32 @@ export async function middleware(request: NextRequest) {
           new URL('/admin/produtos?erro=sem_permissao', request.url),
         )
       }
+    }
+
+    const { data: aalData, error: aalError } =
+      await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+
+    if (aalError || !aalData) {
+      return NextResponse.redirect(
+        new URL('/?erro=admin_indisponivel', request.url),
+      )
+    }
+
+    // 2FA opt-in: sem fator verificado, currentLevel === nextLevel (ambos aal1) — passa.
+    // Com fator verificado e sessão ainda em aal1, currentLevel !== nextLevel — challenge.
+    if (aalData.currentLevel !== aalData.nextLevel) {
+      if (!isMfaChallengePath) {
+        const challengeUrl = new URL('/admin/mfa-challenge', request.url)
+        const from = `${pathname}${request.nextUrl.search}`
+        if (from.startsWith('/admin') && !from.startsWith('/admin/mfa-challenge')) {
+          challengeUrl.searchParams.set('redirect', from)
+        }
+        return NextResponse.redirect(challengeUrl)
+      }
+    } else if (isMfaChallengePath) {
+      return NextResponse.redirect(
+        new URL(safeAdminRedirect(request.nextUrl.searchParams.get('redirect')), request.url),
+      )
     }
   }
 
