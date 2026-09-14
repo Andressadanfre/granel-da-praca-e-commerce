@@ -282,3 +282,11 @@ Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 
 - MCP do Cursor configurado project-scoped em `.cursor/mcp.json`: Supabase (só `apply_migration`/`execute_sql`), Vercel e Figma (só leitura), Context7 (busca de doc). Nenhum servidor tem ferramenta de gasto/pausa/destrutiva habilitada.
 - Supabase Advisors (13/09): `search_path` mutável em `generate_order_code`/`recalculate_stock_status`; `rls_auto_enable` e `create_order_with_items` expostas como SECURITY DEFINER via RPC — atenção: `create_order_with_items` já valida `p_user_id` contra `auth.uid()` no corpo da função, não tratar como vulnerabilidade de spoofing ativa sem reler o código. Leaked Password Protection desabilitado no Auth.
 - `next`/`postcss`: 2 CVEs críticos sem patch na 14.2.x (só existe em 15.5.24/16.3.3). RCE Windows não afeta hosting Vercel (Linux). RCE AVIF só se `next.config` tiver `formats: ['image/avif']` — ainda não confirmado.
+
+## Sessão 14/09/2026 — OfertaCard + banner de Ofertas
+
+- OfertaCard.tsx: layout horizontal a partir do md: (thumb 52px + nome + preço + badge + AddToCartSelector em linha única). Mobile em duas linhas. Fill bg-white/[0.07] sem stroke (o border anterior não tinha respaldo no design-system-v3-1.md). Nome com line-clamp-2 em vez de truncamento fluido — cards podem ter alturas diferentes entre si.
+- OfertasSection.tsx + OfertasCountdown.tsx: padding vertical rebalanceado. Altura do banner desktop: 565px -> 504px.
+- Commit 73280ba — 3 arquivos.
+- TrustBadges: marquee com loop infinito confirmado funcional. A aparência de grid estático investigada nesta sessão era causada por prefers-reduced-motion ativado no SO da máquina de dev, não regressão de código. Nenhuma mudança aplicada.
+- Redesign completo de OfertasSection.tsx (fundo claro, ProductCard em vez de OfertaCard) permanece isolado em stash@{0}. Decisão fechada: manter OfertaCard atual. Destino do stash (descartar ou manter guardado) ainda pendente.
