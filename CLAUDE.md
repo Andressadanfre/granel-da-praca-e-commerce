@@ -290,3 +290,16 @@ Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 
 - Commit 73280ba — 3 arquivos.
 - TrustBadges: marquee com loop infinito confirmado funcional. A aparência de grid estático investigada nesta sessão era causada por prefers-reduced-motion ativado no SO da máquina de dev, não regressão de código. Nenhuma mudança aplicada.
 - Redesign completo de OfertasSection.tsx (fundo claro, ProductCard em vez de OfertaCard) permanece isolado em stash@{0}. Decisão fechada: manter OfertaCard atual. Destino do stash (descartar ou manter guardado) ainda pendente.
+
+## Sessão 14/09/2026 (cont.) — 2FA admin, leaked password protection, stash
+
+- 2FA (TOTP) implementado no admin, opt-in, escopo minimo viavel. Commit 664affa. Testado ao vivo: enroll, logout, login exige codigo, verificacao ok. Sem codigos de recuperacao nesta fase. Desativar 2FA nao exige reautenticacao - limitacao conhecida, aceitavel com 1 admin.
+- Leaked Password Protection: fechado como limitacao de plano Free (recurso exige Supabase Pro+), nao e mais pendencia ativa. Reabrir só se o projeto migrar de plano.
+- Stash do redesign de OfertasSection.tsx descartado (git stash drop) - decisao de manter OfertaCard atual, ja fechada anteriormente.
+
+## Sessão 14/09/2026 (fechamento) — Frente 1 de tracking diagnosticada, migrations de seguranca fechadas
+
+- search_path mutavel corrigido em generate_order_code e recalculate_stock_status (migration fix_search_path_order_code_and_stock_status). rls_auto_enable() teve EXECUTE revogado de PUBLIC (migration revoke_public_execute_rls_auto_enable). Advisors de seguranca confirmados limpos apos as duas.
+- Achado de processo: recalculate_stock_status tinha fix anterior registrado no Notion (24/07) que nao se confirmou no codigo real - reforca nunca tratar documentacao como prova de estado atual sem checar a definicao ao vivo.
+- Frente 1 de tracking (atribuicao de campanha) diagnosticada como greenfield total: orders nao tem nenhuma coluna de atribuicao (gclid/fbc/fbp/utm_*), nenhuma captura em src/, Meta Pixel nao esta instalado (so em doc), GA4 dispara so page_view, zero evento de purchase. Plano em 4 fases definido: 1A (schema + RPC), 1B (captura client-side + cookie), 2 (Meta Pixel com Consent Mode), 3 (evento de compra GA4+Meta). Nada implementado ainda - retomar Fase 1A na proxima sessao.
+- Dominio proprio (graneldapraca.com.br) confirmado ainda servindo a landing page, nao o e-commerce. Decisao: cutover so depois do tracking acima estar pronto e testado.
