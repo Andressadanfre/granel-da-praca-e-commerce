@@ -25,7 +25,7 @@ function calcTimeLeft(target: Date): TimeLeft | null {
 
 function CdBlock({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex min-w-11 flex-col items-center gap-0.5 rounded-inner border border-bd bg-white px-2.5 py-1.5">
+    <div className="flex min-w-11 flex-col items-center gap-1 rounded-inner border border-bd bg-white px-3 py-2">
       <span className="text-lg font-extrabold leading-none tracking-tight text-gdeep tabular-nums">
         {value}
       </span>
@@ -61,7 +61,7 @@ export function OfertasCountdown({
 
   return (
     <div
-      className={cn('flex items-center gap-1', className)}
+      className={cn('mb-8 flex items-center gap-1', className)}
       aria-live="polite"
       aria-label="Contagem regressiva até o fim das ofertas"
     >

@@ -57,9 +57,9 @@ export default async function OfertasSection() {
   if (rows.length === 0) return null
 
   return (
-    <section className="bg-cream py-14 lg:py-20" aria-label="Ofertas da semana">
+    <section className="bg-cream py-12 lg:py-20" aria-label="Ofertas da semana">
       <div className="mx-auto max-w-container px-5 xl:px-0">
-        <div className="relative grid min-h-[440px] grid-cols-1 items-end gap-10 overflow-hidden rounded-[20px] bg-gradient-to-br from-[#012504] via-gdeep to-[#001802] px-4 pt-7 md:gap-14 md:rounded-[28px] md:px-9 md:pt-12 lg:grid-cols-2 lg:gap-14 lg:px-[60px] lg:pt-[60px]">
+        <div className="relative grid min-h-[440px] grid-cols-1 items-end gap-10 overflow-hidden rounded-[20px] bg-gradient-to-br from-[#012504] via-gdeep to-[#001802] px-4 pt-6 md:gap-12 md:rounded-[28px] md:px-8 md:pt-12 lg:grid-cols-2 lg:gap-12 lg:px-12 lg:pt-14">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-[100px] -top-40 h-[560px] w-[560px] rounded-full bg-[radial-gradient(ellipse,rgba(0,178,7,.18)_0%,rgba(0,100,4,.08)_40%,transparent_70%)]"
@@ -79,14 +79,14 @@ export default async function OfertasSection() {
               Apenas esta semana
             </div>
 
-            <h2 className="mb-3.5 text-[clamp(22px,7vw,32px)] font-extrabold leading-[1.08] tracking-[-0.025em] text-white md:text-[clamp(28px,3vw,42px)]">
+            <h2 className="mb-4 text-[clamp(22px,7vw,32px)] font-extrabold leading-[1.08] tracking-[-0.025em] text-white md:text-[clamp(28px,3vw,42px)]">
               Descontos que
               <br />
               fazem{' '}
               <span style={{ color: OFERTAS_MINT }}>diferença</span>
             </h2>
 
-            <p className="mb-9 max-w-[360px] text-[14.5px] leading-[1.65] text-white/75">
+            <p className="mb-8 max-w-[360px] text-[14.5px] leading-[1.65] text-white/75">
               Selecionamos toda semana produtos com preços especiais. Aproveite
               enquanto durar o estoque.
             </p>
@@ -95,14 +95,14 @@ export default async function OfertasSection() {
 
             <Link
               href="/ofertas"
-              className="inline-flex h-[52px] w-full items-center justify-center gap-2.5 rounded-pill bg-g px-8 text-sm font-bold tracking-[0.03em] text-white shadow-[0_4px_0_rgba(0,100,4,.6),0_6px_20px_rgba(0,178,7,.35)] transition-[background,box-shadow,transform] duration-[180ms] hover:-translate-y-0.5 hover:bg-ghover hover:shadow-[0_6px_0_rgba(0,80,3,.7),0_12px_32px_rgba(0,178,7,.45)] active:translate-y-px md:w-auto"
+              className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-pill bg-g px-8 text-sm font-bold tracking-[0.03em] text-white shadow-[0_4px_0_rgba(0,100,4,.6),0_6px_20px_rgba(0,178,7,.35)] transition-[background,box-shadow,transform] duration-[180ms] hover:-translate-y-0.5 hover:bg-ghover hover:shadow-[0_6px_0_rgba(0,80,3,.7),0_12px_32px_rgba(0,178,7,.45)] active:translate-y-px md:w-auto"
             >
               Ver todas as ofertas
               <ArrowRight size={14} strokeWidth={1.6} aria-hidden="true" />
             </Link>
           </div>
 
-          <div className="relative z-[1] flex flex-col gap-3 pb-9 md:gap-4 md:pb-12 lg:pb-12">
+          <div className="relative z-[1] flex flex-col gap-3 pb-8 md:gap-4 md:pb-12 lg:pb-12">
             {rows.map((p) => {
               const isGranel = p.product_type === 'granel'
               const compareAt = p.compare_at_cents as number
