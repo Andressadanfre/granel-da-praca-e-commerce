@@ -32,6 +32,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# MCP project-scoped — config local, nao versionar. Nao ignorar .cursor/ inteiro (rules e versionado).
+.cursor/mcp.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
