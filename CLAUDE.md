@@ -108,6 +108,14 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - **Fonte única de dado (evitar leitura de campo obsoleto):** ao adicionar um campo novo a uma tabela que substitui uma fonte de dado antiga (ex: campo direto substituindo uma tabela relacionada, ou um novo formato substituindo um antigo), sempre grep pelo nome da fonte **antiga** em todo o projeto antes de considerar a migração completa — não assuma que só o lugar óbvio (ex: um único componente) precisa ser atualizado. Na Fase 3, a troca de `product_images` para `products.image_url` exigia atualizar 6 lugares diferentes (ProductCard, PDP, produtos relacionados, ofertas, e o reorder do carrinho) — todos long-lived e silenciosamente desatualizados, sem gerar nenhum erro, só dado errado (placeholder de 'sem foto' mesmo com foto salva).
 - **`process.env` dinâmico não funciona em Client Components:** `process.env[nomeVariavel]` (acesso via string/variável) não é substituído pelo webpack no bundle do browser — só `process.env.NEXT_PUBLIC_X` (acesso estático, literal) é injetado em build time. Um `requireEnv(name: string)` genérico que faz `process.env[name]` internamente funciona em Server Components/Actions (Node real) mas quebra silenciosamente em qualquer client (`getSupabase()`, ou futuro código client-side) — sempre passe o valor já resolvido estaticamente pra função de validação, nunca o nome da variável.
 
+### ⚠️ RPC — CREATE OR REPLACE não substitui se mudar a lista de parâmetros
+
+`CREATE OR REPLACE FUNCTION` só substitui uma função existente se os parâmetros forem **idênticos**. Adicionar parâmetros novos (mesmo com `DEFAULT NULL`) cria uma **segunda função sobreposta** com o mesmo nome, em vez de trocar a antiga.
+
+Isso quebrou o checkout em produção em 15/09/2026: ao adicionar 9 parâmetros de atribuição em `create_order_with_items`, a versão antiga continuou existindo ao lado da nova. Como o Supabase chama RPCs por parâmetro nomeado, a chamada do checkout ficou ambígua entre as duas — erro `function ... is not unique`.
+
+**Regra:** depois de qualquer `CREATE OR REPLACE FUNCTION` que muda a lista de parâmetros de uma RPC já em uso, sempre rodar `DROP FUNCTION` explícito na assinatura antiga, e testar a chamada exata de produção (dentro de `BEGIN`/`ROLLBACK`) antes de considerar a mudança concluída.
+
 ### Observabilidade e Rate Limiting
 
 - Erros de servidor devem ser reportados ao Sentry via `Sentry.captureException()` além do `logger` Pino — os dois não são substitutos um do outro (Pino é log estruturado local/Vercel, Sentry é alerta + agregação).
@@ -279,7 +287,11 @@ Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 
 ## Infraestrutura e segurança (10-13/09/2026)
 
 - Backup automático diário do banco via GitHub Actions (`.github/workflows/backup-db.yml`), `pg_dump` com `postgresql-client-17` (a versão padrão do runner Ubuntu é 16, incompatível com Postgres 17 do Supabase). Secret `SUPABASE_DB_URL` guarda a connection string (Session pooler). Artifact retido 90 dias.
-- MCP do Cursor configurado project-scoped em `.cursor/mcp.json`: Supabase (só `apply_migration`/`execute_sql`), Vercel e Figma (só leitura), Context7 (busca de doc). Nenhum servidor tem ferramenta de gasto/pausa/destrutiva habilitada.
+- MCP do Cursor (inventário 15/09/2026; fallback em ⚙️ 6 — Configuração do Cursor no Notion — `.cursor/mcp.json` não é versionado):
+  - Project-scoped (habilitados): context7, figma, supabase, vercel. Nenhum tem ferramenta de gasto/pausa/destrutiva habilitada.
+  - User-scoped (conta da Andressa — não presumir em outra máquina): firecrawl, Notion, playwright.
+  - Desabilitados (duplicatas — não usar): datadog (Plugin), Figma (User), Github (User), supabase (Plugin), vercel (User).
+  - Pendente: `mcp` (Plugin) em Needs Attention; identidade/propósito não confirmados.
 - Supabase Advisors (13/09): `search_path` mutável em `generate_order_code`/`recalculate_stock_status`; `rls_auto_enable` e `create_order_with_items` expostas como SECURITY DEFINER via RPC — atenção: `create_order_with_items` já valida `p_user_id` contra `auth.uid()` no corpo da função, não tratar como vulnerabilidade de spoofing ativa sem reler o código. Leaked Password Protection desabilitado no Auth.
 - `next`/`postcss`: 2 CVEs críticos sem patch na 14.2.x (só existe em 15.5.24/16.3.3). RCE Windows não afeta hosting Vercel (Linux). RCE AVIF só se `next.config` tiver `formats: ['image/avif']` — ainda não confirmado.
 
