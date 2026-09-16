@@ -247,6 +247,7 @@ export type Database = {
           cancelled_at: string | null
           cancelled_by: string | null
           cancelled_reason: string | null
+          channel_origin: string | null
           code: string
           coupon_id: string | null
           created_at: string
@@ -256,6 +257,9 @@ export type Database = {
           delivery_address: Json | null
           delivery_type: Database["public"]["Enums"]["order_delivery_type"]
           discount_cents: number
+          fbc: string | null
+          fbp: string | null
+          gclid: string | null
           id: string
           is_deleted: boolean
           mp_payment_id: string | null
@@ -269,11 +273,17 @@ export type Database = {
           tracking_token: string
           updated_at: string
           user_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
           cancelled_at?: string | null
           cancelled_by?: string | null
           cancelled_reason?: string | null
+          channel_origin?: string | null
           code?: string
           coupon_id?: string | null
           created_at?: string
@@ -283,6 +293,9 @@ export type Database = {
           delivery_address?: Json | null
           delivery_type: Database["public"]["Enums"]["order_delivery_type"]
           discount_cents?: number
+          fbc?: string | null
+          fbp?: string | null
+          gclid?: string | null
           id?: string
           is_deleted?: boolean
           mp_payment_id?: string | null
@@ -296,11 +309,17 @@ export type Database = {
           tracking_token?: string
           updated_at?: string
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
           cancelled_at?: string | null
           cancelled_by?: string | null
           cancelled_reason?: string | null
+          channel_origin?: string | null
           code?: string
           coupon_id?: string | null
           created_at?: string
@@ -310,6 +329,9 @@ export type Database = {
           delivery_address?: Json | null
           delivery_type?: Database["public"]["Enums"]["order_delivery_type"]
           discount_cents?: number
+          fbc?: string | null
+          fbp?: string | null
+          gclid?: string | null
           id?: string
           is_deleted?: boolean
           mp_payment_id?: string | null
@@ -323,6 +345,11 @@ export type Database = {
           tracking_token?: string
           updated_at?: string
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Relationships: [
           {
@@ -480,12 +507,16 @@ export type Database = {
     Functions: {
       create_order_with_items: {
         Args: {
+          p_channel_origin?: string
           p_customer_email?: string
           p_customer_name?: string
           p_customer_phone?: string
           p_delivery_address?: Json
           p_delivery_type: Database["public"]["Enums"]["order_delivery_type"]
           p_discount_cents: number
+          p_fbc?: string
+          p_fbp?: string
+          p_gclid?: string
           p_items?: Json
           p_notes?: string
           p_payment_method: Database["public"]["Enums"]["payment_method"]
@@ -493,6 +524,11 @@ export type Database = {
           p_subtotal_cents: number
           p_total_cents: number
           p_user_id: string
+          p_utm_campaign?: string
+          p_utm_content?: string
+          p_utm_medium?: string
+          p_utm_source?: string
+          p_utm_term?: string
         }
         Returns: {
           code: string
@@ -507,9 +543,9 @@ export type Database = {
         }
         Returns: {
           id: string
+          order_found: boolean
           payment_status: string
           updated: boolean
-          order_found: boolean
         }[]
       }
     }
@@ -548,12 +584,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -577,11 +613,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -602,11 +638,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -627,11 +663,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -644,11 +680,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

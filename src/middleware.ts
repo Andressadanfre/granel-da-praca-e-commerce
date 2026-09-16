@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { safeAdminRedirect } from '@/lib/auth/safeRedirect'
+import {
+  ATTRIBUTION_COOKIE_NAME,
+  ATTRIBUTION_COOKIE_MAX_AGE_SECONDS,
+  extractAttributionFromUrl,
+} from '@/lib/tracking/attribution'
 
 function isAdminMfaChallengePath(pathname: string): boolean {
   return (
@@ -11,6 +16,22 @@ function isAdminMfaChallengePath(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const { response, user, supabase } = await updateSession(request)
+
+  // Fase 1B — first-touch: só grava se ainda não existe cookie de atribuição
+  // e a URL atual carrega algum sinal de campanha (gclid/fbclid/utm_*).
+  if (!request.cookies.get(ATTRIBUTION_COOKIE_NAME)) {
+    const attribution = extractAttributionFromUrl(request.nextUrl)
+    if (attribution) {
+      response.cookies.set(ATTRIBUTION_COOKIE_NAME, JSON.stringify(attribution), {
+        httpOnly: true,
+        // Secure cookies são rejeitados em http://localhost; em Vercel o request é https.
+        secure: request.nextUrl.protocol === 'https:',
+        sameSite: 'lax',
+        maxAge: ATTRIBUTION_COOKIE_MAX_AGE_SECONDS,
+        path: '/',
+      })
+    }
+  }
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {

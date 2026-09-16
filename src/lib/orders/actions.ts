@@ -1,9 +1,10 @@
 'use server'
 
 import crypto from 'node:crypto'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 
 import { ensureAppUser } from '@/lib/auth/ensureAppUser'
+import { ATTRIBUTION_COOKIE_NAME, parseAttributionCookie } from '@/lib/tracking/attribution'
 import { getSupabaseServer, getSupabaseAdmin } from '@/lib/supabase/server'
 import { logger, logError, logWarn } from '@/lib/logger'
 import { checkoutRatelimit } from '@/lib/rate-limit'
@@ -117,6 +118,11 @@ export async function createOrderAction(
     }
   })
 
+  // Fase 1B — atribuição first-touch gravada pelo middleware.
+  // p_fbp fica de fora de propósito: depende do Pixel do Meta (Fase 2), que
+  // ainda não existe — não há cookie _fbp real pra ler nesta fase.
+  const attribution = parseAttributionCookie(cookies().get(ATTRIBUTION_COOKIE_NAME)?.value)
+
   const { data: rpcData, error: rpcError } = await supabase.rpc(
     'create_order_with_items',
     {
@@ -133,6 +139,14 @@ export async function createOrderAction(
       p_customer_email:   data.customerEmail ?? undefined,
       p_notes:            data.notes ?? undefined,
       p_items:            rpcItems as Json,
+      p_gclid:            attribution?.gclid ?? undefined,
+      p_fbc:              attribution?.fbc ?? undefined,
+      p_utm_source:       attribution?.utm_source ?? undefined,
+      p_utm_medium:       attribution?.utm_medium ?? undefined,
+      p_utm_campaign:     attribution?.utm_campaign ?? undefined,
+      p_utm_content:      attribution?.utm_content ?? undefined,
+      p_utm_term:         attribution?.utm_term ?? undefined,
+      p_channel_origin:   attribution?.channel_origin ?? undefined,
     },
   )
 
