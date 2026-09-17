@@ -215,7 +215,16 @@ export function Footer() {
         <div className="ft-bottom max-w-container mx-auto pt-5 pb-8 px-4 sm:px-5 xl:px-0 flex items-center justify-between gap-6 flex-wrap relative z-[1]">
           <p className="text-[11.5px] text-white/[.42] leading-[1.5]">
             © 2025 <strong className="text-white/60 font-semibold">Granel da Praça</strong>. Todos os direitos reservados.<br />
-            Uberlândia, MG · CNPJ 00.000.000/0001-00
+            Uberlândia, MG · CNPJ 27.673.614/0001-90<br />
+            Desenvolvido por Andressa Dantas ·{' '}
+            <a
+              href="https://wa.me/5534992339555"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/60 hover:text-white transition-colors no-underline"
+            >
+              (34) 99233-9555
+            </a>
           </p>
 
           <div className="flex items-center gap-1.5">
