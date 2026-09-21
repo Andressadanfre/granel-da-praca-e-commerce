@@ -4,6 +4,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
+import { AleloIcon } from '@/components/icons/brand/AleloIcon'
+import { MastercardIcon } from '@/components/icons/brand/MastercardIcon'
+import { MercadoPagoIcon } from '@/components/icons/brand/MercadoPagoIcon'
+import { PixIcon } from '@/components/icons/brand/PixIcon'
+import { VisaIcon } from '@/components/icons/brand/VisaIcon'
 import { NewsletterForm } from './NewsletterForm'
 
 const LOJA_LINKS = [
@@ -22,7 +27,13 @@ const INFO_LINKS = [
   { href: '/conta', label: 'Minha conta' },
 ]
 
-const PAYMENT_METHODS = ['PIX', 'Mercado Pago', 'Crédito', 'Débito', 'Alelo', 'Dinheiro']
+const PAYMENT_ICONS = [
+  { Icon: MercadoPagoIcon, name: 'Mercado Pago' },
+  { Icon: VisaIcon, name: 'Visa' },
+  { Icon: MastercardIcon, name: 'Mastercard' },
+  { Icon: PixIcon, name: 'Pix' },
+  { Icon: AleloIcon, name: 'Alelo' },
+] as const
 
 const CHEVRON = (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -227,16 +238,16 @@ export function Footer() {
             </a>
           </p>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-medium text-white/[.42] tracking-[.06em] uppercase mr-1">
+          <div className="flex flex-wrap items-center justify-start gap-3">
+            <span className="text-[10px] font-medium text-white/[.42] tracking-[.06em] uppercase">
               Aceito
             </span>
-            {PAYMENT_METHODS.map((method) => (
+            {PAYMENT_ICONS.map(({ Icon, name }) => (
               <span
-                key={method}
-                className="h-[26px] px-2.5 rounded-md border border-white/[.08] bg-white/[.05] inline-flex items-center justify-center text-[10px] font-bold text-white/60 tracking-[.03em] whitespace-nowrap"
+                key={name}
+                className="inline-flex h-10 shrink-0 items-center justify-center rounded-pill bg-white px-4 py-2 shadow-card"
               >
-                {method}
+                <Icon className="h-5 w-auto" />
               </span>
             ))}
           </div>
