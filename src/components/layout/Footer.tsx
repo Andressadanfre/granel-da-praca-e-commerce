@@ -238,16 +238,16 @@ export function Footer() {
             </a>
           </p>
 
-          <div className="flex flex-wrap items-center justify-start gap-3">
+          <div className="flex flex-wrap items-center justify-start gap-2 md:gap-3">
             <span className="text-[10px] font-medium text-white/[.42] tracking-[.06em] uppercase">
               Aceito
             </span>
             {PAYMENT_ICONS.map(({ Icon, name }) => (
               <span
                 key={name}
-                className="inline-flex h-10 shrink-0 items-center justify-center rounded-pill bg-white px-4 py-2 shadow-card"
+                className="inline-flex h-8 md:h-10 shrink-0 items-center justify-center rounded-pill bg-white px-3 py-1.5 md:px-4 md:py-2 shadow-card"
               >
-                <Icon className="h-5 w-auto" />
+                <Icon className="h-4 w-auto md:h-5" />
               </span>
             ))}
           </div>
