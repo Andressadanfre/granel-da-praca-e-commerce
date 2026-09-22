@@ -4,6 +4,7 @@ import { withSentryConfig } from '@sentry/nextjs'
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+  poweredByHeader: false,
   experimental: {
     instrumentationHook: true,
   },
