@@ -132,8 +132,17 @@ async function removeUploadedPaths(supabaseAdmin: AdminClient, paths: string[]):
 }
 
 export async function updateProduct(id: number, formData: FormData): Promise<UpdateProductResult> {
-  const imageFile = formDataOptionalFile(formData, 'image')
-  const nutritionalImageFile = formDataOptionalFile(formData, 'nutritionalImage')
+  let imageFile: File | undefined
+  let nutritionalImageFile: File | undefined
+  try {
+    imageFile = formDataOptionalFile(formData, 'image')
+    nutritionalImageFile = formDataOptionalFile(formData, 'nutritionalImage')
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Dados inválidos',
+    }
+  }
 
   const rawInput = {
     name: formDataString(formData, 'name'),
@@ -326,8 +335,17 @@ export async function updateProduct(id: number, formData: FormData): Promise<Upd
 }
 
 export async function createProduct(formData: FormData): Promise<CreateProductResult> {
-  const imageFile = formDataOptionalFile(formData, 'image')
-  const nutritionalImageFile = formDataOptionalFile(formData, 'nutritionalImage')
+  let imageFile: File | undefined
+  let nutritionalImageFile: File | undefined
+  try {
+    imageFile = formDataOptionalFile(formData, 'image')
+    nutritionalImageFile = formDataOptionalFile(formData, 'nutritionalImage')
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Dados inválidos',
+    }
+  }
 
   const rawInput = {
     name: formDataString(formData, 'name'),
