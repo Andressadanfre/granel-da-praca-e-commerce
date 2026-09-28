@@ -68,6 +68,30 @@ export default function RootLayout({
                 window.gtag('config', 'G-C6W30XMXN3');
               `}
             </Script>
+            <Script id="meta-pixel-init" strategy="afterInteractive">
+              {`
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('consent', 'revoke');
+                fbq('init', '2291807841017792');
+                try {
+                  var stored = localStorage.getItem('granel_cookie_consent');
+                  if (stored) {
+                    var state = JSON.parse(stored);
+                    if (state.ads === 'granted') {
+                      fbq('consent', 'grant');
+                    }
+                  }
+                } catch (e) {}
+                fbq('track', 'PageView');
+              `}
+            </Script>
           </>
         )}
         <ToastProvider>

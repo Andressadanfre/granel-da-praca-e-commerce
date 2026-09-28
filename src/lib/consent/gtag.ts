@@ -6,6 +6,7 @@ declare global {
   interface Window {
     dataLayer: unknown[]
     gtag: (...args: unknown[]) => void
+    fbq?: (...args: unknown[]) => void
   }
 }
 
@@ -35,4 +36,6 @@ export function updateConsent(analytics: boolean, ads: boolean) {
     ad_user_data: state.ads,
     ad_personalization: state.ads,
   })
+
+  window.fbq?.('consent', state.ads === 'granted' ? 'grant' : 'revoke')
 }
