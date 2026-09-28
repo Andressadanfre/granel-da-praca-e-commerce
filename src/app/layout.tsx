@@ -78,17 +78,16 @@ export default function RootLayout({
                 t.src=v;s=b.getElementsByTagName(e)[0];
                 s.parentNode.insertBefore(t,s)}(window, document,'script',
                 'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('consent', 'revoke');
-                fbq('init', '2291807841017792');
+                var adsGranted = false;
                 try {
                   var stored = localStorage.getItem('granel_cookie_consent');
                   if (stored) {
                     var state = JSON.parse(stored);
-                    if (state.ads === 'granted') {
-                      fbq('consent', 'grant');
-                    }
+                    adsGranted = state.ads === 'granted';
                   }
                 } catch (e) {}
+                fbq('consent', adsGranted ? 'grant' : 'revoke');
+                fbq('init', '2291807841017792');
                 fbq('track', 'PageView');
               `}
             </Script>
