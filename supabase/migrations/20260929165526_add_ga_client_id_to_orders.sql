@@ -8,13 +8,6 @@
 -- Contexto: Fase 3 do tracking de atribuição (evento de compra GA4 + Meta).
 -- Adiciona a coluna que faltava para o GA4 conseguir ligar o evento de
 -- compra à sessão que originou a venda (client_id do cookie _ga).
---
--- Nota: esta migration também corrige, no mesmo ciclo, um overload
--- duplicado de create_order_with_items criado por engano ao aplicar a
--- mudança (mesmo padrão de incidente já visto na Fase 1A, 16/09/2026) —
--- a versão antiga da função (sem p_ga_client_id) foi removida com
--- DROP FUNCTION usando a assinatura de tipos exata, e só a versão nova
--- permanece no banco.
 
 alter table public.orders add column ga_client_id text;
 
@@ -93,10 +86,3 @@ begin
   return query select v_order_id, v_order_code;
 end;
 $function$;
-
--- Remove o overload duplicado (sem p_ga_client_id) criado pelo CREATE OR
--- REPLACE acima — assinatura de tipos exata da versão antiga, 21 parâmetros.
-drop function if exists public.create_order_with_items(
-  uuid, order_delivery_type, payment_method, integer, integer, integer, integer,
-  jsonb, text, text, text, text, jsonb, text, text, text, text, text, text, text, text, text
-);
