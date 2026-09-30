@@ -36,6 +36,21 @@ function splitCustomerName(fullName: string): { name: string; surname?: string }
   return { name: parts[0], surname: parts.slice(1).join(' ') }
 }
 
+/** client_id do GA4: os dois últimos segmentos de `_ga` (`GA1.<nível>.<parte1>.<parte2>`). */
+function extractGaClientId(cookieValue: string | undefined): string | undefined {
+  if (!cookieValue) return undefined
+  try {
+    const parts = cookieValue.split('.')
+    if (parts.length < 4 || parts[0] !== 'GA1') return undefined
+    const part1 = parts[parts.length - 2]
+    const part2 = parts[parts.length - 1]
+    if (!part1 || !part2 || !/^\d+$/.test(part1) || !/^\d+$/.test(part2)) return undefined
+    return `${part1}.${part2}`
+  } catch {
+    return undefined
+  }
+}
+
 // ─── Tipos de retorno ─────────────────────────────────────────────────────────
 
 export interface CreateOrderResult {
@@ -119,9 +134,11 @@ export async function createOrderAction(
   })
 
   // Fase 1B — atribuição first-touch gravada pelo middleware.
-  // p_fbp fica de fora de propósito: depende do Pixel do Meta (Fase 2), que
-  // ainda não existe — não há cookie _fbp real pra ler nesta fase.
+  // O Pixel do Meta (Fase 2) já grava `_fbp` no navegador; lemos esse cookie
+  // opaco direto. O client_id do GA4 sai dos dois últimos segmentos de `_ga`.
   const attribution = parseAttributionCookie(cookies().get(ATTRIBUTION_COOKIE_NAME)?.value)
+  const fbp = cookies().get('_fbp')?.value
+  const gaClientId = extractGaClientId(cookies().get('_ga')?.value)
 
   const { data: rpcData, error: rpcError } = await supabase.rpc(
     'create_order_with_items',
@@ -141,6 +158,8 @@ export async function createOrderAction(
       p_items:            rpcItems as Json,
       p_gclid:            attribution?.gclid ?? undefined,
       p_fbc:              attribution?.fbc ?? undefined,
+      p_fbp:              fbp ?? undefined,
+      p_ga_client_id:     gaClientId ?? undefined,
       p_utm_source:       attribution?.utm_source ?? undefined,
       p_utm_medium:       attribution?.utm_medium ?? undefined,
       p_utm_campaign:     attribution?.utm_campaign ?? undefined,

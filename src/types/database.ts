@@ -516,6 +516,7 @@ export type Database = {
           p_discount_cents: number
           p_fbc?: string
           p_fbp?: string
+          p_ga_client_id?: string
           p_gclid?: string
           p_items?: Json
           p_notes?: string
