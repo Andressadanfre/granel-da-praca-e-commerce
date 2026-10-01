@@ -28,6 +28,7 @@ export interface CreatePreferenceInput {
   orderCode: string
   trackingToken: string
   items: MPPreferenceItem[]
+  subtotalCents: number      // base do teto de parcelas — regra: subtotal sem frete, antes de desconto
   shippingCents: number
   discountCents: number
   totalCents: number
@@ -49,10 +50,31 @@ export interface MPPreferenceResult {
 // ─── Regra de parcelamento — PRD "Pagamentos Online", sem juros ao cliente ──
 // ≥ R$150 → até 2x · ≥ R$300 → até 3x · abaixo disso → à vista obrigatório
 // Nunca acima de 3x em nenhuma hipótese.
-function computeMaxInstallments(totalCents: number): number {
-  if (totalCents >= PARCELA_3X_THRESHOLD) return 3
-  if (totalCents >= PARCELA_2X_THRESHOLD) return 2
+// Base: subtotal sem frete, antes de qualquer desconto (decisão 01/10/2026).
+function computeMaxInstallments(subtotalCents: number): number {
+  if (subtotalCents >= PARCELA_3X_THRESHOLD) return 3
+  if (subtotalCents >= PARCELA_2X_THRESHOLD) return 2
   return 1
+}
+
+// ─── Desconto aplicado nos itens ──────────────────────────────────────────────
+// A API de preferências NÃO tem campo de desconto global (`discounts` não existe
+// e era descartado em silêncio — o MP cobrava o valor cheio). O desconto é
+// distribuído proporcionalmente entre as linhas (resto na última); cada linha
+// vira quantity 1 com o valor da linha, para o total fechar no centavo.
+function applyDiscountToItems(items: MPPreferenceItem[], discountCents: number): MPPreferenceItem[] {
+  if (discountCents <= 0) return items
+  const lineCents = items.map(i => Math.round(i.unit_price * 100) * i.quantity)
+  const baseCents = lineCents.reduce((a, b) => a + b, 0)
+  let remainingCents = discountCents
+  return items.map((item, idx) => {
+    const shareCents = idx === items.length - 1
+      ? remainingCents
+      : Math.floor((discountCents * lineCents[idx]) / baseCents)
+    remainingCents -= shareCents
+    const title = item.quantity > 1 ? `${item.title} (${item.quantity} un)` : item.title
+    return { ...item, title, quantity: 1, unit_price: (lineCents[idx] - shareCents) / 100 }
+  })
 }
 
 // ─── Criação de preferência ───────────────────────────────────────────────────
@@ -69,21 +91,28 @@ export async function createMPPreference(
   // mostra só cartão (crédito/débito), esconde Pix.
   const excludedTypes =
     input.paymentMethod === 'pix'
-      ? [{ id: 'ticket' }, { id: 'credit_card' }, { id: 'debit_card' }]
+      ? [{ id: 'ticket' }, { id: 'credit_card' }, { id: 'debit_card' }, { id: 'prepaid_card' }]
       : [{ id: 'ticket' }, { id: 'bank_transfer' }]
+
+  // Trava: o que vai ao MP (itens + frete) precisa ser exatamente o total do
+  // pedido no banco. Divergência → falha antes de cobrar, nunca cobrança errada.
+  const chargedItems = applyDiscountToItems(input.items, input.discountCents)
+  const chargedCents =
+    chargedItems.reduce((a, i) => a + Math.round(i.unit_price * 100) * i.quantity, 0)
+    + input.shippingCents
+  if (chargedCents !== input.totalCents) {
+    throw new Error(`Total enviado ao MP (${chargedCents}) diverge do pedido (${input.totalCents})`)
+  }
 
   const body = {
     external_reference: input.orderId,
-    items: input.items,
+    items: chargedItems,
     shipments: input.shippingCents > 0
       ? { cost: input.shippingCents / 100, mode: 'not_specified' as const }
       : undefined,
-    discounts: input.discountCents > 0
-      ? input.discountCents / 100
-      : undefined,
     payer: input.payer,
     payment_methods: {
-      installments: computeMaxInstallments(input.totalCents),
+      installments: computeMaxInstallments(input.subtotalCents),
       excluded_payment_types: excludedTypes,
     },
     statement_descriptor: 'GRANEL PRACA',

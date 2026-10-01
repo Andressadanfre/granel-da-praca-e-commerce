@@ -222,6 +222,7 @@ export async function createOrderAction(
         productNames,
         productDescriptions,
       ),
+      subtotalCents,
       shippingCents,
       discountCents,
       totalCents,
@@ -340,7 +341,7 @@ export async function retryOrderPayment(
   // genérico (evita enumeração). 'pendente' cobre pagamento abandonado.
   const { data: order, error: orderError } = await supabase
     .from('orders')
-    .select('id, code, tracking_token, shipping_cents, discount_cents, total_cents, payment_method, customer_name, customer_phone, customer_email')
+    .select('id, code, tracking_token, subtotal_cents, shipping_cents, discount_cents, total_cents, payment_method, customer_name, customer_phone, customer_email')
     .eq('tracking_token', trackingToken)
     .in('payment_status', ['falhou', 'pendente'])
     .eq('is_deleted', false)
@@ -390,6 +391,7 @@ export async function retryOrderPayment(
       orderCode:     order.code,
       trackingToken: order.tracking_token,
       items:         cartItemsToMPItems(serverItems, productIds, productNames, productDescriptions),
+      subtotalCents: order.subtotal_cents,
       shippingCents: order.shipping_cents,
       discountCents: order.discount_cents,
       totalCents:    order.total_cents,
