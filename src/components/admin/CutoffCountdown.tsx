@@ -3,8 +3,7 @@
 import * as React from 'react'
 import { Clock } from 'lucide-react'
 
-const CUTOFF_HOUR_WEEKDAY = 17
-const CUTOFF_HOUR_SATURDAY = 11
+import { CORTE_ENTREGA } from '@/lib/store/units'
 
 function calcularCountdown(): { label: string; progresso: number } {
   const agora = new Date()
@@ -15,9 +14,9 @@ function calcularCountdown(): { label: string; progresso: number } {
     return { label: 'Sem entregas hoje', progresso: 100 }
   }
 
-  const cutoffHour = diaSemana === 6 ? CUTOFF_HOUR_SATURDAY : CUTOFF_HOUR_WEEKDAY
+  const corteDoDia = diaSemana === 6 ? CORTE_ENTREGA.sabado : CORTE_ENTREGA.diasUteis
   const corte = new Date(horaAtualSP)
-  corte.setHours(cutoffHour, 0, 0, 0)
+  corte.setHours(corteDoDia.hora, corteDoDia.minuto, 0, 0)
 
   if (horaAtualSP >= corte) {
     return { label: 'Corte encerrado', progresso: 100 }
@@ -47,8 +46,8 @@ export function CutoffCountdown() {
     diaSemana === 0
       ? 'Não entregamos aos domingos'
       : diaSemana === 6
-        ? 'Aceitar pedidos até 11h00 (sábado)'
-        : 'Aceitar pedidos até 17h00'
+        ? `Aceitar pedidos até ${CORTE_ENTREGA.sabado.label} (sábado)`
+        : `Aceitar pedidos até ${CORTE_ENTREGA.diasUteis.label}`
 
   return (
     <div className="rounded-card border border-bd bg-white p-[18px_20px] shadow-card transition-shadow hover:shadow-card-hover">

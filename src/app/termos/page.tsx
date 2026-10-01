@@ -25,7 +25,7 @@ export default function TermosDeUsoPage() {
       <p>
         <strong>Granel da Praça</strong> é nome fantasia de <strong>ANBA Comércio e Serviços LTDA</strong>.
         <br />
-        Unidade Fundinho (matriz): Praça Clarimundo Carneiro, 119, Uberlândia/MG — CNPJ 27.673.614/0001-90
+        Unidade Fundinho (matriz): Praça Clarimundo Carneiro, 119, Loja 06, Fundinho, Uberlândia/MG, CEP 38400-154 — CNPJ 27.673.614/0001-90
         <br />
         Unidade UMC (filial): Rua Rafael Marino Neto, 600, Uberlândia/MG — CNPJ 27.673.614/0002-71
       </p>
@@ -55,7 +55,7 @@ export default function TermosDeUsoPage() {
       <h2>5. Entrega e retirada</h2>
       <ul>
         <li><strong>Frete grátis</strong> para pedidos acima de R$100; frete fixo de <strong>R$15</strong> abaixo desse valor.</li>
-        <li>Pedidos devem ser feitos até <strong>17h</strong> (dias úteis) ou até <strong>11h</strong> (sábados) para entrega no mesmo dia.</li>
+        <li>Pedidos devem ser feitos até <strong>17h</strong> (dias úteis) ou até <strong>11h30</strong> (sábados) para entrega no mesmo dia. Aos sábados, os pedidos saem para entrega até 12h.</li>
         <li><strong>Não realizamos entregas aos domingos.</strong></li>
         <li>
           <strong>Retirada e entrega dos pedidos do site são realizadas exclusivamente pela

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { FUNDINHO, UMC } from '@/lib/store/units'
+
 export const metadata: Metadata = {
   title: 'Fale Conosco | Granel da Praça',
   description:
@@ -11,31 +13,23 @@ const unidades = [
   {
     nome: 'Unidade Fundinho',
     tipo: 'Matriz',
-    endereco: 'Rua Coronel Antônio Alves Pereira, 302',
-    bairro: 'Fundinho — Uberlândia, MG',
-    whatsapp: '5534997819292',
-    whatsappDisplay: '(34) 99781-9292',
-    horarios: [
-      { dias: 'Segunda a sábado', horario: '9h às 18h' },
-      { dias: 'Domingos e feriados', horario: 'Fechado' },
-    ],
-    mapsUrl:
-      'https://www.google.com/maps/search/Rua+Coronel+Antônio+Alves+Pereira+302+Fundinho+Uberlândia',
+    endereco: FUNDINHO.endereco,
+    bairro: `${FUNDINHO.bairro} — Uberlândia, MG · CEP ${FUNDINHO.cep}`,
+    whatsapp: FUNDINHO.whatsapp,
+    whatsappDisplay: FUNDINHO.whatsappDisplay,
+    horarios: FUNDINHO.horarios,
+    mapsUrl: `https://www.google.com/maps/search/${encodeURIComponent(`${FUNDINHO.endereco}, ${FUNDINHO.bairro}, Uberlândia - MG, ${FUNDINHO.cep}`)}`,
     destaque: true,
   },
   {
     nome: 'Unidade UMC',
     tipo: 'Jardim Karaíba',
-    endereco: 'Rua Rafael Marino Neto, 600',
-    bairro: 'Jardim Karaíba — Uberlândia, MG',
-    whatsapp: '5534997969191',
-    whatsappDisplay: '(34) 99796-9191',
-    horarios: [
-      { dias: 'Segunda a sexta', horario: '8h às 18h' },
-      { dias: 'Sábados, domingos e feriados', horario: 'Fechado' },
-    ],
-    mapsUrl:
-      'https://www.google.com/maps/search/Rua+Rafael+Marino+Neto+600+Jardim+Karaíba+Uberlândia',
+    endereco: UMC.endereco,
+    bairro: `${UMC.bairro} — Uberlândia, MG`,
+    whatsapp: UMC.whatsapp,
+    whatsappDisplay: UMC.whatsappDisplay,
+    horarios: UMC.horarios,
+    mapsUrl: `https://www.google.com/maps/search/${encodeURIComponent(`${UMC.endereco}, ${UMC.bairro}, Uberlândia - MG`)}`,
     destaque: false,
   },
 ]

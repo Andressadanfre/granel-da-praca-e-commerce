@@ -1,5 +1,6 @@
 import { Leaf, MessageCircle, ShieldCheck, Truck, type LucideIcon } from 'lucide-react'
 
+import { FUNDINHO } from '@/lib/store/units'
 import { cn } from '@/lib/utils'
 
 // ─── Dados estáticos — Server Component, zero JS no cliente ───────────────────
@@ -12,12 +13,12 @@ const BADGES: { icon: LucideIcon; title: string; subtitle: string }[] = [
   {
     icon: MessageCircle,
     title: 'Atendimento WhatsApp',
-    subtitle: 'Seg–Sáb, 8h às 18h',
+    subtitle: FUNDINHO.horarioResumo,
   },
   {
     icon: ShieldCheck,
     title: 'Pagamento Seguro',
-    subtitle: 'Pix, cartão e boleto',
+    subtitle: 'Pix e cartão',
   },
   {
     icon: Leaf,

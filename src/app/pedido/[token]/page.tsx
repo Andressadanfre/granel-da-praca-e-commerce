@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { OrderTimeline } from '@/components/order/OrderTimeline'
 import { RetryPaymentButton } from '@/components/order/RetryPaymentButton'
 import { formatBRL, formatGrams } from '@/lib/utils'
+import { FUNDINHO } from '@/lib/store/units'
 import type { OrderDeliveryType, OrderStatus, PaymentMethod } from '@/lib/orders/types'
 
 export const dynamic = 'force-dynamic'
@@ -246,8 +247,8 @@ export default async function PedidoPage({ params }: Props) {
                 Retirada na loja
               </p>
               <p className="text-[12px] font-medium text-t9 leading-snug">
-                Fundinho — Praça Clarimundo Carneiro, 119<br />
-                Seg–Sáb · 8h às 18h
+                Fundinho — {FUNDINHO.endereco}<br />
+                {FUNDINHO.horarioResumo}
               </p>
               <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-indigo bg-indigo-bg px-2 py-0.5 rounded-pill">
                 Frete grátis

@@ -13,11 +13,12 @@ Castanhas, grãos, sementes, farinhas, chás, suplementos naturais, temperos, ch
 - Termos de uso: /termos
 
 ## Contato e unidades
-- Unidade Fundinho (matriz): Rua Coronel Antônio Alves Pereira, 302 — WhatsApp (34) 99781-9292
-- Unidade UMC: Rua Rafael Marino Neto, 600 — WhatsApp (34) 99796-9191
+- Unidade Fundinho (matriz): Praça Clarimundo Carneiro, 119, Loja 06 — Fundinho, Uberlândia/MG — WhatsApp (34) 99781-9292
+- Unidade UMC: Rua Rafael Marino Neto, 600 (Complexo UMC) — Jardim Karaíba, Uberlândia/MG — WhatsApp (34) 99796-9191
 - Instagram: @graneldapraca
-- Horário Fundinho: segunda a sábado, 9h às 18h
+- Horário Fundinho: segunda a sexta, 9h às 18h; sábado, 9h às 12h
 - Horário UMC: segunda a sexta, 8h às 18h
+- Entrega no mesmo dia: pedidos até 17h (dias úteis) ou 11h30 (sábado); sem entregas aos domingos
 
 ## Estrutura do site
 O site é um e-commerce Next.js com:

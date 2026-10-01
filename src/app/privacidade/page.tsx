@@ -28,7 +28,7 @@ export default function PoliticaDePrivacidadePage() {
         </li>
         <li>
           <strong>Unidade UMC</strong> — Rua Rafael Marino Neto, 600, Uberlândia/MG — WhatsApp
-          (34) 97969-9191 — atendimento presencial; não participa da logística de pedidos do site
+          (34) 99796-9191 — atendimento presencial; não participa da logística de pedidos do site
         </li>
       </ul>
       <p>

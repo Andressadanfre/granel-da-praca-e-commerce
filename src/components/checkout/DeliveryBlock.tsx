@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import type { OrderDeliveryType } from '@/lib/orders/types'
+import { FUNDINHO, RETIRADA_PRAZO } from '@/lib/store/units'
 
 interface DeliveryAddress {
   cep: string
@@ -217,11 +218,11 @@ export function DeliveryBlock({
         {deliveryType === 'retirada' && (
           <div className="bg-surface border border-bd rounded-input px-4 py-3.5">
             <p className="text-[12px] font-semibold text-t9 mb-1">
-              Fundinho — Praça Clarimundo Carneiro, 119
+              Fundinho — {FUNDINHO.endereco}
             </p>
             <p className="text-[11px] text-t6 leading-relaxed">
-              Segunda a Sábado · 8h às 18h<br />
-              Retire em até 2h após a confirmação do pedido
+              {FUNDINHO.horarioResumo}<br />
+              {RETIRADA_PRAZO}
             </p>
           </div>
         )}

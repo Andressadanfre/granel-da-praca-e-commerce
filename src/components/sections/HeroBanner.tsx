@@ -4,6 +4,8 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
+import { CORTE_ENTREGA } from '@/lib/store/units'
+
 import { HeroSlider } from './HeroSlider'
 
 export function HeroBanner() {
@@ -32,7 +34,7 @@ export function HeroBanner() {
 
           {/* Subtítulo */}
           <p className="text-[17px] font-medium text-t6 leading-relaxed mb-8 max-w-[400px]">
-            Compre até as 17h em dias úteis (ou até 11h aos sábados) e entregamos no mesmo dia.
+            Compre até as {CORTE_ENTREGA.diasUteis.label} em dias úteis (ou até {CORTE_ENTREGA.sabado.label} aos sábados) e entregamos no mesmo dia.
           </p>
 
           {/* CTA */}

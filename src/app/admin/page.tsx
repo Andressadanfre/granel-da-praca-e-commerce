@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { TrendingUp, TrendingDown, ShoppingBag, AlertTriangle, AlertCircle, Package, CreditCard, ImageOff } from 'lucide-react'
 import { CutoffCountdown } from '@/components/admin/CutoffCountdown'
+import { CORTE_ENTREGA } from '@/lib/store/units'
 import { cn, formatBRL } from '@/lib/utils'
 import { PAYMENT_METHOD_LABELS } from '@/lib/admin/labels'
 import {
@@ -59,7 +60,7 @@ export default async function AdminDashboardPage() {
         <div>
           <h1 className="text-xl font-bold tracking-tight text-t9">Bom dia, Andressa</h1>
           <p className="mt-0.5 text-xs text-t4">
-            Aqui está o resumo de hoje · seg–sex entregas até 17h30 · sábado até 11h30
+            Aqui está o resumo de hoje · seg–sex pedidos até {CORTE_ENTREGA.diasUteis.label} · sábado até {CORTE_ENTREGA.sabado.label}
           </p>
         </div>
         <div className="rounded-input border border-bd bg-white px-3 py-1.5 text-[11px] font-medium capitalize text-t6">
