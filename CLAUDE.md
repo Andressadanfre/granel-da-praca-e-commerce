@@ -5,6 +5,15 @@
 
 ---
 
+## Segurança — auditoria concluída (22/09/2026)
+- X-Powered-By removido (commit 9ff6bbb)
+- /admin, /conta e /checkout confirmados protegidos (RBAC+2FA, redirect em Server Component, e checagem server-side em createOrderAction, respectivamente)
+- Upload de imagem no admin já validado (validateProductImageFile: tamanho, MIME, extensão) — nenhuma mudança necessária
+- Pendente, não crítico: CSP com unsafe-inline no script-src
+- Aguardando relatório do professor pra confirmar achado de "versão do Next.js exposta", não localizado nesta auditoria
+
+---
+
 ## Identidade e Stack
 
 E-commerce próprio da Granel da Praça — produtos naturais a granel desde 2019, duas unidades em Uberlândia, MG. Substituirá o Goomer e o site institucional no lançamento.
@@ -65,12 +74,20 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Confirmar sempre via painel de desenvolvedor (developers panel → Credenciais de produção) que o formulário de ativação (setor + site + termos) foi completado.
 - Sintoma de conta não ativada: erro `'uma das partes é de teste'` mesmo com cartão real.
 
-### Mercado Pago — FECHADO (01/09/2026)
+### Mercado Pago — preferência e Pix (atualizado 01/10/2026)
 
-- Webhook confirma pagamento ponta a ponta em produção (cartão + Pix), automático.
-- Qualidade da integração MP: **92/100** (aprovada). Causa da "Avaliação indisponível" era o campo "usa plataforma de e-commerce = Sim/Outras" na config da app MP; corrigido para "Não". Medido com Payment ID `175705914245`.
-- Causa raiz do botão travado/Pix ausente: atualização de segurança pendente nas notificações da conta MP (não era código nem chave Pix).
-- Debug do `route.ts` removido. Ticket **WCS-47798** encerrado.
+- Pix já sumiu da conta 2x (ago e set/2026, tickets WCS-47798 e WCS-51102) por causa do lado MP, não de código. Antes de mexer em código, testar: `GET /v1/payment_methods` com token de **PRODUÇÃO** deve listar `pix`.
+- Token de **TESTE** pertence a um usuário de teste (`test_user=true`) — resultado com ele NÃO prova nada sobre a conta real.
+- A API de preferências **NÃO** tem desconto global (`discounts` não existe e é descartado em silêncio — o MP cobrava o valor cheio). Desconto vai embutido nos itens (`applyDiscountToItems` em `src/lib/orders/mercadopago.ts`).
+- Trava obrigatória: soma(itens) + frete === `total_cents` do pedido, senão `createMPPreference` lança erro antes de cobrar. Nunca remover.
+- Teto de parcelas (`installments`) calculado sobre o **SUBTOTAL** (sem frete, antes de desconto): < R$150 à vista · ≥ R$150 2x · ≥ R$300 3x · nunca > 3x.
+- Pix: excluir `ticket`, `credit_card`, `debit_card`, `prepaid_card`. "Dinheiro em conta" e "Linha de Crédito" **NÃO** são removíveis no Checkout Pro.
+- Aplicação de produção: `1466361123117715` (Granel da Praca E-commerce). Qualidade da integração no painel: nunca medida (0/100 em 01/10/2026).
+
+### Dados das lojas — fonte única (01/10/2026)
+
+- Endereço, WhatsApp, horários, corte de entrega e prazo de retirada vivem em `src/lib/store/units.ts`. Nunca escrever esses dados à mão em componente.
+- Exceção: páginas legais (termos, privacidade, entrega) e `public/llms.txt` são texto corrido — atualizar junto, à mão.
 
 ### Estoque — stock_status NÃO bloqueia compra (27/07/2026)
 
@@ -250,10 +267,10 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 |---|---|
 | Supabase project | `ymjmgukuojwumvtaglyp` (São Paulo) |
 | Vercel team | `team_n2LeQBoo0SJSpN5VZ1zRwfZc` (andressadanfres-projects) |
-| Notion — 🗺️ 00 Mapa do Projeto | `35df86ce-18e5-81f2-9f9a-d342f044931d` |
+| Notion — 🗺️ 00A Mapa E-commerce (log de sessões) | `35df86ce-18e5-81f2-9f9a-d342f044931d` |
 | Notion — Framework E-commerce 2026 | `33bf86ce-18e5-815f-892f-c82b14a5b870` |
 | Notion — Site Institucional & Marketing | `343f86ce-18e5-8102-b577-d0f562c5b10e` |
-| GA4 | `G-C6W30XMXN3` · propriedade 491153641 — **nunca criar nova** |
+| GA4 | `G-C6W30XMXN3` · propriedade ⚠️ **divergente: 491153641 (aqui) vs 356725752 (Notion 30/09)** — conferir no painel GA4 antes de usar · **nunca criar nova** |
 | Meta Pixel | `2291807841017792` — **nunca criar novo** |
 | Google Ads | conta 760-664-9903 · conversão AW-763361661 |
 | UTM taxonomy | Google: `utm_source=google&utm_medium=cpc&utm_campaign=fundinho\|umc` · Meta: `utm_source=meta&utm_medium=paid_social` — nunca criar padrão novo |
