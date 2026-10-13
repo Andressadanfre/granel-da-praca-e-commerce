@@ -5,6 +5,7 @@ import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { CheckoutTopbar } from '@/components/checkout/CheckoutTopbar'
 import { Footer } from '@/components/layout/Footer'
 import { OrderTimeline } from '@/components/order/OrderTimeline'
+import { PaymentStatusWatcher } from '@/components/order/PaymentStatusWatcher'
 import { RetryPaymentButton } from '@/components/order/RetryPaymentButton'
 import { formatBRL, formatGrams } from '@/lib/utils'
 import { FUNDINHO } from '@/lib/store/units'
@@ -79,7 +80,7 @@ function statusMessage(
     && (paymentMethod === 'pix' || paymentMethod === 'cartao_credito')) {
     return {
       title: 'Aguardando confirmação do pagamento',
-      sub:   'Assim que o pagamento for aprovado, seu pedido entrará na fila. Você será avisado pelo WhatsApp.',
+      sub:   'Assim que o pagamento for aprovado, seu pedido entrará na fila. Esta página se atualiza sozinha quando o pagamento for confirmado.',
     }
   }
   return {
@@ -324,6 +325,7 @@ export default async function PedidoPage({ params }: Props) {
             </div>
 
             {(isFailed || isPending) && <RetryPaymentButton trackingToken={params.token} />}
+            {isPending && <PaymentStatusWatcher />}
           </div>
 
           {/* Timeline */}

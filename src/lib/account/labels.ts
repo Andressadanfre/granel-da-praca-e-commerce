@@ -63,11 +63,11 @@ export const ACCOUNT_STATUS_BADGE: Record<OrderStatus, AccountStatusBadgeMeta> =
 
 /** Labels de pagamento na Minha Conta (tom conversacional, ≠ admin) */
 export const ACCOUNT_PAYMENT_LABELS: Record<PaymentMethod, string> = {
-  pix: 'Pago via Pix',
+  pix: 'Pix',
   cartao_credito: 'Cartão de crédito',
   cartao_debito: 'Cartão de débito',
-  dinheiro: 'Pago em dinheiro na retirada',
-  alelo: 'Pago com Alelo',
+  dinheiro: 'Dinheiro',
+  alelo: 'Alelo',
 }
 
 export function getAccountPaymentLabel(method: PaymentMethod): string {
