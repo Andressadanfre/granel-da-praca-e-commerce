@@ -83,6 +83,8 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Teto de parcelas (`installments`) calculado sobre o **SUBTOTAL** (sem frete, antes de desconto): < R$150 à vista · ≥ R$150 2x · ≥ R$300 3x · nunca > 3x.
 - Pix: excluir `ticket`, `credit_card`, `debit_card`, `prepaid_card`. "Dinheiro em conta" e "Linha de Crédito" **NÃO** são removíveis no Checkout Pro.
 - Aplicação de produção: `1466361123117715` (Granel da Praca E-commerce). Qualidade da integração no painel: nunca medida (0/100 em 01/10/2026).
+- Pix no Checkout Pro **NÃO** devolve o cliente ao site (`auto_return` só vale p/ cartão) - confirmado no teste GP0070 (13/10/2026). O `PaymentStatusWatcher` só roda em `/pedido/[token]`: cobre o cliente que volta antes da confirmação, não a tela do MP. Solução definitiva planejada (pós-lançamento): Pix transparente com QR na página do pedido.
+- Datas no admin: exibir em `America/Sao_Paulo`. Bug aberto (13/10/2026): admin mostra UTC (+3h); conferir também o cálculo de "hoje" e o filtro de período.
 
 ### Dados das lojas — fonte única (01/10/2026)
 
