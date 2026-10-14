@@ -183,6 +183,14 @@ export function OrderSummaryPanel({
             )}
           </button>
 
+          {paymentMethod === 'pix' && (
+            <p className="mt-2.5 text-center text-[11px] leading-snug text-t6">
+              Depois de pagar o Pix, toque em{' '}
+              <strong className="font-semibold text-t9">Voltar para Granel da Praça</strong>{' '}
+              para ver a confirmação.
+            </p>
+          )}
+
           <div className="flex items-center justify-center gap-3.5 mt-3 flex-wrap">
             {[
               { label: 'Site seguro', path: 'M3 11h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M7 11V7a5 5 0 0 1 10 0v4' },
