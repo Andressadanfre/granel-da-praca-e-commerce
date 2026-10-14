@@ -84,7 +84,8 @@ E-commerce próprio da Granel da Praça — produtos naturais a granel desde 201
 - Pix: excluir `ticket`, `credit_card`, `debit_card`, `prepaid_card`. "Dinheiro em conta" e "Linha de Crédito" **NÃO** são removíveis no Checkout Pro.
 - Aplicação de produção: `1466361123117715` (Granel da Praca E-commerce). Qualidade da integração no painel: nunca medida (0/100 em 01/10/2026).
 - Pix no Checkout Pro **NÃO** devolve o cliente ao site (`auto_return` só vale p/ cartão) - confirmado no teste GP0070 (13/10/2026). O `PaymentStatusWatcher` só roda em `/pedido/[token]`: cobre o cliente que volta antes da confirmação, não a tela do MP. Solução definitiva planejada (pós-lançamento): Pix transparente com QR na página do pedido.
-- Datas no admin: exibir em `America/Sao_Paulo`. Bug aberto (13/10/2026): admin mostra UTC (+3h); conferir também o cálculo de "hoje" e o filtro de período.
+- Datas/horas exibidas: sempre `America/Sao_Paulo`, nunca `getHours()`/`toLocaleString` sem `timeZone` (o servidor da Vercel roda em UTC → +3h). Corrigido em 14/10/2026 em `formatOrderDateTime`, `formatOrderDateLong`, `OrderTimeline` e no cupom; "hoje" e filtros de período já usavam meia-noite de SP. Teste: `src/lib/datetime-sao-paulo.test.ts` (rodar com `TZ=UTC`).
+- Aviso de Pix no checkout (14/10/2026): `OrderSummaryPanel` mostra "toque em Voltar para Granel da Praça" só quando `paymentMethod === 'pix'`. Horário de corte sempre de `CORTE_ENTREGA` (`units.ts`), nunca escrito à mão.
 
 ### Dados das lojas — fonte única (01/10/2026)
 
