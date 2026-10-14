@@ -128,7 +128,7 @@ export default async function ImprimirCupomPage({ params }: Props) {
 
         <div className="codigo-destaque">#{order.code}</div>
         <div className="codigo-sub">
-          {formatOrderDateTime(order.created_at)} · Impresso às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+          {formatOrderDateTime(order.created_at)} · Impresso às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' })}
         </div>
 
         <hr className="divisor" />
