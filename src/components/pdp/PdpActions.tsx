@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge'
 import { QuantitySelector } from '@/components/ui/QuantitySelector'
 import { addToCart } from '@/lib/cart'
 import type { ProductForCart } from '@/lib/cart/types'
+import { CORTE_ENTREGA } from '@/lib/store/units'
 import { formatBRL } from '@/lib/utils'
 
 interface PdpActionsProps {
@@ -114,7 +115,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
 
           <p className="mt-2 flex items-center justify-center gap-[6px] text-[11px] text-t6">
             <Truck size={13} strokeWidth={1.6} className="text-gd" aria-hidden />
-            Peça até às 17h (sáb. até 11h) e receba ainda hoje em Uberlândia.
+            Peça até às {CORTE_ENTREGA.diasUteis.label} (sáb. até {CORTE_ENTREGA.sabado.label}) e receba ainda hoje em Uberlândia.
           </p>
 
           <div className="mt-3 flex gap-[10px]">

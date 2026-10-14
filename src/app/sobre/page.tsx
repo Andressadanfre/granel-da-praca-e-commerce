@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { FUNDINHO, UMC } from '@/lib/store/units'
+import { CORTE_ENTREGA, FUNDINHO, UMC } from '@/lib/store/units'
 
 export const metadata: Metadata = {
   title: 'Fale Conosco | Granel da Praça',
@@ -188,7 +188,7 @@ export default function SobrePage() {
             <div>
               <p className="text-[13.5px] font-600 text-gd">Comprar online</p>
               <p className="text-[12px] text-t6">
-                Entrega em Uberlândia — pedidos até às 17h saem no mesmo dia
+                Entrega em Uberlândia — pedidos até às {CORTE_ENTREGA.diasUteis.label} (sáb. até {CORTE_ENTREGA.sabado.label}) saem no mesmo dia
               </p>
             </div>
           </Link>
@@ -207,7 +207,7 @@ export default function SobrePage() {
               <p className="mt-1 text-[13px] text-t6 leading-relaxed">
                 As compras pelo e-commerce são retiradas e entregues exclusivamente pela{' '}
                 <strong className="font-600 text-t9">Unidade Fundinho (matriz)</strong>.
-                Pedidos realizados até as 17h em dias úteis são entregues no mesmo dia em Uberlândia.
+                Pedidos realizados até as {CORTE_ENTREGA.diasUteis.label} em dias úteis (ou até as {CORTE_ENTREGA.sabado.label} aos sábados) são entregues no mesmo dia em Uberlândia.
               </p>
             </div>
           </div>
