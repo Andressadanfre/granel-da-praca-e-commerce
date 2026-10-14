@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { CheckoutTopbar } from '@/components/checkout/CheckoutTopbar'
 import { Footer } from '@/components/layout/Footer'
@@ -15,6 +16,14 @@ export const dynamic = 'force-dynamic'
 
 interface Props {
   params: { token: string }
+}
+
+type ItemProduct = { image_url: string | null } | { image_url: string | null }[] | null
+
+/** A relação products pode vir como objeto ou lista, dependendo da inferência do PostgREST. */
+function getItemImageUrl(product: ItemProduct): string | null {
+  const row = Array.isArray(product) ? product[0] : product
+  return row?.image_url ?? null
 }
 
 // tracking_token = encode(gen_random_bytes(16), 'hex') no banco — sempre hex minúsculo de 32 chars
@@ -101,7 +110,7 @@ export default async function PedidoPage({ params }: Props) {
 
   const { data: items } = await supabase
     .from('order_items')
-    .select('*')
+    .select('*, products(image_url)')
     .eq('order_id', order.id)
     .order('id')
 
@@ -159,11 +168,21 @@ export default async function PedidoPage({ params }: Props) {
                     key={item.id}
                     className="flex items-center gap-2.5 py-2.5 border-b border-surface last:border-b-0 last:pb-0 first:pt-0"
                   >
-                    <div className="w-11 h-11 rounded-input border border-bd bg-surface flex-shrink-0 flex items-center justify-center">
-                      <svg width="20" height="20" viewBox="0 0 88 88" fill="none" className="opacity-20">
-                        <rect x="8" y="28" width="72" height="52" rx="6" fill="#002603" />
-                        <ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603" />
-                      </svg>
+                    <div className="w-11 h-11 rounded-input border border-bd bg-surface flex-shrink-0 flex items-center justify-center overflow-hidden">
+                      {getItemImageUrl(item.products) ? (
+                        <Image
+                          src={getItemImageUrl(item.products) ?? ''}
+                          alt={item.product_name}
+                          width={44}
+                          height={44}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 88 88" fill="none" className="opacity-20">
+                          <rect x="8" y="28" width="72" height="52" rx="6" fill="#002603" />
+                          <ellipse cx="44" cy="28" rx="20" ry="8" fill="#002603" />
+                        </svg>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[11px] font-semibold text-t9 truncate">{item.product_name}</p>
