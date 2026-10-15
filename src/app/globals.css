@@ -234,6 +234,11 @@ body {
   font-weight: 600; letter-spacing: .02em; text-transform: uppercase;
 }
 .checkout-field input::placeholder { color: transparent; }
+/* iOS Safari dá zoom automático em campos com fonte < 16px */
+@media (max-width: 639px) {
+  .checkout-field input,
+  .checkout-field select { font-size: 16px; }
+}
 .checkout-sel-arrow {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
   pointer-events: none; color: #9CA3AF;

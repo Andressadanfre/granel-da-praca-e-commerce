@@ -3,7 +3,6 @@ import { Poppins } from 'next/font/google'
 import Script from 'next/script'
 import { CartProvider } from '@/components/cart/CartProvider'
 import { ToastProvider } from '@/components/ui/ToastProvider'
-import { NewsletterPopup } from '@/components/features/NewsletterPopup'
 import { CookieConsentBanner } from '@/components/features/CookieConsentBanner'
 import './globals.css'
 
@@ -95,7 +94,6 @@ export default function RootLayout({
         )}
         <ToastProvider>
           <CartProvider>
-            <NewsletterPopup />
             {children}
             <CookieConsentBanner />
           </CartProvider>

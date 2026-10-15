@@ -185,7 +185,7 @@ export function PaymentBlock({
                       value={changeAmount}
                       onChange={e => onChangeAmountChange(maskMoney(e.target.value))}
                       placeholder="Ex: R$ 200,00"
-                      className="w-full h-10 border-[1.5px] border-[#FDE68A] rounded-input px-3 text-[13px] text-t9 bg-white outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.1)] placeholder:text-t4"
+                      className="w-full h-10 border-[1.5px] border-[#FDE68A] rounded-input px-3 text-base sm:text-[13px] text-t9 bg-white outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.1)] placeholder:text-t4"
                     />
                   </div>
                 )}

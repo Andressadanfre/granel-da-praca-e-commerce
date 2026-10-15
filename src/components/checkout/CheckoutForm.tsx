@@ -196,7 +196,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-cream pb-36 sm:pb-0">
       <CheckoutTopbar activeStep="checkout" />
 
       {/* Aviso de sessão pendente */}
@@ -273,7 +273,13 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
       </div>
 
       {/* CTA flutuante no mobile */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-bd px-4 py-3 z-40">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-bd px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] z-40">
+        {paymentMethod === 'pix' && (
+          <p className="mb-2 text-center text-xs leading-snug text-t6">
+            Depois de pagar o Pix, toque em{' '}
+            <strong className="font-semibold text-t9">Voltar para Granel da Praça</strong>.
+          </p>
+        )}
         <button
           type="button"
           onClick={handleSubmit}

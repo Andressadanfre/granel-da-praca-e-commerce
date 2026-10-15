@@ -57,18 +57,7 @@ export async function Navigation() {
       {/* ── ROW 1 — Announcement Bar (rola embora, sem sticky) ─── */}
       <div className="bg-gdeep h-9 flex items-center justify-center overflow-hidden font-sans">
 
-        {/* Desktop: duas mensagens alternadas via Tailwind keyframes */}
-        <div className="hidden md:block relative w-full h-9 overflow-hidden">
-          <p className="animate-ann-slide absolute inset-0 flex items-center justify-center text-white text-xs font-medium whitespace-nowrap m-0">
-            🎉 10% OFF na sua primeira compra acima de R$&nbsp;150
-          </p>
-          <p className="animate-ann-slide-2 absolute inset-0 flex items-center justify-center text-white text-xs font-medium whitespace-nowrap m-0">
-            🚚 Frete GRÁTIS nas compras acima de R$&nbsp;100,00
-          </p>
-        </div>
-
-        {/* Mobile: mensagem única */}
-        <p className="md:hidden text-white text-[11px] font-medium whitespace-nowrap m-0">
+        <p className="text-white text-xs font-medium whitespace-nowrap m-0">
           🚚 Frete GRÁTIS acima de R$&nbsp;100,00
         </p>
       </div>

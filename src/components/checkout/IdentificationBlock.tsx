@@ -85,7 +85,7 @@ export function IdentificationBlock({ fields, onChange }: IdentificationBlockPro
             value={fields.notes}
             onChange={e => onChange('notes', e.target.value)}
             maxLength={500}
-            className="w-full border-[1.5px] border-bd rounded-inner px-3 py-3 text-[13px] text-t9 bg-white outline-none transition-colors resize-none placeholder:text-t4 focus:border-gd focus:shadow-[0_0_0_3px_rgba(44,116,47,.15)] hover:border-t4"
+            className="w-full border-[1.5px] border-bd rounded-inner px-3 py-3 text-base sm:text-[13px] text-t9 bg-white outline-none transition-colors resize-none placeholder:text-t4 focus:border-gd focus:shadow-[0_0_0_3px_rgba(44,116,47,.15)] hover:border-t4"
           />
         </div>
       </div>
