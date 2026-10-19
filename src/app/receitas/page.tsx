@@ -126,7 +126,7 @@ const receitas: Receita[] = [
       'Asse a 170 °C por 20 minutos. Retire, marque os cortes com uma faca e volte ao forno por mais 10 a 15 minutos até ficarem secos e crocantes.',
       'Espere esfriar completamente antes de guardar em pote hermético.',
     ],
-    dica: 'Quanto mais fina a camada, mais crocante fica. Menos de 3 mm é o ideal.',
+    dica: 'Quanto mais fina a camada, mais crocante fica. Menos de 3 mm é o ideal.',
   },
   {
     slug: 'farofa-funcional-castanha-do-para',

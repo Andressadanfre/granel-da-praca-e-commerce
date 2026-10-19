@@ -186,8 +186,8 @@ export function OrderSummaryPanel({
           {paymentMethod === 'pix' && (
             <p className="mt-2.5 text-center text-[11px] leading-snug text-t6">
               Depois de pagar o Pix, toque em{' '}
-              <strong className="font-semibold text-t9">Voltar para Granel da Praça</strong>{' '}
-              para ver a confirmação.
+              <strong className="font-semibold text-t9">Voltar para Granel&nbsp;da&nbsp;Praça</strong>{' '}
+              para ver a&nbsp;confirmação.
             </p>
           )}
 

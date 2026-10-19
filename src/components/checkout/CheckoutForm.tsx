@@ -277,7 +277,7 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
         {paymentMethod === 'pix' && (
           <p className="mb-2 text-center text-xs leading-snug text-t6">
             Depois de pagar o Pix, toque em{' '}
-            <strong className="font-semibold text-t9">Voltar para Granel da Praça</strong>.
+            <strong className="font-semibold text-t9">Voltar para Granel&nbsp;da&nbsp;Praça</strong>.
           </p>
         )}
         <button
