@@ -281,57 +281,26 @@ Exemplo:  feat(loja): adicionar filtro por categoria com URL state
 | WhatsApp UMC (quiosque, sem retirada) | (34) 99796-9191 · Rua Rafael Marino Neto, 600 |
 | Site institucional (provisório) | www.graneldapraca.com.br · repo `Andressadanfre/graneldapraca-landing` |
 
-## Estado atual — 01/09/2026 (fim de sessão)
-
-HEAD: `192b79d` (2026-09-01) — feat(security): Permissions-Policy
-Commits da sessão: `e035d6d` (remove debug webhook MP), `99ff8bc` (npm audit fix 4 CVEs), `192b79d` (Permissions-Policy). Todos em origin/master.
-
-Fechado nesta sessão:
-- Webhook MP confirma pagamento ponta a ponta em produção (cartão + Pix), automático. Ticket WCS-47798 encerrado.
-- Qualidade da integração MP: 92/100 (aprovada). Debug do `route.ts` removido.
-- Headers de segurança: Permissions-Policy adicionado. RLS 10/10. 4 highs npm audit resolvidos.
-
-On the horizon:
-- Backup: Supabase Free **NÃO** tem backup automático. Rotina: export CSV manual pelo painel (Table Editor), semanal e antes de mudanças grandes. Upgrade Pro planejado. Perda de dados no Free é irreversível.
-- 2FA no admin: 0 fatores MFA, 1 admin ativo. Resolver antes da integração Explend.
-
-Achados da auditoria UX/UI, ainda não corrigidos:
-- /receitas e /sobre — 404 real, decisão tomada de criar as duas (conteúdo pendente de definição com a Andressa antes de implementar)
-- 5 links de categoria no rodapé com slug errado (Footer.tsx): oleaginosas, graos, chas, superalimentos, suplementos — não batem com slugs reais (graos-e-sementes, chas-e-infusoes, suplementos-naturais; dois não existem como categoria)
-- Imagens sumindo no carrinho/checkout mobile (reportado pela Andressa) — não reproduzido, falta isolar (página exata, produtos, aba Rede do DevTools)
-
-Lição registrada: seletor de pagamento do checkout foi erroneamente reportado como bug crítico durante a auditoria (falso positivo por instabilidade da sessão de automação) — retratado após reteste em página limpa. Sempre revalidar em estado fresco antes de reportar bug como confirmado.
-
-Próxima sessão: decidir conteúdo de /receitas e /sobre, depois corrigir os 5 links do Footer.tsx.
-
-## Infraestrutura e segurança (10-13/09/2026)
+## Infraestrutura e segurança — invariantes
 
 - Backup automático diário do banco via GitHub Actions (`.github/workflows/backup-db.yml`), `pg_dump` com `postgresql-client-17` (a versão padrão do runner Ubuntu é 16, incompatível com Postgres 17 do Supabase). Secret `SUPABASE_DB_URL` guarda a connection string (Session pooler). Artifact retido 90 dias.
-- MCP do Cursor (inventário 15/09/2026; fallback em ⚙️ 6 — Configuração do Cursor no Notion — `.cursor/mcp.json` não é versionado):
+- MCP do Cursor (fallback em ⚙️ 6 — Configuração do Cursor no Notion — `.cursor/mcp.json` não é versionado):
   - Project-scoped (habilitados): context7, figma, supabase, vercel. Nenhum tem ferramenta de gasto/pausa/destrutiva habilitada.
   - User-scoped (conta da Andressa — não presumir em outra máquina): firecrawl, Notion, playwright.
   - Desabilitados (duplicatas — não usar): datadog (Plugin), Figma (User), Github (User), supabase (Plugin), vercel (User).
-  - Pendente: `mcp` (Plugin) em Needs Attention; identidade/propósito não confirmados.
-- Supabase Advisors (13/09): `search_path` mutável em `generate_order_code`/`recalculate_stock_status`; `rls_auto_enable` e `create_order_with_items` expostas como SECURITY DEFINER via RPC — atenção: `create_order_with_items` já valida `p_user_id` contra `auth.uid()` no corpo da função, não tratar como vulnerabilidade de spoofing ativa sem reler o código. Leaked Password Protection desabilitado no Auth.
-- `next`/`postcss`: 2 CVEs críticos sem patch na 14.2.x (só existe em 15.5.24/16.3.3). RCE Windows não afeta hosting Vercel (Linux). RCE AVIF só se `next.config` tiver `formats: ['image/avif']` — ainda não confirmado.
+- `create_order_with_items` é SECURITY DEFINER exposta via RPC, mas já valida `p_user_id` contra `auth.uid()` no corpo da função — não tratar como vulnerabilidade de spoofing ativa sem reler o código.
+- Leaked Password Protection do Supabase Auth exige plano Pro+ — limitação do plano Free, não pendência. Reabrir só se o projeto migrar de plano.
+- 2FA (TOTP) do admin: sem códigos de recuperação e desativar não exige reautenticação — limitação conhecida, aceitável com 1 admin.
+- `next`/`postcss`: 2 CVEs críticos sem patch na 14.2.x (só existe em 15.5.24/16.3.3). RCE Windows não afeta hosting Vercel (Linux). RCE AVIF só se `next.config` tiver `formats: ['image/avif']`.
+- Domínio próprio (graneldapraca.com.br): o cutover para o e-commerce só acontece depois do tracking (atribuição + evento de compra) estar pronto e testado.
 
-## Sessão 14/09/2026 — OfertaCard + banner de Ofertas
+## UI — decisões fechadas
 
-- OfertaCard.tsx: layout horizontal a partir do md: (thumb 52px + nome + preço + badge + AddToCartSelector em linha única). Mobile em duas linhas. Fill bg-white/[0.07] sem stroke (o border anterior não tinha respaldo no design-system-v3-1.md). Nome com line-clamp-2 em vez de truncamento fluido — cards podem ter alturas diferentes entre si.
-- OfertasSection.tsx + OfertasCountdown.tsx: padding vertical rebalanceado. Altura do banner desktop: 565px -> 504px.
-- Commit 73280ba — 3 arquivos.
-- TrustBadges: marquee com loop infinito confirmado funcional. A aparência de grid estático investigada nesta sessão era causada por prefers-reduced-motion ativado no SO da máquina de dev, não regressão de código. Nenhuma mudança aplicada.
-- Redesign completo de OfertasSection.tsx (fundo claro, ProductCard em vez de OfertaCard) permanece isolado em stash@{0}. Decisão fechada: manter OfertaCard atual. Destino do stash (descartar ou manter guardado) ainda pendente.
+- `OfertaCard` (horizontal a partir do `md:`, fill `bg-white/[0.07]` sem stroke, nome com `line-clamp-2`) é a versão oficial. O redesign de `OfertasSection` com `ProductCard` foi descartado — não reabrir.
+- TrustBadges (marquee): se parecer grid estático, conferir `prefers-reduced-motion` do SO antes de suspeitar de regressão.
 
-## Sessão 14/09/2026 (cont.) — 2FA admin, leaked password protection, stash
+## Disciplina de verificação
 
-- 2FA (TOTP) implementado no admin, opt-in, escopo minimo viavel. Commit 664affa. Testado ao vivo: enroll, logout, login exige codigo, verificacao ok. Sem codigos de recuperacao nesta fase. Desativar 2FA nao exige reautenticacao - limitacao conhecida, aceitavel com 1 admin.
-- Leaked Password Protection: fechado como limitacao de plano Free (recurso exige Supabase Pro+), nao e mais pendencia ativa. Reabrir só se o projeto migrar de plano.
-- Stash do redesign de OfertasSection.tsx descartado (git stash drop) - decisao de manter OfertaCard atual, ja fechada anteriormente.
-
-## Sessão 14/09/2026 (fechamento) — Frente 1 de tracking diagnosticada, migrations de seguranca fechadas
-
-- search_path mutavel corrigido em generate_order_code e recalculate_stock_status (migration fix_search_path_order_code_and_stock_status). rls_auto_enable() teve EXECUTE revogado de PUBLIC (migration revoke_public_execute_rls_auto_enable). Advisors de seguranca confirmados limpos apos as duas.
-- Achado de processo: recalculate_stock_status tinha fix anterior registrado no Notion (24/07) que nao se confirmou no codigo real - reforca nunca tratar documentacao como prova de estado atual sem checar a definicao ao vivo.
-- Frente 1 de tracking (atribuicao de campanha) diagnosticada como greenfield total: orders nao tem nenhuma coluna de atribuicao (gclid/fbc/fbp/utm_*), nenhuma captura em src/, Meta Pixel nao esta instalado (so em doc), GA4 dispara so page_view, zero evento de purchase. Plano em 4 fases definido: 1A (schema + RPC), 1B (captura client-side + cookie), 2 (Meta Pixel com Consent Mode), 3 (evento de compra GA4+Meta). Nada implementado ainda - retomar Fase 1A na proxima sessao.
-- Dominio proprio (graneldapraca.com.br) confirmado ainda servindo a landing page, nao o e-commerce. Decisao: cutover so depois do tracking acima estar pronto e testado.
+- Documentação (CLAUDE.md, Notion, memória) **não** prova estado atual. Conferir a definição ao vivo (código, `git log`, Supabase MCP) antes de agir. Já houve fix registrado no Notion que não existia no código (`recalculate_stock_status`).
+- Antes de reportar bug como confirmado, revalidar em estado fresco (página limpa, sessão nova). O seletor de pagamento do checkout já foi reportado como bug crítico por falso positivo de instabilidade da automação.
+- Este arquivo só guarda invariantes. HEAD, commits, "fechado nesta sessão", "próxima sessão" e pendências vão para o log do Notion 00A.
