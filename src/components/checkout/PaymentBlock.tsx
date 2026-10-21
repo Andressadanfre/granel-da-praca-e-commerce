@@ -92,16 +92,26 @@ export function PaymentBlock({
               <span className="flex-1 min-w-0">
                 <span className="block text-[13px] font-semibold text-t9">{opt.label}</span>
                 <span className="block text-[10px] text-t6 mt-0.5">{opt.sub}</span>
+                {opt.key === 'pix' && (
+                  <span className="mt-1.5 inline-block sm:hidden text-[10px] font-bold px-2 py-0.5 rounded-pill bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] whitespace-nowrap">
+                    5% OFF
+                  </span>
+                )}
+                {opt.key === 'cartao_credito' && (
+                  <span className="mt-1.5 inline-block sm:hidden text-[10px] font-bold px-2 py-0.5 rounded-pill bg-indigo-bg text-indigo whitespace-nowrap">
+                    {installmentBadge}
+                  </span>
+                )}
               </span>
 
               {/* Badge */}
               {opt.key === 'pix' && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-pill bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] whitespace-nowrap flex-shrink-0">
+                <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-pill bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] whitespace-nowrap flex-shrink-0">
                   5% OFF
                 </span>
               )}
               {opt.key === 'cartao_credito' && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-pill bg-indigo-bg text-indigo whitespace-nowrap flex-shrink-0">
+                <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-pill bg-indigo-bg text-indigo whitespace-nowrap flex-shrink-0">
                   {installmentBadge}
                 </span>
               )}
@@ -164,7 +174,7 @@ export function PaymentBlock({
                       key={choice.label}
                       type="button"
                       onClick={() => onNeedsChangeToggle(choice.value)}
-                      className={`border-[1.5px] rounded-pill px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                      className={`flex min-h-11 items-center border-[1.5px] rounded-pill px-3 text-[11px] font-semibold transition-colors ${
                         needsChange === choice.value
                           ? 'border-[#F59E0B] bg-[#FEF9C3] text-[#78350F]'
                           : 'border-[#FDE68A] bg-white text-[#92400E] hover:border-[#F59E0B] hover:bg-[#FEF9C3]'

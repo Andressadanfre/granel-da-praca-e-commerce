@@ -57,7 +57,7 @@ export function DeliveryBlock({
           <button
             type="button"
             onClick={() => onDeliveryTypeChange('entrega')}
-            className={`flex-1 border-[1.5px] rounded-sel px-3.5 py-3 cursor-pointer transition-colors text-left ${
+            className={`flex flex-1 flex-col border-[1.5px] rounded-sel px-3.5 py-3 cursor-pointer transition-colors text-left ${
               deliveryType === 'entrega'
                 ? 'border-gd bg-[#F0FDF4]'
                 : 'border-bd hover:border-[#93C5A5]'
@@ -75,8 +75,8 @@ export function DeliveryBlock({
               </span>
               <span className="text-[12px] font-semibold text-t9">Receber em casa</span>
             </div>
-            <p className="text-[10px] text-t6 ml-6">Motoboy · Uberlândia · R$&nbsp;15,00</p>
-            <span className="mt-1.5 ml-6 inline-block text-[9px] font-bold bg-[#DCFCE7] text-[#166534] px-[7px] py-[2px] rounded-pill">
+            <p className="mb-1.5 text-[10px] text-t6 ml-6">Motoboy · Uberlândia · R$&nbsp;15,00</p>
+            <span className="mt-auto self-start ml-6 inline-block text-[9px] font-bold bg-[#DCFCE7] text-[#166534] px-[7px] py-[2px] rounded-pill">
               Entrega hoje
             </span>
           </button>
@@ -85,7 +85,7 @@ export function DeliveryBlock({
           <button
             type="button"
             onClick={() => onDeliveryTypeChange('retirada')}
-            className={`flex-1 border-[1.5px] rounded-sel px-3.5 py-3 cursor-pointer transition-colors text-left ${
+            className={`flex flex-1 flex-col border-[1.5px] rounded-sel px-3.5 py-3 cursor-pointer transition-colors text-left ${
               deliveryType === 'retirada'
                 ? 'border-gd bg-[#F0FDF4]'
                 : 'border-bd hover:border-[#93C5A5]'
@@ -103,8 +103,8 @@ export function DeliveryBlock({
               </span>
               <span className="text-[12px] font-semibold text-t9">Retirar na loja</span>
             </div>
-            <p className="text-[10px] text-t6 ml-6">Unidade Fundinho</p>
-            <span className="mt-1.5 ml-6 inline-block text-[9px] font-bold bg-indigo-bg text-indigo px-[7px] py-[2px] rounded-pill">
+            <p className="mb-1.5 text-[10px] text-t6 ml-6">Unidade Fundinho</p>
+            <span className="mt-auto self-start ml-6 inline-block text-[9px] font-bold bg-indigo-bg text-indigo px-[7px] py-[2px] rounded-pill">
               Frete grátis
             </span>
           </button>
@@ -144,7 +144,7 @@ export function DeliveryBlock({
                   placeholder=" "
                   value={address.street}
                   onChange={e => onAddressChange('street', e.target.value)}
-                  autoComplete="street-address"
+                  autoComplete="address-line1"
                 />
                 <label htmlFor="street">
                   Rua <span className="text-danger">*</span>
@@ -157,7 +157,7 @@ export function DeliveryBlock({
                   placeholder=" "
                   value={address.streetNumber}
                   onChange={e => onAddressChange('streetNumber', e.target.value)}
-                  autoComplete="address-line2"
+                  autoComplete="off"
                 />
                 <label htmlFor="streetNumber">
                   Nº <span className="text-danger">*</span>
@@ -186,30 +186,41 @@ export function DeliveryBlock({
                   placeholder=" "
                   value={address.complement}
                   onChange={e => onAddressChange('complement', e.target.value)}
+                  autoComplete="address-line2"
                 />
                 <label htmlFor="complement">Complemento (opcional)</label>
               </div>
             </div>
 
             {/* Período */}
-            <div className={`checkout-field has-val`}>
-              <select
-                id="deliveryPeriod"
-                value={address.deliveryPeriod}
-                onChange={e => onAddressChange('deliveryPeriod', e.target.value)}
-              >
-                <option value="">Selecione</option>
-                <option value="manha">Manhã (8h – 12h)</option>
-                <option value="tarde">Tarde (12h – 18h)</option>
-              </select>
-              <label htmlFor="deliveryPeriod">Período preferido</label>
-              <svg
-                className="checkout-sel-arrow"
-                width="14" height="14" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
+            <div>
+              <p id="deliveryPeriodLabel" className="mb-2 text-xs font-semibold text-t6">
+                Período preferido <span className="font-normal text-t4">(opcional)</span>
+              </p>
+              <div role="radiogroup" aria-labelledby="deliveryPeriodLabel" className="flex gap-2.5">
+                {[
+                  { value: 'manha', label: 'Manhã (8h – 12h)' },
+                  { value: 'tarde', label: 'Tarde (12h – 18h)' },
+                ].map(period => {
+                  const selected = address.deliveryPeriod === period.value
+                  return (
+                    <button
+                      key={period.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => onAddressChange('deliveryPeriod', selected ? '' : period.value)}
+                      className={`flex min-h-11 flex-1 items-center justify-center border-[1.5px] rounded-sel px-3 text-xs font-semibold transition-colors ${
+                        selected
+                          ? 'border-gd bg-[#F0FDF4] text-t9'
+                          : 'border-bd text-t6 hover:border-[#93C5A5]'
+                      }`}
+                    >
+                      {period.label}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
         )}
