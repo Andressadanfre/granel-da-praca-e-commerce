@@ -229,7 +229,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <>
             {/* BARRA DE FRETE */}
             <div className="flex-shrink-0 border-b border-bd px-6 pb-3 pt-3.5">
-              <p className="mb-2.5 text-[11px] leading-snug text-t6">
+              <p className="mb-2.5 text-[12px] leading-snug text-t6">
                 {freteUnlocked ? (
                   <span className="font-bold text-g">🎉 Frete Grátis desbloqueado!</span>
                 ) : (
@@ -254,7 +254,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <Truck size={16} strokeWidth={1.6} className="text-gd" aria-hidden="true" />
                 </div>
               </div>
-              <div className="mt-1.5 flex justify-between text-[9px] font-medium text-t4">
+              <div className="mt-1.5 flex justify-between text-[12px] font-medium text-t4">
                 <span>R$ 0</span>
                 <span>R$ 100 — Grátis 🎉</span>
               </div>
@@ -297,7 +297,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <p className="line-clamp-2 text-[13.5px] font-semibold leading-snug text-t9">
                           {item.name}
                         </p>
-                        <p className="mt-0.5 text-[11px] text-t4">{getItemMeta(item)}</p>
+                        <p className="mt-0.5 text-[12px] text-t4">{getItemMeta(item)}</p>
                       </div>
                       <button
                         type="button"
@@ -369,7 +369,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="mt-0.5 shrink-0 text-[#065F46]"
                     aria-hidden="true"
                   />
-                  <div className="text-[11px] leading-relaxed text-[#065F46]">
+                  <div className="text-[12px] leading-relaxed text-[#065F46]">
                     <strong className="block text-xs font-bold">Parcelamento liberado</strong>
                     Parcelamento em {parc.parcelas}x sem juros disponível!
                   </div>
@@ -386,7 +386,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     <strong className="block text-xs font-bold text-indigo">
                       Parcele em 2x sem juros
                     </strong>
-                    <span className="text-[11px] leading-relaxed text-indigo">
+                    <span className="text-[12px] leading-relaxed text-indigo">
                       Faltam {formatBRL(parc.faltam)} para parcelar em 2x sem juros no cartão
                     </span>
                     <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-pill bg-[#C7D2FE]">

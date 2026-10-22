@@ -58,7 +58,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
 
       <hr className="my-5 border-bd" />
 
-      <p className="text-[11px] text-t4">
+      <p className="text-[12px] text-t4">
         {isGranel ? 'Preço por 100 gr' : 'Preço por unidade'}
       </p>
       <div className="mt-1 flex items-baseline gap-2">
@@ -70,7 +70,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
         )}
       </div>
       {isGranel && (
-        <p className="mt-1 text-[11px] text-t4">
+        <p className="mt-1 text-[12px] text-t4">
           {formatBRL(pricePerKgCents(product.priceCents))}/kg
         </p>
       )}
@@ -87,7 +87,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
         </p>
       ) : (
         <>
-          <p className="mb-2 mt-5 text-[11px] font-semibold uppercase tracking-[0.05em] text-t6">
+          <p className="mb-2 mt-5 text-[12px] font-semibold uppercase tracking-[0.05em] text-t6">
             Quantidade
           </p>
           <QuantitySelector
@@ -113,7 +113,7 @@ export function PdpActions({ product, stockStatus }: PdpActionsProps) {
             {added ? 'Adicionado!' : `Adicionar ao carrinho • ${formatBRL(displayTotalCents)}`}
           </button>
 
-          <p className="mt-2 flex items-center justify-center gap-[6px] text-[11px] text-t6">
+          <p className="mt-2 flex items-center justify-center gap-[6px] text-[12px] text-t6">
             <Truck size={13} strokeWidth={1.6} className="text-gd" aria-hidden />
             Peça até às {CORTE_ENTREGA.diasUteis.label} (sáb. até {CORTE_ENTREGA.sabado.label}) e receba ainda hoje em Uberlândia.
           </p>
