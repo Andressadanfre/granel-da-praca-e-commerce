@@ -53,7 +53,6 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix')
   const [needsChange, setNeedsChange]     = useState(false)
   const [changeAmount, setChangeAmount]   = useState('')
-  const [couponCode, setCouponCode]       = useState('')
   const [isSubmitting, setIsSubmitting]   = useState(false)
   const [error, setError]                 = useState<string | null>(null)
 
@@ -196,7 +195,13 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
   }
 
   return (
-    <div className="min-h-screen bg-cream pb-36 sm:pb-0">
+    <div
+      className={`min-h-screen bg-cream sm:pb-0 ${
+        paymentMethod === 'pix'
+          ? 'pb-[calc(9rem+env(safe-area-inset-bottom))]'
+          : 'pb-[calc(6rem+env(safe-area-inset-bottom))]'
+      }`}
+    >
       <CheckoutTopbar activeStep="checkout" />
 
       {/* Aviso de sessão pendente */}
@@ -222,9 +227,6 @@ export function CheckoutForm({ prefillEmail }: CheckoutFormProps) {
             paymentMethod={paymentMethod}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}
-            couponCode={couponCode}
-            onCouponChange={setCouponCode}
-            onApplyCoupon={() => { /* cupom — Fase 5B */ }}
             deliveryType={deliveryType}
           />
         </div>

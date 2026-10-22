@@ -21,9 +21,6 @@ interface OrderSummaryPanelProps {
   paymentMethod: PaymentMethod
   isSubmitting: boolean
   onSubmit: () => void
-  couponCode: string
-  onCouponChange: (val: string) => void
-  onApplyCoupon: () => void
   deliveryType: OrderDeliveryType
 }
 
@@ -32,9 +29,6 @@ export function OrderSummaryPanel({
   paymentMethod,
   isSubmitting,
   onSubmit,
-  couponCode,
-  onCouponChange,
-  onApplyCoupon,
   deliveryType,
 }: OrderSummaryPanelProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -204,31 +198,6 @@ export function OrderSummaryPanel({
                 {item.label}
               </div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Coupon */}
-      <div className="bg-white border border-bd rounded-inner overflow-hidden shadow-card hidden sm:block">
-        <div className="px-[18px] py-3.5 border-b border-bd text-[13px] font-semibold text-t9">
-          Cupom de desconto
-        </div>
-        <div className="px-[18px] py-4">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={couponCode}
-              onChange={e => onCouponChange(e.target.value.toUpperCase())}
-              placeholder="Ex: BEMVINDOUDI"
-              className="flex-1 h-[38px] border border-bd rounded-input px-3 text-[12px] text-t9 bg-white outline-none transition-colors focus:border-gd placeholder:text-t4"
-            />
-            <button
-              type="button"
-              onClick={onApplyCoupon}
-              className="h-[38px] px-3.5 bg-surface border border-bd rounded-input text-[12px] font-semibold text-t6 hover:bg-[#E5E7EB] hover:text-t9 transition-colors whitespace-nowrap"
-            >
-              Aplicar
-            </button>
           </div>
         </div>
       </div>

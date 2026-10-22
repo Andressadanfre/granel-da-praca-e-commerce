@@ -179,7 +179,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Carrinho de compras"
-        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85vh] w-full flex-col overflow-hidden rounded-t-modal bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[420px] md:rounded-none"
+        className="fixed bottom-0 left-0 right-0 z-50 flex h-[85dvh] w-full flex-col overflow-hidden rounded-t-modal bg-cream shadow-drawer outline-none md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-screen md:w-[420px] md:rounded-none"
         initial={drawerMotion.initial}
         animate={drawerMotion.animate}
         exit={drawerMotion.exit}
@@ -314,7 +314,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           type="button"
                           onClick={() => handleDecrease(item)}
                           aria-label="Diminuir quantidade"
-                          className="flex h-8 w-8 items-center justify-center rounded-input text-gd transition-colors hover:bg-g-muted"
+                          className="relative flex h-8 w-8 items-center justify-center rounded-input text-gd transition-colors before:absolute before:-inset-1.5 hover:bg-g-muted"
                         >
                           <Minus size={14} strokeWidth={1.6} aria-hidden="true" />
                         </button>
@@ -325,7 +325,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           type="button"
                           onClick={() => handleIncrease(item)}
                           aria-label="Aumentar quantidade"
-                          className="flex h-8 w-8 items-center justify-center rounded-input text-gd transition-colors hover:bg-g-muted"
+                          className="relative flex h-8 w-8 items-center justify-center rounded-input text-gd transition-colors before:absolute before:-inset-1.5 hover:bg-g-muted"
                         >
                           <Plus size={14} strokeWidth={1.6} aria-hidden="true" />
                         </button>
@@ -416,7 +416,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center justify-center gap-1.5 text-center text-sm text-t4 transition-colors hover:text-t6"
+                className="relative flex w-full items-center justify-center gap-1.5 text-center text-sm text-t4 transition-colors before:absolute before:inset-x-0 before:-inset-y-3 hover:text-t6"
               >
                 <ArrowLeft size={14} strokeWidth={1.6} aria-hidden="true" />
                 Continuar comprando
