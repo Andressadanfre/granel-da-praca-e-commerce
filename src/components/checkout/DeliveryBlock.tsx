@@ -75,7 +75,7 @@ export function DeliveryBlock({
               </span>
               <span className="text-[12px] font-semibold text-t9">Receber em casa</span>
             </div>
-            <p className="mb-1.5 text-[10px] text-t6 ml-6">Motoboy · Uberlândia · R$&nbsp;15,00</p>
+            <p className="mb-1.5 text-[12px] text-t6 ml-6">Motoboy · Uberlândia · R$&nbsp;15,00</p>
             <span className="mt-auto self-start ml-6 inline-block text-[9px] font-bold bg-[#DCFCE7] text-[#166534] px-[7px] py-[2px] rounded-pill">
               Entrega hoje
             </span>
@@ -103,7 +103,7 @@ export function DeliveryBlock({
               </span>
               <span className="text-[12px] font-semibold text-t9">Retirar na loja</span>
             </div>
-            <p className="mb-1.5 text-[10px] text-t6 ml-6">Unidade Fundinho</p>
+            <p className="mb-1.5 text-[12px] text-t6 ml-6">Unidade Fundinho</p>
             <span className="mt-auto self-start ml-6 inline-block text-[9px] font-bold bg-indigo-bg text-indigo px-[7px] py-[2px] rounded-pill">
               Frete grátis
             </span>
@@ -231,7 +231,7 @@ export function DeliveryBlock({
             <p className="text-[12px] font-semibold text-t9 mb-1">
               Fundinho — {FUNDINHO.endereco}
             </p>
-            <p className="text-[11px] text-t6 leading-relaxed">
+            <p className="text-[12px] text-t6 leading-relaxed">
               {FUNDINHO.horarioResumo}<br />
               {RETIRADA_PRAZO}
             </p>

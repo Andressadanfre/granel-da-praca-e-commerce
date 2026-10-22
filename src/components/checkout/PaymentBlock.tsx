@@ -91,7 +91,7 @@ export function PaymentBlock({
               {/* Info */}
               <span className="flex-1 min-w-0">
                 <span className="block text-[13px] font-semibold text-t9">{opt.label}</span>
-                <span className="block text-[10px] text-t6 mt-0.5">{opt.sub}</span>
+                <span className="block text-[12px] text-t6 mt-0.5">{opt.sub}</span>
                 {opt.key === 'pix' && (
                   <span className="mt-1.5 inline-block sm:hidden text-[10px] font-bold px-2 py-0.5 rounded-pill bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] whitespace-nowrap">
                     5% OFF
@@ -124,7 +124,7 @@ export function PaymentBlock({
                   <div className="w-16 h-16 rounded-input border border-dashed border-[#6EE7B7] bg-white flex items-center justify-center flex-shrink-0 text-[9px] text-t4 text-center leading-tight">
                     QR Code<br />após pedido
                   </div>
-                  <div className="text-[11px] text-[#065F46] leading-relaxed">
+                  <div className="text-[12px] text-[#065F46] leading-relaxed">
                     <strong className="block text-[12px] font-semibold mb-1">Como pagar com PIX</strong>
                     1. Clique em &ldquo;Pagar agora&rdquo; para finalizar o pedido<br />
                     2. Você será redirecionado para o Mercado Pago<br />
@@ -138,7 +138,7 @@ export function PaymentBlock({
             {/* Cartão detail */}
             {paymentMethod === opt.key && opt.key === 'cartao_credito' && (
               <div className="mt-2 px-3.5 py-3.5 bg-[#F8F9FF] border border-[#E0E7FF] rounded-inner">
-                <div className="flex items-center gap-1.5 text-[11px] text-indigo font-semibold mb-2.5">
+                <div className="flex items-center gap-1.5 text-[12px] text-indigo font-semibold mb-2.5">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
@@ -150,13 +150,13 @@ export function PaymentBlock({
                     { label: `2x sem juros — pedidos acima de ${formatBRL(PARCELA_2X_THRESHOLD)}`, active: maxInstallments >= 2 },
                     { label: `3x sem juros — pedidos acima de ${formatBRL(PARCELA_3X_THRESHOLD)}`, active: maxInstallments >= 3 },
                   ].map(tier => (
-                    <div key={tier.label} className={`flex items-center gap-2 text-[11px] ${tier.active ? 'text-t9 font-semibold' : 'text-t4 opacity-40'}`}>
+                    <div key={tier.label} className={`flex items-center gap-2 text-[12px] ${tier.active ? 'text-t9 font-semibold' : 'text-t4 opacity-40'}`}>
                       <span className={`w-2 h-2 rounded-full flex-shrink-0 ${tier.active ? 'bg-g' : 'bg-bd'}`} />
                       {tier.label}
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] text-t6">
+                <p className="text-[12px] text-t6">
                   Você será redirecionado ao Mercado Pago para inserir os dados do cartão com segurança.
                 </p>
               </div>
@@ -165,7 +165,7 @@ export function PaymentBlock({
             {/* Dinheiro detail — troco */}
             {paymentMethod === opt.key && opt.key === 'dinheiro' && (
               <div className="mt-2 px-3.5 py-3.5 bg-[#FEFCE8] border border-[#FDE68A] rounded-inner">
-                <p className="text-[11px] font-semibold text-[#854D0E] mb-2.5">
+                <p className="text-[12px] font-semibold text-[#854D0E] mb-2.5">
                   Vai precisar de troco?
                 </p>
                 <div className="flex gap-2 flex-wrap mb-2.5">
@@ -174,7 +174,7 @@ export function PaymentBlock({
                       key={choice.label}
                       type="button"
                       onClick={() => onNeedsChangeToggle(choice.value)}
-                      className={`flex min-h-11 items-center border-[1.5px] rounded-pill px-3 text-[11px] font-semibold transition-colors ${
+                      className={`flex min-h-11 items-center border-[1.5px] rounded-pill px-3 text-[12px] font-semibold transition-colors ${
                         needsChange === choice.value
                           ? 'border-[#F59E0B] bg-[#FEF9C3] text-[#78350F]'
                           : 'border-[#FDE68A] bg-white text-[#92400E] hover:border-[#F59E0B] hover:bg-[#FEF9C3]'
@@ -186,7 +186,7 @@ export function PaymentBlock({
                 </div>
                 {needsChange && (
                   <div>
-                    <span className="block text-[10px] font-semibold text-[#92400E] mb-1.5">
+                    <span className="block text-[12px] font-semibold text-[#92400E] mb-1.5">
                       Tenho uma nota de:
                     </span>
                     <input

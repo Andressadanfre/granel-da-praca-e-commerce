@@ -53,7 +53,7 @@ export function CheckoutTopbar({ activeStep }: CheckoutTopbarProps) {
           ))}
         </div>
 
-        <div className="flex items-center gap-1.5 text-[11px] text-t6 font-medium">
+        <div className="flex items-center gap-1.5 text-[12px] text-t6 font-medium">
           <svg
             width="12" height="12" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"
